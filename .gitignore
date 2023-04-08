@@ -35,5 +35,5 @@
 *.dSYM
 *.DS_Store
 
-read_sac_*
+./read_sac_*
 data/*
