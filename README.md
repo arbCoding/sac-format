@@ -9,4 +9,7 @@ and branch out from there.
 
 TODO:
 - [ ] Read [SAC](https://ds.iris.edu/files/sac-manual/manual/file_format.html) file format
-- [ ]  
+
+- [ ] Print out SAC header information to the cli
+
+- [ ] Profit

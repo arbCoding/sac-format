@@ -34,3 +34,6 @@
 # Mac stuff
 *.dSYM
 *.DS_Store
+
+read_sac_*
+data/*
