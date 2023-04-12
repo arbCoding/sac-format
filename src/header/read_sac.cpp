@@ -22,7 +22,12 @@ std::array<char, word_length> read_next_word(std::ifstream* sac)
   return result;
 }
 
-// Reads next word as a float
+// Literally just skips the the word by reading it into nothing
+void skip_word(std::ifstream* sac)
+{
+  read_next_word(sac);
+}
+
 float read_next_float(std::ifstream* sac)
 {
   char raw_word[word_length] = {};
@@ -30,6 +35,21 @@ float read_next_float(std::ifstream* sac)
   float word{};
   std::memcpy(&word, raw_word, 4);
   return word;
+}
+
+int read_next_int(std::ifstream* sac)
+{
+  char raw_word[word_length] = {};
+  sac->read((char*) &raw_word, word_length);
+  int word{};
+  std::memcpy(&word, raw_word, 4);
+  return word;
+}
+
+bool read_next_bool(std::ifstream* sac)
+{
+  std::array<char, word_length> one_word = read_next_word(sac);
+  return static_cast<bool>(one_word[0]);
 }
 
 // Reads the sac data starting from the data_word
@@ -42,7 +62,7 @@ std::vector<float> read_data(std::ifstream* sac)
 {
   // Go to the end to get the size of the file
   sac->seekg(0, std::ios::end);
-  long long sac_end{sac->tellg()};
+  const long long sac_end{sac->tellg()};
   // This is the number of words we're going to read for the data
   const int final_word{static_cast<int>(sac_end / word_length)};
   // Initialize and resize our data vector

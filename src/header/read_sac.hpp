@@ -31,8 +31,17 @@ int word_position(int word_number);
 // Read the next (single) word in the buffer
 std::array<char, word_length> read_next_word(std::ifstream* sac);
 
+// Skips the next word, useful for unused headers
+void skip_word(std::ifstream* sac);
+
 // Reads next word as a float
 float read_next_float(std::ifstream* sac);
+
+// Reads next word as integer
+int read_next_int(std::ifstream* sac);
+
+// Reads next word as a logical (wasteful format)
+bool read_next_bool(std::ifstream* sac);
 
 // Read in all the data (assume evenly spaced only)
 std::vector<float> read_data(std::ifstream* sac);
