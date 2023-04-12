@@ -1,12 +1,11 @@
-#include <iostream>
-#include <fstream>
-#include <array>
+#include <iostream>  // std::cout
+#include <fstream>   // std::ifstream
+#include <array>     // std::array
+#include <algorithm> // std::copy()
 
 // SAC uses words that are 4 characters long
 static constexpr int word_length{4};
 
-// Currently this can read a single word and spit out all the characters
-// in that word
 // There is no checking to see if the characters are real or jibberish
 // There is no converting to the correct format (string, integer, float)
 // Nor is the word being returned to the caller so that it can be passed
@@ -29,7 +28,7 @@ std::array<char, word_length> read_next_word(std::ifstream* sac)
 }
 
 // Read in multiple words
-// For some reason if I use int instead of longusigned int it fails to compile (sign conversion error)
+// For some reason if I use int instead of long unsigned int it fails to compile (sign conversion error)
 // This happens even when I provide it with an int as input
 // As it'll never be negative anyway, I deem it okay to use long unsigned int in this case
 template <long unsigned int N> // template for array size
@@ -52,7 +51,7 @@ int word_position(int word_number)
   return (word_number * word_length);
 }
 
-template <long unsigned int N>
+template <long unsigned int N> // another template for array size
 void print_array(std::array<char, N> input_array)
 {
   for (long unsigned int i{0}; i < sizeof(input_array); i++)
@@ -80,6 +79,7 @@ void test_read_two(std::ifstream* sac)
 // argc is the argument count, 
 // argv[] is the argument vector
 // it is an array of pointers to strings
+// I really should have an argument parser function that makes sure everything is safe..
 int main(int argc, char* argv[])
 {
   if (argc == 2)

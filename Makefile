@@ -10,6 +10,7 @@ ifeq ($(uname_s), Linux)
 	cxx = g++
 else
 	cxx = g++-12 # Homebrew g++ install I have
+#	cxx = clang
 endif
 
 # Param always used
@@ -17,8 +18,11 @@ param = -std=c++20 -pedantic-errors -Wall
 # Debug params only if debug is true
 # Default should be to avoid shadowing, so after 6.5 add the
 # -Wshadow prefix to give errors on shaowing (avoid doing it!)
-# debug_param = -fanalyzer -Weffc++ -Wextra -Wsign-conversion -Werror -Wshadow -ggdb
+#  Clang
+#debug_param = -Weffc++ -Wextra -Wsign-conversion -Werror -Wshadow -ggdb
+# G++
 debug_param = -fanalyzer -Weffc++ -Wextra -Wsign-conversion -Werror -ggdb
+# debug_param = -fanalyzer -Weffc++ -Wextra -Wsign-conversion -Werror -ggdb
 # Release params only if debug is false
 release_param = -O2 -DNDEBUG
 
@@ -34,33 +38,11 @@ endif
 src_prefix = ./src/
 # Header prefix
 hdr_prefix = $(src_prefix)header/
-# Used to substitute an empty string ("" doesn't seem to work)
-empty :=
-# Get all files in source code directory ending in .cpp
-cpp_files := $(wildcard $(src_prefix)*.cpp)
-# For items in cpp_files, remove source directory prefix
-targets := $(subst $(src_prefix), $(empty), $(cpp_files))
-# Strip off the .cpp suffix so we have the raw names
-final_targets := $(subst .cpp, $(empty), $(targets))
 
-# Debugging print out of values of variables
-#$(info $$cpp_files is [${cpp_files}])
-#$(info $$targets is [${targets}])
-#$(info $$final_targets is [${final_targets}])
+all: read_sac_test
 
-
-# Define a function to loop through all targets and compile them
-define compile_all
-	for target in $(final_targets); do\
-		echo Making: $$target;\
-		echo $(cxx) -o $$target $(src_prefix)$$target.cpp -I$(hdr_prefix) $(params);\
-		echo "";\
-		$(cxx) -o $$target $(src_prefix)$$target.cpp -I$(hdr_prefix) $(params);\
-	done;
-endef
-
-all:
-	$(call compile_all)
+read_sac_test: $(src_prefix)read_sac_test.cpp $(hdr_prefix)read_sac.cpp
+	$(cxx) -o read_sac_test $(src_prefix)read_sac_test.cpp $(hdr_prefix)read_sac.cpp -I$(hdr_prefix) $(params)
 
 clean:
-	rm -r $(final_targets) *.dSYM
+	rm -rf read_sac_test *.dSYM
