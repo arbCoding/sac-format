@@ -1,7 +1,7 @@
 // Preferred for handling sac data
 #include "sac_class.hpp"
 // Temporary for testing
-#include "sac_io.hpp"
+//#include "sac_io.hpp"
 
 #include <iostream>
 #include <string>
@@ -135,21 +135,14 @@ int main()
   //---------------------------------------------------------------------------
   // Test Writing sac data
   //---------------------------------------------------------------------------
-  std::string new_file_name = "./data/test.SAC";
-  std::cout << "\n\nTesting writing...\n";
-  //std::ofstream out_file(new_file_name, std::ios::out | std::ios::trunc);
-  //SAC::write_next_word(&out_file, static_cast<char>(sac.b));
-  std::vector<char> word{};
-  word.resize(4);
-  word = SAC::convert_to_word(sac.b);
-  std::cout << "\nB: " << sac.b << "\nB word:\n";
-  SAC::print_word(word);
-  word = SAC::convert_to_word(sac.baz);
-  std::cout << "\nBAZ: " << sac.baz << "\nBAZ word:\n";
-  SAC::print_word(word);
-  word = SAC::convert_to_word(sac.nzyear);
-  std::cout << "\nNZYear: " << sac.nzyear << "\nNZYear word:\n";
-  SAC::print_word(word);
+  std::cout << "\n\nTesting writing to binary SAC...\n";
+  std::string new_file = "./data/test.SAC";
+  sac.write(new_file);
+  std::cout << "Successfully written out to: " << new_file << '\n';
+
+  std::cout << "\nTesting reading new file...\n";
+  SAC::Sac_Class new_sac(new_file);
+  std::cout << new_sac.kevnm << '\n';
 
   return 0;
 }

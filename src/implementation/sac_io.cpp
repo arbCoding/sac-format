@@ -151,15 +151,13 @@ template bool is_set(std::array<char, 4 * word_length> words);
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-void write_next_word(std::ofstream* sac_file, std::vector<char> input)
+void write_words(std::ofstream* sac_file, std::vector<char> input)
 {
   std::ofstream& sac = *sac_file;
   if (sac.is_open())
   {
-    // Using foreach for funzies
-    // Shouldn't be slower than a standard for-loop
-    // Considered 'preferred' due to abstraction and cleaner style
-    for (char c: input)
+    // Foreach-loop for funzies instead of usual for-loop
+    for (char c : input)
     {
       //sac.write(c, sizeof(char)); // cannot initialize
       sac.write((char*) &c, sizeof(char));
@@ -186,6 +184,37 @@ std::vector<char> convert_to_word(T x)
 // Explicit instantiation
 template std::vector<char> convert_to_word(float x);
 template std::vector<char> convert_to_word(int x);
+
+// Veriable sized words for the 'K' headers
+template <long unsigned int N>
+std::array<char, N> convert_to_words(std::string s, int n_words)
+{
+  std::array<char, N> all_words;
+  // String to null-terminated character array
+  const char* c_str = s.c_str();
+  for (int i{0}; i < (n_words * word_length); ++i)
+  {
+    all_words[static_cast<long unsigned int>(i)] = static_cast<int>(c_str[i]);
+  }
+  return all_words;
+}
+
+// Explicit instantiation
+template std::array<char, word_length> convert_to_words(std::string s, int n_words = 1);
+template std::array<char, 2 * word_length> convert_to_words(std::string s, int n_words = 2);
+template std::array<char, 4 * word_length> convert_to_words(std::string s, int n_words = 4);
+
+std::vector<char> bool_to_word(bool b)
+{
+  std::vector<char> result;
+  result.resize(4);
+  result[0] = b;
+  for (long unsigned int i{1}; i < 4; ++i)
+  {
+    result[i] = 0;
+  }
+  return result;
+}
 //-----------------------------------------------------------------------------
 // End writing
 //-----------------------------------------------------------------------------

@@ -29,6 +29,7 @@ release_param = -O2 -DNDEBUG
 # Debug version is substantially larger file size (and slower runtime)
 # Debug compilation is extremely strict (warnings = errors)
 debug = true
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # Release version is substantially smaller file size (and faster runtime)
 # Release compilation is extremely relaxed (possible bugs if using to by-pass failed debug compilation...)
 #debug = false
@@ -50,7 +51,9 @@ all: sac_class_test
 
 sac_class_test: $(src_prefix)sac_class_test.cpp $(imp_prefix)sac_class.cpp $(imp_prefix)sac_io.cpp
 	@echo "Building sac_class_test..."
+	@echo "Build began at:     $$(date)"
 	$(cxx) -o sac_class_test $(src_prefix)sac_class_test.cpp $(imp_prefix)sac_class.cpp $(imp_prefix)sac_io.cpp -I$(hdr_prefix) $(params)
+	@echo "Build completed at: $$(date)"
 
 clean:
 	rm -rf sac_class_test *.dSYM

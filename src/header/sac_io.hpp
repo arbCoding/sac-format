@@ -81,11 +81,9 @@ bool is_set(std::array<char, N> words);
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-// Write the next single word to the file
-// This doesn't need to be limited to a single word...
-// Would be easy to do an arbitrary number of characters in a vector
-// Trade-off: arrays are faster than vectors, but vectors are more flexible
-void write_next_word(std::ofstream* sac_file, std::array<char, word_length> input);
+// Using std::vector because more flexible
+// Allows writing arbitrary amount of data to file
+void write_words(std::ofstream* sac_file, std::vector<char> input);
 
 // Template function to convert to a SAC word
 // handles float and int (not string)
@@ -93,9 +91,11 @@ template <typename T>
 std::vector<char> convert_to_word(T x);
 
 // Template function to convert string to SAC word(s)
-// will need to be able to handle multiple words
 template <long unsigned int N>
 std::array<char, N> convert_to_words(std::string s, int n_words = 1);
+
+// Convert a bool value to a word
+std::vector<char> bool_to_word(bool b);
 //-----------------------------------------------------------------------------
 // End writing
 //-----------------------------------------------------------------------------

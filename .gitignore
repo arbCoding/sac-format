@@ -41,3 +41,5 @@ _test
 *_test
 # data files
 data/*
+# Any compressed files
+*.tar.gz
