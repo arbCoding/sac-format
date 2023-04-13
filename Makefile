@@ -73,6 +73,7 @@ all: sac_class_test
 $(obj_prefix)%.o: $(imp_prefix)%.cpp
 	@echo "Building $@"
 	@echo "Build start:  $$(date)"
+	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
 	$(cxx) $(params) -I$(hdr_prefix) -c -o $@ $<
 	@echo -e "Build finish: $$(date)\n"
 
@@ -81,8 +82,9 @@ $(obj_prefix)%.o: $(imp_prefix)%.cpp
 sac_class_test: $(src_prefix)sac_class_test.cpp $(obj_files)
 	@echo "Building $(bin_prefix)$@"
 	@echo "Build start:  $$(date)"
+	@test -d $(bin_prefix) || mkdir -p $(bin_prefix)
 	$(cxx) $(params) -I$(hdr_prefix) -o $(bin_prefix)$@ $^
 	@echo -e "Build finish: $$(date)\n"
 
 clean:
-	rm -rf $(bin_prefix)* $(obj_prefix)*.o
+	rm -rf $(bin_prefix) $(obj_prefix)

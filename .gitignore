@@ -39,6 +39,8 @@
 data/*
 # Compiled stuff
 bin/*
+# Be extra sure no objects
+./src/objects/*
 # Any compressed files
 *.tar.gz
 # Dumb MacOS
