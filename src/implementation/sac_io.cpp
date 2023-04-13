@@ -1,6 +1,6 @@
 #include "sac_io.hpp"
 
-// Here is where I'm going to put my actual definitions
+// Implementation of the interface in sac_io.hpp
 
 namespace SAC
 {
@@ -25,7 +25,7 @@ std::array<char, word_length> read_next_word(std::ifstream* sac)
   return result;
 }
 
-// Literally just skips the the word by reading it into nothing
+// Literally just skips the word by reading it into nothing
 void skip_word(std::ifstream* sac)
 {
   read_next_word(sac);
@@ -97,6 +97,9 @@ template std::array<char, 4 * word_length> read_words(std::ifstream* sac, int n_
 // End reading
 //-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+// Misc
+//-----------------------------------------------------------------------------
 template <long unsigned int N>
 void print_words(std::array<char, N> words)
 {
@@ -110,6 +113,15 @@ void print_words(std::array<char, N> words)
 template void print_words(std::array<char, word_length> words);
 template void print_words(std::array<char, 2 * word_length> words);
 template void print_words(std::array<char, 4 * word_length> words);
+
+void print_word(std::vector<char> word)
+{
+  // Foreach style loop to make simpler
+  for (char c : word)
+  {
+    std::cout << static_cast<int>(c) << '\n';
+  }
+}
 
 // Seems to work
 // Checks to see if the value is -12345 (characters)
@@ -132,27 +144,48 @@ bool is_set(std::array<char, N> words)
 template bool is_set(std::array<char, word_length> words);
 template bool is_set(std::array<char, 2 * word_length> words);
 template bool is_set(std::array<char, 4 * word_length> words);
+//-----------------------------------------------------------------------------
+// End misc
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-void write_next_char(std::ofstream* sac_file, char input)
-{
-  std::ofstream& sac = *sac_file;
-  if (sac.is_open())
-  {
-    sac.write(&input, sizeof(input));
-  }
-}
-
 void write_next_word(std::ofstream* sac_file, std::vector<char> input)
 {
   std::ofstream& sac = *sac_file;
   if (sac.is_open())
   {
-    sac.write(reinterpret_cast<char*>(&input[0]), static_cast<long int>(input.size() * sizeof(char)));
+    // Using foreach for funzies
+    // Shouldn't be slower than a standard for-loop
+    // Considered 'preferred' due to abstraction and cleaner style
+    for (char c: input)
+    {
+      //sac.write(c, sizeof(char)); // cannot initialize
+      sac.write((char*) &c, sizeof(char));
+    }
   }
 }
+
+// Template on the typename to make possible to handle float or int
+template <typename T>
+std::vector<char> convert_to_word(T x)
+{
+  char tmp[4];
+  // Copy bytes from x into the tmp array
+  std::memcpy(tmp, &x, 4);
+  std::vector<char> word{};
+  word.resize(4);
+  for (int i{0}; i < 4; ++i)
+  {
+    word[static_cast<long unsigned int>(i)] = tmp[i];
+  }
+  return word;
+}
+
+// Explicit instantiation
+template std::vector<char> convert_to_word(float x);
+template std::vector<char> convert_to_word(int x);
 //-----------------------------------------------------------------------------
 // End writing
 //-----------------------------------------------------------------------------

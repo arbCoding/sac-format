@@ -1,4 +1,7 @@
+// Preferred for handling sac data
 #include "sac_class.hpp"
+// Temporary for testing
+#include "sac_io.hpp"
 
 #include <iostream>
 #include <string>
@@ -142,6 +145,25 @@ int main()
   std::cout << "Data size:\t" << sac.data.size() << " points\n";
   std::cout << "Avg:\t\t" << mean(&sac.data) << '\n';
   std::cout << "Class size:\t" << sizeof(sac) << " bytes\n";
+
+  //---------------------------------------------------------------------------
+  // Test Writing sac data
+  //---------------------------------------------------------------------------
+  std::string new_file_name = "./data/test.SAC";
+  std::cout << "\n\nTesting writing...\n";
+  //std::ofstream out_file(new_file_name, std::ios::out | std::ios::trunc);
+  //SAC::write_next_word(&out_file, static_cast<char>(sac.b));
+  std::vector<char> word{};
+  word.resize(4);
+  word = SAC::convert_to_word(sac.b);
+  std::cout << "B: " << sac.b << "\nB word below\n\n";
+  SAC::print_word(word);
+  word = SAC::convert_to_word(sac.baz);
+  std::cout << "BAZ: " << sac.baz << "\nBAZ word below\n\n";
+  SAC::print_word(word);
+  word = SAC::convert_to_word(sac.nzyear);
+  std::cout << "NZYear: " << sac.nzyear << "\nNZYear word below\n\n";
+  SAC::print_word(word);
 
   return 0;
 }
