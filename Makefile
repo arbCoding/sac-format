@@ -27,6 +27,7 @@ debug_param = -fanalyzer -Weffc++ -Wextra -Wsign-conversion -Werror -ggdb
 release_param = -O2 -DNDEBUG
 
 debug = true
+#debug = false
 
 ifeq ($(debug), true)
 	params = $(param) $(debug_param)
@@ -35,19 +36,17 @@ else
 endif
 
 # Where the source code files are being stored
-src_prefix = ./src/
+src_prefix = ./src/code/
 # Header prefix
-hdr_prefix = $(src_prefix)header/
+hdr_prefix = ./src/header/
+# Implementation prefix
+imp_prefix = ./src/implementation/
 
-all: read_sac_test sac_class_test
+all: sac_class_test
 
-read_sac_test: $(src_prefix)read_sac_test.cpp $(hdr_prefix)read_sac.cpp
-	@echo "Building read_sac_test..."
-	$(cxx) -o read_sac_test $(src_prefix)read_sac_test.cpp $(hdr_prefix)read_sac.cpp -I$(hdr_prefix) $(params)
-
-sac_class_test: $(src_prefix)sac_class_test.cpp $(hdr_prefix)sac_class.cpp $(hdr_prefix)read_sac.cpp
+sac_class_test: $(src_prefix)sac_class_test.cpp $(imp_prefix)sac_class.cpp $(imp_prefix)sac_io.cpp
 	@echo "Building sac_class_test..."
-	$(cxx) -o sac_class_test $(src_prefix)sac_class_test.cpp $(hdr_prefix)sac_class.cpp $(hdr_prefix)read_sac.cpp -I$(hdr_prefix) $(params)
+	$(cxx) -o sac_class_test $(src_prefix)sac_class_test.cpp $(imp_prefix)sac_class.cpp $(imp_prefix)sac_io.cpp -I$(hdr_prefix) $(params)
 
 clean:
-	rm -rf read_sac_test sac_class_test *.dSYM
+	rm -rf sac_class_test *.dSYM

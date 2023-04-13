@@ -1,4 +1,4 @@
-#include "read_sac.hpp"
+#include "sac_io.hpp"
 
 // Here is where I'm going to put my actual definitions
 
@@ -10,6 +10,9 @@ int word_position(int word_number)
   return (word_number * word_length);
 }
 
+//-----------------------------------------------------------------------------
+// Reading
+//-----------------------------------------------------------------------------
 std::array<char, word_length> read_next_word(std::ifstream* sac)
 {
   char word[word_length] = {};
@@ -90,6 +93,9 @@ std::array<char, N> read_words(std::ifstream* sac, int n_words)
 template std::array<char, word_length> read_words(std::ifstream* sac, int n_words = 1);
 template std::array<char, 2 * word_length> read_words(std::ifstream* sac, int n_words = 2);
 template std::array<char, 4 * word_length> read_words(std::ifstream* sac, int n_words = 4);
+//-----------------------------------------------------------------------------
+// End reading
+//-----------------------------------------------------------------------------
 
 template <long unsigned int N>
 void print_words(std::array<char, N> words)
@@ -126,5 +132,29 @@ bool is_set(std::array<char, N> words)
 template bool is_set(std::array<char, word_length> words);
 template bool is_set(std::array<char, 2 * word_length> words);
 template bool is_set(std::array<char, 4 * word_length> words);
+
+//-----------------------------------------------------------------------------
+// Writing
+//-----------------------------------------------------------------------------
+void write_next_char(std::ofstream* sac_file, char input)
+{
+  std::ofstream& sac = *sac_file;
+  if (sac.is_open())
+  {
+    sac.write(&input, sizeof(input));
+  }
+}
+
+void write_next_word(std::ofstream* sac_file, std::vector<char> input)
+{
+  std::ofstream& sac = *sac_file;
+  if (sac.is_open())
+  {
+    sac.write(reinterpret_cast<char*>(&input[0]), static_cast<long int>(input.size() * sizeof(char)));
+  }
+}
+//-----------------------------------------------------------------------------
+// End writing
+//-----------------------------------------------------------------------------
 
 }

@@ -1,13 +1,26 @@
 #include "sac_class.hpp"
-#include "read_sac.hpp"
 
 #include <iostream>
 #include <string>
+#include <vector>
 
+// Pass in by pointer
+float mean(std::vector<float>* data_ptr)
+{
+  // Dereference the pointer
+  std::vector<float>& data = *data_ptr;
+  float sum{};
+  for (long unsigned int i{0}; i < data.size(); ++i)
+  {
+    sum += data[i];
+  }
+  return (sum / data.size());
+}
 
 int main()
 {
   std::string file_name = "./data/IM.NV31..BHZ.M.2023.094.222304.SAC";
+  std::cout << "File:\t\t" << file_name << '\n';
   SAC::Sac_Class sac(file_name);
 
   //---------------------------------------------------------------------------
@@ -122,14 +135,13 @@ int main()
   std::cout << "KCmpNm:\t\t" << sac.kcmpnm << '\n'; // BHZ
   std::cout << "KNetwk:\t\t" << sac.knetwk << '\n'; // IM
   std::cout << "KDatRd:\t\t" << sac.kdatrd << '\n'; // -12345
-  std::cout << "KInst:\t\t" << sac.kinst << '\n'; // -12345
+  std::cout << "KInst:\t\t" << sac.kinst << '\n'; // CMG3T_NV
   //---------------------------------------------------------------------------
-  // Data
+  // Additional information
   //---------------------------------------------------------------------------
-  for (long unsigned int i{0}; i < 25; ++i)
-  {
-       std::cout << '\t' << sac.data[i] << '\n';
-  }
+  std::cout << "Data size:\t" << sac.data.size() << " points\n";
+  std::cout << "Avg:\t\t" << mean(&sac.data) << '\n';
+  std::cout << "Class size:\t" << sizeof(sac) << " bytes\n";
 
   return 0;
 }

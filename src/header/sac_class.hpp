@@ -1,7 +1,7 @@
 #ifndef SAC_CLASS_H
 #define SAC_CLASS_H
 
-#include "read_sac.hpp" // my sac format reading sac functions
+#include "sac_io.hpp" // my sac format reading sac functions
 
 #include <string> // std::string
 #include <vector> // std::vector
@@ -130,6 +130,8 @@ namespace SAC
     // Footer (if nvhdr = 7)
     // Parameterized constructor (reader)
     Sac_Class(const std::string& file_name);
+    // Allows writing out to binary sac file format
+    void write(const std::string& file_name);
   };
 }
 
