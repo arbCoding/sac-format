@@ -16,13 +16,10 @@ endif
 # Param always used
 param = -std=c++20 -pedantic-errors -Wall
 # Debug params only if debug is true
-# Default should be to avoid shadowing, so after 6.5 add the
-# -Wshadow prefix to give errors on shaowing (avoid doing it!)
 #  Clang
 #debug_param = -Weffc++ -Wextra -Wsign-conversion -Werror -Wshadow -ggdb
 # G++
-debug_param = -fanalyzer -Weffc++ -Wextra -Wsign-conversion -Werror -ggdb
-# debug_param = -fanalyzer -Weffc++ -Wextra -Wsign-conversion -Werror -ggdb
+debug_param = -fanalyzer -Weffc++ -Wextra -Wsign-conversion -Werror -Wshadow -ggdb
 # Release params only if debug is false
 release_param = -O2 -DNDEBUG
 

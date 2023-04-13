@@ -492,9 +492,9 @@ void Sac_Class::write(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Data
   //---------------------------------------------------------------------------
-  for (float f : data)
+  for (float x : data)
   {
-       SAC::write_words(&file, convert_to_word(f));
+       SAC::write_words(&file, convert_to_word(x));
   }
   //---------------------------------------------------------------------------
   // End data
@@ -512,9 +512,9 @@ float Sac_Class::mean()
 {
   float sum{};
   // Foreach loop to try to look cleaner
-  for (float f : data)
+  for (float x : data)
   {
-    sum += f;
+    sum += x;
   }
   return (sum / data.size());
 }

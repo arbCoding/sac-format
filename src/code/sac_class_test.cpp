@@ -9,7 +9,7 @@
 
 int main()
 {
-  std::string file_name = "./data/IM.NV31..BHZ.M.2023.094.222304.SAC";
+  std::string file_name = "../data/IM.NV31..BHZ.M.2023.094.222304.SAC";
   std::cout << "File:\t\t" << file_name << '\n';
   SAC::Sac_Class sac(file_name);
 
@@ -139,7 +139,7 @@ int main()
   std::cout << "\n\nTesting writing to binary SAC...\n";
   sac.mag = -1.2345f;
   std::cout << "Mag:\t" << sac.mag << '\n';
-  std::string new_file = "./data/test.SAC";
+  std::string new_file = "../data/test.SAC";
   sac.write(new_file);
   std::cout << "Successfully written out to: " << new_file << '\n';
 
