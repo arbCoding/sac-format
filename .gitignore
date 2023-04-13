@@ -35,12 +35,10 @@
 *.dSYM
 *.DS_Store
 
-# Compiled stuff
-read_sac_??
-_test
-*_test
 # data files
 data/*
+# Compiled stuff
+bin/*
 # Any compressed files
 *.tar.gz
 # Dumb MacOS
