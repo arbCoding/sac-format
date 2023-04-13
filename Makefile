@@ -26,7 +26,11 @@ debug_param = -fanalyzer -Weffc++ -Wextra -Wsign-conversion -Werror -ggdb
 # Release params only if debug is false
 release_param = -O2 -DNDEBUG
 
+# Debug version is substantially larger file size (and slower runtime)
+# Debug compilation is extremely strict (warnings = errors)
 debug = true
+# Release version is substantially smaller file size (and faster runtime)
+# Release compilation is extremely relaxed (possible bugs if using to by-pass failed debug compilation...)
 #debug = false
 
 ifeq ($(debug), true)

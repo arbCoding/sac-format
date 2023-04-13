@@ -7,19 +7,6 @@
 #include <string>
 #include <vector>
 
-// Pass in by pointer
-float mean(std::vector<float>* data_ptr)
-{
-  // Dereference the pointer
-  std::vector<float>& data = *data_ptr;
-  float sum{};
-  for (long unsigned int i{0}; i < data.size(); ++i)
-  {
-    sum += data[i];
-  }
-  return (sum / data.size());
-}
-
 int main()
 {
   std::string file_name = "./data/IM.NV31..BHZ.M.2023.094.222304.SAC";
@@ -143,9 +130,8 @@ int main()
   // Additional information
   //---------------------------------------------------------------------------
   std::cout << "Data size:\t" << sac.data.size() << " points\n";
-  std::cout << "Avg:\t\t" << mean(&sac.data) << '\n';
+  std::cout << "Avg:\t\t" << sac.mean() << '\n';
   std::cout << "Class size:\t" << sizeof(sac) << " bytes\n";
-
   //---------------------------------------------------------------------------
   // Test Writing sac data
   //---------------------------------------------------------------------------
@@ -156,13 +142,13 @@ int main()
   std::vector<char> word{};
   word.resize(4);
   word = SAC::convert_to_word(sac.b);
-  std::cout << "B: " << sac.b << "\nB word below\n\n";
+  std::cout << "\nB: " << sac.b << "\nB word:\n";
   SAC::print_word(word);
   word = SAC::convert_to_word(sac.baz);
-  std::cout << "BAZ: " << sac.baz << "\nBAZ word below\n\n";
+  std::cout << "\nBAZ: " << sac.baz << "\nBAZ word:\n";
   SAC::print_word(word);
   word = SAC::convert_to_word(sac.nzyear);
-  std::cout << "NZYear: " << sac.nzyear << "\nNZYear word below\n\n";
+  std::cout << "\nNZYear: " << sac.nzyear << "\nNZYear word:\n";
   SAC::print_word(word);
 
   return 0;
