@@ -37,6 +37,7 @@
 
 # Compiled stuff
 read_sac_??
-read_sac_test
+_test
+*_test
 # data files
 data/*

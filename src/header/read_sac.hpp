@@ -44,7 +44,9 @@ int read_next_int(std::ifstream* sac);
 bool read_next_bool(std::ifstream* sac);
 
 // Read in all the data (assume evenly spaced only)
-std::vector<float> read_data(std::ifstream* sac);
+// This assume the format is 6 (nvhdr = 6)
+// Compatible with nvhdr = 6 or 7 (6 is old, 7 is new with footer after data)
+std::vector<float> read_data(std::ifstream* sac, int npts);
 
 // Read the next (n_words) words in the buffer
 template <long unsigned int N>

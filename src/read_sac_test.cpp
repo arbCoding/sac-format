@@ -1,11 +1,11 @@
-#include "read_sac.hpp"
+#include "read_sac.hpp" // raw reading
 
 #include <iostream>
 #include <fstream>
 #include <array>
 // note string_views are more efficient because read-only
 #include <string_view> // std::string_view (faster, read-only)
-// #include <string> // std::string (slower)
+#include <string> // std::string (slower)
 
 // TODO
 // Read in entire header
@@ -15,7 +15,8 @@
 
 int main()
 {
-  std::ifstream sac_file("./data/IM.NV31..BHZ.M.2023.094.222304.SAC", std::ifstream::binary);
+  std::string file_name = "./data/IM.NV31..BHZ.M.2023.094.222304.SAC";
+  std::ifstream sac_file(file_name, std::ifstream::binary);
   if (!sac_file)
   {
     std::cerr << "File could not be read...\n";
@@ -26,6 +27,7 @@ int main()
   // Possible words
   std::array<char, 2 * SAC::word_length> two_words;
   std::array<char, 4 * SAC::word_length> four_words;
+  
   //---------------------------------------------------------------------------
   // Headers
   //---------------------------------------------------------------------------
@@ -300,25 +302,25 @@ int main()
   int istreg{SAC::read_next_int(&sac_file)}; // -12345
   std::cout << "Istreg:\t\t" << istreg << '\n';
   
-  int ievreg{SAC::read_next_int(&sac_file)}; // 
+  int ievreg{SAC::read_next_int(&sac_file)}; // -12345 
   std::cout << "Ievreg:\t\t" << ievreg << '\n';
   
-  int ievtyp{SAC::read_next_int(&sac_file)}; // 
+  int ievtyp{SAC::read_next_int(&sac_file)}; // -12345
   std::cout << "Ievtyp:\t\t" << ievtyp << '\n';
   
-  int iqual{SAC::read_next_int(&sac_file)}; // 
+  int iqual{SAC::read_next_int(&sac_file)}; // -12345
   std::cout << "Iqual:\t\t" << iqual << '\n';
   
-  int isynth{SAC::read_next_int(&sac_file)}; // 
+  int isynth{SAC::read_next_int(&sac_file)}; // -12345
   std::cout << "Isynth:\t\t" << isynth << '\n';
   
-  int imagtyp{SAC::read_next_int(&sac_file)}; // 
+  int imagtyp{SAC::read_next_int(&sac_file)}; // -12345
   std::cout << "Imagtyp:\t" << imagtyp << '\n';
   
-  int imagsrc{SAC::read_next_int(&sac_file)}; // 
+  int imagsrc{SAC::read_next_int(&sac_file)}; // -12345
   std::cout << "Imagsrc:\t" << imagsrc << '\n';
   
-  int ibody{SAC::read_next_int(&sac_file)}; // 
+  int ibody{SAC::read_next_int(&sac_file)}; // -12345
   std::cout << "Ibody:\t\t" << ibody << '\n';
 
   // Skip 'unused' (x7)
@@ -443,17 +445,25 @@ int main()
 
   //---------------------------------------------------------------------------
   // End header
-  // --------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
 
   std::cout << "\nEnd header.\n Now reading data...\n\n";
   // Read all the data
   std::cout << "Data vector:\n";
-  std::vector data{SAC::read_data(&sac_file)};
+  std::vector<float> data{SAC::read_data(&sac_file, npts)};
   for (long unsigned int i{0}; i < 25; ++i)
   {
     std::cout << '\t' << data[i] << '\n';
   }
   std::cout << "\t...\n";
+
+  //---------------------------------------------------------------------------
+  // Footer
+  // --------------------------------------------------------------------------
+  // This is only for nvhdr = 7 (sac 102.0)
+  //---------------------------------------------------------------------------
+  // End Footer
+  //---------------------------------------------------------------------------
 
   std::cout << "\nEnd data.\n Successful run!\n";
 

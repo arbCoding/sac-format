@@ -52,22 +52,14 @@ bool read_next_bool(std::ifstream* sac)
   return static_cast<bool>(one_word[0]);
 }
 
-// Reads the sac data starting from the data_word
+// Reads the sac data starting from the data_word and to npts
 // It does it word by word (each word is a 4 byte float)
 // Assumes evenly spaced data (standard file format)
-// Does not work with unevenly spaced data (different format)
-// Also assume standard endianness of file (endian of file matches endian of system)
-// Does the entire file, so it assume your memory can hold the entire file (no partial reading)
-std::vector<float> read_data(std::ifstream* sac)
+std::vector<float> read_data(std::ifstream* sac, int npts)
 {
-  // Go to the end to get the size of the file
-  sac->seekg(0, std::ios::end);
-  const long long sac_end{sac->tellg()};
-  // This is the number of words we're going to read for the data
-  const int final_word{static_cast<int>(sac_end / word_length)};
   // Initialize and resize our data vector
   std::vector<float> data{};
-  data.resize(static_cast<std::vector<float>::size_type>(final_word - data_word));
+  data.resize(static_cast<std::vector<float>::size_type>(npts));
   // Go to the start of the data.
   sac->seekg(word_position(data_word));
   // Do until the file is finished

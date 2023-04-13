@@ -39,10 +39,15 @@ src_prefix = ./src/
 # Header prefix
 hdr_prefix = $(src_prefix)header/
 
-all: read_sac_test
+all: read_sac_test sac_class_test
 
 read_sac_test: $(src_prefix)read_sac_test.cpp $(hdr_prefix)read_sac.cpp
+	@echo "Building read_sac_test..."
 	$(cxx) -o read_sac_test $(src_prefix)read_sac_test.cpp $(hdr_prefix)read_sac.cpp -I$(hdr_prefix) $(params)
 
+sac_class_test: $(src_prefix)sac_class_test.cpp $(hdr_prefix)sac_class.cpp $(hdr_prefix)read_sac.cpp
+	@echo "Building sac_class_test..."
+	$(cxx) -o sac_class_test $(src_prefix)sac_class_test.cpp $(hdr_prefix)sac_class.cpp $(hdr_prefix)read_sac.cpp -I$(hdr_prefix) $(params)
+
 clean:
-	rm -rf read_sac_test *.dSYM
+	rm -rf read_sac_test sac_class_test *.dSYM
