@@ -40,20 +40,49 @@ else
 	params = $(param) $(release_param)
 endif
 
+# Code base starts here
+base_prefix = ./src/
+# Program location here
+bin_prefix = ./bin/
 # Where the source code files are being stored
-src_prefix = ./src/code/
+src_prefix = $(base_prefix)code/
 # Header prefix
-hdr_prefix = ./src/header/
+hdr_prefix = $(base_prefix)header/
 # Implementation prefix
-imp_prefix = ./src/implementation/
+imp_prefix = $(base_prefix)implementation/
+# Object prefix
+obj_prefix = $(base_prefix)objects/
+
+# Sources (implementations)
+imp_files := $(wildcard $(imp_prefix)*.cpp)
+# Objects
+obj_files := $(patsubst $(imp_prefix)%.cpp, $(obj_prefix)%.o, $(imp_files))
 
 all: sac_class_test
 
-sac_class_test: $(src_prefix)sac_class_test.cpp $(imp_prefix)sac_class.cpp $(imp_prefix)sac_io.cpp
-	@echo "Building sac_class_test..."
-	@echo "Build began at:     $$(date)"
-	$(cxx) -o sac_class_test $(src_prefix)sac_class_test.cpp $(imp_prefix)sac_class.cpp $(imp_prefix)sac_io.cpp -I$(hdr_prefix) $(params)
-	@echo "Build completed at: $$(date)"
+# Print out the variables
+#$(info $$imp_files is [${imp_files}])
+#$(info $$obj_files is [${obj_files}])
+
+# By splitting into .o files I can make it so that only newly written code gets compiled
+# Therefore cutting down on compilation times
+# Also helps to simply the logic a little bit
+# $@ is target
+# $< is first prerequisite (I think same as $^ in this case)
+# This is a general rule to build an object from its corresponding implementation
+$(obj_prefix)%.o: $(imp_prefix)%.cpp
+	@echo "Building $@"
+	@echo "Build start:  $$(date)"
+	$(cxx) $(params) -I$(hdr_prefix) -c -o $@ $<
+	@echo -e "Build finish: $$(date)\n"
+
+# $@ is target
+# $^ is all prerequisites, without duplicates, separated by spaces
+sac_class_test: $(src_prefix)sac_class_test.cpp $(obj_files)
+	@echo "Building $(bin_prefix)$@"
+	@echo "Build start:  $$(date)"
+	$(cxx) $(params) -I$(hdr_prefix) -o $(bin_prefix)$@ $^
+	@echo -e "Build finish: $$(date)\n"
 
 clean:
-	rm -rf sac_class_test *.dSYM
+	rm -rf $(bin_prefix)* $(obj_prefix)*.o

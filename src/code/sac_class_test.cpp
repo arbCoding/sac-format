@@ -135,14 +135,18 @@ int main()
   //---------------------------------------------------------------------------
   // Test Writing sac data
   //---------------------------------------------------------------------------
+  // Leave a marker
   std::cout << "\n\nTesting writing to binary SAC...\n";
+  sac.mag = -1.2345f;
+  std::cout << "Mag:\t" << sac.mag << '\n';
   std::string new_file = "./data/test.SAC";
   sac.write(new_file);
   std::cout << "Successfully written out to: " << new_file << '\n';
 
   std::cout << "\nTesting reading new file...\n";
   SAC::Sac_Class new_sac(new_file);
-  std::cout << new_sac.kevnm << '\n';
+
+  std::cout << "Mag:\t" << new_sac.mag << '\n'; // It works!
 
   return 0;
 }
