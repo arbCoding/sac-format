@@ -1,5 +1,5 @@
 # Don't echo all the bash commands!
-MAKEFLAGS += --silent
+#MAKEFLAGS += --silent
 # Use the correct shell for bash scripts
 # seemed to default to /bin/sh when I use /bin/bash
 SHELL := /bin/bash
@@ -7,10 +7,10 @@ SHELL := /bin/bash
 uname_s := $(shell uname -s)
 
 ifeq ($(uname_s), Linux)
-	cxx = g++
+	compiler = g++
 else
-	cxx = g++-12 # Homebrew g++ install I have
-#	cxx = clang
+	compiler = g++-12 # Homebrew g++ install I have
+#	compiler = clang
 endif
 
 # Param always used
@@ -37,30 +37,21 @@ else
 	params = $(param) $(release_param)
 endif
 
+# Project directory structur
 # Code base starts here
 base_prefix = ./src/
-# Program location here
+# Built programs will go here
 bin_prefix = ./bin/
-# Where the source code files are being stored
+# Where the source code files for programs are stored
 src_prefix = $(base_prefix)code/
-# Header prefix
+# Where header (interface) files are stored
 hdr_prefix = $(base_prefix)header/
-# Implementation prefix
+# Where the source code (implementation) files are stored
 imp_prefix = $(base_prefix)implementation/
-# Object prefix
+# Built object files will go here
 obj_prefix = $(base_prefix)objects/
 
-# This is automated if a program uses all of these its great
-# Sources (implementations)
-#imp_files := $(wildcard $(imp_prefix)*.cpp)
-# Objects
-#obj_files := $(patsubst $(imp_prefix)%.cpp, $(obj_prefix)%.o, $(imp_files))
-
 all: sac_class_test
-
-# Print out the variables
-#$(info $$imp_files is [${imp_files}])
-#$(info $$obj_files is [${obj_files}])
 
 # By splitting into .o files I can make it so that only newly written code gets compiled
 # Therefore cutting down on compilation times
@@ -72,22 +63,35 @@ $(obj_prefix)%.o: $(imp_prefix)%.cpp
 	@echo "Building $@"
 	@echo "Build start:  $$(date)"
 	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
-	$(cxx) $(params) -I$(hdr_prefix) -c -o $@ $<
+	$(compiler) $(params) -I$(hdr_prefix) -c -o $@ $<
 	@echo -e "Build finish: $$(date)\n"
 
 # Manually defined for specific program
 # Modules for sac_class_test
 modules := sac_io sac_class
-imp_files := $(addsuffix .cpp, $(addprefix $(imp_prefix), $(modules)))
 obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
 
+# Print out obj_files to check that they are set correctly
+#$(info $$obj_files is [${obj_files}])
+
+# link obj_files to a single object-file
+sac_format: $(obj_files)
+	@echo "Building $(bin_prefix)$@"
+	@echo "Build start:  $$(date)"
+	ld -r -o $(obj_prefix)$@.o $^
+	@echo -e "Build finish: $$(date)\n"
+
+
+# Use the single object file to simplify
+modules := sac_format
+obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
 # $@ is target
 # $^ is all prerequisites, without duplicates, separated by spaces
-sac_class_test: $(src_prefix)sac_class_test.cpp $(obj_files)
+sac_class_test: $(src_prefix)sac_class_test.cpp $(modules)
 	@echo "Building $(bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(bin_prefix) || mkdir -p $(bin_prefix)
-	$(cxx) $(params) -I$(hdr_prefix) -o $(bin_prefix)$@ $^
+	$(compiler) $(params) -I$(hdr_prefix) -o $(bin_prefix)$@ $< $(obj_files)
 	@echo -e "Build finish: $$(date)\n"
 
 clean:

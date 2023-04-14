@@ -27,7 +27,7 @@ Sac_Class::Sac_Class(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Header
   //---------------------------------------------------------------------------
-  delta  = SAC::read_next_float(&file);
+  f_delta  = SAC::read_next_float(&file);
   depmin = SAC::read_next_float(&file);
   depmax = SAC::read_next_float(&file);
   
@@ -35,27 +35,27 @@ Sac_Class::Sac_Class(const std::string& file_name)
   SAC::skip_word(&file);
   
   odelta = SAC::read_next_float(&file); 
-  b = SAC::read_next_float(&file);
-  e = SAC::read_next_float(&file);
-  o = SAC::read_next_float(&file);
-  a = SAC::read_next_float(&file); 
+  f_b = SAC::read_next_float(&file);
+  f_e = SAC::read_next_float(&file);
+  f_o = SAC::read_next_float(&file);
+  f_a = SAC::read_next_float(&file); 
 
   // Skip 'internal'
   SAC::skip_word(&file);
 
   // Arrival time picking headers
   // All -12345
-  t0 = SAC::read_next_float(&file); 
-  t1 = SAC::read_next_float(&file); 
-  t2 = SAC::read_next_float(&file); 
-  t3 = SAC::read_next_float(&file); 
-  t4 = SAC::read_next_float(&file); 
-  t5 = SAC::read_next_float(&file); 
-  t6 = SAC::read_next_float(&file); 
-  t7 = SAC::read_next_float(&file); 
-  t8 = SAC::read_next_float(&file); 
-  t9 = SAC::read_next_float(&file); 
-  f = SAC::read_next_float(&file); 
+  f_t0 = SAC::read_next_float(&file); 
+  f_t1 = SAC::read_next_float(&file); 
+  f_t2 = SAC::read_next_float(&file); 
+  f_t3 = SAC::read_next_float(&file); 
+  f_t4 = SAC::read_next_float(&file); 
+  f_t5 = SAC::read_next_float(&file); 
+  f_t6 = SAC::read_next_float(&file); 
+  f_t7 = SAC::read_next_float(&file); 
+  f_t8 = SAC::read_next_float(&file); 
+  f_t9 = SAC::read_next_float(&file); 
+  f_f = SAC::read_next_float(&file); 
 
   // Resp headers
   // All -12345
@@ -71,14 +71,14 @@ Sac_Class::Sac_Class(const std::string& file_name)
   resp9 = SAC::read_next_float(&file); 
 
   // Station headers
-  stla = SAC::read_next_float(&file);
-  stlo = SAC::read_next_float(&file);
+  f_stla = SAC::read_next_float(&file);
+  f_stlo = SAC::read_next_float(&file);
   stel = SAC::read_next_float(&file);
   stdp = SAC::read_next_float(&file);
 
   // Event headers
-  evla = SAC::read_next_float(&file);
-  evlo = SAC::read_next_float(&file);
+  f_evla = SAC::read_next_float(&file);
+  f_evlo = SAC::read_next_float(&file);
   evel = SAC::read_next_float(&file);
   evdp = SAC::read_next_float(&file);
   mag = SAC::read_next_float(&file);
@@ -98,11 +98,8 @@ Sac_Class::Sac_Class(const std::string& file_name)
   az = SAC::read_next_float(&file);
   baz = SAC::read_next_float(&file);
   gcarc = SAC::read_next_float(&file);
-
-  // Skip 'internal' 
-  SAC::skip_word(&file);
-  // Skip 'internal'
-  SAC::skip_word(&file);
+  f_sb = SAC::read_next_float(&file);
+  f_sdelta = SAC::read_next_float(&file);
 
   depmen = SAC::read_next_float(&file); 
   cmpaz = SAC::read_next_float(&file);
@@ -132,10 +129,7 @@ Sac_Class::Sac_Class(const std::string& file_name)
   norid = SAC::read_next_int(&file); 
   nevid = SAC::read_next_int(&file); 
   npts = SAC::read_next_int(&file);
- 
-  // Skip 'internal'
-  SAC::skip_word(&file);
-
+  nsnpts = SAC::read_next_int(&file);
   nwfid = SAC::read_next_int(&file); 
   nxsize = SAC::read_next_int(&file); 
   nysize = SAC::read_next_int(&file); 
@@ -256,7 +250,14 @@ Sac_Class::Sac_Class(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Data
   //---------------------------------------------------------------------------
-  data = SAC::read_data(&file, npts);
+  data1 = SAC::read_data(&file, npts);
+  // (Unevenly sampled-data) or (spectral or xy)
+  // Same size as data1
+  if ((leven == 0) || (iftype > 1))
+  {
+    data2 = SAC::read_data(&file, npts);
+  }
+
   //---------------------------------------------------------------------------
   // End data
   //---------------------------------------------------------------------------
@@ -264,7 +265,61 @@ Sac_Class::Sac_Class(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Footer (if nvhdr = 7)
   //---------------------------------------------------------------------------
-
+  // NOTE: NVHDR = 6 was the format for SEVERAL DECADES, NVHDR = 7 is from 2020
+  //   and beyond
+  // New version of format, load in the footer values after data section(s)
+  if (nvhdr == 7)
+  {
+    delta = SAC::read_next_double(&file);
+    b = SAC::read_next_double(&file);
+    e = SAC::read_next_double(&file);
+    o = SAC::read_next_double(&file);
+    a = SAC::read_next_double(&file);
+    t0 = SAC::read_next_double(&file);
+    t1 = SAC::read_next_double(&file);
+    t2 = SAC::read_next_double(&file);
+    t3 = SAC::read_next_double(&file);
+    t4 = SAC::read_next_double(&file);
+    t5 = SAC::read_next_double(&file);
+    t6 = SAC::read_next_double(&file);
+    t7 = SAC::read_next_double(&file);
+    t8 = SAC::read_next_double(&file);
+    t9 = SAC::read_next_double(&file);
+    f = SAC::read_next_double(&file);
+    evlo = SAC::read_next_double(&file);
+    evla = SAC::read_next_double(&file);
+    stlo = SAC::read_next_double(&file);
+    stla = SAC::read_next_double(&file);
+    sb = SAC::read_next_double(&file);
+    sdelta = SAC::read_next_double(&file);
+  }
+  else
+  {
+    // Convert to NVHDR = 7
+    delta = static_cast<double>(f_delta);
+    b = static_cast<double>(f_b);
+    e = static_cast<double>(f_e);
+    o = static_cast<double>(f_o);
+    a = static_cast<double>(f_a);
+    t0 = static_cast<double>(f_t0);
+    t1 = static_cast<double>(f_t1);
+    t2 = static_cast<double>(f_t2);
+    t3 = static_cast<double>(f_t3);
+    t4 = static_cast<double>(f_t4);
+    t5 = static_cast<double>(f_t5);
+    t6 = static_cast<double>(f_t6);
+    t7 = static_cast<double>(f_t7);
+    t8 = static_cast<double>(f_t8);
+    t9 = static_cast<double>(f_t9);
+    f = static_cast<double>(f_f);
+    evlo = static_cast<double>(f_evlo);
+    evla = static_cast<double>(f_evla);
+    stlo = static_cast<double>(f_stlo);
+    stla = static_cast<double>(f_stla);
+    sb = static_cast<double>(f_sb);
+    sdelta = static_cast<double>(f_sdelta);
+    nvhdr = 7;
+  }
   //---------------------------------------------------------------------------
   // End footer 
   //---------------------------------------------------------------------------
@@ -287,31 +342,31 @@ void Sac_Class::write(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Header
   //---------------------------------------------------------------------------
-  SAC::write_words(&file, convert_to_word(delta));
+  SAC::write_words(&file, convert_to_word(f_delta));
   SAC::write_words(&file, convert_to_word(depmin));
   SAC::write_words(&file, convert_to_word(depmax));
   // Fill 'unused'
   SAC::write_words(&file, convert_to_word(depmax));
 
   SAC::write_words(&file, convert_to_word(odelta));
-  SAC::write_words(&file, convert_to_word(b));
-  SAC::write_words(&file, convert_to_word(e));
-  SAC::write_words(&file, convert_to_word(o));
-  SAC::write_words(&file, convert_to_word(a));
+  SAC::write_words(&file, convert_to_word(f_b));
+  SAC::write_words(&file, convert_to_word(f_e));
+  SAC::write_words(&file, convert_to_word(f_o));
+  SAC::write_words(&file, convert_to_word(f_a));
   // Fill 'internal'
-  SAC::write_words(&file, convert_to_word(a));
+  SAC::write_words(&file, convert_to_word(f_a)); // Could give this a name and a value..
 
-  SAC::write_words(&file, convert_to_word(t0));
-  SAC::write_words(&file, convert_to_word(t1));
-  SAC::write_words(&file, convert_to_word(t2));
-  SAC::write_words(&file, convert_to_word(t3));
-  SAC::write_words(&file, convert_to_word(t4));
-  SAC::write_words(&file, convert_to_word(t5));
-  SAC::write_words(&file, convert_to_word(t6));
-  SAC::write_words(&file, convert_to_word(t7));
-  SAC::write_words(&file, convert_to_word(t8));
-  SAC::write_words(&file, convert_to_word(t9));
-  SAC::write_words(&file, convert_to_word(f));
+  SAC::write_words(&file, convert_to_word(f_t0));
+  SAC::write_words(&file, convert_to_word(f_t1));
+  SAC::write_words(&file, convert_to_word(f_t2));
+  SAC::write_words(&file, convert_to_word(f_t3));
+  SAC::write_words(&file, convert_to_word(f_t4));
+  SAC::write_words(&file, convert_to_word(f_t5));
+  SAC::write_words(&file, convert_to_word(f_t6));
+  SAC::write_words(&file, convert_to_word(f_t7));
+  SAC::write_words(&file, convert_to_word(f_t8));
+  SAC::write_words(&file, convert_to_word(f_t9));
+  SAC::write_words(&file, convert_to_word(f_f));
   SAC::write_words(&file, convert_to_word(resp0));
   SAC::write_words(&file, convert_to_word(resp1));
   SAC::write_words(&file, convert_to_word(resp2));
@@ -322,12 +377,12 @@ void Sac_Class::write(const std::string& file_name)
   SAC::write_words(&file, convert_to_word(resp7));
   SAC::write_words(&file, convert_to_word(resp8));
   SAC::write_words(&file, convert_to_word(resp9));
-  SAC::write_words(&file, convert_to_word(stla));
-  SAC::write_words(&file, convert_to_word(stlo));
+  SAC::write_words(&file, convert_to_word(f_stla));
+  SAC::write_words(&file, convert_to_word(f_stlo));
   SAC::write_words(&file, convert_to_word(stel));
   SAC::write_words(&file, convert_to_word(stdp));
-  SAC::write_words(&file, convert_to_word(evla));
-  SAC::write_words(&file, convert_to_word(evlo));
+  SAC::write_words(&file, convert_to_word(f_evla));
+  SAC::write_words(&file, convert_to_word(f_evlo));
   SAC::write_words(&file, convert_to_word(evel));
   SAC::write_words(&file, convert_to_word(evdp));
   SAC::write_words(&file, convert_to_word(mag));
@@ -345,9 +400,8 @@ void Sac_Class::write(const std::string& file_name)
   SAC::write_words(&file, convert_to_word(az));
   SAC::write_words(&file, convert_to_word(baz));
   SAC::write_words(&file, convert_to_word(gcarc));
-  // Fill 'internal' (x2)
-  SAC::write_words(&file, convert_to_word(gcarc));
-  SAC::write_words(&file, convert_to_word(gcarc));
+  SAC::write_words(&file, convert_to_word(f_sb));
+  SAC::write_words(&file, convert_to_word(f_sdelta));
 
   SAC::write_words(&file, convert_to_word(depmen));
   SAC::write_words(&file, convert_to_word(cmpaz));
@@ -357,6 +411,7 @@ void Sac_Class::write(const std::string& file_name)
   SAC::write_words(&file, convert_to_word(yminimum));
   SAC::write_words(&file, convert_to_word(ymaximum));
   // Fill 'unused' (x7)
+  // Could give these names and values
   SAC::write_words(&file, convert_to_word(ymaximum));
   SAC::write_words(&file, convert_to_word(ymaximum));
   SAC::write_words(&file, convert_to_word(ymaximum));
@@ -375,19 +430,20 @@ void Sac_Class::write(const std::string& file_name)
   SAC::write_words(&file, convert_to_word(norid));
   SAC::write_words(&file, convert_to_word(nevid));
   SAC::write_words(&file, convert_to_word(npts));
-  // Fill 'internal'
-  SAC::write_words(&file, convert_to_word(npts));
+  SAC::write_words(&file, convert_to_word(nsnpts));
 
   SAC::write_words(&file, convert_to_word(nwfid));
   SAC::write_words(&file, convert_to_word(nxsize));
   SAC::write_words(&file, convert_to_word(nysize));
   // Fill 'unused'
+  // could give a name and a value
   SAC::write_words(&file, convert_to_word(nysize));
 
   SAC::write_words(&file, convert_to_word(iftype));
   SAC::write_words(&file, convert_to_word(idep));
   SAC::write_words(&file, convert_to_word(iztype));
   // Fill 'unused'
+  // could give a name and a vlue
   SAC::write_words(&file, convert_to_word(iztype));
 
   SAC::write_words(&file, convert_to_word(iinst));
@@ -400,6 +456,7 @@ void Sac_Class::write(const std::string& file_name)
   SAC::write_words(&file, convert_to_word(imagsrc));
   SAC::write_words(&file, convert_to_word(ibody));
   // Fill 'unused' (x7)
+  // could give these names and values
   SAC::write_words(&file, convert_to_word(ibody));
   SAC::write_words(&file, convert_to_word(ibody));
   SAC::write_words(&file, convert_to_word(ibody));
@@ -413,6 +470,7 @@ void Sac_Class::write(const std::string& file_name)
   SAC::write_words(&file, bool_to_word(lovrok));
   SAC::write_words(&file, bool_to_word(lcalda));
   // Fill 'unused'
+  // could give this a name and a value
   SAC::write_words(&file, bool_to_word(lcalda));
 
   std::array<char, 2 * word_length> two_words;
@@ -492,12 +550,55 @@ void Sac_Class::write(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Data
   //---------------------------------------------------------------------------
-  for (float x : data)
+  for (float x : data1)
   {
-       SAC::write_words(&file, convert_to_word(x));
+    SAC::write_words(&file, convert_to_word(x));
+  }
+  // (Unevenly sampled-data) or (spectral or xy)
+  if ((leven == 0) || (iftype > 1))
+  {
+    for (float x : data2)
+    {
+      SAC::write_words(&file, convert_to_word(x));
+    }
   }
   //---------------------------------------------------------------------------
   // End data
+  //---------------------------------------------------------------------------
+
+  //---------------------------------------------------------------------------
+  // Footer
+  //---------------------------------------------------------------------------
+  // Because upon reading we convert to NVHDR = 7 this should be automatically ran
+  // But incase you specifically wanted to make some NVHDR = 6 I wouldn't want
+  // the write-out to be borked (say, generating synthetics using the old standard)
+  if (nvhdr == 7)
+  {
+    SAC::write_words(&file, convert_to_word(delta));
+    SAC::write_words(&file, convert_to_word(b));
+    SAC::write_words(&file, convert_to_word(e));
+    SAC::write_words(&file, convert_to_word(o));
+    SAC::write_words(&file, convert_to_word(a));
+    SAC::write_words(&file, convert_to_word(t0));
+    SAC::write_words(&file, convert_to_word(t1));
+    SAC::write_words(&file, convert_to_word(t2));
+    SAC::write_words(&file, convert_to_word(t3));
+    SAC::write_words(&file, convert_to_word(t4));
+    SAC::write_words(&file, convert_to_word(t5));
+    SAC::write_words(&file, convert_to_word(t6));
+    SAC::write_words(&file, convert_to_word(t7));
+    SAC::write_words(&file, convert_to_word(t8));
+    SAC::write_words(&file, convert_to_word(t9));
+    SAC::write_words(&file, convert_to_word(f));
+    SAC::write_words(&file, convert_to_word(evlo));
+    SAC::write_words(&file, convert_to_word(evla));
+    SAC::write_words(&file, convert_to_word(stlo));
+    SAC::write_words(&file, convert_to_word(stla));
+    SAC::write_words(&file, convert_to_word(sb));
+    SAC::write_words(&file, convert_to_word(sdelta));
+  }
+  //---------------------------------------------------------------------------
+  // End footer
   //---------------------------------------------------------------------------
   file.close();
 }
@@ -508,16 +609,7 @@ void Sac_Class::write(const std::string& file_name)
 //-----------------------------------------------------------------------------
 // Misc
 //-----------------------------------------------------------------------------
-float Sac_Class::mean()
-{
-  float sum{};
-  // Foreach loop to try to look cleaner
-  for (float x : data)
-  {
-    sum += x;
-  }
-  return (sum / data.size());
-}
+
 //-----------------------------------------------------------------------------
 // End misc
 //-----------------------------------------------------------------------------

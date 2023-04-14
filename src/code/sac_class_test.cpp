@@ -16,24 +16,34 @@ int main()
   //---------------------------------------------------------------------------
   // Header values
   //---------------------------------------------------------------------------
-  std::cout << "Delta:\t\t" << sac.delta << " s\n"; // 0.025
+  std::cout << "f_Delta:\t\t" << sac.f_delta << " s\n"; // 0.025
+  std::cout << "Delta:\t\t" << sac.delta << " s \n"; //
   std::cout << "DepMin:\t\t" << sac.depmin << '\n'; // -12345
   std::cout << "DepMax:\t\t" << sac.depmax << '\n'; // -12345
   std::cout << "ODelta:\t\t" << sac.odelta << '\n'; // -12345
-  std::cout << "B:\t\t" << sac.b << '\n'; // 0
-  std::cout << "E:\t\t" << sac.e << '\n'; // 697
-  std::cout << "O:\t\t" << sac.o << '\n'; // 13
-  std::cout << "A:\t\t" << sac.a << '\n'; // -12345
-  std::cout << "T0:\t\t" << sac.t0 << '\n'; // -12345
-  std::cout << "T1:\t\t" << sac.t1 << '\n'; // -12345
-  std::cout << "T2:\t\t" << sac.t2 << '\n'; // -12345
-  std::cout << "T3:\t\t" << sac.t3 << '\n'; // -12345
-  std::cout << "T4:\t\t" << sac.t4 << '\n'; // -12345
-  std::cout << "T5:\t\t" << sac.t5 << '\n'; // -12345
-  std::cout << "T6:\t\t" << sac.t6 << '\n'; // -12345
-  std::cout << "T7:\t\t" << sac.t7 << '\n'; // -12345
-  std::cout << "T8:\t\t" << sac.t8 << '\n'; // -12345
-  std::cout << "T9:\t\t" << sac.t9 << '\n'; // -12345
+  std::cout << "f_B:\t\t" << sac.f_b << '\n'; // 0
+  std::cout << "B:\t\t" << sac.b << '\n'; //
+  std::cout << "f_E:\t\t" << sac.f_e << '\n'; // 697
+  std::cout << "E:\t\t" << sac.e << '\n'; //
+  std::cout << "f_O:\t\t" << sac.f_o << '\n'; // 13
+  std::cout << "O:\t\t" << sac.o << '\n'; //
+  std::cout << "f_A:\t\t" << sac.f_a << '\n'; // -12345
+  std::cout << "A:\t\t" << sac.a << '\n'; // 
+  std::cout << "f_T0:\t\t" << sac.f_t0 << '\n'; // -12345
+  std::cout << "T0:\t\t" << sac.t0 << '\n'; // 
+  std::cout << "f_T1:\t\t" << sac.f_t1 << '\n'; // -12345
+  std::cout << "T1:\t\t" << sac.t1 << '\n'; // 
+  std::cout << "f_T2:\t\t" << sac.f_t2 << '\n'; // -12345
+  std::cout << "T2:\t\t" << sac.t2 << '\n'; // 
+  std::cout << "f_T3:\t\t" << sac.f_t3 << '\n'; // -12345
+  std::cout << "T3:\t\t" << sac.t3 << '\n'; // 
+  std::cout << "f_T4:\t\t" << sac.f_t4 << '\n'; // -12345
+  std::cout << "f_T5:\t\t" << sac.f_t5 << '\n'; // -12345
+  std::cout << "f_T6:\t\t" << sac.f_t6 << '\n'; // -12345
+  std::cout << "f_T7:\t\t" << sac.f_t7 << '\n'; // -12345
+  std::cout << "f_T8:\t\t" << sac.f_t8 << '\n'; // -12345
+  std::cout << "f_T9:\t\t" << sac.f_t9 << '\n'; // -12345
+  std::cout << "f_f:\t\t" << sac.f_f << '\n'; // 
   std::cout << "Resp0:\t\t" << sac.resp0 << '\n'; // -12345
   std::cout << "Resp1:\t\t" << sac.resp1 << '\n'; // -12345
   std::cout << "Resp2:\t\t" << sac.resp2 << '\n'; // -12345
@@ -44,12 +54,12 @@ int main()
   std::cout << "Resp7:\t\t" << sac.resp7 << '\n'; // -12345
   std::cout << "Resp8:\t\t" << sac.resp8 << '\n'; // -12345
   std::cout << "Resp9:\t\t" << sac.resp9 << '\n'; // -12345
-  std::cout << "Stla:\t\t" << sac.stla << '\n'; // 38.4328
-  std::cout << "Stlo:\t\t" << sac.stlo << '\n'; // -118.155
+  std::cout << "f_Stla:\t\t" << sac.f_stla << '\n'; // 38.4328
+  std::cout << "f_Stlo:\t\t" << sac.f_stlo << '\n'; // -118.155
   std::cout << "Stel\t\t" << sac.stel << '\n'; // 1509
   std::cout << "Stdp:\t\t" << sac.stdp << '\n'; // 0
-  std::cout << "Evla:\t\t" << sac.evla << '\n'; // 36.801
-  std::cout << "Evlo:\t\t" << sac.evlo << '\n'; // -121.323
+  std::cout << "f_Evla:\t\t" << sac.f_evla << '\n'; // 36.801
+  std::cout << "f_Evlo:\t\t" << sac.f_evlo << '\n'; // -121.323
   std::cout << "Evel:\t\t" << sac.evel << '\n'; // -12345
   std::cout << "Evdp:\t\t" << sac.evdp << '\n'; // 10.16
   std::cout << "Mag:\t\t" << sac.mag << '\n'; // -12345
@@ -67,6 +77,8 @@ int main()
   std::cout << "Az:\t\t" << sac.az << '\n'; // 56.1169
   std::cout << "Baz:\t\t" << sac.baz << '\n'; // 238.043
   std::cout << "Gcarc:\t\t" << sac.gcarc << '\n'; // 2.99645
+  std::cout << "f_sb:\t\t" << sac.f_sb << '\n'; //
+  std::cout << "f_sdelta:\t\t" << sac.f_sdelta << '\n'; //
   std::cout << "DepMen:\t\t" << sac.depmen << '\n'; // -12345
   std::cout << "CmpAz:\t\t" << sac.cmpaz << '\n'; // 0
   std::cout << "CmpInc:\t\t" << sac.cmpinc << '\n'; // 0
@@ -129,16 +141,17 @@ int main()
   //---------------------------------------------------------------------------
   // Additional information
   //---------------------------------------------------------------------------
-  std::cout << "Data size:\t" << sac.data.size() << " points\n";
-  std::cout << "Avg:\t\t" << sac.mean() << '\n';
+  std::cout << "Data size:\t" << sac.data1.size() << " points\n";
   std::cout << "Class size:\t" << sizeof(sac) << " bytes\n";
   //---------------------------------------------------------------------------
   // Test Writing sac data
   //---------------------------------------------------------------------------
   // Leave a marker
   std::cout << "\n\nTesting writing to binary SAC...\n";
-  sac.mag = -1.2345f;
+  sac.mag = SAC::unset_float;
   std::cout << "Mag:\t" << sac.mag << '\n';
+  sac.kevnm = SAC::unset_four_words;
+  std::cout << "KEvNm:\t" << sac.kevnm << '\n';
   std::string new_file = "../data/test.SAC";
   sac.write(new_file);
   std::cout << "Successfully written out to: " << new_file << '\n';
@@ -147,6 +160,7 @@ int main()
   SAC::Sac_Class new_sac(new_file);
 
   std::cout << "Mag:\t" << new_sac.mag << '\n'; // It works!
+  std::cout << "KEvNm:\t" << new_sac.kevnm << '\n'; // Also works!
 
   return 0;
 }

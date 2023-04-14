@@ -25,6 +25,15 @@ namespace SAC
 constexpr int word_length{4};
 // First word of time-series
 constexpr int data_word{158};
+// Values for unset variables
+// These are SAC magic values
+// I'm setting there here explicitly to conform with the standard
+constexpr int unset_int{-12345};
+constexpr float unset_float{-12345.0f};
+constexpr double unset_double{-12345.0};
+constexpr bool unset_bool{0};
+const std::string unset_two_words{"-12345  "};
+const std::string unset_four_words{"-12345          "};
 
 // Convert word_number to the position (simple, but useful)
 int word_position(int word_number);
@@ -40,6 +49,9 @@ void skip_word(std::ifstream* sac);
 
 // Reads next word as a float
 float read_next_float(std::ifstream* sac);
+
+// Reads next word as a double
+double read_next_double(std::ifstream* sac);
 
 // Reads next word as integer
 int read_next_int(std::ifstream* sac);
@@ -86,9 +98,13 @@ bool is_set(std::array<char, N> words);
 void write_words(std::ofstream* sac_file, std::vector<char> input);
 
 // Template function to convert to a SAC word
-// handles float and int (not string)
+// handles float and int (not string or double)
+// Only single word
 template <typename T>
 std::vector<char> convert_to_word(T x);
+
+// Special for double-precision numbers (2 words, not 1)
+std::vector<char> convert_to_word(double x);
 
 // Template function to convert string to SAC word(s)
 template <long unsigned int N>

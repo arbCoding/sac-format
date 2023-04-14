@@ -36,7 +36,17 @@ float read_next_float(std::ifstream* sac)
   char raw_word[word_length] = {};
   sac->read((char*) &raw_word, word_length);
   float word{};
-  std::memcpy(&word, raw_word, 4);
+  std::memcpy(&word, raw_word, word_length);
+  return word;
+}
+
+double read_next_double(std::ifstream* sac)
+{
+  // 64-bit instead of 32-bit
+  char raw_word[2 * word_length] = {};
+  sac->read((char*) &raw_word, word_length);
+  double word{};
+  std::memcpy(&word, raw_word, 2 * word_length);
   return word;
 }
 
@@ -45,7 +55,7 @@ int read_next_int(std::ifstream* sac)
   char raw_word[word_length] = {};
   sac->read((char*) &raw_word, word_length);
   int word{};
-  std::memcpy(&word, raw_word, 4);
+  std::memcpy(&word, raw_word, word_length);
   return word;
 }
 
@@ -169,11 +179,11 @@ void write_words(std::ofstream* sac_file, std::vector<char> input)
 template <typename T>
 std::vector<char> convert_to_word(T x)
 {
-  char tmp[4];
+  char tmp[word_length];
   // Copy bytes from x into the tmp array
-  std::memcpy(tmp, &x, 4);
+  std::memcpy(tmp, &x, word_length);
   std::vector<char> word{};
-  word.resize(4);
+  word.resize(word_length);
   for (int i{0}; i < 4; ++i)
   {
     word[static_cast<long unsigned int>(i)] = tmp[i];
@@ -184,6 +194,20 @@ std::vector<char> convert_to_word(T x)
 // Explicit instantiation
 template std::vector<char> convert_to_word(float x);
 template std::vector<char> convert_to_word(int x);
+
+std::vector<char> convert_to_word(double x)
+{
+  char tmp[2 * word_length];
+  // Copy bytes from x into the tmp array
+  std::memcpy(tmp, &x, 2 * word_length);
+  std::vector<char> word{};
+  word.resize(2 * word_length);
+  for (int i{0}; i < 4; ++i)
+  {
+    word[static_cast<long unsigned int>(i)] = tmp[i];
+  }
+  return word;
+}
 
 // Veriable sized words for the 'K' headers
 template <long unsigned int N>
