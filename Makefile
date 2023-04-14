@@ -50,10 +50,11 @@ imp_prefix = $(base_prefix)implementation/
 # Object prefix
 obj_prefix = $(base_prefix)objects/
 
+# This is automated if a program uses all of these its great
 # Sources (implementations)
-imp_files := $(wildcard $(imp_prefix)*.cpp)
+#imp_files := $(wildcard $(imp_prefix)*.cpp)
 # Objects
-obj_files := $(patsubst $(imp_prefix)%.cpp, $(obj_prefix)%.o, $(imp_files))
+#obj_files := $(patsubst $(imp_prefix)%.cpp, $(obj_prefix)%.o, $(imp_files))
 
 all: sac_class_test
 
@@ -73,6 +74,12 @@ $(obj_prefix)%.o: $(imp_prefix)%.cpp
 	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
 	$(cxx) $(params) -I$(hdr_prefix) -c -o $@ $<
 	@echo -e "Build finish: $$(date)\n"
+
+# Manually defined for specific program
+# Modules for sac_class_test
+modules := sac_io sac_class
+imp_files := $(addsuffix .cpp, $(addprefix $(imp_prefix), $(modules)))
+obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
 
 # $@ is target
 # $^ is all prerequisites, without duplicates, separated by spaces
