@@ -87,6 +87,7 @@ sac_format: $(obj_files)
 # Use the single object file to simplify
 modules := sac_format
 obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
+$(info $$obj_files is [${obj_files}])
 # $@ is target
 # $^ is all prerequisites, without duplicates, separated by spaces
 sac_conversions_test: $(src_prefix)sac_conversions_test.cpp $(modules)
@@ -96,7 +97,8 @@ sac_conversions_test: $(src_prefix)sac_conversions_test.cpp $(modules)
 	$(cxx) -o $(bin_prefix)$@ $< $(obj_files)
 	@echo -e "Build finish: $$(date)\n"
 
-
+modules := sac_format
+obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
 sac_class_test: $(src_prefix)sac_class_test.cpp $(modules)
 	@echo "Building $(bin_prefix)$@"
 	@echo "Build start:  $$(date)"

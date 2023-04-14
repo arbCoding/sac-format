@@ -16,7 +16,7 @@
 #include <algorithm>
 // std::vector
 #include <vector>
-// std::memcpy()
+// std::memcpy(), std::copy() [strings]
 #include <cstring>
 // std::bitset
 # include <bitset>
@@ -26,9 +26,10 @@
 namespace SAC
 {
 // Size of data chunks in binary SAC files (called words)
-constexpr int word_length{4};
-constexpr int bytes_per_word{4};
-constexpr int binary_word_size{word_length * bytes_per_word};
+constexpr int word_length{4}; // bytes
+constexpr int bits_per_byte{8};
+// Each word is 32-bits (4 bytes)
+constexpr int binary_word_size{word_length * bits_per_byte};
 // First word of time-series
 constexpr int data_word{158};
 // Values for unset variables
@@ -99,11 +100,44 @@ bool is_set(std::array<char, N> words);
 //-----------------------------------------------------------------------------
 // Conversions
 //-----------------------------------------------------------------------------
-// SAC uses 16 bit integers (1 word, 4 bytes)
+// User defined types that allows the compiler to map the two values to each
+// other and perform conversions
+// Analogous for integers doesn't seem to work
+// Floats to binary and back
+union float_to_bits
+{
+  float value;
+  std::bitset<binary_word_size> bits;
+
+  float_to_bits(float x) : value(x){}
+  float_to_bits(std::bitset<binary_word_size> binary) : bits(binary){}
+};
+// Doubles to binary and back
+union double_to_bits
+{
+  double value;
+  std::bitset<2 * binary_word_size> bits;
+
+  double_to_bits(double x) : value(x){}
+  double_to_bits(std::bitset<2 * binary_word_size> binary) : bits(binary){}
+};
+
+// SAC uses 32 bit integers (1 word, 4 bytes)
 std::bitset<binary_word_size> int_to_binary(int x);
 int binary_to_int(std::bitset<binary_word_size> x);
+// SAC uses 32 bit floats (1 word, 4 bytes)
 std::bitset<binary_word_size> float_to_binary(float x);
+float binary_to_float(std::bitset<binary_word_size> x);
+// SAC uses 64 bit floats (2 words, 8 bytes)
 std::bitset<2 * binary_word_size> double_to_binary(double x);
+double binary_to_double(std::bitset<2 * binary_word_size> x);
+// SAC uses either 64 bit strings (2 words, 8 bytes)
+std::bitset<2 * binary_word_size> string_to_binary(std::string x);
+std::string binary_to_string(std::bitset<2 * binary_word_size> x);
+// 128 bit string (4 words, 16 bytes, only KEVNM header)
+std::bitset<4 * binary_word_size> long_string_to_binary(std::string x);
+std::string binary_to_long_string(std::bitset<4 * binary_word_size> x);
+
 std::bitset<binary_word_size> bool_to_binary(bool x);
 //-----------------------------------------------------------------------------
 // End conversions

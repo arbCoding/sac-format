@@ -205,6 +205,135 @@ int binary_to_int(std::bitset<binary_word_size> x)
   }
   return result;
 }
+
+// Union makes this so easy
+std::bitset<binary_word_size> float_to_binary(float x)
+{
+  return float_to_bits(x).bits;
+}
+
+float binary_to_float(std::bitset<binary_word_size> x)
+{
+  return float_to_bits(x).value;
+}
+
+// Once again, union to the rescue!
+std::bitset<2 * binary_word_size> double_to_binary(double x)
+{
+  return double_to_bits(x).bits;
+}
+
+double binary_to_double(std::bitset<2 * binary_word_size> x)
+{
+  return double_to_bits(x).value;
+}
+
+std::bitset<2 * binary_word_size> string_to_binary(std::string x)
+{
+  constexpr long unsigned int string_size{2 * word_length};
+  // 1 byte per character
+  constexpr long unsigned int char_size{bits_per_byte};
+  // x is being passed by value, not reference, so it shouldn't be
+  // altered outside of the function
+  // String must be of specific length
+  if (x.length() > string_size)
+  {
+    // Truncate if needed
+    x = x.substr(0, string_size);
+  }
+  else if (x.length() < string_size)
+  {
+    // Pad if needed
+    x = x.append(string_size - x.length(), ' ');
+  }
+  // Two words (8 characters)
+  std::bitset<2 * binary_word_size> bits{};
+  // 1 character
+  std::bitset<char_size> byte{};
+  long unsigned int character{};
+  for (long unsigned int i{0}; i < string_size; ++i)
+  {
+    character = static_cast<long unsigned int>(x[i]);
+    byte = std::bitset<char_size>(character);
+    for (long unsigned int j{0}; j < char_size; ++j)
+    {
+      bits[(i * char_size) + j] = byte[j];
+    }
+  }
+
+  return bits;
+}
+
+std::string binary_to_string(std::bitset<2 * binary_word_size> x)
+{
+  std::string result{};
+  constexpr long unsigned int char_size{bits_per_byte};
+  std::bitset<char_size> byte{};
+  // Read character by character
+  for (long unsigned int i{0}; i < 2 * binary_word_size; i += char_size)
+  {
+    // Build the character
+    for (long unsigned int j{0}; j < char_size; ++j)
+    {
+      byte[j] = x[i + j];
+    }
+    result += static_cast<char>(byte.to_ulong());
+  }
+  return result;
+}
+
+std::bitset<4 * binary_word_size> long_string_to_binary(std::string x)
+{
+  // Same as before, but twice the length
+  // Cannot use template since compiler cannot decide which function
+  // to use based upon input (in-case user make string longer than it
+  // should be)
+  constexpr long unsigned int string_size{4 * word_length};
+  constexpr long unsigned int char_size{bits_per_byte};
+  if (x.length() > string_size)
+  {
+    // Truncate if needed
+    x = x.substr(0, string_size);
+  }
+  else if (x.length() < string_size)
+  {
+    // Pad if needed
+    x = x.append(string_size - x.length(), ' ');
+  }
+  // Four words (16 characters)
+  std::bitset<4 * binary_word_size> bits{};
+  // One character
+  std::bitset<char_size> byte{};
+  long unsigned int character{};
+  for (long unsigned int i{0}; i < string_size; ++i)
+  {
+    character = static_cast<long unsigned int>(x[i]);
+    byte = std::bitset<char_size>(character);
+    for (long unsigned int j{0}; j < char_size; ++j)
+    {
+      bits[(i * char_size) + j] = byte[j];
+    }
+  }
+  return bits;
+}
+
+std::string binary_to_long_string(std::bitset<4 * binary_word_size> x)
+{
+  std::string result{};
+  constexpr long unsigned int char_size{bits_per_byte};
+  std::bitset<char_size> byte{};
+  // Read character by character
+  for (long unsigned int i{0}; i < 4 * binary_word_size; i += char_size)
+  {
+    // It builds character!
+    for (long unsigned int j{0}; j < char_size; ++j)
+    {
+      byte[j] = x[i + j];
+    }
+    result += static_cast<char>(byte.to_ulong());
+  }
+  return result;
+}
 //-----------------------------------------------------------------------------
 // End conversions
 //-----------------------------------------------------------------------------
