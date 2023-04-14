@@ -260,7 +260,6 @@ std::bitset<2 * binary_word_size> string_to_binary(std::string x)
       bits[(i * char_size) + j] = byte[j];
     }
   }
-
   return bits;
 }
 
@@ -333,6 +332,18 @@ std::string binary_to_long_string(std::bitset<4 * binary_word_size> x)
     result += static_cast<char>(byte.to_ulong());
   }
   return result;
+}
+
+std::bitset<binary_word_size> bool_to_binary(bool x)
+{
+  std::bitset<binary_word_size> result{};
+  result[binary_word_size - 1] = x;
+  return result;
+}
+
+bool binary_to_bool(std::bitset<binary_word_size> x)
+{
+  return x[binary_word_size - 1];
 }
 //-----------------------------------------------------------------------------
 // End conversions

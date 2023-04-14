@@ -137,8 +137,9 @@ std::string binary_to_string(std::bitset<2 * binary_word_size> x);
 // 128 bit string (4 words, 16 bytes, only KEVNM header)
 std::bitset<4 * binary_word_size> long_string_to_binary(std::string x);
 std::string binary_to_long_string(std::bitset<4 * binary_word_size> x);
-
+// Shit I forgot this one...
 std::bitset<binary_word_size> bool_to_binary(bool x);
+bool binary_to_bool(std::bitset<binary_word_size> x);
 //-----------------------------------------------------------------------------
 // End conversions
 //-----------------------------------------------------------------------------
