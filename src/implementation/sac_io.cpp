@@ -159,6 +159,58 @@ template bool is_set(std::array<char, 4 * word_length> words);
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Conversions
+//-----------------------------------------------------------------------------
+std::bitset<binary_word_size> int_to_binary(int x)
+{
+  std::bitset<binary_word_size> bits{};
+  if (x >= 0)
+  {
+    bits = std::bitset<binary_word_size>(static_cast<long long unsigned int>(x));
+  }
+  else
+  {
+    // 2's compliment
+    bits = std::bitset<binary_word_size>(std::pow(2, binary_word_size) + x);
+  }
+  // Convert to bitset<word_length>
+  return bits;
+}
+
+int binary_to_int(std::bitset<binary_word_size> x)
+{
+  int result{};
+  // Check if negative number
+  // First number is 1 (true), number is negative
+  // otherwise it is positive
+  // test reads position from right to left (not left to right!)
+  // hence why it looks like we're reading the final value
+  // (for a bitset the final value is the left-most value)
+  if (x.test(binary_word_size - 1))
+  {
+    // Bitwise not operator flips 0's and 1's
+    // -1 -> 6 in for a 4-bit integer
+    // e.g. 1001 -> 0110
+    x = ~x;
+    // Convert back to an integer
+    result = x.to_ulong();
+    // Add 1 to complete the complement portion
+    result += 1;
+    // Changed sign to denote it as negative
+    result *= -1;
+  }
+  else
+  {
+    result = x.to_ulong();
+  }
+  return result;
+}
+//-----------------------------------------------------------------------------
+// End conversions
+//-----------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
 void write_words(std::ofstream* sac_file, std::vector<char> input)

@@ -18,11 +18,17 @@
 #include <vector>
 // std::memcpy()
 #include <cstring>
+// std::bitset
+# include <bitset>
+// std::pow
+# include <cmath>
 
 namespace SAC
 {
 // Size of data chunks in binary SAC files (called words)
 constexpr int word_length{4};
+constexpr int bytes_per_word{4};
+constexpr int binary_word_size{word_length * bytes_per_word};
 // First word of time-series
 constexpr int data_word{158};
 // Values for unset variables
@@ -88,6 +94,19 @@ template <long unsigned int N>
 bool is_set(std::array<char, N> words);
 //-----------------------------------------------------------------------------
 // End misc
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Conversions
+//-----------------------------------------------------------------------------
+// SAC uses 16 bit integers (1 word, 4 bytes)
+std::bitset<binary_word_size> int_to_binary(int x);
+int binary_to_int(std::bitset<binary_word_size> x);
+std::bitset<binary_word_size> float_to_binary(float x);
+std::bitset<2 * binary_word_size> double_to_binary(double x);
+std::bitset<binary_word_size> bool_to_binary(bool x);
+//-----------------------------------------------------------------------------
+// End conversions
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

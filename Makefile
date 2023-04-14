@@ -51,7 +51,10 @@ imp_prefix = $(base_prefix)implementation/
 # Built object files will go here
 obj_prefix = $(base_prefix)objects/
 
-all: sac_class_test
+# Compilation command
+cxx := $(compiler) $(params) -I$(hdr_prefix)
+
+all: sac_conversions_test sac_class_test
 
 # By splitting into .o files I can make it so that only newly written code gets compiled
 # Therefore cutting down on compilation times
@@ -63,7 +66,7 @@ $(obj_prefix)%.o: $(imp_prefix)%.cpp
 	@echo "Building $@"
 	@echo "Build start:  $$(date)"
 	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
-	$(compiler) $(params) -I$(hdr_prefix) -c -o $@ $<
+	$(cxx) -c -o $@ $<
 	@echo -e "Build finish: $$(date)\n"
 
 # Manually defined for specific program
@@ -81,18 +84,25 @@ sac_format: $(obj_files)
 	ld -r -o $(obj_prefix)$@.o $^
 	@echo -e "Build finish: $$(date)\n"
 
-
 # Use the single object file to simplify
 modules := sac_format
 obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
 # $@ is target
 # $^ is all prerequisites, without duplicates, separated by spaces
+sac_conversions_test: $(src_prefix)sac_conversions_test.cpp $(modules)
+	@echo "Building $(bin_prefix)$@"
+	@echo "Build start:  $$(date)"
+	@test -d $(bin_prefix) || mkdir -p $(bin_prefix)
+	$(cxx) -o $(bin_prefix)$@ $< $(obj_files)
+	@echo -e "Build finish: $$(date)\n"
+
+
 sac_class_test: $(src_prefix)sac_class_test.cpp $(modules)
 	@echo "Building $(bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(bin_prefix) || mkdir -p $(bin_prefix)
-	$(compiler) $(params) -I$(hdr_prefix) -o $(bin_prefix)$@ $< $(obj_files)
+	$(cxx) -o $(bin_prefix)$@ $< $(obj_files)
 	@echo -e "Build finish: $$(date)\n"
 
 clean:
-	rm -rf $(bin_prefix) $(obj_prefix)
+	rm -rf $(bin_prefix) $(obj_prefix) *.dSYM
