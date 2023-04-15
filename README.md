@@ -92,6 +92,29 @@ make sac_format
 The above command will build ./src/objects/sac_format.o which you can use in your program
 (don't forget to include ./src/header to have the sac_io.hpp and sac_stream.hpp interfaces).
 
+This will build three object files:
+* sac_io.o - low-level sac-file IO functions
+* sac_stream.o - high-level SacStream class
+* sac_format.o - Both sac_io.o and sac_stream.o combined
+
+#### IMPORTANT 
+If you *only* want **low-level** sac-file IO you *can* use `sac_io.o` exclusively (interface in `./src/header/sac_io.hpp`)
+
+If you want **high-level** sac-file IO you *can* use `sac_io.o` and `sac_stream.o` (inferfaces in `./src/header/`)
+
+**Preferred method** Use `sac_format.o` and include the interfaces in `./src/header`. If you're using the high-level stuff,
+you'll need the low-level anyway (since it uses it behind the scenes), so you might as well shrink your list of object files.
+
+---
+
+## Organization
+
+I have split functionality between *interface* files `./src/header/*.hpp` and *implementation* files `./src/implementation.*cpp`.
+
+The interface files have the constant definitions, the function names and return types, and comments on what they do (but **not** the details).
+
+If you're curious of the details on a function, you can find it in the implementation file that corresponds to its interface.
+
 ---
 
 ## TODO:
