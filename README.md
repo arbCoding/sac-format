@@ -109,7 +109,7 @@ you'll need the low-level anyway (since it uses it behind the scenes), so you mi
 
 ## Organization
 
-I have split functionality between *interface* files `./src/header/*.hpp` and *implementation* files `./src/implementation/*cpp`.
+I have split functionality between *interface* files `./src/header/*.hpp` and *implementation* files `./src/implementation/.*cpp`.
 
 The interface files have the constant definitions, the function names and return types, and comments on what they do (but **not** the details).
 
