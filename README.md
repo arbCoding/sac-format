@@ -9,8 +9,10 @@ Presently, SAC binary files are supported. Other formats may come later.
 By default, the build process uses debug-mode, which has a lot of error checking and results
 in longer compilation times, larger compiled programs and objects, and slower runtimes.
 
+---
+
 ## Compiling
-*BEFORE COMPILING* make sure to set your c++ compiler in the make file
+**BEFORE COMPILING** make sure to set your c++ compiler in the Makefile:
 ```Makefile
 # Linux or Mac
 uname_s := $(shell uname -s)
@@ -26,7 +28,10 @@ You can see in the above snippet that for linux I use the default g++ compiler a
 the g++-12 compiler I installed via homebrew. If you have a different compiler, you'll need to set
 the compiler variable yourself.
 
-*ON COMPILERS* I use g++, the Makefile works with g++. If you want to use clang *and* compiling the debug
+---
+
+### ON COMPILERS 
+I use g++, the Makefile works with g++. If you want to use clang *and* compile the debug
 version (more on that below) you will need to remove the `-fanalyzer` argument from the parameter list
 
 G++:
@@ -40,6 +45,8 @@ Clang:
 # Clang
 debug_param = -Weffc++ -Wextra -Wsign_conversion -Werror -Wshadow -ggdb
 ```
+
+---
 
 ### Debug vs Release
 If you'd rather compile in release-mode you will need to edit the Makefile as follows.
@@ -66,11 +73,17 @@ New:
 debug = false
 ```
 
+---
+
+### Build tests
 To build the test programs, in the top-level directory (same as this README.md file) run:
 ```shell
 make tests
 ```
 
+---
+
+### Build sac_format
 If you're only interested in being able to read/write binary SAC-files without tests or anything else:
 ```shell
 make sac_format
@@ -79,7 +92,10 @@ make sac_format
 The above command will build ./src/objects/sac_format.o which you can use in your program
 (don't forget to include ./src/header to have the sac_io.hpp and sac_stream.hpp interfaces).
 
-TODO:
+---
+
+## TODO:
+
 - [X] Read [SAC](https://ds.iris.edu/files/sac-manual/manual/file_format.html) file format
 
 - [X] Write [SAC] file format
