@@ -51,7 +51,7 @@ debug_param = -Weffc++ -Wextra -Wsign_conversion -Werror -Wshadow -ggdb
 ### Debug vs Release
 If you'd rather compile in release-mode you will need to edit the Makefile as follows.
 
-Original:
+Debug-Mode:
 ```Makefile
 # Debug version is substantially larger file size (and slower runtime)
 # Debug compilation is extremely strict (warnings = errors)
@@ -62,7 +62,7 @@ debug = true
 #debug = false
 ```
 
-New:
+Release-Mode:
 ```Makefile
 # Debug version is substantially larger file size (and slower runtime)
 # Debug compilation is extremely strict (warnings = errors)
