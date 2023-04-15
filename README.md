@@ -12,7 +12,6 @@ in longer compilation times, larger compiled programs and objects, and slower ru
 If you'd rather compile in release-mode you will need to edit the Makefile as follows.
 
 Original:
-
 ```Makefile
 # Debug version is substantially larger file size (and slower runtime)
 # Debug compilation is extremely strict (warnings = errors)
@@ -35,12 +34,12 @@ debug = false
 ```
 
 To build the test programs, in the top-level directory (same as this README.md file) run:
-```
+```shell
 make tests
 ```
 
 If you're only interested in being able to read/write binary SAC-files without tests or anything else:
-```
+```shell
 make sac_format
 ```
 
