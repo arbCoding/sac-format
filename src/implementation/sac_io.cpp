@@ -220,7 +220,6 @@ std::bitset<4 * binary_word_size> concat_words(std::bitset<2 * binary_word_size>
   }
   return result;
 }
-
 //-----------------------------------------------------------------------------
 // End conversions
 //-----------------------------------------------------------------------------
@@ -231,7 +230,7 @@ std::bitset<4 * binary_word_size> concat_words(std::bitset<2 * binary_word_size>
 std::bitset<binary_word_size> read_word(std::ifstream* sac)
 {
   std::bitset<binary_word_size> bits{};
-  constexpr long unsigned int char_size{bits_per_byte};
+  constexpr size_t char_size{bits_per_byte};
   // Where we will store the characters
   // Dynamic memory allocation (make sure to delete)
   char words[word_length];
@@ -279,72 +278,8 @@ std::vector<float> read_data(std::ifstream* sac, size_t n_words, int start)
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Misc
-//-----------------------------------------------------------------------------
-template <long unsigned int N>
-void print_words(std::array<char, N> words)
-{
-  for (long unsigned int i{0}; i < sizeof(words); ++i)
-  {
-    std::cout << words[i] << '\t' << static_cast<int>(words[i]) << '\n'; 
-  }
-}
-
-// Explicit instantiation of template to make linker/compiler behave!
-template void print_words(std::array<char, word_length> words);
-template void print_words(std::array<char, 2 * word_length> words);
-template void print_words(std::array<char, 4 * word_length> words);
-
-void print_word(std::vector<char> word)
-{
-  // Foreach style loop to make simpler
-  for (char c : word)
-  {
-    std::cout << static_cast<int>(c) << '\n';
-  }
-}
-
-// Seems to work
-// Checks to see if the value is -12345 (characters)
-// Which is the SAC special value for unset
-template <long unsigned int N>
-bool is_set(std::array<char, N> words)
-{
-  // Need to search for the -12345 pattern
-  for (long unsigned int i{0}; i < sizeof(words); ++i)
-  {
-    if (words[i] == '-')
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
-// Explicit instantiation of template to make linker/compiler behave!
-template bool is_set(std::array<char, word_length> words);
-template bool is_set(std::array<char, 2 * word_length> words);
-template bool is_set(std::array<char, 4 * word_length> words);
-//-----------------------------------------------------------------------------
-// End misc
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-void write_words(std::ofstream* sac_file, std::vector<char> input)
-{
-  std::ofstream& sac = *sac_file;
-  if (sac.is_open())
-  {
-    // Foreach-loop for funzies instead of usual for-loop
-    for (char c : input)
-    {
-      //sac.write(c, sizeof(char)); // cannot initialize
-      sac.write((char*) &c, sizeof(char));
-    }
-  }
-}
 
 // Template on the typename to make possible to handle float or int
 template <typename T>

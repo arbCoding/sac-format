@@ -297,8 +297,9 @@ void Sac_Class::write(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Header
   //---------------------------------------------------------------------------
-  SAC::write_words(&file, convert_to_word(f_delta));
-  SAC::write_words(&file, convert_to_word(depmin));
+  //write_word(&file, float_to_binary(f_delta));
+  //write_word(&file, float_to_binary(depmin));
+  /*
   SAC::write_words(&file, convert_to_word(depmax));
   // Fill 'unused'
   SAC::write_words(&file, convert_to_word(depmax));
@@ -552,6 +553,7 @@ void Sac_Class::write(const std::string& file_name)
     SAC::write_words(&file, convert_to_word(sb));
     SAC::write_words(&file, convert_to_word(sdelta));
   }
+  */
   //---------------------------------------------------------------------------
   // End footer
   //---------------------------------------------------------------------------
