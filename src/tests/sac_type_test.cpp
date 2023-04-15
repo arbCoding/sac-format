@@ -12,7 +12,8 @@
 int main()
 {
   std::cout << "Integer tests..." << '\n';
-  std::cout << "Positive integer:\n";
+  // ANSI escape sequences to make bold
+  std::cout << "\033[1m" << "Positive integer:" << "\033[0m\n";
   constexpr int i1{12345};
   std::cout << "\tTest:\t" << i1 << '\n';
   std::bitset<SAC::binary_word_size> one_word{};
@@ -46,6 +47,24 @@ int main()
   std::cout << "\tBack:\t" << SAC::binary_to_float(one_word) << '\n';
   std::cout << "\tPass:\t" << (f2 == SAC::binary_to_float(one_word)) << '\n';
 
+
+  std::cout << "\nBool tests...\n";
+  std::cout << "True bool:\n";
+  const bool b1{0};
+  std::cout << "\tTest:\t" << b1 << '\n';
+  one_word = SAC::bool_to_binary(b1);
+  std::cout << "\tBinary:\t" << one_word << '\n';
+  std::cout << "\tBack:\t" << SAC::binary_to_bool(one_word) << '\n';
+  std::cout << "\tPass:\t" << (b1 == SAC::binary_to_bool(one_word)) << '\n';
+
+  std::cout << "\nFalse bool:\n";
+  const bool b2{1};
+  std::cout << "\tTest:\t" << b2 << '\n';
+  one_word = SAC::bool_to_binary(b2);
+  std::cout << "\tBinary:\t" << one_word << '\n';
+  std::cout << "\tBack:\t" << SAC::binary_to_bool(one_word) << '\n';
+  std::cout << "\tPass:\t" << (b2 == SAC::binary_to_bool(one_word)) << '\n';
+
   std::cout << "\nDouble tests..." << '\n';
   std::cout << "Positive double:\n";
   constexpr double d1{1.2345};
@@ -65,7 +84,7 @@ int main()
   std::cout << "\tPass:\t" << (d2 == SAC::binary_to_double(two_words)) << '\n';
 
   std::cout << "\nString tests..." << '\n';
-  std::cout << "\nPerfect two word string:\n";
+  std::cout << "Perfect two word string:\n";
   const std::string s1{"01234567"};
   std::cout << "\tTest:\t" << s1 << '\n';
   two_words = SAC::string_to_binary(s1);
@@ -120,21 +139,6 @@ int main()
   std::cout << "\tBack:\t" << SAC::binary_to_long_string(four_words) << '\n';
   // Must match up with the truncated version
   std::cout << "\tPass:\t" << (s4 == SAC::binary_to_long_string(four_words)) << '\n';
-
-  std::cout << "\nBool tests...\n";
-  const bool b1{0};
-  std::cout << "\tTest:\t" << b1 << '\n';
-  one_word = SAC::bool_to_binary(b1);
-  std::cout << "\tBinary:\t" << one_word << '\n';
-  std::cout << "\tBack:\t" << SAC::binary_to_bool(one_word) << '\n';
-  std::cout << "\tPass:\t" << (b1 == SAC::binary_to_bool(one_word)) << '\n';
-
-  const bool b2{1};
-  std::cout << "\n\tTest:\t" << b2 << '\n';
-  one_word = SAC::bool_to_binary(b2);
-  std::cout << "\tBinary:\t" << one_word << '\n';
-  std::cout << "\tBack:\t" << SAC::binary_to_bool(one_word) << '\n';
-  std::cout << "\tPass:\t" << (b2 == SAC::binary_to_bool(one_word)) << '\n';
 
   return 0;
 }

@@ -42,6 +42,8 @@ endif
 base_prefix = ./src/
 # Built programs will go here
 bin_prefix = ./bin/
+# Test programs will go here
+test_bin_prefix = $(bin_prefix)tests/
 # Where the source code files for programs are stored
 src_prefix = $(base_prefix)code/
 # Where the source code files for tests are stored
@@ -56,7 +58,8 @@ obj_prefix = $(base_prefix)objects/
 # Compilation command
 cxx := $(compiler) $(params) -I$(hdr_prefix)
 
-tests: sac_class_test sac_type_test sac_io_test
+# Tests make the test programs
+tests: sac_stream_test sac_type_test sac_io_test
 
 # By splitting into .o files I can make it so that only newly written code gets compiled
 # Therefore cutting down on compilation times
@@ -73,7 +76,7 @@ $(obj_prefix)%.o: $(imp_prefix)%.cpp
 
 # Manually defined for specific program
 # Modules for sac_class_test
-modules := sac_io sac_class
+modules := sac_io sac_stream
 obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
 
 # Print out obj_files to check that they are set correctly
@@ -92,27 +95,27 @@ obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
 # $@ is target
 # $^ is all prerequisites, without duplicates, separated by spaces
 sac_type_test: $(test_prefix)sac_type_test.cpp $(modules)
-	@echo "Building $(bin_prefix)$@"
+	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
-	@test -d $(bin_prefix) || mkdir -p $(bin_prefix)
-	$(cxx) -o $(bin_prefix)$@ $< $(obj_files)
+	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
 	@echo -e "Build finish: $$(date)\n"
 
 sac_io_test: $(test_prefix)sac_io_test.cpp $(modules)
-	@echo "Building $(bin_prefix)$@"
+	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
-	@test -d $(bin_prefix) || mkdir -p $(bin_prefix)
-	$(cxx) -o $(bin_prefix)$@ $< $(obj_files)
+	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
 	@echo -e "Building finish $$(date)\n"
 
 modules := sac_format
 obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
 
-sac_class_test: $(test_prefix)sac_class_test.cpp $(modules)
-	@echo "Building $(bin_prefix)$@"
+sac_stream_test: $(test_prefix)sac_stream_test.cpp $(modules)
+	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
-	@test -d $(bin_prefix) || mkdir -p $(bin_prefix)
-	$(cxx) -o $(bin_prefix)$@ $< $(obj_files)
+	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
 	@echo -e "Build finish: $$(date)\n"
 
 clean:

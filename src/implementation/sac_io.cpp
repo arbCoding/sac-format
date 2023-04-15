@@ -5,20 +5,20 @@
 namespace SAC
 {
 
+//-----------------------------------------------------------------------------
+// Conversions
+//-----------------------------------------------------------------------------
 int word_position(int word_number)
 {
   return (word_number * word_length);
 }
 
-//-----------------------------------------------------------------------------
-// Conversions
-//-----------------------------------------------------------------------------
 std::bitset<binary_word_size> int_to_binary(int x)
 {
   std::bitset<binary_word_size> bits{};
   if (x >= 0)
   {
-    bits = std::bitset<binary_word_size>(static_cast<long long unsigned int>(x));
+    bits = std::bitset<binary_word_size>(static_cast<uint64_t>(x));
   }
   else
   {
@@ -82,9 +82,9 @@ double binary_to_double(std::bitset<2 * binary_word_size> x)
 
 std::bitset<2 * binary_word_size> string_to_binary(std::string x)
 {
-  constexpr long unsigned int string_size{2 * word_length};
+  constexpr size_t string_size{2 * word_length};
   // 1 byte per character
-  constexpr long unsigned int char_size{bits_per_byte};
+  constexpr size_t char_size{bits_per_byte};
   // x is being passed by value, not reference, so it shouldn't be
   // altered outside of the function
   // String must be of specific length
@@ -102,12 +102,12 @@ std::bitset<2 * binary_word_size> string_to_binary(std::string x)
   std::bitset<2 * binary_word_size> bits{};
   // 1 character
   std::bitset<char_size> byte{};
-  long unsigned int character{};
-  for (long unsigned int i{0}; i < string_size; ++i)
+  size_t character{};
+  for (size_t i{0}; i < string_size; ++i)
   {
-    character = static_cast<long unsigned int>(x[i]);
+    character = static_cast<size_t>(x[i]);
     byte = std::bitset<char_size>(character);
-    for (long unsigned int j{0}; j < char_size; ++j)
+    for (size_t j{0}; j < char_size; ++j)
     {
       bits[(i * char_size) + j] = byte[j];
     }
@@ -118,13 +118,13 @@ std::bitset<2 * binary_word_size> string_to_binary(std::string x)
 std::string binary_to_string(std::bitset<2 * binary_word_size> x)
 {
   std::string result{};
-  constexpr long unsigned int char_size{bits_per_byte};
+  constexpr size_t char_size{bits_per_byte};
   std::bitset<char_size> byte{};
   // Read character by character
-  for (long unsigned int i{0}; i < 2 * binary_word_size; i += char_size)
+  for (size_t i{0}; i < 2 * binary_word_size; i += char_size)
   {
     // Build the character
-    for (long unsigned int j{0}; j < char_size; ++j)
+    for (size_t j{0}; j < char_size; ++j)
     {
       byte[j] = x[i + j];
     }
@@ -139,8 +139,8 @@ std::bitset<4 * binary_word_size> long_string_to_binary(std::string x)
   // Cannot use template since compiler cannot decide which function
   // to use based upon input (in-case user make string longer than it
   // should be)
-  constexpr long unsigned int string_size{4 * word_length};
-  constexpr long unsigned int char_size{bits_per_byte};
+  constexpr size_t string_size{4 * word_length};
+  constexpr size_t char_size{bits_per_byte};
   if (x.length() > string_size)
   {
     // Truncate if needed
@@ -155,12 +155,12 @@ std::bitset<4 * binary_word_size> long_string_to_binary(std::string x)
   std::bitset<4 * binary_word_size> bits{};
   // One character
   std::bitset<char_size> byte{};
-  long unsigned int character{};
-  for (long unsigned int i{0}; i < string_size; ++i)
+  size_t character{};
+  for (size_t i{0}; i < string_size; ++i)
   {
-    character = static_cast<long unsigned int>(x[i]);
+    character = static_cast<size_t>(x[i]);
     byte = std::bitset<char_size>(character);
-    for (long unsigned int j{0}; j < char_size; ++j)
+    for (size_t j{0}; j < char_size; ++j)
     {
       bits[(i * char_size) + j] = byte[j];
     }
@@ -171,13 +171,13 @@ std::bitset<4 * binary_word_size> long_string_to_binary(std::string x)
 std::string binary_to_long_string(std::bitset<4 * binary_word_size> x)
 {
   std::string result{};
-  constexpr long unsigned int char_size{bits_per_byte};
+  constexpr size_t char_size{bits_per_byte};
   std::bitset<char_size> byte{};
   // Read character by character
-  for (long unsigned int i{0}; i < 4 * binary_word_size; i += char_size)
+  for (size_t i{0}; i < 4 * binary_word_size; i += char_size)
   {
     // It builds character!
-    for (long unsigned int j{0}; j < char_size; ++j)
+    for (size_t j{0}; j < char_size; ++j)
     {
       byte[j] = x[i + j];
     }
@@ -230,21 +230,21 @@ std::bitset<4 * binary_word_size> concat_words(std::bitset<2 * binary_word_size>
 std::bitset<binary_word_size> read_word(std::ifstream* sac)
 {
   std::bitset<binary_word_size> bits{};
-  constexpr long unsigned int char_size{bits_per_byte};
+  constexpr size_t char_size{bits_per_byte};
   // Where we will store the characters
   // Dynamic memory allocation (make sure to delete)
-  char words[word_length];
+  char word[word_length];
   // Read to our buffer
-  sac->read(words, word_length);
+  sac->read(word, word_length);
   // Take each character
   std::bitset<char_size> byte{};
-  long unsigned int character{};
-  for (long unsigned int i{0}; i < sizeof(words); ++i)
+  size_t character{};
+  for (size_t i{0}; i < word_length; ++i)
   {
-    character = static_cast<long unsigned int>(words[i]);
+    character = static_cast<size_t>(word[i]);
     byte = std::bitset<char_size>(character);
     // bit-by-bit
-    for (long unsigned int j{0}; j < char_size; ++j)
+    for (size_t j{0}; j < char_size; ++j)
     {
       bits[(i * char_size) + j] = byte[j];
     }
@@ -280,6 +280,19 @@ std::vector<float> read_data(std::ifstream* sac, size_t n_words, int start)
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
+//-----------------
+// Not working
+//-----------------
+void write_word(std::ofstream* sac_file, std::bitset<binary_word_size> x)
+{
+  std::cout << sac_file->is_open() << '\n';
+  std::cout << x << '\n';
+  return;
+}
+
+//-----------------
+// Working
+//-----------------
 void write_words(std::ofstream* sac_file, std::vector<char> input)
 {
   std::ofstream& sac = *sac_file;
@@ -303,7 +316,7 @@ std::vector<char> convert_to_word(T x)
   std::memcpy(tmp, &x, word_length);
   std::vector<char> word{};
   word.resize(word_length);
-  for (int i{0}; i < 4; ++i)
+  for (int i{0}; i < word_length; ++i)
   {
     word[static_cast<std::size_t>(i)] = tmp[i];
   }
@@ -323,13 +336,13 @@ std::vector<char> convert_to_word(double x)
   word.resize(2 * word_length);
   for (int i{0}; i < 2 * word_length; ++i)
   {
-    word[static_cast<long unsigned int>(i)] = tmp[i];
+    word[static_cast<size_t>(i)] = tmp[i];
   }
   return word;
 }
 
 // Veriable sized words for the 'K' headers
-template <long unsigned int N>
+template <size_t N>
 std::array<char, N> convert_to_words(std::string s, int n_words)
 {
   std::array<char, N> all_words;
@@ -337,7 +350,7 @@ std::array<char, N> convert_to_words(std::string s, int n_words)
   const char* c_str = s.c_str();
   for (int i{0}; i < (n_words * word_length); ++i)
   {
-    all_words[static_cast<long unsigned int>(i)] = static_cast<int>(c_str[i]);
+    all_words[static_cast<size_t>(i)] = static_cast<int>(c_str[i]);
   }
   return all_words;
 }
@@ -350,9 +363,9 @@ template std::array<char, 4 * word_length> convert_to_words(std::string s, int n
 std::vector<char> bool_to_word(bool b)
 {
   std::vector<char> result;
-  result.resize(4);
+  result.resize(word_length);
   result[0] = b;
-  for (long unsigned int i{1}; i < 4; ++i)
+  for (size_t i{1}; i < word_length; ++i)
   {
     result[i] = 0;
   }

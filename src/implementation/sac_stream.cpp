@@ -1,12 +1,71 @@
-#include "sac_class.hpp"
+#include "sac_stream.hpp"
 
 namespace SAC
 {
 //-----------------------------------------------------------------------------
+// Convience functions
+//-----------------------------------------------------------------------------
+void SacStream::header_to_footer()
+{
+  delta = static_cast<double>(f_delta);
+  b = static_cast<double>(f_b);
+  e = static_cast<double>(f_e);
+  o = static_cast<double>(f_o);
+  a = static_cast<double>(f_a);
+  t0 = static_cast<double>(f_t0);
+  t1 = static_cast<double>(f_t1);
+  t2 = static_cast<double>(f_t2);
+  t3 = static_cast<double>(f_t3);
+  t4 = static_cast<double>(f_t4);
+  t5 = static_cast<double>(f_t5);
+  t6 = static_cast<double>(f_t6);
+  t7 = static_cast<double>(f_t7);
+  t8 = static_cast<double>(f_t8);
+  t9 = static_cast<double>(f_t9);
+  f = static_cast<double>(f_f);
+  evlo = static_cast<double>(f_evlo);
+  evla = static_cast<double>(f_evla);
+  stlo = static_cast<double>(f_stlo);
+  stla = static_cast<double>(f_stla);
+  sb = static_cast<double>(f_sb);
+  sdelta = static_cast<double>(f_sdelta);
+}
+
+void SacStream::footer_to_header()
+{
+  f_delta = static_cast<float>(delta);
+  f_b = static_cast<float>(b);
+  f_e = static_cast<float>(e);
+  f_o = static_cast<float>(o);
+  f_a = static_cast<float>(a);
+  f_t0 = static_cast<float>(t0);
+  f_t1 = static_cast<float>(t1);
+  f_t2 = static_cast<float>(t2);
+  f_t3 = static_cast<float>(t3);
+  f_t4 = static_cast<float>(t4);
+  f_t5 = static_cast<float>(t5);
+  f_t6 = static_cast<float>(t6);
+  f_t7 = static_cast<float>(t7);
+  f_t8 = static_cast<float>(t8);
+  f_t9 = static_cast<float>(t9);
+  f_f = static_cast<float>(f);
+  f_evlo = static_cast<float>(evlo);
+  f_evla = static_cast<float>(evla);
+  f_stlo = static_cast<float>(stlo);
+  f_stla = static_cast<float>(stla);
+  f_sb = static_cast<float>(sb);
+  f_sdelta = static_cast<float>(f_sdelta);
+}
+
+//-----------------------------------------------------------------------------
+// End convience functions
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // Constructors
 //-----------------------------------------------------------------------------
 // Constructor from file
-Sac_Class::Sac_Class(const std::string& file_name)
+SacStream::SacStream(const std::string& file_name)
 {
   //---------------------------------------------------------------------------
   // Open binary file
@@ -247,32 +306,13 @@ Sac_Class::Sac_Class(const std::string& file_name)
     stla = binary_to_double(read_two_words(&file));
     sb = binary_to_double(read_two_words(&file));
     sdelta = binary_to_double(read_two_words(&file));
+    // Make sure things are consistent
+    footer_to_header();
   }
   else
   {
     // Convert to NVHDR = 7
-    delta = static_cast<double>(f_delta);
-    b = static_cast<double>(f_b);
-    e = static_cast<double>(f_e);
-    o = static_cast<double>(f_o);
-    a = static_cast<double>(f_a);
-    t0 = static_cast<double>(f_t0);
-    t1 = static_cast<double>(f_t1);
-    t2 = static_cast<double>(f_t2);
-    t3 = static_cast<double>(f_t3);
-    t4 = static_cast<double>(f_t4);
-    t5 = static_cast<double>(f_t5);
-    t6 = static_cast<double>(f_t6);
-    t7 = static_cast<double>(f_t7);
-    t8 = static_cast<double>(f_t8);
-    t9 = static_cast<double>(f_t9);
-    f = static_cast<double>(f_f);
-    evlo = static_cast<double>(f_evlo);
-    evla = static_cast<double>(f_evla);
-    stlo = static_cast<double>(f_stlo);
-    stla = static_cast<double>(f_stla);
-    sb = static_cast<double>(f_sb);
-    sdelta = static_cast<double>(f_sdelta);
+    header_to_footer();
     nvhdr = 7;
   }
   //---------------------------------------------------------------------------
@@ -287,17 +327,19 @@ Sac_Class::Sac_Class(const std::string& file_name)
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-void Sac_Class::write(const std::string& file_name)
+void SacStream::write(const std::string& file_name)
 {
   std::ofstream file(file_name, std::ios::binary | std::ios::out | std::ios::trunc);
   if (!file)
   {
     std::cerr << "Unable to write file...\n";
   }
+  // Make sure things are consistent just in case footer values changed,
+  // but header values did not
+  footer_to_header();
   //---------------------------------------------------------------------------
   // Header
   //---------------------------------------------------------------------------
-  //write_word(&file, float_to_binary(f_delta));
   write_words(&file, convert_to_word(f_delta));
   write_words(&file, convert_to_word(depmin));
   write_words(&file, convert_to_word(depmax));
@@ -557,6 +599,13 @@ void Sac_Class::write(const std::string& file_name)
   // End footer
   //---------------------------------------------------------------------------
   file.close();
+}
+
+void SacStream::legacy_write(const std::string& file_name)
+{
+  // Since nvhdr is checked before writing to determine is a footer is appropriate
+  nvhdr = 6;
+  write(file_name);
 }
 //-----------------------------------------------------------------------------
 // End writing

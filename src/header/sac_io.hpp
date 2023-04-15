@@ -22,16 +22,23 @@
 # include <bitset>
 // std::pow
 # include <cmath>
+// std::uint64_t
+// More concise than `long long unsigned int`
+#include <cstdint>
 
 namespace SAC
 {
+//-----------------------------------------------------------------------------
+// Constants
+//-----------------------------------------------------------------------------
 // Size of data chunks in binary SAC files (called words)
 constexpr int word_length{4}; // bytes
-constexpr int bits_per_byte{8};
+constexpr int bits_per_byte{8}; // binary character size
 // Each word is 32-bits (4 bytes)
 constexpr int binary_word_size{word_length * bits_per_byte};
-// First word of time-series
+// First word of (first) data-section
 constexpr int data_word{158};
+
 // Values for unset variables
 // These are SAC magic values
 // I'm setting there here explicitly to conform with the standard
@@ -39,18 +46,24 @@ constexpr int unset_int{-12345};
 constexpr float unset_float{-12345.0f};
 constexpr double unset_double{-12345.0};
 constexpr bool unset_bool{0};
-const std::string unset_two_words{"-12345  "};
-const std::string unset_four_words{"-12345          "};
-
-// Convert word_number to the position (simple, but useful)
-int word_position(int word_number);
+// This should work for two and four word string headers
+const std::string unset_word{"-12345"};
+//-----------------------------------------------------------------------------
+// End constants
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Conversions
 //-----------------------------------------------------------------------------
+// You tell it what word you want, it'll return the position in the sac-file
+// Use with the seekg() command to get to that position in the file
+int word_position(int word_number);
+
+// These unions work like magic. I assume the system uses what it considers
+// the most natural way to map these to each other (uses the system endianness)
+
 // User defined types that allows the compiler to map the two values to each
 // other and perform conversions
-// Analogous for integers doesn't seem to work
 // Floats to binary and back
 union float_to_bits
 {
@@ -60,6 +73,7 @@ union float_to_bits
   float_to_bits(float x) : value(x){}
   float_to_bits(std::bitset<binary_word_size> binary) : bits(binary){}
 };
+
 // Doubles to binary and back
 union double_to_bits
 {
@@ -100,12 +114,16 @@ std::vector<char> bitset_to_vector(std::bitset<binary_word_size> x);
 //-----------------------------------------------------------------------------
 // Reading
 //-----------------------------------------------------------------------------
+// Can read 1, 2, or 4 words and return as a binary bitset
+// Conversion functions are then used to do the conversions
 std::bitset<binary_word_size> read_word(std::ifstream* sac);
 
 std::bitset<2 * binary_word_size> read_two_words(std::ifstream* sac);
 
 std::bitset<4 * binary_word_size> read_four_words(std::ifstream* sac);
 
+// Can read any number of words into a vector of floats
+// Useful for data values
 std::vector<float> read_data(std::ifstream* sac, size_t n_words, int start = data_word);
 //-----------------------------------------------------------------------------
 // End reading
@@ -114,6 +132,15 @@ std::vector<float> read_data(std::ifstream* sac, size_t n_words, int start = dat
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
+//-----------------
+// Not working
+//-----------------
+void write_word(std::ofstream* sac_file, std::bitset<binary_word_size> x);
+
+//-----------------
+// Working
+//-----------------
+// The below writing functions all work, though they are a bit funky
 // Using std::vector because more flexible
 // Allows writing arbitrary amount of data to file
 void write_words(std::ofstream* sac_file, std::vector<char> input);

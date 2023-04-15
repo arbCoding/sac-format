@@ -1,5 +1,5 @@
 // Preferred for handling sac data
-#include "sac_class.hpp"
+#include "sac_stream.hpp"
 // Temporary for testing
 //#include "sac_io.hpp"
 
@@ -9,8 +9,8 @@
 
 int main()
 {
-  //std::string file_name = "../data/IM.NV31..BHZ.M.2023.094.222304.SAC";
-  std::string file_name = "../data/test.SAC";
+  //std::string file_name = "../../data/IM.NV31..BHZ.M.2023.094.222304.SAC";
+  std::string file_name = "../../data/test.SAC";
   // Something fails when writing/reading test.SAC with the double-precision footer values...
   // They come back as zero (except delta, 1.32525e-314)
   // I know they get converted to double correctly from a v6 file
@@ -18,7 +18,7 @@ int main()
   // ObsPy cannot handle v7 data yet (thinks file is wrong size lol)
   //std::string file_name = "../data/test.SAC";
   std::cout << "File:\t\t" << file_name << '\n';
-  SAC::Sac_Class sac(file_name);
+  SAC::SacStream sac(file_name);
 
   //---------------------------------------------------------------------------
   // Header values
@@ -171,16 +171,19 @@ int main()
   sac.f_delta = 123.0f;
   std::cout << "f_Delta:\t" << sac.f_delta << '\n';
   sac.delta = 12345.0;
-  std::cout << "Delta:\t" << sac.delta << '\n';
-  std::string new_file = "../data/test.SAC";
+  std::cout << "Delta:\t\t" << sac.delta << '\n';
+  std::string new_file = "../../data/test.SAC";
   sac.write(new_file);
   std::cout << "Successfully written out to: " << new_file << '\n';
 
   std::cout << "\nTesting reading new file...\n";
-  SAC::Sac_Class new_sac(new_file);
+  SAC::SacStream new_sac(new_file);
   std::cout << "f_Delta:\t" << new_sac.f_delta << '\n';
-  std::cout << "Delta:\t" << new_sac.delta << '\n';
+  std::cout << "Delta:\t\t" << new_sac.delta << '\n';
 
+  std::cout << "\nWriting legacy file...\n";
+  std::string legacy_file = "../../data/test2.SAC";
+  new_sac.legacy_write(legacy_file);
 
   return 0;
 }
