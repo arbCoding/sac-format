@@ -86,14 +86,14 @@ You can then find the test programs in `./bin/tests/` folder.
 The tests:
 * `sac_type_test`
     - This tests converting between standard types and binary, and back, following the SAC conventions.
-    - This will work without and SAC files
+    - This will work without any SAC files
 * `sac_io_test`
     - This tests opening a sac file (low-level io) and reading some of the header information, which it will spit out to the console.
     - This requires an input sac file (need to implement taking user provided file instead of hard-coded file not provided in this repository)
 * `sac_stream_test`
     - This tests reading a sac file as a `SacStream` object (high-level io) and spits out all the header/footer values.
     - It converts v6 files to v7. It writes out a v6 sac file with a tracer and a v7 sac file with a tracer.
-    - This requires and input sac file (need to implement taking user provided file instead of hard-coded file not provided in this repository)
+    - This requires an input sac file (need to implement taking user provided file instead of hard-coded file not provided in this repository)
 
 ---
 
@@ -122,7 +122,7 @@ If you want **high-level** sac-file IO you *can* use `sac_io.o` and `sac_stream.
 **Preferred method**
 
 Use `sac_format.o` and include the interfaces in `./src/header`. If you're using the high-level stuff,
-you'll need the low-level anyway (since it uses it behind the scenes), might as well have a shorter list of object files.
+you'll need the low-level stuff anyway (since it uses it behind the scenes), might as well have a shorter list of object files.
 
 ---
 
@@ -132,15 +132,17 @@ I have split functionality between
 * **Interface** files 
     - `./src/header/*.hpp`
 * **Implementation** files
-    - `./src/implementation/.*cpp`.
+    - `./src/implementation/.*cpp`
 
-The interface files have the constant definitions, the function names and return types, and comments on what they do (but **not** the details).
+The interface files have the definitions of the necessary constants, the function names and return types, and comments on what they do (but **not** the details).
 
 If you're curious about the details of a function, you can find it in the implementation file that corresponds to its interface.
 
 ---
 
 ## TODO:
+
+- [ ] Fix test programs to take user-supplied SAC file (instead of hard-coded file not kept on this repository)
 
 - [X] Read [SAC](https://ds.iris.edu/files/sac-manual/manual/file_format.html) file format
 
