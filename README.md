@@ -13,7 +13,7 @@ If you'd rather compile in release-mode you will need to edit the Makefile as fo
 
 Original:
 
-```
+```Makefile
 # Debug version is substantially larger file size (and slower runtime)
 # Debug compilation is extremely strict (warnings = errors)
 debug = true
@@ -24,7 +24,7 @@ debug = true
 ```
 
 New:
-```
+```Makefile
 # Debug version is substantially larger file size (and slower runtime)
 # Debug compilation is extremely strict (warnings = errors)
 #debug = true
