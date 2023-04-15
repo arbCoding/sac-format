@@ -111,7 +111,7 @@ int main()
   std::cout << "NzMin:\t\t" << sac.nzmin << '\n'; // 23
   std::cout << "NzSec:\t\t" << sac.nzsec << '\n'; // 4
   std::cout << "NzMSec:\t\t" << sac.nzmsec << '\n'; // 0
-  std::cout << "NvHdr:\t\t" << sac.nvhdr << '\n'; // 6
+  std::cout << "NvHdr:\t\t" << sac.nvhdr << '\n'; // 7
   std::cout << "NorID:\t\t" << sac.norid << '\n'; // -12345
   std::cout << "NEvID:\t\t" << sac.nevid << '\n'; // -12345
   std::cout << "Npts:\t\t" << sac.npts << '\n'; // 27881

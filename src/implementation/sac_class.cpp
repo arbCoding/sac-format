@@ -21,228 +21,183 @@ Sac_Class::Sac_Class(const std::string& file_name)
   //---------------------------------------------------------------------------
   // End open binary file
   //---------------------------------------------------------------------------
-  // Possible words
-  std::array<char, 2 * SAC::word_length> two_words;
-  std::array<char, 4 * SAC::word_length> four_words;
+
   //---------------------------------------------------------------------------
   // Header
   //---------------------------------------------------------------------------
-  f_delta  = SAC::read_next_float(&file);
-  depmin = SAC::read_next_float(&file);
-  depmax = SAC::read_next_float(&file);
+  f_delta  = binary_to_float(read_word(&file));
+  depmin = binary_to_float(read_word(&file));
+  depmax = binary_to_float(read_word(&file));
   
   // Skip 'unused'
-  SAC::skip_word(&file);
+  read_word(&file);
   
-  odelta = SAC::read_next_float(&file); 
-  f_b = SAC::read_next_float(&file);
-  f_e = SAC::read_next_float(&file);
-  f_o = SAC::read_next_float(&file);
-  f_a = SAC::read_next_float(&file); 
+  odelta = binary_to_float(read_word(&file)); 
+  f_b = binary_to_float(read_word(&file));
+  f_e = binary_to_float(read_word(&file));
+  f_o = binary_to_float(read_word(&file));
+  f_a = binary_to_float(read_word(&file)); 
 
   // Skip 'internal'
-  SAC::skip_word(&file);
+  read_word(&file);
 
   // Arrival time picking headers
   // All -12345
-  f_t0 = SAC::read_next_float(&file); 
-  f_t1 = SAC::read_next_float(&file); 
-  f_t2 = SAC::read_next_float(&file); 
-  f_t3 = SAC::read_next_float(&file); 
-  f_t4 = SAC::read_next_float(&file); 
-  f_t5 = SAC::read_next_float(&file); 
-  f_t6 = SAC::read_next_float(&file); 
-  f_t7 = SAC::read_next_float(&file); 
-  f_t8 = SAC::read_next_float(&file); 
-  f_t9 = SAC::read_next_float(&file); 
-  f_f = SAC::read_next_float(&file); 
+  f_t0 = binary_to_float(read_word(&file)); 
+  f_t1 = binary_to_float(read_word(&file)); 
+  f_t2 = binary_to_float(read_word(&file)); 
+  f_t3 = binary_to_float(read_word(&file)); 
+  f_t4 = binary_to_float(read_word(&file)); 
+  f_t5 = binary_to_float(read_word(&file)); 
+  f_t6 = binary_to_float(read_word(&file)); 
+  f_t7 = binary_to_float(read_word(&file)); 
+  f_t8 = binary_to_float(read_word(&file)); 
+  f_t9 = binary_to_float(read_word(&file)); 
+  f_f = binary_to_float(read_word(&file)); 
 
   // Resp headers
   // All -12345
-  resp0 = SAC::read_next_float(&file); 
-  resp1 = SAC::read_next_float(&file); 
-  resp2 = SAC::read_next_float(&file); 
-  resp3 = SAC::read_next_float(&file); 
-  resp4 = SAC::read_next_float(&file);
-  resp5 = SAC::read_next_float(&file); 
-  resp6 = SAC::read_next_float(&file); 
-  resp7 = SAC::read_next_float(&file); 
-  resp8 = SAC::read_next_float(&file); 
-  resp9 = SAC::read_next_float(&file); 
+  resp0 = binary_to_float(read_word(&file)); 
+  resp1 = binary_to_float(read_word(&file)); 
+  resp2 = binary_to_float(read_word(&file)); 
+  resp3 = binary_to_float(read_word(&file)); 
+  resp4 = binary_to_float(read_word(&file));
+  resp5 = binary_to_float(read_word(&file)); 
+  resp6 = binary_to_float(read_word(&file)); 
+  resp7 = binary_to_float(read_word(&file)); 
+  resp8 = binary_to_float(read_word(&file)); 
+  resp9 = binary_to_float(read_word(&file)); 
 
   // Station headers
-  f_stla = SAC::read_next_float(&file);
-  f_stlo = SAC::read_next_float(&file);
-  stel = SAC::read_next_float(&file);
-  stdp = SAC::read_next_float(&file);
+  f_stla = binary_to_float(read_word(&file));
+  f_stlo = binary_to_float(read_word(&file));
+  stel = binary_to_float(read_word(&file));
+  stdp = binary_to_float(read_word(&file));
 
   // Event headers
-  f_evla = SAC::read_next_float(&file);
-  f_evlo = SAC::read_next_float(&file);
-  evel = SAC::read_next_float(&file);
-  evdp = SAC::read_next_float(&file);
-  mag = SAC::read_next_float(&file);
+  f_evla = binary_to_float(read_word(&file));
+  f_evlo = binary_to_float(read_word(&file));
+  evel = binary_to_float(read_word(&file));
+  evdp = binary_to_float(read_word(&file));
+  mag = binary_to_float(read_word(&file));
  
   // User headers
-  user0 = SAC::read_next_float(&file); 
-  user1 = SAC::read_next_float(&file); 
-  user2 = SAC::read_next_float(&file); 
-  user3 = SAC::read_next_float(&file); 
-  user4 = SAC::read_next_float(&file); 
-  user5 = SAC::read_next_float(&file); 
-  user6 = SAC::read_next_float(&file); 
-  user7 = SAC::read_next_float(&file); 
-  user8 = SAC::read_next_float(&file); 
-  user9 = SAC::read_next_float(&file); 
-  dist = SAC::read_next_float(&file);
-  az = SAC::read_next_float(&file);
-  baz = SAC::read_next_float(&file);
-  gcarc = SAC::read_next_float(&file);
-  f_sb = SAC::read_next_float(&file);
-  f_sdelta = SAC::read_next_float(&file);
+  user0 = binary_to_float(read_word(&file)); 
+  user1 = binary_to_float(read_word(&file)); 
+  user2 = binary_to_float(read_word(&file)); 
+  user3 = binary_to_float(read_word(&file)); 
+  user4 = binary_to_float(read_word(&file)); 
+  user5 = binary_to_float(read_word(&file)); 
+  user6 = binary_to_float(read_word(&file)); 
+  user7 = binary_to_float(read_word(&file)); 
+  user8 = binary_to_float(read_word(&file)); 
+  user9 = binary_to_float(read_word(&file)); 
+  dist = binary_to_float(read_word(&file));
+  az = binary_to_float(read_word(&file));
+  baz = binary_to_float(read_word(&file));
+  gcarc = binary_to_float(read_word(&file));
+  f_sb = binary_to_float(read_word(&file));
+  f_sdelta = binary_to_float(read_word(&file));
 
-  depmen = SAC::read_next_float(&file); 
-  cmpaz = SAC::read_next_float(&file);
-  cmpinc = SAC::read_next_float(&file);
-  xminimum = SAC::read_next_float(&file); 
-  xmaximum = SAC::read_next_float(&file); 
-  yminimum = SAC::read_next_float(&file); 
-  ymaximum = SAC::read_next_float(&file); 
+  depmen = binary_to_float(read_word(&file)); 
+  cmpaz = binary_to_float(read_word(&file));
+  cmpinc = binary_to_float(read_word(&file));
+  xminimum = binary_to_float(read_word(&file)); 
+  xmaximum = binary_to_float(read_word(&file)); 
+  yminimum = binary_to_float(read_word(&file)); 
+  ymaximum = binary_to_float(read_word(&file)); 
 
   // Skip 'unused' (x7)
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
+  read_word(&file);
+  read_word(&file);
+  read_word(&file);
+  read_word(&file);
+  read_word(&file);
+  read_word(&file);
+  read_word(&file);
 
   // Date_time headers
-  nzyear = SAC::read_next_int(&file);
-  nzjday = SAC::read_next_int(&file);
-  nzhour = SAC::read_next_int(&file);
-  nzmin = SAC::read_next_int(&file);
-  nzsec = SAC::read_next_int(&file);
-  nzmsec = SAC::read_next_int(&file);
-  nvhdr = SAC::read_next_int(&file);
-  norid = SAC::read_next_int(&file); 
-  nevid = SAC::read_next_int(&file); 
-  npts = SAC::read_next_int(&file);
-  nsnpts = SAC::read_next_int(&file);
-  nwfid = SAC::read_next_int(&file); 
-  nxsize = SAC::read_next_int(&file); 
-  nysize = SAC::read_next_int(&file); 
+  nzyear = binary_to_int(read_word(&file));
+  nzjday = binary_to_int(read_word(&file));
+  nzhour = binary_to_int(read_word(&file));
+  nzmin = binary_to_int(read_word(&file));
+  nzsec = binary_to_int(read_word(&file));
+  nzmsec = binary_to_int(read_word(&file));
+  nvhdr = binary_to_int(read_word(&file));
+  norid = binary_to_int(read_word(&file)); 
+  nevid = binary_to_int(read_word(&file)); 
+  npts = binary_to_int(read_word(&file));
+  nsnpts = binary_to_int(read_word(&file));
+  nwfid = binary_to_int(read_word(&file)); 
+  nxsize = binary_to_int(read_word(&file)); 
+  nysize = binary_to_int(read_word(&file)); 
  
   // Skip 'unused'
-  SAC::skip_word(&file);
+  read_word(&file);
 
-  iftype = SAC::read_next_int(&file);
-  idep = SAC::read_next_int(&file); 
-  iztype = SAC::read_next_int(&file); 
+  iftype = binary_to_int(read_word(&file));
+  idep = binary_to_int(read_word(&file)); 
+  iztype = binary_to_int(read_word(&file)); 
   
   // Skip 'unused'
-  SAC::skip_word(&file);
+  read_word(&file);
 
-  iinst = SAC::read_next_int(&file); 
-  istreg = SAC::read_next_int(&file); 
-  ievreg = SAC::read_next_int(&file);
-  ievtyp = SAC::read_next_int(&file);
-  iqual = SAC::read_next_int(&file);
-  isynth = SAC::read_next_int(&file);
-  imagtyp = SAC::read_next_int(&file);
-  imagsrc = SAC::read_next_int(&file); 
-  ibody = SAC::read_next_int(&file); 
+  iinst = binary_to_int(read_word(&file)); 
+  istreg = binary_to_int(read_word(&file)); 
+  ievreg = binary_to_int(read_word(&file));
+  ievtyp = binary_to_int(read_word(&file));
+  iqual = binary_to_int(read_word(&file));
+  isynth = binary_to_int(read_word(&file));
+  imagtyp = binary_to_int(read_word(&file));
+  imagsrc = binary_to_int(read_word(&file)); 
+  ibody = binary_to_int(read_word(&file)); 
 
   // Skip 'unused' (x7)
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
-  SAC::skip_word(&file);
+  read_word(&file);
+  read_word(&file);
+  read_word(&file);
+  read_word(&file);
+  read_word(&file);
+  read_word(&file);
+  read_word(&file);
 
   // Logical headers
-  leven = SAC::read_next_bool(&file);
-  lpspol = SAC::read_next_bool(&file); 
-  lovrok = SAC::read_next_bool(&file);
-  lcalda = SAC::read_next_bool(&file);
+  leven = binary_to_bool(read_word(&file));
+  lpspol = binary_to_bool(read_word(&file)); 
+  lovrok = binary_to_bool(read_word(&file));
+  lcalda = binary_to_bool(read_word(&file));
 
   // Skip 'unused'
-  SAC::skip_word(&file);
+  read_word(&file);
   
   // KSTNM is 2 words long (like all other 'K' headers)
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kstnm = std::string(two_words.data(), two_words.size());
+  kstnm = binary_to_string(read_two_words(&file));
 
   // KEVNM is 4 words long (special rule!)
-  four_words = SAC::read_words<sizeof(four_words)>(&file, 4);
-  kevnm = std::string(four_words.data(), four_words.size());
+  kevnm = binary_to_long_string(read_four_words(&file));
 
   // All other 'K' headers are 2 words long
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  khole = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2); 
-  ko = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  ka = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kt0 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kt1 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kt2 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kt3 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kt4 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kt5 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kt6 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kt7 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kt8 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kt9 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kf = std::string(two_words.data(), two_words.size());
-  
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kuser0 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kuser1 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kuser2 = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kcmpnm = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  knetwk = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kdatrd = std::string(two_words.data(), two_words.size());
-
-  two_words = SAC::read_words<sizeof(two_words)>(&file, 2);
-  kinst = std::string(two_words.data(), two_words.size());
+  khole = binary_to_string(read_two_words(&file));
+  ko = binary_to_string(read_two_words(&file));
+  ka = binary_to_string(read_two_words(&file));
+  kt0 = binary_to_string(read_two_words(&file));
+  kt1 = binary_to_string(read_two_words(&file));
+  kt2 = binary_to_string(read_two_words(&file));
+  kt3 = binary_to_string(read_two_words(&file));
+  kt4 = binary_to_string(read_two_words(&file));
+  kt5 = binary_to_string(read_two_words(&file));
+  kt6 = binary_to_string(read_two_words(&file));
+  kt7 = binary_to_string(read_two_words(&file));
+  kt8 = binary_to_string(read_two_words(&file));
+  kt9 = binary_to_string(read_two_words(&file));
+  kf = binary_to_string(read_two_words(&file));
+  kuser0 = binary_to_string(read_two_words(&file));
+  kuser1 = binary_to_string(read_two_words(&file));
+  kuser2 = binary_to_string(read_two_words(&file));
+  kcmpnm = binary_to_string(read_two_words(&file));
+  knetwk = binary_to_string(read_two_words(&file));
+  kdatrd = binary_to_string(read_two_words(&file));
+  kinst = binary_to_string(read_two_words(&file));
   //---------------------------------------------------------------------------
   // End header
   //---------------------------------------------------------------------------
@@ -250,12 +205,12 @@ Sac_Class::Sac_Class(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Data
   //---------------------------------------------------------------------------
-  data1 = SAC::read_data(&file, npts);
+  data1 = read_data(&file, static_cast<size_t>(npts));
   // (Unevenly sampled-data) or (spectral or xy)
   // Same size as data1
   if ((leven == 0) || (iftype > 1))
   {
-    data2 = SAC::read_data(&file, npts);
+    data2 = read_data(&file, static_cast<size_t>(npts), SAC::data_word + npts);
   }
 
   //---------------------------------------------------------------------------
@@ -270,28 +225,28 @@ Sac_Class::Sac_Class(const std::string& file_name)
   // New version of format, load in the footer values after data section(s)
   if (nvhdr == 7)
   {
-    delta = SAC::read_next_double(&file);
-    b = SAC::read_next_double(&file);
-    e = SAC::read_next_double(&file);
-    o = SAC::read_next_double(&file);
-    a = SAC::read_next_double(&file);
-    t0 = SAC::read_next_double(&file);
-    t1 = SAC::read_next_double(&file);
-    t2 = SAC::read_next_double(&file);
-    t3 = SAC::read_next_double(&file);
-    t4 = SAC::read_next_double(&file);
-    t5 = SAC::read_next_double(&file);
-    t6 = SAC::read_next_double(&file);
-    t7 = SAC::read_next_double(&file);
-    t8 = SAC::read_next_double(&file);
-    t9 = SAC::read_next_double(&file);
-    f = SAC::read_next_double(&file);
-    evlo = SAC::read_next_double(&file);
-    evla = SAC::read_next_double(&file);
-    stlo = SAC::read_next_double(&file);
-    stla = SAC::read_next_double(&file);
-    sb = SAC::read_next_double(&file);
-    sdelta = SAC::read_next_double(&file);
+    delta = binary_to_double(read_two_words(&file));
+    b = binary_to_double(read_two_words(&file));
+    e = binary_to_double(read_two_words(&file));
+    o = binary_to_double(read_two_words(&file));
+    a = binary_to_double(read_two_words(&file));
+    t0 = binary_to_double(read_two_words(&file));
+    t1 = binary_to_double(read_two_words(&file));
+    t2 = binary_to_double(read_two_words(&file));
+    t3 = binary_to_double(read_two_words(&file));
+    t4 = binary_to_double(read_two_words(&file));
+    t5 = binary_to_double(read_two_words(&file));
+    t6 = binary_to_double(read_two_words(&file));
+    t7 = binary_to_double(read_two_words(&file));
+    t8 = binary_to_double(read_two_words(&file));
+    t9 = binary_to_double(read_two_words(&file));
+    f = binary_to_double(read_two_words(&file));
+    evlo = binary_to_double(read_two_words(&file));
+    evla = binary_to_double(read_two_words(&file));
+    stlo = binary_to_double(read_two_words(&file));
+    stla = binary_to_double(read_two_words(&file));
+    sb = binary_to_double(read_two_words(&file));
+    sdelta = binary_to_double(read_two_words(&file));
   }
   else
   {

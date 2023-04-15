@@ -2,6 +2,8 @@
 // including conversion to/from binary...
 #include "sac_io.hpp"
 
+#include <iostream>
+
 // This program tests converting from binary to variables
 // using the SAC binary data format specification
 // See: https://ds.iris.edu/files/sac-manual/file_format.html

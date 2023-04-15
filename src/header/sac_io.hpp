@@ -46,58 +46,6 @@ const std::string unset_four_words{"-12345          "};
 int word_position(int word_number);
 
 //-----------------------------------------------------------------------------
-// Reading
-//-----------------------------------------------------------------------------
-// Read the next (single) word in the buffer
-std::array<char, word_length> read_next_word(std::ifstream* sac);
-
-// Skips the next word, useful for unused headers ('unused' or 'internal' in SAC documentation)
-void skip_word(std::ifstream* sac);
-
-// Reads next word as a float
-float read_next_float(std::ifstream* sac);
-
-// Reads next word as a double
-double read_next_double(std::ifstream* sac);
-
-// Reads next word as integer
-int read_next_int(std::ifstream* sac);
-
-// Reads next word as a logical (wasteful format: uses 4 bytes to represent a bool by only using the first and ignoring the other three...)
-bool read_next_bool(std::ifstream* sac);
-
-// Read in all the data (assume evenly spaced only)
-// Compatible with nvhdr = 6 or 7 (6 is old, 7 is new with footer after data)
-// Would need a new function to handle the rare unevenly sampled SAC file (never seen one in the wild before...)
-std::vector<float> read_data(std::ifstream* sac, int npts);
-
-// Read the next (n_words) words in the buffer
-// Default is 1 word
-template <long unsigned int N>
-std::array<char, N> read_words(std::ifstream* sac, int n_words = 1);
-//-----------------------------------------------------------------------------
-// End reading
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Misc
-//-----------------------------------------------------------------------------
-
-// Take the words and print them out
-template <long unsigned int N>
-void print_words(std::array<char, N> words);
-
-// Take a single word vector and print it out
-void print_word(std::vector<char> word);
-
-// Take the words and check to see if it has -12345 as it's value (unset)
-template <long unsigned int N>
-bool is_set(std::array<char, N> words);
-//-----------------------------------------------------------------------------
-// End misc
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 // Conversions
 //-----------------------------------------------------------------------------
 // User defined types that allows the compiler to map the two values to each
@@ -137,11 +85,46 @@ std::string binary_to_string(std::bitset<2 * binary_word_size> x);
 // 128 bit string (4 words, 16 bytes, only KEVNM header)
 std::bitset<4 * binary_word_size> long_string_to_binary(std::string x);
 std::string binary_to_long_string(std::bitset<4 * binary_word_size> x);
-// Shit I forgot this one...
+// Booleans
 std::bitset<binary_word_size> bool_to_binary(bool x);
 bool binary_to_bool(std::bitset<binary_word_size> x);
+// Concat words
+std::bitset<2 * binary_word_size> concat_words(std::bitset<binary_word_size> x, std::bitset<binary_word_size> y);
+std::bitset<4 * binary_word_size> concat_words(std::bitset<2 * binary_word_size> x, std::bitset<2 * binary_word_size> y);
 //-----------------------------------------------------------------------------
 // End conversions
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Reading
+//-----------------------------------------------------------------------------
+std::bitset<binary_word_size> read_word(std::ifstream* sac);
+
+std::bitset<2 * binary_word_size> read_two_words(std::ifstream* sac);
+
+std::bitset<4 * binary_word_size> read_four_words(std::ifstream* sac);
+
+std::vector<float> read_data(std::ifstream* sac, size_t n_words, int start = data_word);
+//-----------------------------------------------------------------------------
+// End reading
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Misc
+//-----------------------------------------------------------------------------
+
+// Take the words and print them out
+template <long unsigned int N>
+void print_words(std::array<char, N> words);
+
+// Take a single word vector and print it out
+void print_word(std::vector<char> word);
+
+// Take the words and check to see if it has -12345 as it's value (unset)
+template <long unsigned int N>
+bool is_set(std::array<char, N> words);
+//-----------------------------------------------------------------------------
+// End misc
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
