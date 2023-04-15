@@ -81,6 +81,20 @@ To build the test programs, in the top-level directory (same as this README.md f
 make tests
 ```
 
+You can then find the test programs in `./bin/tests/` folder.
+
+The tests:
+* `sac_type_test`
+    - This tests converting between standard types and binary, and back, following the SAC conventions.
+    - This will work without and SAC files
+* `sac_io_test`
+    - This tests opening a sac file (low-level io) and reading some of the header information, which it will spit out to the console.
+    - This requires an input sac file (need to implement taking user provided file instead of hard-coded file not provided in this repository)
+* `sac_stream_test`
+    - This tests reading a sac file as a `SacStream` object (high-level io) and spits out all the header/footer values.
+    - It converts v6 files to v7. It writes out a v6 sac file with a tracer and a v7 sac file with a tracer.
+    - This requires and input sac file (need to implement taking user provided file instead of hard-coded file not provided in this repository)
+
 ---
 
 ### Build sac_format
