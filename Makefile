@@ -56,7 +56,7 @@ obj_prefix = $(base_prefix)objects/
 # Compilation command
 cxx := $(compiler) $(params) -I$(hdr_prefix)
 
-tests: sac_type_test sac_io_test
+tests: sac_class_test sac_type_test sac_io_test
 
 # By splitting into .o files I can make it so that only newly written code gets compiled
 # Therefore cutting down on compilation times
