@@ -91,6 +91,8 @@ bool binary_to_bool(std::bitset<binary_word_size> x);
 // Concat words
 std::bitset<2 * binary_word_size> concat_words(std::bitset<binary_word_size> x, std::bitset<binary_word_size> y);
 std::bitset<4 * binary_word_size> concat_words(std::bitset<2 * binary_word_size> x, std::bitset<2 * binary_word_size> y);
+// bitset to character vector (for writing)
+std::vector<char> bitset_to_vector(std::bitset<binary_word_size> x);
 //-----------------------------------------------------------------------------
 // End conversions
 //-----------------------------------------------------------------------------
@@ -107,24 +109,6 @@ std::bitset<4 * binary_word_size> read_four_words(std::ifstream* sac);
 std::vector<float> read_data(std::ifstream* sac, size_t n_words, int start = data_word);
 //-----------------------------------------------------------------------------
 // End reading
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Misc
-//-----------------------------------------------------------------------------
-
-// Take the words and print them out
-template <long unsigned int N>
-void print_words(std::array<char, N> words);
-
-// Take a single word vector and print it out
-void print_word(std::vector<char> word);
-
-// Take the words and check to see if it has -12345 as it's value (unset)
-template <long unsigned int N>
-bool is_set(std::array<char, N> words);
-//-----------------------------------------------------------------------------
-// End misc
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

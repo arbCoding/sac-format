@@ -220,7 +220,6 @@ std::bitset<4 * binary_word_size> concat_words(std::bitset<2 * binary_word_size>
   }
   return result;
 }
-
 //-----------------------------------------------------------------------------
 // End conversions
 //-----------------------------------------------------------------------------
@@ -279,57 +278,6 @@ std::vector<float> read_data(std::ifstream* sac, size_t n_words, int start)
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Misc
-//-----------------------------------------------------------------------------
-template <long unsigned int N>
-void print_words(std::array<char, N> words)
-{
-  for (long unsigned int i{0}; i < sizeof(words); ++i)
-  {
-    std::cout << words[i] << '\t' << static_cast<int>(words[i]) << '\n'; 
-  }
-}
-
-// Explicit instantiation of template to make linker/compiler behave!
-template void print_words(std::array<char, word_length> words);
-template void print_words(std::array<char, 2 * word_length> words);
-template void print_words(std::array<char, 4 * word_length> words);
-
-void print_word(std::vector<char> word)
-{
-  // Foreach style loop to make simpler
-  for (char c : word)
-  {
-    std::cout << static_cast<int>(c) << '\n';
-  }
-}
-
-// Seems to work
-// Checks to see if the value is -12345 (characters)
-// Which is the SAC special value for unset
-template <long unsigned int N>
-bool is_set(std::array<char, N> words)
-{
-  // Need to search for the -12345 pattern
-  for (long unsigned int i{0}; i < sizeof(words); ++i)
-  {
-    if (words[i] == '-')
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
-// Explicit instantiation of template to make linker/compiler behave!
-template bool is_set(std::array<char, word_length> words);
-template bool is_set(std::array<char, 2 * word_length> words);
-template bool is_set(std::array<char, 4 * word_length> words);
-//-----------------------------------------------------------------------------
-// End misc
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
 void write_words(std::ofstream* sac_file, std::vector<char> input)
@@ -357,7 +305,7 @@ std::vector<char> convert_to_word(T x)
   word.resize(word_length);
   for (int i{0}; i < 4; ++i)
   {
-    word[static_cast<long unsigned int>(i)] = tmp[i];
+    word[static_cast<std::size_t>(i)] = tmp[i];
   }
   return word;
 }
@@ -373,7 +321,7 @@ std::vector<char> convert_to_word(double x)
   std::memcpy(tmp, &x, 2 * word_length);
   std::vector<char> word{};
   word.resize(2 * word_length);
-  for (int i{0}; i < 4; ++i)
+  for (int i{0}; i < 2 * word_length; ++i)
   {
     word[static_cast<long unsigned int>(i)] = tmp[i];
   }

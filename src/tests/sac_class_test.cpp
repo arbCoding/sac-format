@@ -9,7 +9,8 @@
 
 int main()
 {
-  std::string file_name = "../data/IM.NV31..BHZ.M.2023.094.222304.SAC";
+  //std::string file_name = "../data/IM.NV31..BHZ.M.2023.094.222304.SAC";
+  std::string file_name = "../data/test.SAC";
   // Something fails when writing/reading test.SAC with the double-precision footer values...
   // They come back as zero (except delta, 1.32525e-314)
   // I know they get converted to double correctly from a v6 file
@@ -167,19 +168,19 @@ int main()
   //---------------------------------------------------------------------------
   // Leave a marker
   std::cout << "\n\nTesting writing to binary SAC...\n";
-  sac.mag = SAC::unset_float;
-  std::cout << "Mag:\t" << sac.mag << '\n';
-  sac.kevnm = SAC::unset_four_words;
-  std::cout << "KEvNm:\t" << sac.kevnm << '\n';
+  sac.f_delta = 123.0f;
+  std::cout << "f_Delta:\t" << sac.f_delta << '\n';
+  sac.delta = 12345.0;
+  std::cout << "Delta:\t" << sac.delta << '\n';
   std::string new_file = "../data/test.SAC";
   sac.write(new_file);
   std::cout << "Successfully written out to: " << new_file << '\n';
 
   std::cout << "\nTesting reading new file...\n";
   SAC::Sac_Class new_sac(new_file);
+  std::cout << "f_Delta:\t" << new_sac.f_delta << '\n';
+  std::cout << "Delta:\t" << new_sac.delta << '\n';
 
-  std::cout << "Mag:\t" << new_sac.mag << '\n'; // It works!
-  std::cout << "KEvNm:\t" << new_sac.kevnm << '\n'; // Also works!
 
   return 0;
 }

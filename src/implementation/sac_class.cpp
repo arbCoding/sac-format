@@ -205,12 +205,12 @@ Sac_Class::Sac_Class(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Data
   //---------------------------------------------------------------------------
-  data1 = read_data(&file, static_cast<size_t>(npts));
+  data1 = read_data(&file, static_cast<size_t>(npts), data_word);
   // (Unevenly sampled-data) or (spectral or xy)
   // Same size as data1
   if ((leven == 0) || (iftype > 1))
   {
-    data2 = read_data(&file, static_cast<size_t>(npts), SAC::data_word + npts);
+    data2 = read_data(&file, static_cast<size_t>(npts), data_word + npts);
   }
 
   //---------------------------------------------------------------------------
@@ -297,207 +297,208 @@ void Sac_Class::write(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Header
   //---------------------------------------------------------------------------
-  SAC::write_words(&file, convert_to_word(f_delta));
-  SAC::write_words(&file, convert_to_word(depmin));
-  SAC::write_words(&file, convert_to_word(depmax));
+  //write_word(&file, float_to_binary(f_delta));
+  write_words(&file, convert_to_word(f_delta));
+  write_words(&file, convert_to_word(depmin));
+  write_words(&file, convert_to_word(depmax));
   // Fill 'unused'
-  SAC::write_words(&file, convert_to_word(depmax));
+  write_words(&file, convert_to_word(depmax));
 
-  SAC::write_words(&file, convert_to_word(odelta));
-  SAC::write_words(&file, convert_to_word(f_b));
-  SAC::write_words(&file, convert_to_word(f_e));
-  SAC::write_words(&file, convert_to_word(f_o));
-  SAC::write_words(&file, convert_to_word(f_a));
+  write_words(&file, convert_to_word(odelta));
+  write_words(&file, convert_to_word(f_b));
+  write_words(&file, convert_to_word(f_e));
+  write_words(&file, convert_to_word(f_o));
+  write_words(&file, convert_to_word(f_a));
   // Fill 'internal'
-  SAC::write_words(&file, convert_to_word(f_a)); // Could give this a name and a value..
+  write_words(&file, convert_to_word(f_a)); // Could give this a name and a value..
 
-  SAC::write_words(&file, convert_to_word(f_t0));
-  SAC::write_words(&file, convert_to_word(f_t1));
-  SAC::write_words(&file, convert_to_word(f_t2));
-  SAC::write_words(&file, convert_to_word(f_t3));
-  SAC::write_words(&file, convert_to_word(f_t4));
-  SAC::write_words(&file, convert_to_word(f_t5));
-  SAC::write_words(&file, convert_to_word(f_t6));
-  SAC::write_words(&file, convert_to_word(f_t7));
-  SAC::write_words(&file, convert_to_word(f_t8));
-  SAC::write_words(&file, convert_to_word(f_t9));
-  SAC::write_words(&file, convert_to_word(f_f));
-  SAC::write_words(&file, convert_to_word(resp0));
-  SAC::write_words(&file, convert_to_word(resp1));
-  SAC::write_words(&file, convert_to_word(resp2));
-  SAC::write_words(&file, convert_to_word(resp3));
-  SAC::write_words(&file, convert_to_word(resp4));
-  SAC::write_words(&file, convert_to_word(resp5));
-  SAC::write_words(&file, convert_to_word(resp6));
-  SAC::write_words(&file, convert_to_word(resp7));
-  SAC::write_words(&file, convert_to_word(resp8));
-  SAC::write_words(&file, convert_to_word(resp9));
-  SAC::write_words(&file, convert_to_word(f_stla));
-  SAC::write_words(&file, convert_to_word(f_stlo));
-  SAC::write_words(&file, convert_to_word(stel));
-  SAC::write_words(&file, convert_to_word(stdp));
-  SAC::write_words(&file, convert_to_word(f_evla));
-  SAC::write_words(&file, convert_to_word(f_evlo));
-  SAC::write_words(&file, convert_to_word(evel));
-  SAC::write_words(&file, convert_to_word(evdp));
-  SAC::write_words(&file, convert_to_word(mag));
-  SAC::write_words(&file, convert_to_word(user0));
-  SAC::write_words(&file, convert_to_word(user1));
-  SAC::write_words(&file, convert_to_word(user2));
-  SAC::write_words(&file, convert_to_word(user3));
-  SAC::write_words(&file, convert_to_word(user4));
-  SAC::write_words(&file, convert_to_word(user5));
-  SAC::write_words(&file, convert_to_word(user6));
-  SAC::write_words(&file, convert_to_word(user7));
-  SAC::write_words(&file, convert_to_word(user8));
-  SAC::write_words(&file, convert_to_word(user9));
-  SAC::write_words(&file, convert_to_word(dist));
-  SAC::write_words(&file, convert_to_word(az));
-  SAC::write_words(&file, convert_to_word(baz));
-  SAC::write_words(&file, convert_to_word(gcarc));
-  SAC::write_words(&file, convert_to_word(f_sb));
-  SAC::write_words(&file, convert_to_word(f_sdelta));
+  write_words(&file, convert_to_word(f_t0));
+  write_words(&file, convert_to_word(f_t1));
+  write_words(&file, convert_to_word(f_t2));
+  write_words(&file, convert_to_word(f_t3));
+  write_words(&file, convert_to_word(f_t4));
+  write_words(&file, convert_to_word(f_t5));
+  write_words(&file, convert_to_word(f_t6));
+  write_words(&file, convert_to_word(f_t7));
+  write_words(&file, convert_to_word(f_t8));
+  write_words(&file, convert_to_word(f_t9));
+  write_words(&file, convert_to_word(f_f));
+  write_words(&file, convert_to_word(resp0));
+  write_words(&file, convert_to_word(resp1));
+  write_words(&file, convert_to_word(resp2));
+  write_words(&file, convert_to_word(resp3));
+  write_words(&file, convert_to_word(resp4));
+  write_words(&file, convert_to_word(resp5));
+  write_words(&file, convert_to_word(resp6));
+  write_words(&file, convert_to_word(resp7));
+  write_words(&file, convert_to_word(resp8));
+  write_words(&file, convert_to_word(resp9));
+  write_words(&file, convert_to_word(f_stla));
+  write_words(&file, convert_to_word(f_stlo));
+  write_words(&file, convert_to_word(stel));
+  write_words(&file, convert_to_word(stdp));
+  write_words(&file, convert_to_word(f_evla));
+  write_words(&file, convert_to_word(f_evlo));
+  write_words(&file, convert_to_word(evel));
+  write_words(&file, convert_to_word(evdp));
+  write_words(&file, convert_to_word(mag));
+  write_words(&file, convert_to_word(user0));
+  write_words(&file, convert_to_word(user1));
+  write_words(&file, convert_to_word(user2));
+  write_words(&file, convert_to_word(user3));
+  write_words(&file, convert_to_word(user4));
+  write_words(&file, convert_to_word(user5));
+  write_words(&file, convert_to_word(user6));
+  write_words(&file, convert_to_word(user7));
+  write_words(&file, convert_to_word(user8));
+  write_words(&file, convert_to_word(user9));
+  write_words(&file, convert_to_word(dist));
+  write_words(&file, convert_to_word(az));
+  write_words(&file, convert_to_word(baz));
+  write_words(&file, convert_to_word(gcarc));
+  write_words(&file, convert_to_word(f_sb));
+  write_words(&file, convert_to_word(f_sdelta));
 
-  SAC::write_words(&file, convert_to_word(depmen));
-  SAC::write_words(&file, convert_to_word(cmpaz));
-  SAC::write_words(&file, convert_to_word(cmpinc));
-  SAC::write_words(&file, convert_to_word(xminimum));
-  SAC::write_words(&file, convert_to_word(xmaximum));
-  SAC::write_words(&file, convert_to_word(yminimum));
-  SAC::write_words(&file, convert_to_word(ymaximum));
+  write_words(&file, convert_to_word(depmen));
+  write_words(&file, convert_to_word(cmpaz));
+  write_words(&file, convert_to_word(cmpinc));
+  write_words(&file, convert_to_word(xminimum));
+  write_words(&file, convert_to_word(xmaximum));
+  write_words(&file, convert_to_word(yminimum));
+  write_words(&file, convert_to_word(ymaximum));
   // Fill 'unused' (x7)
   // Could give these names and values
-  SAC::write_words(&file, convert_to_word(ymaximum));
-  SAC::write_words(&file, convert_to_word(ymaximum));
-  SAC::write_words(&file, convert_to_word(ymaximum));
-  SAC::write_words(&file, convert_to_word(ymaximum));
-  SAC::write_words(&file, convert_to_word(ymaximum));
-  SAC::write_words(&file, convert_to_word(ymaximum));
-  SAC::write_words(&file, convert_to_word(ymaximum));
+  write_words(&file, convert_to_word(ymaximum));
+  write_words(&file, convert_to_word(ymaximum));
+  write_words(&file, convert_to_word(ymaximum));
+  write_words(&file, convert_to_word(ymaximum));
+  write_words(&file, convert_to_word(ymaximum));
+  write_words(&file, convert_to_word(ymaximum));
+  write_words(&file, convert_to_word(ymaximum));
 
-  SAC::write_words(&file, convert_to_word(nzyear));
-  SAC::write_words(&file, convert_to_word(nzjday));
-  SAC::write_words(&file, convert_to_word(nzhour));
-  SAC::write_words(&file, convert_to_word(nzmin));
-  SAC::write_words(&file, convert_to_word(nzsec));
-  SAC::write_words(&file, convert_to_word(nzmsec));
-  SAC::write_words(&file, convert_to_word(nvhdr));
-  SAC::write_words(&file, convert_to_word(norid));
-  SAC::write_words(&file, convert_to_word(nevid));
-  SAC::write_words(&file, convert_to_word(npts));
-  SAC::write_words(&file, convert_to_word(nsnpts));
+  write_words(&file, convert_to_word(nzyear));
+  write_words(&file, convert_to_word(nzjday));
+  write_words(&file, convert_to_word(nzhour));
+  write_words(&file, convert_to_word(nzmin));
+  write_words(&file, convert_to_word(nzsec));
+  write_words(&file, convert_to_word(nzmsec));
+  write_words(&file, convert_to_word(nvhdr));
+  write_words(&file, convert_to_word(norid));
+  write_words(&file, convert_to_word(nevid));
+  write_words(&file, convert_to_word(npts));
+  write_words(&file, convert_to_word(nsnpts));
 
-  SAC::write_words(&file, convert_to_word(nwfid));
-  SAC::write_words(&file, convert_to_word(nxsize));
-  SAC::write_words(&file, convert_to_word(nysize));
+  write_words(&file, convert_to_word(nwfid));
+  write_words(&file, convert_to_word(nxsize));
+  write_words(&file, convert_to_word(nysize));
   // Fill 'unused'
   // could give a name and a value
-  SAC::write_words(&file, convert_to_word(nysize));
+  write_words(&file, convert_to_word(nysize));
 
-  SAC::write_words(&file, convert_to_word(iftype));
-  SAC::write_words(&file, convert_to_word(idep));
-  SAC::write_words(&file, convert_to_word(iztype));
+  write_words(&file, convert_to_word(iftype));
+  write_words(&file, convert_to_word(idep));
+  write_words(&file, convert_to_word(iztype));
   // Fill 'unused'
   // could give a name and a vlue
-  SAC::write_words(&file, convert_to_word(iztype));
+  write_words(&file, convert_to_word(iztype));
 
-  SAC::write_words(&file, convert_to_word(iinst));
-  SAC::write_words(&file, convert_to_word(istreg));
-  SAC::write_words(&file, convert_to_word(ievreg));
-  SAC::write_words(&file, convert_to_word(ievtyp));
-  SAC::write_words(&file, convert_to_word(iqual));
-  SAC::write_words(&file, convert_to_word(isynth));
-  SAC::write_words(&file, convert_to_word(imagtyp));
-  SAC::write_words(&file, convert_to_word(imagsrc));
-  SAC::write_words(&file, convert_to_word(ibody));
+  write_words(&file, convert_to_word(iinst));
+  write_words(&file, convert_to_word(istreg));
+  write_words(&file, convert_to_word(ievreg));
+  write_words(&file, convert_to_word(ievtyp));
+  write_words(&file, convert_to_word(iqual));
+  write_words(&file, convert_to_word(isynth));
+  write_words(&file, convert_to_word(imagtyp));
+  write_words(&file, convert_to_word(imagsrc));
+  write_words(&file, convert_to_word(ibody));
   // Fill 'unused' (x7)
   // could give these names and values
-  SAC::write_words(&file, convert_to_word(ibody));
-  SAC::write_words(&file, convert_to_word(ibody));
-  SAC::write_words(&file, convert_to_word(ibody));
-  SAC::write_words(&file, convert_to_word(ibody));
-  SAC::write_words(&file, convert_to_word(ibody));
-  SAC::write_words(&file, convert_to_word(ibody));
-  SAC::write_words(&file, convert_to_word(ibody));
+  write_words(&file, convert_to_word(ibody));
+  write_words(&file, convert_to_word(ibody));
+  write_words(&file, convert_to_word(ibody));
+  write_words(&file, convert_to_word(ibody));
+  write_words(&file, convert_to_word(ibody));
+  write_words(&file, convert_to_word(ibody));
+  write_words(&file, convert_to_word(ibody));
 
-  SAC::write_words(&file, bool_to_word(leven));
-  SAC::write_words(&file, bool_to_word(lpspol));
-  SAC::write_words(&file, bool_to_word(lovrok));
-  SAC::write_words(&file, bool_to_word(lcalda));
+  write_words(&file, bool_to_word(leven));
+  write_words(&file, bool_to_word(lpspol));
+  write_words(&file, bool_to_word(lovrok));
+  write_words(&file, bool_to_word(lcalda));
   // Fill 'unused'
   // could give this a name and a value
-  SAC::write_words(&file, bool_to_word(lcalda));
+  write_words(&file, bool_to_word(lcalda));
 
   std::array<char, 2 * word_length> two_words;
   two_words = convert_to_words<sizeof(two_words)>(kstnm, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   std::array<char, 4 * word_length> four_words;
   four_words = convert_to_words<sizeof(four_words)>(kevnm, 4);
-  SAC::write_words(&file, std::vector<char>(four_words.begin(), four_words.end()));
+  write_words(&file, std::vector<char>(four_words.begin(), four_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(khole, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(ko, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(ka, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kt0, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kt1, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kt2, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kt3, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kt4, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kt5, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kt6, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kt7, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kt8, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kt9, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kf, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kuser0, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kuser1, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kuser2, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kcmpnm, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(knetwk, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kdatrd, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
   two_words = convert_to_words<sizeof(two_words)>(kinst, 2);
-  SAC::write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
   //---------------------------------------------------------------------------
   // End header
   //---------------------------------------------------------------------------
@@ -507,14 +508,14 @@ void Sac_Class::write(const std::string& file_name)
   //---------------------------------------------------------------------------
   for (float x : data1)
   {
-    SAC::write_words(&file, convert_to_word(x));
+    write_words(&file, convert_to_word(x));
   }
   // (Unevenly sampled-data) or (spectral or xy)
   if ((leven == 0) || (iftype > 1))
   {
     for (float x : data2)
     {
-      SAC::write_words(&file, convert_to_word(x));
+      write_words(&file, convert_to_word(x));
     }
   }
   //---------------------------------------------------------------------------
@@ -529,28 +530,28 @@ void Sac_Class::write(const std::string& file_name)
   // the write-out to be borked (say, generating synthetics using the old standard)
   if (nvhdr == 7)
   {
-    SAC::write_words(&file, convert_to_word(delta));
-    SAC::write_words(&file, convert_to_word(b));
-    SAC::write_words(&file, convert_to_word(e));
-    SAC::write_words(&file, convert_to_word(o));
-    SAC::write_words(&file, convert_to_word(a));
-    SAC::write_words(&file, convert_to_word(t0));
-    SAC::write_words(&file, convert_to_word(t1));
-    SAC::write_words(&file, convert_to_word(t2));
-    SAC::write_words(&file, convert_to_word(t3));
-    SAC::write_words(&file, convert_to_word(t4));
-    SAC::write_words(&file, convert_to_word(t5));
-    SAC::write_words(&file, convert_to_word(t6));
-    SAC::write_words(&file, convert_to_word(t7));
-    SAC::write_words(&file, convert_to_word(t8));
-    SAC::write_words(&file, convert_to_word(t9));
-    SAC::write_words(&file, convert_to_word(f));
-    SAC::write_words(&file, convert_to_word(evlo));
-    SAC::write_words(&file, convert_to_word(evla));
-    SAC::write_words(&file, convert_to_word(stlo));
-    SAC::write_words(&file, convert_to_word(stla));
-    SAC::write_words(&file, convert_to_word(sb));
-    SAC::write_words(&file, convert_to_word(sdelta));
+    write_words(&file, convert_to_word(delta));
+    write_words(&file, convert_to_word(b));
+    write_words(&file, convert_to_word(e));
+    write_words(&file, convert_to_word(o));
+    write_words(&file, convert_to_word(a));
+    write_words(&file, convert_to_word(t0));
+    write_words(&file, convert_to_word(t1));
+    write_words(&file, convert_to_word(t2));
+    write_words(&file, convert_to_word(t3));
+    write_words(&file, convert_to_word(t4));
+    write_words(&file, convert_to_word(t5));
+    write_words(&file, convert_to_word(t6));
+    write_words(&file, convert_to_word(t7));
+    write_words(&file, convert_to_word(t8));
+    write_words(&file, convert_to_word(t9));
+    write_words(&file, convert_to_word(f));
+    write_words(&file, convert_to_word(evlo));
+    write_words(&file, convert_to_word(evla));
+    write_words(&file, convert_to_word(stlo));
+    write_words(&file, convert_to_word(stla));
+    write_words(&file, convert_to_word(sb));
+    write_words(&file, convert_to_word(sdelta));
   }
   //---------------------------------------------------------------------------
   // End footer
