@@ -43,5 +43,10 @@ bin/*
 ./src/objects/*
 # Any compressed files
 *.tar.gz
+# Any csv files
+*.csv
+# Any sac files
+*.sac
+*.SAC
 # Dumb MacOS
 .DS_Store

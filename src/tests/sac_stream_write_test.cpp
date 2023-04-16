@@ -14,7 +14,8 @@ int main(int arg_count, char *arg_array[])
     std::printf("Usage: `%s <file>`\n", arg_array[0]);
     return 1;
   }
-  std::string file_name = arg_array[1];
+
+  std::string file_name{arg_array[1]};
   // ObsPy cannot handle v7 data yet (thinks file is wrong size lol)
   std::cout << "File:\t\t" << file_name << '\n';
   SAC::SacStream sac(file_name);

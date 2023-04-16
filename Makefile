@@ -3,6 +3,11 @@
 # Use the correct shell for bash scripts
 # seemed to default to /bin/sh when I use /bin/bash
 SHELL := /bin/bash
+# I assume github repositories are in your home directory
+# e.g. (for this repository)
+# Mac:   /Users/user_name/seismic
+# Linux: /home/user_name/seismic
+home_dir := $(shell echo ~)/
 # Linux or Mac
 uname_s := $(shell uname -s)
 
@@ -39,9 +44,9 @@ endif
 
 # Project directory structur
 # Code base starts here
-base_prefix = ./src/
+base_prefix = $(home_dir)seismic/src/
 # Built programs will go here
-bin_prefix = ./bin/
+bin_prefix = $(home_dir)seismic/bin/
 # Test programs will go here
 test_bin_prefix = $(bin_prefix)tests/
 # Where the source code files for programs are stored
@@ -54,12 +59,19 @@ hdr_prefix = $(base_prefix)header/
 imp_prefix = $(base_prefix)implementation/
 # Built object files will go here
 obj_prefix = $(base_prefix)objects/
+# Where is FFTW installed? This is on Mac from Homebrew (version number may change)
+fftw_loc = /opt/homebrew/Cellar/fftw/3.3.10_1/
+fftw_params = -I$(fftw_loc)include/ -L$(fftw_loc)lib/ -lfftw3 -lm
 
 # Compilation command
 cxx := $(compiler) $(params) -I$(hdr_prefix)
 
 # Tests make the test programs
-tests: sac_type_test sac_io_test sac_stream_read_test sac_stream_write_test
+sac_tests: sac_type_test sac_io_test sac_stream_read_test sac_stream_write_test sac_stream_fftw_test
+
+other_tests: fftw_test
+
+tests: sac_tests other_tests
 
 # By splitting into .o files I can make it so that only newly written code gets compiled
 # Therefore cutting down on compilation times
@@ -123,6 +135,20 @@ sac_stream_write_test: $(test_prefix)sac_stream_write_test.cpp $(modules)
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
 	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
+	@echo -e "Build finish: $$(date)\n"
+
+fftw_test: $(test_prefix)fftw_test.cpp
+	@echo "Building $(test_bin_prefix)$@"
+	@echo "Build start:  $$(date)"
+	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
+	$(cxx) $(fftw_params) -o $(test_bin_prefix)$@ $<
+	@echo -e "Build finish: $$(date)\n"
+
+sac_stream_fftw_test: $(test_prefix)sac_stream_fftw_test.cpp $(modules)
+	@echo "Building $(test_bin_prefix)$@"
+	@echo "Build start:  $$(date)"
+	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
+	$(cxx) $(fftw_params) -o $(test_bin_prefix)$@ $< $(obj_files)
 	@echo -e "Build finish: $$(date)\n"
 
 clean:

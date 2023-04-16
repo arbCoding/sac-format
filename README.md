@@ -99,6 +99,15 @@ The tests:
     - This tests writing out a v7 (modern) sac file (write)
     - This tests writing out a v6 (legacy) sac file (legacy_write)
     - It prints out the names of the two new files to the console
+* `fftw_test`
+    - This requires [FFTW](https://www.fftw.org/) to be installed
+    - You'll need to edit the `fftw_params` in the Makefile to point to your install location
+    - Does not use any of the sac libraries, just makes sure FFTW is working
+* `sac_stream_fftw_test`
+    - If `sac_stream_read_test` and `fftw_test` are working, this will work
+    - Calculates the FFT of the data1 component of the sac file (assumes a time-series)
+    - Outputs FFT values to `./fftw.csv` (with first row header line) for plotting elsewhere
+    - Outputs up to the Nyquist frequency (Max_Frequency / 2) (((N_Points / 2) + 1) frequency points)
 
 ---
 

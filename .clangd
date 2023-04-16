@@ -1,2 +1,2 @@
 CompileFlags:
-  Add: [-std=c++20]
+  Add: [-std=c++20, -I./src/header, -I/opt/homebrew/Cellar/fftw/3.3.10_1/include, -L/opt/homebrew/Cellar/fftw/3.3.10_1/lib]
