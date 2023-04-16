@@ -4,9 +4,14 @@
 #include <string>
 #include <fstream>
 
-int main()
+int main(int arg_count, char *arg_array[])
 {
-  std::string file_name = "../../data/IM.NV31..BHZ.M.2023.094.222304.SAC";
+  if (arg_count != 2)
+  {
+    std::printf("Usage: %s <file>\n", arg_array[0]);
+    return 1;
+  }
+  std::string file_name = arg_array[1];
   std::cout << "File:\t\t" << file_name << '\n';
   // Open it in binary mode
   std::ifstream file(file_name, std::ios::binary);

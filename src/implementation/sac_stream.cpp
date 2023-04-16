@@ -3,7 +3,7 @@
 namespace SAC
 {
 //-----------------------------------------------------------------------------
-// Convience functions
+// Convenience methods
 //-----------------------------------------------------------------------------
 void SacStream::header_to_footer()
 {
@@ -56,15 +56,14 @@ void SacStream::footer_to_header()
   f_sb = static_cast<float>(sb);
   f_sdelta = static_cast<float>(f_sdelta);
 }
-
 //-----------------------------------------------------------------------------
-// End convience functions
+// End convenience functions
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Constructors
 //-----------------------------------------------------------------------------
-// Constructor from file
+// Parameterized constructor (reader)
 SacStream::SacStream(const std::string& file_name)
 {
   //---------------------------------------------------------------------------
@@ -87,21 +86,16 @@ SacStream::SacStream(const std::string& file_name)
   f_delta  = binary_to_float(read_word(&file));
   depmin = binary_to_float(read_word(&file));
   depmax = binary_to_float(read_word(&file));
-  
   // Skip 'unused'
   read_word(&file);
-  
   odelta = binary_to_float(read_word(&file)); 
   f_b = binary_to_float(read_word(&file));
   f_e = binary_to_float(read_word(&file));
   f_o = binary_to_float(read_word(&file));
   f_a = binary_to_float(read_word(&file)); 
-
   // Skip 'internal'
   read_word(&file);
-
   // Arrival time picking headers
-  // All -12345
   f_t0 = binary_to_float(read_word(&file)); 
   f_t1 = binary_to_float(read_word(&file)); 
   f_t2 = binary_to_float(read_word(&file)); 
@@ -113,9 +107,7 @@ SacStream::SacStream(const std::string& file_name)
   f_t8 = binary_to_float(read_word(&file)); 
   f_t9 = binary_to_float(read_word(&file)); 
   f_f = binary_to_float(read_word(&file)); 
-
   // Resp headers
-  // All -12345
   resp0 = binary_to_float(read_word(&file)); 
   resp1 = binary_to_float(read_word(&file)); 
   resp2 = binary_to_float(read_word(&file)); 
@@ -126,20 +118,17 @@ SacStream::SacStream(const std::string& file_name)
   resp7 = binary_to_float(read_word(&file)); 
   resp8 = binary_to_float(read_word(&file)); 
   resp9 = binary_to_float(read_word(&file)); 
-
   // Station headers
   f_stla = binary_to_float(read_word(&file));
   f_stlo = binary_to_float(read_word(&file));
   stel = binary_to_float(read_word(&file));
   stdp = binary_to_float(read_word(&file));
-
   // Event headers
   f_evla = binary_to_float(read_word(&file));
   f_evlo = binary_to_float(read_word(&file));
   evel = binary_to_float(read_word(&file));
   evdp = binary_to_float(read_word(&file));
   mag = binary_to_float(read_word(&file));
- 
   // User headers
   user0 = binary_to_float(read_word(&file)); 
   user1 = binary_to_float(read_word(&file)); 
@@ -157,7 +146,6 @@ SacStream::SacStream(const std::string& file_name)
   gcarc = binary_to_float(read_word(&file));
   f_sb = binary_to_float(read_word(&file));
   f_sdelta = binary_to_float(read_word(&file));
-
   depmen = binary_to_float(read_word(&file)); 
   cmpaz = binary_to_float(read_word(&file));
   cmpinc = binary_to_float(read_word(&file));
@@ -165,16 +153,11 @@ SacStream::SacStream(const std::string& file_name)
   xmaximum = binary_to_float(read_word(&file)); 
   yminimum = binary_to_float(read_word(&file)); 
   ymaximum = binary_to_float(read_word(&file)); 
-
   // Skip 'unused' (x7)
-  read_word(&file);
-  read_word(&file);
-  read_word(&file);
-  read_word(&file);
-  read_word(&file);
-  read_word(&file);
-  read_word(&file);
-
+  for (std::size_t i{0}; i < 7; ++i)
+  {
+    read_word(&file);
+  }
   // Date_time headers
   nzyear = binary_to_int(read_word(&file));
   nzjday = binary_to_int(read_word(&file));
@@ -190,17 +173,13 @@ SacStream::SacStream(const std::string& file_name)
   nwfid = binary_to_int(read_word(&file)); 
   nxsize = binary_to_int(read_word(&file)); 
   nysize = binary_to_int(read_word(&file)); 
- 
   // Skip 'unused'
   read_word(&file);
-
   iftype = binary_to_int(read_word(&file));
   idep = binary_to_int(read_word(&file)); 
   iztype = binary_to_int(read_word(&file)); 
-  
   // Skip 'unused'
   read_word(&file);
-
   iinst = binary_to_int(read_word(&file)); 
   istreg = binary_to_int(read_word(&file)); 
   ievreg = binary_to_int(read_word(&file));
@@ -210,31 +189,22 @@ SacStream::SacStream(const std::string& file_name)
   imagtyp = binary_to_int(read_word(&file));
   imagsrc = binary_to_int(read_word(&file)); 
   ibody = binary_to_int(read_word(&file)); 
-
   // Skip 'unused' (x7)
-  read_word(&file);
-  read_word(&file);
-  read_word(&file);
-  read_word(&file);
-  read_word(&file);
-  read_word(&file);
-  read_word(&file);
-
+  for (std::size_t i{0}; i < 7; ++i)
+  {
+    read_word(&file);
+  }
   // Logical headers
   leven = binary_to_bool(read_word(&file));
   lpspol = binary_to_bool(read_word(&file)); 
   lovrok = binary_to_bool(read_word(&file));
   lcalda = binary_to_bool(read_word(&file));
-
   // Skip 'unused'
   read_word(&file);
-  
   // KSTNM is 2 words long (like all other 'K' headers)
   kstnm = binary_to_string(read_two_words(&file));
-
   // KEVNM is 4 words long (special rule!)
   kevnm = binary_to_long_string(read_four_words(&file));
-
   // All other 'K' headers are 2 words long
   khole = binary_to_string(read_two_words(&file));
   ko = binary_to_string(read_two_words(&file));
@@ -271,7 +241,6 @@ SacStream::SacStream(const std::string& file_name)
   {
     data2 = read_data(&file, static_cast<size_t>(npts), data_word + npts);
   }
-
   //---------------------------------------------------------------------------
   // End data
   //---------------------------------------------------------------------------
@@ -345,15 +314,13 @@ void SacStream::write(const std::string& file_name)
   write_words(&file, convert_to_word(depmax));
   // Fill 'unused'
   write_words(&file, convert_to_word(depmax));
-
   write_words(&file, convert_to_word(odelta));
   write_words(&file, convert_to_word(f_b));
   write_words(&file, convert_to_word(f_e));
   write_words(&file, convert_to_word(f_o));
   write_words(&file, convert_to_word(f_a));
   // Fill 'internal'
-  write_words(&file, convert_to_word(f_a)); // Could give this a name and a value..
-
+  write_words(&file, convert_to_word(f_a)); // Could give this a name and a value...
   write_words(&file, convert_to_word(f_t0));
   write_words(&file, convert_to_word(f_t1));
   write_words(&file, convert_to_word(f_t2));
@@ -400,7 +367,6 @@ void SacStream::write(const std::string& file_name)
   write_words(&file, convert_to_word(gcarc));
   write_words(&file, convert_to_word(f_sb));
   write_words(&file, convert_to_word(f_sdelta));
-
   write_words(&file, convert_to_word(depmen));
   write_words(&file, convert_to_word(cmpaz));
   write_words(&file, convert_to_word(cmpinc));
@@ -410,14 +376,10 @@ void SacStream::write(const std::string& file_name)
   write_words(&file, convert_to_word(ymaximum));
   // Fill 'unused' (x7)
   // Could give these names and values
-  write_words(&file, convert_to_word(ymaximum));
-  write_words(&file, convert_to_word(ymaximum));
-  write_words(&file, convert_to_word(ymaximum));
-  write_words(&file, convert_to_word(ymaximum));
-  write_words(&file, convert_to_word(ymaximum));
-  write_words(&file, convert_to_word(ymaximum));
-  write_words(&file, convert_to_word(ymaximum));
-
+  for (std::size_t i{0}; i < 7; ++i)
+  {
+    write_words(&file, convert_to_word(ymaximum));
+  }
   write_words(&file, convert_to_word(nzyear));
   write_words(&file, convert_to_word(nzjday));
   write_words(&file, convert_to_word(nzhour));
@@ -429,21 +391,18 @@ void SacStream::write(const std::string& file_name)
   write_words(&file, convert_to_word(nevid));
   write_words(&file, convert_to_word(npts));
   write_words(&file, convert_to_word(nsnpts));
-
   write_words(&file, convert_to_word(nwfid));
   write_words(&file, convert_to_word(nxsize));
   write_words(&file, convert_to_word(nysize));
   // Fill 'unused'
   // could give a name and a value
   write_words(&file, convert_to_word(nysize));
-
   write_words(&file, convert_to_word(iftype));
   write_words(&file, convert_to_word(idep));
   write_words(&file, convert_to_word(iztype));
   // Fill 'unused'
   // could give a name and a vlue
   write_words(&file, convert_to_word(iztype));
-
   write_words(&file, convert_to_word(iinst));
   write_words(&file, convert_to_word(istreg));
   write_words(&file, convert_to_word(ievreg));
@@ -455,14 +414,10 @@ void SacStream::write(const std::string& file_name)
   write_words(&file, convert_to_word(ibody));
   // Fill 'unused' (x7)
   // could give these names and values
-  write_words(&file, convert_to_word(ibody));
-  write_words(&file, convert_to_word(ibody));
-  write_words(&file, convert_to_word(ibody));
-  write_words(&file, convert_to_word(ibody));
-  write_words(&file, convert_to_word(ibody));
-  write_words(&file, convert_to_word(ibody));
-  write_words(&file, convert_to_word(ibody));
-
+  for (std::size_t i{0}; i < 7; ++i)
+  {
+    write_words(&file, convert_to_word(ibody));
+  }
   write_words(&file, bool_to_word(leven));
   write_words(&file, bool_to_word(lpspol));
   write_words(&file, bool_to_word(lovrok));
@@ -470,7 +425,7 @@ void SacStream::write(const std::string& file_name)
   // Fill 'unused'
   // could give this a name and a value
   write_words(&file, bool_to_word(lcalda));
-
+  // Strings are handled differently
   std::array<char, 2 * word_length> two_words;
   two_words = convert_to_words<sizeof(two_words)>(kstnm, 2);
   write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
@@ -568,7 +523,7 @@ void SacStream::write(const std::string& file_name)
   // Footer
   //---------------------------------------------------------------------------
   // Because upon reading we convert to NVHDR = 7 this should be automatically ran
-  // But incase you specifically wanted to make some NVHDR = 6 I wouldn't want
+  // But incase you specifically wanted to make NVHDR = 6 for legacy writing I wouldn't want
   // the write-out to be borked (say, generating synthetics using the old standard)
   if (nvhdr == 7)
   {
@@ -618,5 +573,4 @@ void SacStream::legacy_write(const std::string& file_name)
 //-----------------------------------------------------------------------------
 // End misc
 //-----------------------------------------------------------------------------
-
 }

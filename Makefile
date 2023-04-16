@@ -59,7 +59,7 @@ obj_prefix = $(base_prefix)objects/
 cxx := $(compiler) $(params) -I$(hdr_prefix)
 
 # Tests make the test programs
-tests: sac_stream_test sac_type_test sac_io_test
+tests: sac_type_test sac_io_test sac_stream_read_test sac_stream_write_test
 
 # By splitting into .o files I can make it so that only newly written code gets compiled
 # Therefore cutting down on compilation times
@@ -111,7 +111,14 @@ sac_io_test: $(test_prefix)sac_io_test.cpp $(modules)
 modules := sac_format
 obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
 
-sac_stream_test: $(test_prefix)sac_stream_test.cpp $(modules)
+sac_stream_read_test: $(test_prefix)sac_stream_read_test.cpp $(modules)
+	@echo "Building $(test_bin_prefix)$@"
+	@echo "Build start:  $$(date)"
+	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
+	@echo -e "Build finish: $$(date)\n"
+
+sac_stream_write_test: $(test_prefix)sac_stream_write_test.cpp $(modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)

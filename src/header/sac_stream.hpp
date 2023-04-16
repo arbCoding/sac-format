@@ -32,7 +32,7 @@ namespace SAC
     float f_delta{unset_float};
     // Minimum value of dependent variable
     // So Amplitude for time series
-    // Is spectra then amplitude or real component
+    // If spectrum, then amplitude or real component
     float depmin{unset_float};
     // Maximum value of dependent variable
     float depmax{unset_float};
@@ -40,11 +40,11 @@ namespace SAC
     float odelta{unset_float};
     // Beginning value of independent variable [required]
     // First time value for time-series
-    // What is this for spectral?
+    // First frequency for spectral data (f, or 2(pi)f?)
     float f_b{unset_float};
-    // End value of independent variable [requipred]
+    // End value of independent variable [required]
     // Final time value for time-series
-    // What is this for spectral?
+    // Final frequency for spectral data
     float f_e{unset_float};
     // Event origin time, seconds relative to reference time
     float f_o{unset_float};
@@ -78,7 +78,7 @@ namespace SAC
     float f_stla{unset_float};
     // Station longitude, degrees, east positive
     float f_stlo{unset_float};
-    // Station elevation above sea level, meters [not used by SAC]
+    // Station elevation above sea-level, meters [not used by SAC]
     float stel{unset_float};
     // Station depth below surface, meters [not used by SAC]
     float stdp{unset_float};
@@ -86,7 +86,7 @@ namespace SAC
     float f_evla{unset_float};
     // Event longitude, degrees, east positive
     float f_evlo{unset_float};
-    // Event elevation above sea level, meters [not used by SAC]
+    // Event elevation above sea-level, meters [not used by SAC]
     float evel{unset_float};
     // Event depth below surface, kilometers [previously meters]
     float evdp{unset_float};
@@ -119,8 +119,8 @@ namespace SAC
     float depmen{unset_float};
     // Component azimuth, degrees clockwise from north
     float cmpaz{unset_float};
-    // Component incident angle, degrees from upward vertical
-    // SEED/MINISEED use dip, degrees from horizontal down
+    // Component incident angle, degrees from upward vertical (incident 0 = -90 dip)
+    // SEED/MINISEED use dip, degrees from horizontal down (dip 0 = incident 90)
     float cmpinc{unset_float};
     // Minimum value of X (spectral only)
     float xminimum{unset_float};
@@ -143,13 +143,15 @@ namespace SAC
     // GMT MilliSecond
     int nzmsec{unset_int};
     // Header version number
-    // SAC 102.0+ auto-updates from <=6 to 7 upon reading nowadays
+    // SAC 102.0+ auto-updates from 6 to 7 upon reading nowadays
+    // The constructor for this class also updates from 6 to 7
+    // though legacy writing is still supported
     int nvhdr{unset_int};
     // Origin ID
     int norid{unset_int};
     // Event ID
     int nevid{unset_int};
-    // Number of points per data component [required]
+    // Number of points per data component [required] (each component must be same size)
     int npts{unset_int};
     // Original NPTS (file), not same as in memory (SAC internal)
     int nsnpts{unset_int};
@@ -251,7 +253,7 @@ namespace SAC
     // 71 = IUNKNOWN = Unknown
     int imagsrc{unset_int};
     // Body/spheroid definition used in distance calculations
-    // undef/-12345  = SAC historical spheroid version: a = 6378160.0m, f = 0.00335293 (this is NOT WGS84)
+    // undef/-12345   = Earth: SAC historical spheroid version: a = 6378160.0m, f = 0.00335293 (this is NOT WGS84)
     //  98 = ISUN     = Sun: a = 696000000.0 m, f = 8.189e-6
     //  99 = IMERCURY = Mercury: a = 2439700.0 m, f = 0.0
     // 100 = IVENUS   = Venus: a = 6051800.0 m, f = 0.0
@@ -263,7 +265,7 @@ namespace SAC
     int ibody{unset_int};
     // True if data is evenly spaced [required]
     bool leven{unset_bool};
-    // True if station have positive-polarity (left-hand rule [e.g. NEZ])
+    // True if station has positive-polarity (left-hand rule [e.g. NEZ {North-East-Up}])
     bool lpspol{unset_bool};
     // True if okay to overwrite file
     bool lovrok{unset_bool};
@@ -271,15 +273,15 @@ namespace SAC
     bool lcalda{unset_bool};
     // Station name
     std::string kstnm{unset_word};
-    // Event name
+    // Event name (the only 4 four word string variable)
     std::string kevnm{unset_word};
     // Nuclear: hole identifier; Other: Location identifier (LOCID)
     std::string khole{unset_word};
-    // Event origin time identification (test for o)
+    // Event origin time identification (text for o)
     std::string ko{unset_word};
     // First arrival time identification (text for a)
     std::string ka{unset_word};
-    // User defined pick identifiers (test for t0-t9)
+    // User defined pick identifiers (text for t0-t9)
     std::string kt0{unset_word};
     std::string kt1{unset_word};
     std::string kt2{unset_word};
@@ -290,7 +292,7 @@ namespace SAC
     std::string kt7{unset_word};
     std::string kt8{unset_word};
     std::string kt9{unset_word};
-    // Fini identification
+    // Fini identification (text for f)
     std::string kf{unset_word};
     // User defined variable storage area (text, n=0-2)
     std::string kuser0{unset_word};
@@ -298,8 +300,10 @@ namespace SAC
     std::string kuser2{unset_word};
     // Channel Name
     // SEED volumes use 3 coded characters (e.g. BHZ)
-    // Third if direction (Z = up)
-    // Current trend is to prefer 1/2 over N/E
+    // First is instrument type (B = broadband, H = higher-frequency broadband)
+    // Second is related to sampling rate (H = high sampling rate, V = very low sampling rate)
+    // Third is direction (Z = up, E = East, N = North, R = Radial, T = Transverse)
+    // Current trend is to prefer 1/2 over N/E (in case they're not correctly aligned?)
     std::string kcmpnm{unset_word};
     // Name of seismic network
     std::string knetwk{unset_word};
@@ -327,9 +331,12 @@ namespace SAC
     //-------------------------------------------------------------------------
     // Footer (if nvhdr = 7)
     //-------------------------------------------------------------------------
-    // These are double precision version of float headers
+    // These are double-precision versions of float headers
     // Giving them default unset_double value to be consistent with all default values
     // double-precision version of delta
+    // I prefixed all the single-precision header equivalents with `f_` to denote they
+    // are floats instead of doubles (`d_` for double would've been annoying as the
+    // doubles will ALWAYS be preferred; it isn't 1980 anymore)
     double delta{unset_double};
     // double-precision version of b
     double b{unset_double};
@@ -387,7 +394,7 @@ namespace SAC
     // Constructors
     //-------------------------------------------------------------------------
     // Copy constructor is unnecessary as the compiler will default
-    // to do member-wise copying (only needed for special cases)
+    // to do member-wise copying (only needed for special cases, not here)
     // Parameterized constructor (reader)
     SacStream(const std::string& file_name);
     //-------------------------------------------------------------------------
@@ -417,5 +424,4 @@ namespace SAC
     //-------------------------------------------------------------------------
   };
 }
-
 #endif
