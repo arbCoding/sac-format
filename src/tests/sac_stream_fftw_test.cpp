@@ -10,7 +10,7 @@
 #include <fftw3.h>
 
 // FFTW is working
-// Note that there this is a raw FFT (no windowing, nothing)
+// Note that this is a raw FFT (no windowing, no tapering, no nothing)
 
 int main(int arg_count, char *arg_array[])
 {
@@ -30,7 +30,7 @@ int main(int arg_count, char *arg_array[])
 
   // Dynamic memory allocation since the size is not known at compile-time
   //fftw_complex* signal = new fftw_complex[n_points]; // apparently bad form as it won't be contiguous in memory
-  // fftw_malloc is btter
+  // fftw_malloc is better
   fftw_complex* signal = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * sac.data1.size());
   for (std::size_t i{0}; i < sac.data1.size(); ++i)
   {
@@ -40,19 +40,20 @@ int main(int arg_count, char *arg_array[])
     signal[i][1] = 0.0;
   }
 
+  // Only want half of the FFT, the second half is a mirror image of the first half (also, don't want to go beyond nyquist frequency)
+  const int n_freqs{(sac.npts / 2) + 1};
   // More dynamic memory allocation since the size is not known at compile-time
-  fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * sac.data1.size());
+  fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * static_cast<std::size_t>(n_freqs));
   // Make the plan to calculate the FFT
   fftw_plan plan = fftw_plan_dft_1d(sac.npts, signal, spectrum, FFTW_FORWARD,  FFTW_ESTIMATE);
   // DO IT
   fftw_execute(plan);
   // Cleanup
+  // delete[] signal; // for non-malloc (bad form) version
+  fftw_free(signal);
   fftw_destroy_plan(plan);
   fftw_cleanup();
-  // Release memory related to signal
-  //delete[] signal; // for non-malloc (bad form) version
-  // For malloc verison
-  fftw_free(signal);
+
   std::cout << "FFT successfully calculated!\n\n";
 
   // Let's spit it out to a CSV for plotting since I have yet to find a nice C++ plotting library that doesn't break
@@ -71,7 +72,6 @@ int main(int arg_count, char *arg_array[])
   double frequency{};
   const double sampling_freq{1.0 / sac.delta};
   const double freq_step{sampling_freq / sac.npts};
-  const int n_freqs{(sac.npts / 2) + 1};
   csv_file << "Frequency,Real,Imaginary\n";
   for (int i{0}; i < n_freqs; ++i)
   {

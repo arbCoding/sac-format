@@ -11,6 +11,17 @@ in longer compilation times, larger compiled programs and objects, and slower ru
 
 ---
 
+## Dependencies
+**BEFORE COMPILING** make sure you have all dependencies installed on your system.
+
+While everything could be re-created from scratch, it is sometimes better to use pre-existing libraries.
+
+The list of **required** libraries is as follows:
+- [FFTW](https://www.fftw.org/)
+    - This provides very-fast FFT functionality. See `./src/tests/sac_stream_fftw_test.cpp` to see it in action.
+
+---
+
 ## Compiling
 **BEFORE COMPILING** make sure to set your c++ compiler in the Makefile:
 ```Makefile
@@ -185,6 +196,8 @@ If you're curious about the details of a function, you can find it in the implem
 - [ ] Time-series plotting
 
 - [ ] Time-series stacking (Moveout stacking [PRF], slant stacking)
+
+- [ ] Make installation/compilation easier (dependency checking, etc.)
 
 ---
 
