@@ -18,7 +18,7 @@
 //
 // Footer values will have the regular name (instead of prefixed with d_ for double)
 // And will be used by default
-// If an old version is written in, the floats will be converted to doubles and nvhdr updated
+// If an old version is read-in, the floats will be converted to doubles and nvhdr updated
 
 namespace SAC
 {

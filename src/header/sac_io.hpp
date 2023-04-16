@@ -23,7 +23,7 @@
 // std::pow
 # include <cmath>
 // std::uint64_t
-// More concise than `long long unsigned int`
+// More concise than `long std::size_t`
 #include <cstdint>
 
 namespace SAC
@@ -122,7 +122,7 @@ std::bitset<2 * binary_word_size> read_two_words(std::ifstream* sac);
 std::bitset<4 * binary_word_size> read_four_words(std::ifstream* sac);
 // Can read any number of words into a vector of floats
 // Useful for data values
-std::vector<float> read_data(std::ifstream* sac, size_t n_words, int start = data_word);
+std::vector<float> read_data(std::ifstream* sac, std::size_t n_words, int start = data_word);
 //-----------------------------------------------------------------------------
 // End reading
 //-----------------------------------------------------------------------------
@@ -149,7 +149,7 @@ std::vector<char> convert_to_word(T x);
 // Special for double-precision numbers (2 words, not 1)
 std::vector<char> convert_to_word(double x);
 // Template function to convert string to SAC word(s)
-template <long unsigned int N>
+template <std::size_t N>
 std::array<char, N> convert_to_words(std::string s, int n_words = 1);
 // Convert a bool value to a word
 std::vector<char> bool_to_word(bool b);

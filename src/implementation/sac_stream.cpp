@@ -558,7 +558,7 @@ void SacStream::write(const std::string& file_name)
 
 void SacStream::legacy_write(const std::string& file_name)
 {
-  // Since nvhdr is checked before writing to determine is a footer is appropriate
+  // Since nvhdr is checked before writing to determine if a footer is appropriate
   nvhdr = 6;
   write(file_name);
 }

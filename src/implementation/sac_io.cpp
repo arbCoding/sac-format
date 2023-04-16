@@ -48,7 +48,7 @@ int binary_to_int(std::bitset<binary_word_size> x)
     // 1110     -> 1111 (-1)
     // 0000 (0) -> 0001 (+1)
     result += 1;
-    // Changed sign to denote it as negative
+    // Change sign to make it as negative
     result *= -1;
   }
   else
