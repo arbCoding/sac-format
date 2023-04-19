@@ -590,11 +590,12 @@ void SacStream::fft_real_imaginary()
   fftw_destroy_plan(plan);
   fftw_cleanup();
   // Set the new values
+  const double norm{sqrt(npts)};
   data2.resize(data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    data1[i] = static_cast<float>(spectrum[i][0]); // Real
-    data2[i] = static_cast<float>(spectrum[i][1]); // Imaginary
+    data1[i] = static_cast<float>(spectrum[i][0] / norm); // Real
+    data2[i] = static_cast<float>(spectrum[i][1] / norm); // Imaginary
   }
   fftw_free(spectrum);
   // Set to IRLIM data type
@@ -618,9 +619,10 @@ void SacStream::ifft_real_imaginary()
   fftw_free(spectrum);
   fftw_destroy_plan(plan);
   fftw_cleanup();
+  const double norm{sqrt(npts)};
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    data1[i] = static_cast<float>(signal[i] / npts);
+    data1[i] = static_cast<float>(signal[i] / norm);
   }
   fftw_free(signal);
   // Set to ITIME data type
@@ -648,11 +650,12 @@ void SacStream::fft_amplitude_phase()
   fftw_destroy_plan(plan);
   fftw_cleanup();
   // Set the new values
+  const double norm{sqrt(npts)};
   data2.resize(data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    data1[i] = sqrt(pow(spectrum[i][0], 2) + pow(spectrum[i][1], 2)); // Amplitude
-    data2[i] = atan2(spectrum[i][1], spectrum[i][0]); // Phase
+    data1[i] = sqrt(pow(spectrum[i][0] / norm, 2) + pow(spectrum[i][1] / norm, 2)); // Amplitude
+    data2[i] = atan2(spectrum[i][1] / norm, spectrum[i][0] / norm); // Phase
   }
   fftw_free(spectrum);
   // Set to IAMPH data type
@@ -664,6 +667,11 @@ void SacStream::ifft_amplitude_phase()
   fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
+    // Z = X + iY
+    // |Z| = sqrt((X*X) + (Y*Y))
+    // theta = atan(Y / X)
+    // X = |Z| * cos(theta)
+    // Y = |Z| * sin(theta)
     spectrum[i][0] = static_cast<double>(data1[i] * cos(data2[i])); // Real
     spectrum[i][1] = static_cast<double>(data1[i] * sin(data2[i])); // Imaginary
   }
@@ -676,9 +684,10 @@ void SacStream::ifft_amplitude_phase()
   fftw_free(spectrum);
   fftw_destroy_plan(plan);
   fftw_cleanup();
+  const double norm{sqrt(npts)};
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    data1[i] = static_cast<float>(signal[i] / npts);
+    data1[i] = static_cast<float>(signal[i] / norm);
   }
   fftw_free(signal);
   // Set to ITIME data type

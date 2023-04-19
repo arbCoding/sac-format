@@ -421,6 +421,14 @@ namespace SAC
     //-------------------------------------------------------------------------
     // Spectral functions
     //-------------------------------------------------------------------------
+    //
+    // How FFTW normalizes things: FFT -> 1; IFFT -> 1/N
+    //
+    // How I normalize things: FFT -> 1/sqrt(N); IFFT -> 1/sqrt(N)
+    //
+    // I prefer the symmetry of the 1/sqrt(N) normalization condition (makes
+    // interpretation of resultant units simpler)
+    //
     // FFT that sets data1 to the real and data2 to the imaginary
     void fft_real_imaginary();
     // Inverse-FFT for data1 = read, data2 = imaginary

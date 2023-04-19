@@ -72,7 +72,7 @@ int main(int arg_count, char *arg_array[])
     }
   }
 
-  std::cout << "Same (Real/Imaginary)? " << (same ? "true" : "false") << '\n';
+  std::cout << "Equal to Original? (Real/Imaginary)? " << (same ? "true" : "false") << '\n';
 
   std::cout << "\nForward! (Amplitude/Phase)\n";
   sac.fft_amplitude_phase();
@@ -110,7 +110,7 @@ int main(int arg_count, char *arg_array[])
     }
   }
 
-  std::cout << "Same (Amplitude/Phase)? " << (same ? "true" : "false") << '\n';
+  std::cout << "Equal to Original? (Amplitude/Phase)? " << (same ? "true" : "false") << '\n';
 
   return 0;
 }
