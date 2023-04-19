@@ -23,8 +23,6 @@
 // And will be used by default
 // If an old version is read-in, the floats will be converted to doubles and nvhdr updated
 //
-// TODO: Make data vectors double-precision, but write out as single-precision (internal analysis
-// is as accurate as can be. But output is still in line with the data standard).
 
 namespace SAC
 {
