@@ -598,7 +598,7 @@ void SacStream::fft_real_imaginary()
   fftw_destroy_plan(plan);
   fftw_cleanup();
   // Set the new values
-  const double norm{sqrt(npts)};
+  const double norm{std::sqrt(npts)};
   data2.resize(data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
@@ -632,7 +632,7 @@ void SacStream::ifft_real_imaginary()
   fftw_free(spectrum);
   fftw_destroy_plan(plan);
   fftw_cleanup();
-  const double norm{sqrt(npts)};
+  const double norm{std::sqrt(npts)};
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
     data1[i] = signal[i] / norm;
@@ -668,11 +668,11 @@ void SacStream::fft_amplitude_phase()
   fftw_destroy_plan(plan);
   fftw_cleanup();
   // Set the new values
-  const double norm{sqrt(npts)};
+  const double norm{std::sqrt(npts)};
   data2.resize(data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    data1[i] = sqrt(pow(spectrum[i][0], 2.0) + pow(spectrum[i][1], 2.0)) / norm; // Amplitude
+    data1[i] = std::sqrt(pow(spectrum[i][0], 2.0) + pow(spectrum[i][1], 2.0)) / norm; // Amplitude
     data2[i] = atan2(spectrum[i][1], spectrum[i][0]); // Phase
   }
   fftw_free(spectrum);
@@ -707,7 +707,7 @@ void SacStream::ifft_amplitude_phase()
   fftw_free(spectrum);
   fftw_destroy_plan(plan);
   fftw_cleanup();
-  const double norm{sqrt(npts)};
+  const double norm{std::sqrt(npts)};
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
     data1[i] = signal[i] / norm;
