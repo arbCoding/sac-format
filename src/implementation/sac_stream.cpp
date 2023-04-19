@@ -234,6 +234,7 @@ SacStream::SacStream(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Data
   //---------------------------------------------------------------------------
+  // These are read in and converted to doubles (originally single-precision)
   data1 = read_data(&file, static_cast<size_t>(npts), data_word);
   // (Unevenly sampled-data) or (spectral or xy)
   // Same size as data1
@@ -503,16 +504,19 @@ void SacStream::write(const std::string& file_name)
   //---------------------------------------------------------------------------
   // Data
   //---------------------------------------------------------------------------
-  for (float x : data1)
+  // We go from double to float (loss in precision, but matches the data standard)
+  // This way we do double-precision in all interal calculations, only lose precision
+  // on outputting data to SAC file.
+  for (double x : data1)
   {
-    write_words(&file, convert_to_word(x));
+    write_words(&file, convert_to_word(static_cast<float>(x)));
   }
   // (Unevenly sampled-data) or (spectral or xy)
   if ((leven == 0) || (iftype > 1))
   {
-    for (float x : data2)
+    for (double x : data2)
     {
-      write_words(&file, convert_to_word(x));
+      write_words(&file, convert_to_word(static_cast<float>(x)));
     }
   }
   //---------------------------------------------------------------------------
@@ -578,7 +582,7 @@ void SacStream::fft_real_imaginary()
   double* signal = (double*) fftw_malloc(sizeof(double) * data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    signal[i] = static_cast<double>(data1[i]);
+    signal[i] = data1[i];
   }
   // We'll do full size as it isn't a huge time savings to do only half
   // Can changed later if it becomes an issue
@@ -598,8 +602,8 @@ void SacStream::fft_real_imaginary()
   data2.resize(data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    data1[i] = static_cast<float>(spectrum[i][0] / norm); // Real
-    data2[i] = static_cast<float>(spectrum[i][1] / norm); // Imaginary
+    data1[i] = spectrum[i][0] / norm; // Real
+    data2[i] = spectrum[i][1] / norm; // Imaginary
   }
   fftw_free(spectrum);
   // Set to IRLIM data type
@@ -616,8 +620,8 @@ void SacStream::ifft_real_imaginary()
   fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    spectrum[i][0] = static_cast<double>(data1[i]); // Real
-    spectrum[i][1] = static_cast<double>(data2[i]); // Imaginary
+    spectrum[i][0] = data1[i]; // Real
+    spectrum[i][1] = data2[i]; // Imaginary
   }
   // Clear contents and set to size 0
   data2.clear();
@@ -631,7 +635,7 @@ void SacStream::ifft_real_imaginary()
   const double norm{sqrt(npts)};
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    data1[i] = static_cast<float>(signal[i] / norm);
+    data1[i] = signal[i] / norm;
   }
   fftw_free(signal);
   // Set to ITIME data type
@@ -648,7 +652,7 @@ void SacStream::fft_amplitude_phase()
   double* signal = (double*) fftw_malloc(sizeof(double) * data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    signal[i] = static_cast<double>(data1[i]);
+    signal[i] = data1[i];
   }
   // We'll do full size as it isn't a huge time savings to do only half
   // Can changed later if it becomes an issue
@@ -668,7 +672,7 @@ void SacStream::fft_amplitude_phase()
   data2.resize(data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    data1[i] = sqrt(pow(spectrum[i][0], 2) + pow(spectrum[i][1], 2)) / norm; // Amplitude
+    data1[i] = sqrt(pow(spectrum[i][0], 2.0) + pow(spectrum[i][1], 2.0)) / norm; // Amplitude
     data2[i] = atan2(spectrum[i][1], spectrum[i][0]); // Phase
   }
   fftw_free(spectrum);
@@ -691,8 +695,8 @@ void SacStream::ifft_amplitude_phase()
     // theta = atan(Y / X)
     // X = |Z| * cos(theta)
     // Y = |Z| * sin(theta)
-    spectrum[i][0] = static_cast<double>(data1[i] * cos(data2[i])); // Real
-    spectrum[i][1] = static_cast<double>(data1[i] * sin(data2[i])); // Imaginary
+    spectrum[i][0] = data1[i] * cos(data2[i]); // Real
+    spectrum[i][1] = data1[i] * sin(data2[i]); // Imaginary
   }
   // Clear contents and set to size 0
   data2.clear();
@@ -706,7 +710,7 @@ void SacStream::ifft_amplitude_phase()
   const double norm{sqrt(npts)};
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    data1[i] = static_cast<float>(signal[i] / norm);
+    data1[i] = signal[i] / norm;
   }
   fftw_free(signal);
   // Set to ITIME data type

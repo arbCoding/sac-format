@@ -22,6 +22,9 @@
 // Footer values will have the regular name (instead of prefixed with d_ for double)
 // And will be used by default
 // If an old version is read-in, the floats will be converted to doubles and nvhdr updated
+//
+// TODO: Make data vectors double-precision, but write out as single-precision (internal analysis
+// is as accurate as can be. But output is still in line with the data standard).
 
 namespace SAC
 {
@@ -323,10 +326,12 @@ namespace SAC
     //-------------------------------------------------------------------------
     // data1 is the first data chunk in the SAC-file
     // It is ALWAYS present
-    std::vector<float> data1{};
+    // SAC format uses single-precision, we convert to double for computing
+    // and back to single for writing out (to remain compatible with the standard)
+    std::vector<double> data1{};
     // data2 is the second data chunk in the SAC-file
     // It is CONDITIONALLY present
-    std::vector<float> data2{};
+    std::vector<double> data2{};
     //-------------------------------------------------------------------------
     // End data
     //-------------------------------------------------------------------------

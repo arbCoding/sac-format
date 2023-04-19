@@ -27,7 +27,7 @@ int main(int arg_count, char *arg_array[])
 
   std::cout << "Size of data1:\t" << sac.data1.size() << " points\n";
   std::cout << "Preparing to perform FFT...\n\n";
-  const std::vector<float> data1_copy{sac.data1};
+  const std::vector<double> data1_copy{sac.data1};
   // Forward
   std::cout << "Forward (Real/Imaginary)!\n";
   sac.fft_real_imaginary();
@@ -61,11 +61,17 @@ int main(int arg_count, char *arg_array[])
   sac.ifft_real_imaginary();
 
   bool same{true};
-  constexpr float tolerance{1e-45f}; // Really really small tolerance
-  float diff{};
+  // Equality tolerance from FFT/IFFT
+  constexpr double tolerance{1e-10};
+  double diff{};
+  double max_diff{0.0};
   for (std::size_t i{0}; i < sac.data1.size(); ++i)
   {
-    diff = abs(sac.data1[i] - data1_copy[i]);
+    diff = std::abs(sac.data1[i] - data1_copy[i]);
+    if (diff > max_diff)
+    {
+      max_diff = diff;
+    }
     if (diff > tolerance)
     {
       same = false;
@@ -73,6 +79,7 @@ int main(int arg_count, char *arg_array[])
   }
 
   std::cout << "Equal to Original? (Real/Imaginary)? " << (same ? "true" : "false") << '\n';
+  std::cout << "Maximum difference: " << max_diff << '\n';
 
   std::cout << "\nForward! (Amplitude/Phase)\n";
   sac.fft_amplitude_phase();
@@ -101,9 +108,14 @@ int main(int arg_count, char *arg_array[])
   std::cout << "Inverse! (Amplitude/Phase)\n\n";
   sac.ifft_amplitude_phase();
   same = true;
+  max_diff = 0.0;
   for (std::size_t i{0}; i < sac.data1.size(); ++i)
   {
-    diff = abs(sac.data1[i] - data1_copy[i]);
+    diff = std::abs(sac.data1[i] - data1_copy[i]);
+    if (diff > max_diff)
+    {
+      max_diff = diff;
+    }
     if (diff > tolerance)
     {
       same = false;
@@ -111,6 +123,7 @@ int main(int arg_count, char *arg_array[])
   }
 
   std::cout << "Equal to Original? (Amplitude/Phase)? " << (same ? "true" : "false") << '\n';
+  std::cout << "Maximum difference: " << max_diff << '\n';
 
   return 0;
 }

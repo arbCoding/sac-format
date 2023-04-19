@@ -263,14 +263,14 @@ std::bitset<4 * binary_word_size> read_four_words(std::ifstream* sac)
   return concat_words(read_two_words(sac), read_two_words(sac));
 }
 
-std::vector<float> read_data(std::ifstream* sac, std::size_t n_words, int start)
+std::vector<double> read_data(std::ifstream* sac, std::size_t n_words, int start)
 {
   sac->seekg(word_position(start));
-  std::vector<float> result{};
+  std::vector<double> result{};
   result.resize(n_words);
   for (std::size_t i{0}; i < n_words; ++i)
   {
-    result[i] = binary_to_float(read_word(sac));
+    result[i] = static_cast<double>(binary_to_float(read_word(sac)));
   }
   return result;
 }
