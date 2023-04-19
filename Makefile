@@ -8,15 +8,10 @@ SHELL := /bin/bash
 # Mac:   /Users/user_name/seismic
 # Linux: /home/user_name/seismic
 home_dir := $(shell echo ~)/
-# Linux or Mac
+# Linux of mac
 uname_s := $(shell uname -s)
 
-ifeq ($(uname_s), Linux)
-	compiler = g++
-else
-	compiler = g++-12 # Homebrew g++ install I have
-#	compiler = clang
-endif
+compiler = g++-12
 
 # Param always used
 param = -std=c++20 -pedantic-errors -Wall
@@ -60,11 +55,15 @@ imp_prefix = $(base_prefix)implementation/
 # Built object files will go here
 obj_prefix = $(base_prefix)objects/
 # Where is FFTW installed? This is on Mac from Homebrew (version number may change)
-fftw_loc = /opt/homebrew/Cellar/fftw/3.3.10_1/
-fftw_params = -I$(fftw_loc)include/ -L$(fftw_loc)lib/ -lfftw3 -lm
+ifeq ($(uname_s), Linux)
+	fftw_params = -I/usr/include/ -L/usr/lib/x86_64-linux-gnu/ -lfftw3 -lm
+else
+	fftw_loc = /opt/homebrew/Cellar/fftw/3.3.10_1/
+	fftw_params = -I$(fftw_loc)include/ -L$(fftw_loc)lib/ -lfftw3 -lm
+endif
 
 # Compilation command
-cxx := $(compiler) $(params) $(fftw_params) -I$(hdr_prefix)
+cxx := $(compiler) $(params) -I$(hdr_prefix)
 
 # Tests make the test programs
 sac_tests: sac_type_test sac_io_test sac_stream_read_test sac_stream_write_test sac_stream_fftw_test
@@ -83,7 +82,7 @@ $(obj_prefix)%.o: $(imp_prefix)%.cpp
 	@echo "Building $@"
 	@echo "Build start:  $$(date)"
 	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
-	$(cxx) -c -o $@ $<
+	$(cxx) -c -o $@ $< $(fftw_params)
 	@echo -e "Build finish: $$(date)\n"
 
 # Manually defined for specific program
@@ -110,14 +109,14 @@ sac_type_test: $(test_prefix)sac_type_test.cpp $(modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files) $(fftw_params)
 	@echo -e "Build finish: $$(date)\n"
 
 sac_io_test: $(test_prefix)sac_io_test.cpp $(modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files) $(fftw_params)
 	@echo -e "Building finish $$(date)\n"
 
 modules := sac_format
@@ -127,28 +126,28 @@ sac_stream_read_test: $(test_prefix)sac_stream_read_test.cpp $(modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files) $(fftw_params)
 	@echo -e "Build finish: $$(date)\n"
 
 sac_stream_write_test: $(test_prefix)sac_stream_write_test.cpp $(modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files) $(fftw_params)
 	@echo -e "Build finish: $$(date)\n"
 
 fftw_test: $(test_prefix)fftw_test.cpp
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) $(fftw_params) -o $(test_bin_prefix)$@ $<
+	$(cxx) $(fftw_params) -o $(test_bin_prefix)$@ $< $(fftw_params)
 	@echo -e "Build finish: $$(date)\n"
 
 sac_stream_fftw_test: $(test_prefix)sac_stream_fftw_test.cpp $(modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files) $(fftw_params)
 	@echo -e "Build finish: $$(date)\n"
 
 clean:

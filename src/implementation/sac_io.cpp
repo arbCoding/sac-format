@@ -19,7 +19,7 @@ std::bitset<binary_word_size> int_to_binary(int x)
   if (x >= 0)
   {
     // Straight conversion
-    bits = std::bitset<binary_word_size>(static_cast<uint64_t>(x));
+    bits = std::bitset<binary_word_size>(static_cast<long long unsigned int>(x));
   }
   else
   {
