@@ -19,7 +19,7 @@ While everything could be re-created from scratch, it is sometimes better to use
 The list of **required** libraries is as follows:
 - [FFTW](https://www.fftw.org/)
     - This provides very-fast FFT functionality. See `./src/tests/sac_stream_fftw_test.cpp` to see it in action.
-
+    - **IMPORTANT** Because of the way the Makefile is designed, you must have this installed for any of the programs to build/link.
 ---
 
 ## Compiling
@@ -115,10 +115,8 @@ The tests:
     - You'll need to edit the `fftw_params` in the Makefile to point to your install location
     - Does not use any of the sac libraries, just makes sure FFTW is working
 * `sac_stream_fftw_test`
-    - If `sac_stream_read_test` and `fftw_test` are working, this will work
     - Calculates the FFT of the data1 component of the sac file (assumes a time-series)
-    - Outputs FFT values to `./fftw.csv` (with first row header line) for plotting elsewhere
-    - Outputs up to the Nyquist frequency (Max_Frequency / 2) (((N_Points / 2) + 1) frequency points)
+    - It tests both to/from real/imaginary **and** amplitude/phase.
 
 ---
 
@@ -183,6 +181,8 @@ If you're curious about the details of a function, you can find it in the implem
 
 - [X] Read general XY data
 
+- [X] Forward- and inverse-fast Fourier transforms (using FFTW).
+
 - [ ] Read general XYZ data (not enough information in specification to implement at the moment...)
 
 - [ ] Time-series analysis functions (demean, detrend, filtering, convolution, deconvolution, etc.)
@@ -214,7 +214,7 @@ Also I feel that there are a lot of problems with the seismological software tha
 * Documentation issues:
     - Undocumented (no documentation)
     - Underdocumented (incomplete documentation)
-    - Incorrectly documented (sure, it was correct **20 years ago**, but you've changed things since and never bothered to make sure other people can use it).
+    - Incorrectly documented (maybe it was correct **20 years ago**, but not unfortuantely it is no longer correct).
 * Compilation issues:
     - Sloppy programming results in numerous errors and undefined behavior (too many warnings, etc.).
         - Sure the **author** can compile it on their system, but what about **everyone** else?

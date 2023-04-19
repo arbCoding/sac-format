@@ -567,6 +567,128 @@ void SacStream::legacy_write(const std::string& file_name)
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Spectral functions
+//-----------------------------------------------------------------------------
+void SacStream::fft_real_imaginary()
+{
+  double* signal = (double*) fftw_malloc(sizeof(double) * data1.size());
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    signal[i] = static_cast<double>(data1[i]);
+  }
+  // We'll do full size as it isn't a huge time savings to do only half
+  // Can changed later if it becomes an issue
+  fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * data1.size());
+  // Make the plan to calculate the FFT
+  // r2c is always FFTW_FORWARD (real-to-complex)
+  fftw_plan plan = fftw_plan_dft_r2c_1d(npts, signal, spectrum, FFTW_ESTIMATE);
+  // DO IT
+  fftw_execute(plan);
+  // Cleanup
+  fftw_free(signal);
+  // Destory the plan, if you want to do many one after the other (same size input) don't destroy (it's faster to re-use!)
+  fftw_destroy_plan(plan);
+  fftw_cleanup();
+  // Set the new values
+  data2.resize(data1.size());
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    data1[i] = static_cast<float>(spectrum[i][0]); // Real
+    data2[i] = static_cast<float>(spectrum[i][1]); // Imaginary
+  }
+  fftw_free(spectrum);
+  // Set to IRLIM data type
+  iftype = 2;
+}
+
+void SacStream::ifft_real_imaginary()
+{
+  fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * data1.size());
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    spectrum[i][0] = static_cast<double>(data1[i]); // Real
+    spectrum[i][1] = static_cast<double>(data2[i]); // Imaginary
+  }
+  // Clear contents and set to size 0
+  data2.clear();
+  double* signal = (double*) fftw_malloc(sizeof(double) * data1.size());
+  // c2r is always FFTW_BACKWARD (complex-to-real)
+  fftw_plan plan = fftw_plan_dft_c2r_1d(npts, spectrum, signal, FFTW_ESTIMATE);
+  fftw_execute(plan);
+  fftw_free(spectrum);
+  fftw_destroy_plan(plan);
+  fftw_cleanup();
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    data1[i] = static_cast<float>(signal[i] / npts);
+  }
+  fftw_free(signal);
+  // Set to ITIME data type
+  iftype = 1;
+}
+
+void SacStream::fft_amplitude_phase()
+{
+  double* signal = (double*) fftw_malloc(sizeof(double) * data1.size());
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    signal[i] = static_cast<double>(data1[i]);
+  }
+  // We'll do full size as it isn't a huge time savings to do only half
+  // Can changed later if it becomes an issue
+  fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * data1.size());
+  // Make the plan to calculate the FFT
+  // r2c is always FFTW_FORWARD (real-to-complex)
+  fftw_plan plan = fftw_plan_dft_r2c_1d(npts, signal, spectrum, FFTW_ESTIMATE);
+  // DO IT
+  fftw_execute(plan);
+  // Cleanup
+  fftw_free(signal);
+  // Destory the plan, if you want to do many one after the other (same size input) don't destroy (it's faster to re-use!)
+  fftw_destroy_plan(plan);
+  fftw_cleanup();
+  // Set the new values
+  data2.resize(data1.size());
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    data1[i] = sqrt(pow(spectrum[i][0], 2) + pow(spectrum[i][1], 2)); // Amplitude
+    data2[i] = atan2(spectrum[i][1], spectrum[i][0]); // Phase
+  }
+  fftw_free(spectrum);
+  // Set to IAMPH data type
+  iftype = 3;
+}
+
+void SacStream::ifft_amplitude_phase()
+{
+  fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * data1.size());
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    spectrum[i][0] = static_cast<double>(data1[i] * cos(data2[i])); // Real
+    spectrum[i][1] = static_cast<double>(data1[i] * sin(data2[i])); // Imaginary
+  }
+  // Clear contents and set to size 0
+  data2.clear();
+  double* signal = (double*) fftw_malloc(sizeof(double) * data1.size());
+  // c2r is always FFTW_BACKWARD (complex-to-real)
+  fftw_plan plan = fftw_plan_dft_c2r_1d(npts, spectrum, signal, FFTW_ESTIMATE);
+  fftw_execute(plan);
+  fftw_free(spectrum);
+  fftw_destroy_plan(plan);
+  fftw_cleanup();
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    data1[i] = static_cast<float>(signal[i] / npts);
+  }
+  fftw_free(signal);
+  // Set to ITIME data type
+  iftype = 1;
+}
+//-----------------------------------------------------------------------------
+// End spectral functions
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // Misc
 //-----------------------------------------------------------------------------
 

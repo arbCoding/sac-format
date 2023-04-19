@@ -64,7 +64,7 @@ fftw_loc = /opt/homebrew/Cellar/fftw/3.3.10_1/
 fftw_params = -I$(fftw_loc)include/ -L$(fftw_loc)lib/ -lfftw3 -lm
 
 # Compilation command
-cxx := $(compiler) $(params) -I$(hdr_prefix)
+cxx := $(compiler) $(params) $(fftw_params) -I$(hdr_prefix)
 
 # Tests make the test programs
 sac_tests: sac_type_test sac_io_test sac_stream_read_test sac_stream_write_test sac_stream_fftw_test
@@ -148,8 +148,8 @@ sac_stream_fftw_test: $(test_prefix)sac_stream_fftw_test.cpp $(modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) $(fftw_params) -o $(test_bin_prefix)$@ $< $(obj_files)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files)
 	@echo -e "Build finish: $$(date)\n"
 
 clean:
-	rm -rf $(bin_prefix) $(obj_prefix) *.dSYM
+	rm -rf $(bin_prefix) $(obj_prefix) *.dSYM *.csv

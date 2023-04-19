@@ -27,38 +27,14 @@ int main(int arg_count, char *arg_array[])
 
   std::cout << "Size of data1:\t" << sac.data1.size() << " points\n";
   std::cout << "Preparing to perform FFT...\n\n";
-
-  // Dynamic memory allocation since the size is not known at compile-time
-  //fftw_complex* signal = new fftw_complex[n_points]; // apparently bad form as it won't be contiguous in memory
-  // fftw_malloc is better
-  fftw_complex* signal = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * sac.data1.size());
-  for (std::size_t i{0}; i < sac.data1.size(); ++i)
-  {
-    // static_cast to double to be sure it uses doubles instead of trying to use float
-    signal[i][0] = static_cast<double>(sac.data1[i]);
-    // Our signal is real!
-    signal[i][1] = 0.0;
-  }
-
-  // Only want half of the FFT, the second half is a mirror image of the first half (also, don't want to go beyond nyquist frequency)
-  const int n_freqs{(sac.npts / 2) + 1};
-  // More dynamic memory allocation since the size is not known at compile-time
-  fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * static_cast<std::size_t>(n_freqs));
-  // Make the plan to calculate the FFT
-  fftw_plan plan = fftw_plan_dft_1d(sac.npts, signal, spectrum, FFTW_FORWARD,  FFTW_ESTIMATE);
-  // DO IT
-  fftw_execute(plan);
-  // Cleanup
-  // delete[] signal; // for non-malloc (bad form) version
-  fftw_free(signal);
-  fftw_destroy_plan(plan);
-  fftw_cleanup();
-
-  std::cout << "FFT successfully calculated!\n\n";
-
+  const std::vector<float> data1_copy{sac.data1};
+  // Forward
+  std::cout << "Forward (Real/Imaginary)!\n";
+  sac.fft_real_imaginary();
+  
   // Let's spit it out to a CSV for plotting since I have yet to find a nice C++ plotting library that doesn't break
   // my project
-  const std::string csv_name{"./fftw.csv"};
+  const std::string csv_name{"./fftw_real_imaginary.csv"};
   // If it exists, overwrite it (do not append)
   std::ofstream csv_file(csv_name, std::ios::trunc);
   if (!csv_file.is_open())
@@ -73,13 +49,68 @@ int main(int arg_count, char *arg_array[])
   const double sampling_freq{1.0 / sac.delta};
   const double freq_step{sampling_freq / sac.npts};
   csv_file << "Frequency,Real,Imaginary\n";
-  for (int i{0}; i < n_freqs; ++i)
+  for (std::size_t i{0}; i < sac.data1.size(); ++i)
   {
     frequency = i * freq_step;
-    csv_file << frequency << ',' << spectrum[i][0] << ',' << spectrum[i][1] << '\n';
+    csv_file << frequency << ',' << sac.data1[i] << ',' << sac.data2[i] << '\n';
   }
-  // Release memory related to spectrum
-  fftw_free(spectrum);
+  csv_file.close();
+
+  // Inverse
+  std::cout << "Inverse (Real/Imaginary)!\n\n";
+  sac.ifft_real_imaginary();
+
+  bool same{true};
+  constexpr float tolerance{1e-45f}; // Really really small tolerance
+  float diff{};
+  for (std::size_t i{0}; i < sac.data1.size(); ++i)
+  {
+    diff = abs(sac.data1[i] - data1_copy[i]);
+    if (diff > tolerance)
+    {
+      same = false;
+    }
+  }
+
+  std::cout << "Same (Real/Imaginary)? " << (same ? "true" : "false") << '\n';
+
+  std::cout << "\nForward! (Amplitude/Phase)\n";
+  sac.fft_amplitude_phase();
+
+  // Let's spit it out to a CSV for plotting since I have yet to find a nice C++ plotting library that doesn't break
+  // my project
+  const std::string csv_name2{"./fftw_amplitude_phase.csv"};
+  // If it exists, overwrite it (do not append)
+  std::ofstream csv_file2(csv_name2, std::ios::trunc);
+  if (!csv_file2.is_open())
+  {
+    std::cerr << "Failed to open: " << csv_name2 << " for the fft results...\n";
+    return 1;
+  }
+
+  std::cout << "Writing the results of the FFT to: " << csv_name << '\n';
+
+  csv_file2 << "Frequency,Amplitude,Phase\n";
+  for (std::size_t i{0}; i < sac.data1.size(); ++i)
+  {
+    frequency = i * freq_step;
+    csv_file2 << frequency << ',' << sac.data1[i] << ',' << sac.data2[i] << '\n';
+  }
+  csv_file2.close();
+
+  std::cout << "Inverse! (Amplitude/Phase)\n\n";
+  sac.ifft_amplitude_phase();
+  same = true;
+  for (std::size_t i{0}; i < sac.data1.size(); ++i)
+  {
+    diff = abs(sac.data1[i] - data1_copy[i]);
+    if (diff > tolerance)
+    {
+      same = false;
+    }
+  }
+
+  std::cout << "Same (Amplitude/Phase)? " << (same ? "true" : "false") << '\n';
 
   return 0;
 }
