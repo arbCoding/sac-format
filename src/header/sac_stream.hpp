@@ -432,6 +432,15 @@ namespace SAC
     // I prefer the symmetry of the 1/sqrt(N) normalization condition (makes
     // interpretation of resultant units simpler)
     //
+    // Accuracy:
+    //  using fft_real_imaginary() followed by ifft_real_imaginary()
+    //  reproduces the original signal better by about an order of magnitude
+    //  (one additional deicmal place) than
+    //  using fft_amplitude_phase() followed by ifft_amplitude_phase()
+    //
+    // So unless you specifically need amplitude/phase, you should use
+    // real/imaginary
+    //
     // FFT that sets data1 to the real and data2 to the imaginary
     // Requires iftype = 1 (SAC ITIME)
     void fft_real_imaginary();

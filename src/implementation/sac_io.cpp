@@ -40,13 +40,13 @@ int binary_to_int(std::bitset<binary_word_size> x)
   if (x.test(binary_word_size - 1))
   {
     // Bitwise not operator flips 0's and 1's
-    // 0001 (+1) -> 1110
-    // 1111 (-1) -> 0000 (0)
+    // a) 0001 (+1) -> 1110 (-2)
+    // c) 1111 (-1) -> 0000 (0)
     x = ~x;
     result = x.to_ulong();
     // Add one
-    // 1110     -> 1111 (-1)
-    // 0000 (0) -> 0001 (+1)
+    // a) 1110 (-2) -> 1111 (-1)
+    // c) 0000 (0)  -> 0001 (+1)
     result += 1;
     // Change sign to make it as negative
     result *= -1;

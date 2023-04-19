@@ -11,6 +11,10 @@
 
 // FFTW is working
 // Note that this is a raw FFT (no windowing, no tapering, no nothing)
+// Of note:
+// fft_real_imaginary() followed by ifft_real_imaginary() better reproduces the signal than
+// fft_amplitude_phase() followed by ifft_amplitude_phase() by about 1 order of magnitude
+// (one additional decimal place)
 
 int main(int arg_count, char *arg_array[])
 {
