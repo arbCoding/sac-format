@@ -99,7 +99,7 @@ int main(int arg_count, char *arg_array[])
     return 1;
   }
 
-  std::cout << "Writing the results of the FFT to: " << csv_name << '\n';
+  std::cout << "Writing the results of the FFT to: " << csv_name2 << '\n';
 
   csv_file2 << "Frequency,Amplitude,Phase\n";
   for (std::size_t i{0}; i < sac.data1.size(); ++i)
