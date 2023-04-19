@@ -571,6 +571,10 @@ void SacStream::legacy_write(const std::string& file_name)
 //-----------------------------------------------------------------------------
 void SacStream::fft_real_imaginary()
 {
+  if (iftype != 1)
+  {
+    std::cerr << "Incorrect iftype: expected `1` (SAC ITIME), received `" << iftype << "`\n";
+  }
   double* signal = (double*) fftw_malloc(sizeof(double) * data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
@@ -604,6 +608,11 @@ void SacStream::fft_real_imaginary()
 
 void SacStream::ifft_real_imaginary()
 {
+  if (iftype !=2)
+  {
+    std::cerr << "Incorrect iftype: expected `2` (SAC IRLIM), received `" << iftype << "`\n";
+    return;
+  }
   fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
@@ -631,6 +640,11 @@ void SacStream::ifft_real_imaginary()
 
 void SacStream::fft_amplitude_phase()
 {
+  if (iftype != 1)
+  {
+    std::cerr << "Incorrect iftype: expected `1` (SAC ITIME), received `" << iftype << "`\n";
+    return;
+  }
   double* signal = (double*) fftw_malloc(sizeof(double) * data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
@@ -654,8 +668,8 @@ void SacStream::fft_amplitude_phase()
   data2.resize(data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
-    data1[i] = sqrt(pow(spectrum[i][0] / norm, 2) + pow(spectrum[i][1] / norm, 2)); // Amplitude
-    data2[i] = atan2(spectrum[i][1] / norm, spectrum[i][0] / norm); // Phase
+    data1[i] = sqrt(pow(spectrum[i][0], 2) + pow(spectrum[i][1], 2)) / norm; // Amplitude
+    data2[i] = atan2(spectrum[i][1], spectrum[i][0]); // Phase
   }
   fftw_free(spectrum);
   // Set to IAMPH data type
@@ -667,6 +681,11 @@ void SacStream::ifft_amplitude_phase()
   fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * data1.size());
   for (std::size_t i{0}; i < data1.size(); ++i)
   {
+    if (iftype != 3)
+    {
+      std::cerr << "Incorrect `iftype`: expected `3` (SAC IAMPH), received `" << iftype << "`\n";
+      return;
+    }
     // Z = X + iY
     // |Z| = sqrt((X*X) + (Y*Y))
     // theta = atan(Y / X)

@@ -430,11 +430,15 @@ namespace SAC
     // interpretation of resultant units simpler)
     //
     // FFT that sets data1 to the real and data2 to the imaginary
+    // Requires iftype = 1 (SAC ITIME)
     void fft_real_imaginary();
     // Inverse-FFT for data1 = read, data2 = imaginary
+    // Requires iftype = 2 (SAC IRLIM)
     void ifft_real_imaginary();
     // FFT that sets data1 to the amplitude and data2 to the phase
+    // Requires iftype = 1 (SAC ITIME)
     void fft_amplitude_phase();
+    // Requires iftype = 3 (SAC IAMPH)
     // Inverse-FFT for data1 = amplitude, data2 = phase
     void ifft_amplitude_phase();
     //-------------------------------------------------------------------------
