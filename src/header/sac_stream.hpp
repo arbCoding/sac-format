@@ -453,6 +453,19 @@ namespace SAC
     // Requires iftype = 3 (SAC IAMPH)
     // Inverse-FFT for data1 = amplitude, data2 = phase
     void ifft_amplitude_phase();
+    // Note: These filters are RAW
+    // As in, not safe if you don't know what you're doing
+    // They don't care about the Nyquist frequency
+    // They don't care about the sampling rate
+    // They don't care about spectral leakage
+    // They don't care about windowing functions
+    // These are all things you'll need to apply yourself (for now)
+    // Lowpass filter (butterworth)
+    void lowpass(int order, double cutoff);
+    // Highpass filter (butterworth)
+    void highpass(int order, double cutoff);
+    // Bandpass filter (butterworth)
+    void bandpass(int order, double lowpass, double highpass);
     //-------------------------------------------------------------------------
     // End spectral functions
     //-------------------------------------------------------------------------

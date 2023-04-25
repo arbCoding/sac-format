@@ -25,11 +25,11 @@ release_param = -O2 -DNDEBUG
 
 # Debug version is substantially larger file size (and slower runtime)
 # Debug compilation is extremely strict (warnings = errors)
-debug = true
+#debug = true
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # Release version is substantially smaller file size (and faster runtime)
 # Release compilation is extremely relaxed (possible bugs if using to by-pass failed debug compilation...)
-#debug = false
+debug = false
 
 ifeq ($(debug), true)
 	params = $(param) $(debug_param)
@@ -65,12 +65,16 @@ endif
 # Compilation command
 cxx := $(compiler) $(params) -I$(hdr_prefix)
 
+all: tests
+
 # Tests make the test programs
-sac_tests: sac_type_test sac_io_test sac_stream_read_test sac_stream_write_test sac_stream_fftw_test
+sac_tests: sac_type_test sac_io_test sac_stream_read_test sac_stream_write_test
+
+spectral_tests: sac_stream_fftw_test sac_stream_lowpass_test
 
 other_tests: fftw_test
 
-tests: sac_tests other_tests
+tests: sac_tests other_tests spectral_tests
 
 # By splitting into .o files I can make it so that only newly written code gets compiled
 # Therefore cutting down on compilation times
@@ -144,6 +148,13 @@ fftw_test: $(test_prefix)fftw_test.cpp
 	@echo -e "Build finish: $$(date)\n"
 
 sac_stream_fftw_test: $(test_prefix)sac_stream_fftw_test.cpp $(modules)
+	@echo "Building $(test_bin_prefix)$@"
+	@echo "Build start:  $$(date)"
+	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files) $(fftw_params)
+	@echo -e "Build finish: $$(date)\n"
+
+sac_stream_lowpass_test: $(test_prefix)sac_stream_lowpass_test.cpp $(modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)

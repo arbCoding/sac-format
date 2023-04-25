@@ -3,12 +3,7 @@
 
 #include <iostream>
 #include <string>
-// File IO
 #include <fstream>
-// FFTW
-#include <cmath>
-#include <fftw3.h>
-
 // FFTW is working
 // Note that this is a raw FFT (no windowing, no tapering, no nothing)
 // Of note:
@@ -16,7 +11,7 @@
 // fft_amplitude_phase() followed by ifft_amplitude_phase() by about 1 order of magnitude
 // (one additional decimal place)
 
-int main(int arg_count, char *arg_array[])
+int main(int arg_count, char* arg_array[])
 {
   if (arg_count != 2)
   {
@@ -61,7 +56,7 @@ int main(int arg_count, char *arg_array[])
   csv_file.close();
 
   // Inverse
-  std::cout << "Inverse (Real/Imaginary)!\n\n";
+  std::cout << "Inverse (Real/Imaginary)!\n";
   sac.ifft_real_imaginary();
 
   bool same{true};
@@ -109,7 +104,7 @@ int main(int arg_count, char *arg_array[])
   }
   csv_file2.close();
 
-  std::cout << "Inverse! (Amplitude/Phase)\n\n";
+  std::cout << "Inverse! (Amplitude/Phase)\n";
   sac.ifft_amplitude_phase();
   same = true;
   max_diff = 0.0;

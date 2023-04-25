@@ -716,6 +716,90 @@ void SacStream::ifft_amplitude_phase()
   // Set to ITIME data type
   iftype = 1;
 }
+
+void SacStream::lowpass(int order, double cutoff)
+{
+  if (iftype != 1)
+  {
+    std::cerr << "Incorrect `iftype`: expected 1 (SAC ITIME), received `" << iftype << "`\n";
+    return;
+  }
+  // FFT of our signal
+  fft_real_imaginary();
+  double frequency{};
+  const double sampling_freq{1.0 / delta};
+  const double freq_step{sampling_freq / npts};
+  double denominator{};
+  double gain{};
+  // Build and apply filter to each element
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    // Make filter for this frequency
+    frequency = i * freq_step;
+    denominator = std::pow(frequency / cutoff, 2.0 * order);
+    // Splitting the steps across lines causes it to correctly use the sqrt overload for doubles
+    denominator = std::sqrt(1.0 + denominator);
+    //std::cout << "Denominator: " << denominator << '\n';
+    gain = 1.0 / denominator;
+    data1[i] *= gain;
+    data2[i] *= gain;
+  }
+  // Return the filtered signal
+  ifft_real_imaginary();
+}
+
+void SacStream::highpass(int order, double cutoff)
+{
+  if (iftype != 1)
+  {
+    std::cerr << "Incorrect `iftype`: expected 1 (SAC ITIME), received `" << iftype << "`\n";
+    return;
+  }
+  fft_real_imaginary();
+  double frequency{};
+  const double sampling_freq{1.0 / delta};
+  const double freq_step{sampling_freq / npts};
+  double denominator{};
+  double gain{};
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    frequency = i * freq_step;
+    denominator = std::pow(cutoff / frequency, 2.0 * order);
+    denominator = std::sqrt(1.0 + denominator);
+    gain = 1.0 / denominator;
+    data1[i] *= gain;
+    data2[i] *= gain;
+  }
+  ifft_real_imaginary();
+}
+
+void SacStream::bandpass(int order, double lowpass, double highpass)
+{
+  if (iftype != 1)
+  {
+    std::cerr << "Incorrect `iftype`: expected 1 (SAC ITIME), received `" << iftype << "`\n";
+    return;
+  }
+  fft_real_imaginary();
+  double frequency{};
+  const double sampling_freq{1.0 / delta};
+  const double freq_step{sampling_freq / npts};
+  double denominator{};
+  double gain{};
+  const double bandwidth = highpass - lowpass;
+  const double central_freq = lowpass + (bandwidth / 2.0);
+  for (std::size_t i{0}; i < data1.size(); ++i)
+  {
+    frequency = i * freq_step;
+    denominator = (frequency - central_freq) / (frequency - bandwidth);
+    denominator = std::pow(denominator, 2.0 * order);
+    denominator = std::sqrt(1.0 + denominator);
+    gain = 1.0 / denominator;
+    data1[i] *= gain;
+    data2[i] *= gain;
+  }
+  ifft_real_imaginary();
+}
 //-----------------------------------------------------------------------------
 // End spectral functions
 //-----------------------------------------------------------------------------
