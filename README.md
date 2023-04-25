@@ -185,7 +185,9 @@ If you're curious about the details of a function, you can find it in the implem
 
 - [ ] Read general XYZ data (not enough information in specification to implement at the moment...)
 
-- [ ] Time-series analysis functions (demean, detrend, filtering, convolution, deconvolution, etc.)
+- [X] Lowpass, highpass, bandpass Butterworth filters
+
+- [X] Time-series preprocessing functions (demean, detrend)
 
 - [ ] Geometric analysis functions (3C seismic data, rotating components)
 
