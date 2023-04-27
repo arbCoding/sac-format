@@ -81,15 +81,23 @@ cxx := $(cxx) -I$(hdr_prefix)
 #------------------------------------------------------------------------------
 # Program definitions
 #------------------------------------------------------------------------------
+# All programs
 all: tests
 
-sac_tests: sac_type_test sac_io_test sac_stream_read_test sac_stream_write_test
+# These only need sac_io.o
+sac_fundamental_tests: sac_type_test sac_io_test
 
+# These need sac_format.o (sac_io.o and sac_stream.o) still need to remove the FFTW requirement
+sac_stream_tests: sac_stream_read_test sac_stream_write_test
+
+# These need sac_format.o and FFTW
 spectral_tests: sac_stream_fftw_test sac_stream_lowpass_test
 
+# This needs FFTW
 other_tests: fftw_test
 
-tests: sac_tests other_tests spectral_tests
+# All tests
+tests: sac_fundamental_tests sac_stream_tests other_tests spectral_tests
 #------------------------------------------------------------------------------
 # End program definitions
 #------------------------------------------------------------------------------
@@ -100,42 +108,54 @@ tests: sac_tests other_tests spectral_tests
 # By splitting into .o files I can make it so that only newly written code gets compiled
 # Therefore cutting down on compilation times
 # Also helps to simply the logic a little bit
-# $@ is target
-# $< is first prerequisite (I think same as $^ in this case)
-# This is a general rule to build an object from its corresponding implementation
-$(obj_prefix)%.o: $(imp_prefix)%.cpp
+sac_io: $(imp_prefix)sac_io.cpp
 	@echo "Building $@"
 	@echo "Build start:  $$(date)"
 	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
-	$(cxx) -c -o $@ $< $(fftw_params)
+	$(cxx) -c -o $(obj_prefix)$@.o $<
+	@echo -e "Build finish:  $$(date)\n"
+
+sac_stream: $(imp_prefix)sac_stream.cpp
+	@echo "Building $@"
+	@echo "Build start:  $$(date)"
+	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
+	$(cxx) -c -o $(obj_prefix)$@.o $< $(fftw_params)
 	@echo -e "Build finish: $$(date)\n"
 
 # Manually defined for specific program
 # Modules for sac_class_test
-modules := sac_io sac_stream
-obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
-
-# Print out obj_files to check that they are set correctly
-#$(info $$obj_files is [${obj_files}])
+sf_modules := sac_io sac_stream
+sf_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(sf_modules)))
 
 # link obj_files to a single object-file
-sac_format: $(obj_files)
+sac_format: $(sf_modules)
 	@echo "Building $(bin_prefix)$@"
 	@echo "Build start:  $$(date)"
-	ld -r -o $(obj_prefix)$@.o $^
+	ld -r -o $(obj_prefix)$@.o $(sf_obj)
 	@echo -e "Build finish: $$(date)\n"
 
-# Use the single object file to simplify
-modules := sac_format
-obj_files := $(addsuffix .o, $(addprefix $(obj_prefix), $(modules)))
-# $@ is target
-# $^ is all prerequisites, without duplicates, separated by spaces
-basic_sac := sac_type_test sac_io_test sac_stream_read_test sac_stream_write_test sac_stream_fftw_test sac_stream_lowpass_test fftw_test
-$(basic_sac): %:$(test_prefix)%.cpp $(modules)
+basic_modules := sac_io
+basic_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(basic_modules)))
+basic_sac := sac_type_test sac_io_test
+$(basic_sac): %:$(test_prefix)%.cpp $(basic_modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -o $(test_bin_prefix)$@ $< $(obj_files) $(fftw_params)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(basic_obj)
+	@echo -e "Build finish: $$(date)\n"
+
+# Use the single object file to simplify
+full_modules := sac_format
+full_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(full_modules)))
+# $@ is target
+# $< is the first prerequisite only
+# $^ is all prerequisites, without duplicates, separated by spaces
+spectral_sac := sac_stream_read_test sac_stream_write_test sac_stream_fftw_test sac_stream_lowpass_test fftw_test
+$(spectral_sac): %:$(test_prefix)%.cpp $(full_modules)
+	@echo "Building $(test_bin_prefix)$@"
+	@echo "Build start:  $$(date)"
+	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(full_obj) $(fftw_params)
 	@echo -e "Build finish $$(date)\n"
 #------------------------------------------------------------------------------
 # End compilation patterns

@@ -420,7 +420,10 @@ namespace SAC
     //-------------------------------------------------------------------------
     // End writing
     //-------------------------------------------------------------------------
-    
+   
+    // Spectral is slated to be moved to a separate header
+    // that way people who do not want to use these don't need to bother
+    // with setting up FFTW
     //-------------------------------------------------------------------------
     // Spectral functions
     //-------------------------------------------------------------------------
