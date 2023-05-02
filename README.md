@@ -12,32 +12,28 @@ in longer compilation times, larger compiled programs and objects, and slower ru
 ---
 
 ## Dependencies
-**BEFORE COMPILING** make sure you have all dependencies installed on your system.
+**BEFORE COMPILING** make sure you have all **required** dependencies installed on your system. Be sure
+to also check the **optional** dependencies to determine if you need them for your purposes.
 
 While everything could be re-created from scratch, it is sometimes better to use pre-existing libraries.
 
-The list of **required** libraries is as follows:
+This list of **required** dependencies is as follows:
+    - None as of yet
+
+The list of **optional** dependencies is as follows:
 - [FFTW](https://www.fftw.org/)
     - This provides very-fast FFT functionality. See `./src/tests/sac_stream_fftw_test.cpp` to see it in action.
-    - **IMPORTANT** Because of the way the Makefile is designed, you must have this installed for any of the programs to build/link.
+    - **IMPORTANT** If you're not using the spectral functions (fft, ifft, lowpass, highpass, bandpass), this is 
+    unnecessary. You can still work with the SacStream class, or the low-level i/o functions in sac_io.hpp without
+    installing FFTW3.
+
 ---
 
 ## Compiling
 **BEFORE COMPILING** make sure to set your c++ compiler in the Makefile:
-```Makefile
-# Linux or Mac
-uname_s := $(shell uname -s)
 
-ifeq ($(uname_s), Linux)
-	compiler = g++
-else
-	compiler = g++-12 # Homebrew g++ install I have
-#	compiler = clang
-endif
-```
-You can see in the above snippet that for linux I use the default g++ compiler and on Mac I use
-the g++-12 compiler I installed via homebrew. If you have a different compiler, you'll need to set
-the compiler variable yourself.
+As stated in the Makefile, I use g++-12 (GCC version 12.2.0). GCC 13.1.0 will not compile under my debug paramters.
+ It will, however, compile under my release parameters (set `debug=false` in the Makefile).
 
 ---
 
@@ -63,26 +59,10 @@ debug_param = -Weffc++ -Wextra -Wsign_conversion -Werror -Wshadow -ggdb
 If you'd rather compile in release-mode you will need to edit the Makefile as follows.
 
 Debug-Mode:
-```Makefile
-# Debug version is substantially larger file size (and slower runtime)
-# Debug compilation is extremely strict (warnings = errors)
-debug = true
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# Release version is substantially smaller file size (and faster runtime)
-# Release compilation is extremely relaxed (possible bugs if using to by-pass failed debug compilation...)
-#debug = false
-```
+`debug = true`
 
 Release-Mode:
-```Makefile
-# Debug version is substantially larger file size (and slower runtime)
-# Debug compilation is extremely strict (warnings = errors)
-#debug = true
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# Release version is substantially smaller file size (and faster runtime)
-# Release compilation is extremely relaxed (possible bugs if using to by-pass failed debug compilation...)
-debug = false
-```
+`debug = false`
 
 ---
 
@@ -110,13 +90,13 @@ The tests:
     - This tests writing out a v7 (modern) sac file (write)
     - This tests writing out a v6 (legacy) sac file (legacy_write)
     - It prints out the names of the two new files to the console
-* `fftw_test`
-    - This requires [FFTW](https://www.fftw.org/) to be installed
-    - You'll need to edit the `fftw_params` in the Makefile to point to your install location
-    - Does not use any of the sac libraries, just makes sure FFTW is working
 * `sac_stream_fftw_test`
     - Calculates the FFT of the data1 component of the sac file (assumes a time-series)
     - It tests both to/from real/imaginary **and** amplitude/phase.
+    - Requires FFTW.
+* `sac_stream_lowpass_test`
+    - Performs a low-pass filter on the data.
+    - Requires FFTW.
 
 ---
 
@@ -136,6 +116,10 @@ This will build three object files:
     - high-level SacStream class
 * `sac_format.o`
     - Both `sac_io.o` and `sac_stream.o` combined (linked)
+* `sac_spectral.o`
+    - Spectral functionality (fft, ifft, lowpass, highpass, bandpass)
+    - Requires FFTW
+    - Optional
 
 #### IMPORTANT 
 If you *only* want **low-level** sac-file IO you *can* use `sac_io.o` exclusively (interface is `./src/header/sac_io.hpp`)
@@ -206,30 +190,22 @@ If you're curious about the details of a function, you can find it in the implem
 ## Why does this exist?
 
 A few reasons:
-* I learn best not by following lessons, but by programming actual projects.
 * I wanted to sharpen my C++ skills.
-* I dislike the fact that IRIS requires a form to be filled out in order to receive SAC and its header files (and sometimes they refuse for rather silly reasons).
-* I was unable to quickly get their IO files to work for myself, so I thought it'd be fun to write my own.
 * I've never written code to handle binary file IO before, I've only used code that already did it for me.
+* Seemed like fun.
 
-Also I feel that there are a lot of problems with the seismological software that is available these days:
+Also I feel that there are some issues with presently available seismological software these days:
 * Documentation issues:
     - Undocumented (no documentation)
     - Underdocumented (incomplete documentation)
-    - Incorrectly documented (maybe it was correct **20 years ago**, but not unfortuantely it is no longer correct).
+    - Incorrectly documented (it was correct **X years ago**, but unfortuantely it is no longer correct).
 * Compilation issues:
-    - Sloppy programming results in numerous errors and undefined behavior (too many warnings, etc.).
-        - Sure the **author** can compile it on their system, but what about **everyone** else?
+    - Dated programming habits that are now considered bad-practices are all over the place.
+        - Scientists don't often keep up on modern programming practices
+        because programming is a necessary, but minor, component of their actual work. It doesn't matter if other people can understand it, or if it compiles
+        without warnings, or if it compiles for anyone other than the person that wrote it, so long as it allows the author to do their work.
     - Won't compile on standard compilers
-        - Love seeing quotes like "If you manage to get this to work on gfortran, please let me know" (since they're using some proprietary compiler).
-    - Sometimes languages update without being backwards compatible. Or sometimes a program was written specifically for PowerPC Macintosh computers in the mid-2000's.
-        - Too bad that means it is either **extremely painful** to make the software usable (with much time and effort), or impossible to use on a modern OS (or modern hardware).
-* Compatibily issues
-    - Oh, you've altered the format to have additional headers that you haven't documented (that are not standard). Now when I try to read it with some other software, that expects the standard format, it crashes.
-    **THANKS** for not even telling me (see documentation issues), and not providing a solution.
-    - Or, cannot handle the new v7 sac format (it came out in 2020, it's currently 2023).
-* Age:
-    - A lot of scientific software is dated, **extremely** dated.
-        - Many very smart people have spent a lot of time thinking and implementing new ideas in the realm of programming.
-        - Yet, in science, you'll still see a lot of **new** code written in extremely old standards (like FORTRAN77 for instance, not even modern FORTRAN...).
-    - This means that there are better ways to write code, that is clear and robust, to do the tasks we need done. Let's try to actually use that progress.
+        - It's cool when people get to use super-fast/efficient compilers, I get it. For code very specific code, that will never get distributed, thats awesome.
+        - My priority is for the code to be accessible. I use GCC because anyone cant get it, anywhere, for free, with relatively little effort/trouble.
+    - Won't compile on modern hardware
+        - (Generic scenario) Someone wrote some awesome code, X years ago, for the PowerPC MacOs (before Mac went to Intel, and definitely before they went to their mX cpu line). Too bad it's impossible/very difficult to run it on a modern computer (or a different OS).
