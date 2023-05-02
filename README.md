@@ -18,7 +18,7 @@ to also check the **optional** dependencies to determine if you need them for yo
 While everything could be re-created from scratch, it is sometimes better to use pre-existing libraries.
 
 This list of **required** dependencies is as follows:
-    - None as of yet
+- None as of yet
 
 The list of **optional** dependencies is as follows:
 - [FFTW](https://www.fftw.org/)
@@ -32,7 +32,7 @@ The list of **optional** dependencies is as follows:
 ## Compiling
 **BEFORE COMPILING** make sure to set your c++ compiler in the Makefile:
 
-As stated in the Makefile, I use g++-12 (GCC version 12.2.0). GCC 13.1.0 will not compile under my debug paramters.
+As stated in the Makefile, I use g++-12 (GCC version 12.2.0). GCC 13.1.0 will not compile under my debug parameters.
  It will, however, compile under my release parameters (set `debug=false` in the Makefile).
 
 ---
@@ -91,10 +91,13 @@ The tests:
     - This tests writing out a v6 (legacy) sac file (legacy_write)
     - It prints out the names of the two new files to the console
 * `sac_stream_fftw_test`
+    - This requires an input sac file
     - Calculates the FFT of the data1 component of the sac file (assumes a time-series)
     - It tests both to/from real/imaginary **and** amplitude/phase.
     - Requires FFTW.
 * `sac_stream_lowpass_test`
+    - This requires an input sac file
+    - It also requires input filter order and cutoff frequency (Butterworth filter)
     - Performs a low-pass filter on the data.
     - Requires FFTW.
 
@@ -116,10 +119,17 @@ This will build three object files:
     - high-level SacStream class
 * `sac_format.o`
     - Both `sac_io.o` and `sac_stream.o` combined (linked)
+
+---
+
+#### Build sac_spectral
+If you're interested in using the spectral functions, you'll need to build sac_spectral.
 * `sac_spectral.o`
     - Spectral functionality (fft, ifft, lowpass, highpass, bandpass)
     - Requires FFTW
     - Optional
+
+---
 
 #### IMPORTANT 
 If you *only* want **low-level** sac-file IO you *can* use `sac_io.o` exclusively (interface is `./src/header/sac_io.hpp`)
@@ -130,6 +140,8 @@ If you want **high-level** sac-file IO you *can* use `sac_io.o` and `sac_stream.
 
 Use `sac_format.o` and include the interfaces in `./src/header`. If you're using the high-level stuff,
 you'll need the low-level stuff anyway (since it uses it behind the scenes), might as well have a shorter list of object files.
+
+Use `sac_spectral.o` and include the interfaces in `./src/header`. This provides access to the optional spectral functions (depend on FFTW).
 
 ---
 
@@ -205,7 +217,8 @@ Also I feel that there are some issues with presently available seismological so
         because programming is a necessary, but minor, component of their actual work. It doesn't matter if other people can understand it, or if it compiles
         without warnings, or if it compiles for anyone other than the person that wrote it, so long as it allows the author to do their work.
     - Won't compile on standard compilers
-        - It's cool when people get to use super-fast/efficient compilers, I get it. For code very specific code, that will never get distributed, thats awesome.
-        - My priority is for the code to be accessible. I use GCC because anyone cant get it, anywhere, for free, with relatively little effort/trouble.
+        - It's cool when people get to use super-fast/efficient compilers, I get it. For code that is very specific and will never get distributed, that's awesome.
+        - My priority is for the code to be accessible. I use GCC because anyone can get it, anywhere, for free, with relatively little effort/trouble.
     - Won't compile on modern hardware
-        - (Generic scenario) Someone wrote some awesome code, X years ago, for the PowerPC MacOs (before Mac went to Intel, and definitely before they went to their mX cpu line). Too bad it's impossible/very difficult to run it on a modern computer (or a different OS).
+        - (Generic scenario) Someone wrote some awesome code, X years ago, for the PowerPC MacOs (before Mac went to Intel, and definitely before they went to their mX
+        cpu line). Too bad it's impossible/very difficult to run it on a modern computer (or a different OS).
