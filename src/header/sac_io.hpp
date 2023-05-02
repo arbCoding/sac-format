@@ -130,13 +130,6 @@ std::vector<double> read_data(std::ifstream* sac, std::size_t n_words, int start
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-//-----------------
-// Not working
-//-----------------
-void write_word(std::ofstream* sac_file, std::bitset<binary_word_size> x);
-//-----------------
-// Working
-//-----------------
 // The below writing functions all work, though they are a bit funky
 // Using std::vector because more flexible
 // Allows writing arbitrary amount of data to file

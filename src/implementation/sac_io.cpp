@@ -281,21 +281,6 @@ std::vector<double> read_data(std::ifstream* sac, std::size_t n_words, int start
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-//-----------------
-// Not working
-//-----------------
-void write_word(std::ofstream* sac_file, std::bitset<binary_word_size> x)
-{
-  // Just some junk to get rid of unused-parameter warnings while this
-  // is unfinished
-  std::cout << sac_file->is_open() << '\n';
-  std::cout << x << '\n';
-  return;
-}
-
-//-----------------
-// Working
-//-----------------
 void write_words(std::ofstream* sac_file, std::vector<char> input)
 {
   std::ofstream& sac = *sac_file;

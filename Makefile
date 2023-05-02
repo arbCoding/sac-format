@@ -64,6 +64,10 @@ obj_prefix = $(base_prefix)objects/
 #------------------------------------------------------------------------------
 # FFTW
 #------------------------------------------------------------------------------
+# Note that FFTW is optional and only used for spectral functions
+# If you don't want to use the spectral functions don't worry about this
+# If you do, you'll need to setup fftw_params according to your installation
+# Spectral = FFT, IFFT, Filters (lowpass, highpass, bandpass)
 ifeq ($(uname_s), Linux)
 	fftw_include := /usr/include/
 	fftw_lib := /usr/lib/x86_64-linux-gnu/
