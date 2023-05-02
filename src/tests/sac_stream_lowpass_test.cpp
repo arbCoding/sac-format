@@ -1,4 +1,5 @@
 #include "sac_stream.hpp"
+#include "sac_spectral.hpp"
 
 #include <iostream>
 #include <string>
@@ -29,7 +30,7 @@ int main(int arg_count, char* arg_array[])
   const int order{std::stoi(arg_array[2])};
   const double cutoff{std::stod(arg_array[3])};
   std::cout << "Butterworth lowpass filter: order " << order << ", cutoff " << cutoff << '\n';
-  sac.lowpass(order, cutoff);
+  SAC::lowpass(sac, order, cutoff);
 
   std::string prefix{};
   std::string suffix{};

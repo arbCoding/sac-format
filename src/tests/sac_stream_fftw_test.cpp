@@ -1,5 +1,6 @@
 // SacClass
 #include "sac_stream.hpp"
+#include "sac_spectral.hpp"
 
 #include <iostream>
 #include <string>
@@ -29,7 +30,7 @@ int main(int arg_count, char* arg_array[])
   const std::vector<double> data1_copy{sac.data1};
   // Forward
   std::cout << "Forward (Real/Imaginary)!\n";
-  sac.fft_real_imaginary();
+  SAC::fft_real_imaginary(sac);
   
   // Let's spit it out to a CSV for plotting since I have yet to find a nice C++ plotting library that doesn't break
   // my project
@@ -57,7 +58,7 @@ int main(int arg_count, char* arg_array[])
 
   // Inverse
   std::cout << "Inverse (Real/Imaginary)!\n";
-  sac.ifft_real_imaginary();
+  SAC::ifft_real_imaginary(sac);
 
   bool same{true};
   // Equality tolerance from FFT/IFFT
@@ -81,7 +82,7 @@ int main(int arg_count, char* arg_array[])
   std::cout << "Maximum difference: " << max_diff << '\n';
 
   std::cout << "\nForward! (Amplitude/Phase)\n";
-  sac.fft_amplitude_phase();
+  SAC::fft_amplitude_phase(sac);
 
   // Let's spit it out to a CSV for plotting since I have yet to find a nice C++ plotting library that doesn't break
   // my project
@@ -105,7 +106,7 @@ int main(int arg_count, char* arg_array[])
   csv_file2.close();
 
   std::cout << "Inverse! (Amplitude/Phase)\n";
-  sac.ifft_amplitude_phase();
+  SAC::ifft_amplitude_phase(sac);
   same = true;
   max_diff = 0.0;
   for (std::size_t i{0}; i < sac.data1.size(); ++i)

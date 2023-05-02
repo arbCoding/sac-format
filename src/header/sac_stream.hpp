@@ -3,7 +3,6 @@
 
 #include "sac_io.hpp" // my sac-format io functions
 
-#include <fftw3.h> // FFTW library
 #include <cmath>
 
 #include <string> // std::string
@@ -23,6 +22,9 @@
 // And will be used by default
 // If an old version is read-in, the floats will be converted to doubles and nvhdr updated
 //
+// Spectral functions are provided separately in sac_spectral.hpp/sac_spectral.cpp
+// This is so that the SacStream class can be used without needing FFTW to be installed
+// Spectral functions are optional
 
 namespace SAC
 {
@@ -419,58 +421,6 @@ namespace SAC
     void legacy_write(const std::string& file_name);
     //-------------------------------------------------------------------------
     // End writing
-    //-------------------------------------------------------------------------
-   
-    // Spectral is slated to be moved to a separate header
-    // that way people who do not want to use these don't need to bother
-    // with setting up FFTW
-    //-------------------------------------------------------------------------
-    // Spectral functions
-    //-------------------------------------------------------------------------
-    //
-    // How FFTW normalizes things: FFT -> 1; IFFT -> 1/N
-    //
-    // How I normalize things: FFT -> 1/sqrt(N); IFFT -> 1/sqrt(N)
-    //
-    // I prefer the symmetry of the 1/sqrt(N) normalization condition (makes
-    // interpretation of resultant units simpler)
-    //
-    // Accuracy:
-    //  using fft_real_imaginary() followed by ifft_real_imaginary()
-    //  reproduces the original signal better by about an order of magnitude
-    //  (one additional deicmal place) than
-    //  using fft_amplitude_phase() followed by ifft_amplitude_phase()
-    //
-    // So unless you specifically need amplitude/phase, you should use
-    // real/imaginary
-    //
-    // FFT that sets data1 to the real and data2 to the imaginary
-    // Requires iftype = 1 (SAC ITIME)
-    void fft_real_imaginary();
-    // Inverse-FFT for data1 = read, data2 = imaginary
-    // Requires iftype = 2 (SAC IRLIM)
-    void ifft_real_imaginary();
-    // FFT that sets data1 to the amplitude and data2 to the phase
-    // Requires iftype = 1 (SAC ITIME)
-    void fft_amplitude_phase();
-    // Requires iftype = 3 (SAC IAMPH)
-    // Inverse-FFT for data1 = amplitude, data2 = phase
-    void ifft_amplitude_phase();
-    // Note: These filters are RAW
-    // As in, not safe if you don't know what you're doing
-    // They don't care about the Nyquist frequency
-    // They don't care about the sampling rate
-    // They don't care about spectral leakage
-    // They don't care about windowing functions
-    // These are all things you'll need to apply yourself (for now)
-    // Lowpass filter (butterworth)
-    void lowpass(int order, double cutoff);
-    // Highpass filter (butterworth)
-    void highpass(int order, double cutoff);
-    // Bandpass filter (butterworth)
-    void bandpass(int order, double lowpass, double highpass);
-    //-------------------------------------------------------------------------
-    // End spectral functions
     //-------------------------------------------------------------------------
     
     //-------------------------------------------------------------------------

@@ -5,6 +5,14 @@
 # seemed to default to /bin/sh when I use /bin/bash
 SHELL := /bin/bash
 # Compiler
+# Note on g++-13
+# The C++ std library included in g++-13 has problems
+# In particular, <vector> gives warnings for uninitialized values
+# This is not a fault with my code, this is the std library
+# not being compliant with its own style guidelines
+# As such, on g++-13 it will not compile with debug_params
+# If this gets fixed, I'll update to g++-13
+# This is true as of GCC version 13.1.0 as provided by HomeBrew
 compiler = g++-12
 # Param is always used
 param = -std=c++20 -pedantic-errors -Wall
@@ -93,11 +101,8 @@ sac_stream_tests: sac_stream_read_test sac_stream_write_test
 # These need sac_format.o and FFTW
 spectral_tests: sac_stream_fftw_test sac_stream_lowpass_test
 
-# This needs FFTW
-other_tests: fftw_test
-
 # All tests
-tests: sac_fundamental_tests sac_stream_tests other_tests spectral_tests
+tests: sac_fundamental_tests sac_stream_tests spectral_tests
 #------------------------------------------------------------------------------
 # End program definitions
 #------------------------------------------------------------------------------
@@ -116,6 +121,13 @@ sac_io: $(imp_prefix)sac_io.cpp
 	@echo -e "Build finish:  $$(date)\n"
 
 sac_stream: $(imp_prefix)sac_stream.cpp
+	@echo "Building $@"
+	@echo "Build start:  $$(date)"
+	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
+	$(cxx) -c -o $(obj_prefix)$@.o $<
+	@echo -e "Build finish: $$(date)\n"
+
+sac_spectral: $(imp_prefix)sac_spectral.cpp
 	@echo "Building $@"
 	@echo "Build start:  $$(date)"
 	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
@@ -145,18 +157,28 @@ $(basic_sac): %:$(test_prefix)%.cpp $(basic_modules)
 	@echo -e "Build finish: $$(date)\n"
 
 # Use the single object file to simplify
-full_modules := sac_format
-full_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(full_modules)))
+stream_modules := sac_format
+stream_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(stream_modules)))
 # $@ is target
 # $< is the first prerequisite only
 # $^ is all prerequisites, without duplicates, separated by spaces
-spectral_sac := sac_stream_read_test sac_stream_write_test sac_stream_fftw_test sac_stream_lowpass_test fftw_test
-$(spectral_sac): %:$(test_prefix)%.cpp $(full_modules)
+stream_sac := sac_stream_read_test sac_stream_write_test
+$(stream_sac): %:$(test_prefix)%.cpp $(stream_modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -o $(test_bin_prefix)$@ $< $(full_obj) $(fftw_params)
-	@echo -e "Build finish $$(date)\n"
+	$(cxx) -o $(test_bin_prefix)$@ $< $(stream_obj)
+	@echo -e "Build finish: $$(date)\n"
+
+spectral_modules := sac_format sac_spectral
+spectral_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(spectral_modules)))
+spectral_sac := sac_stream_fftw_test sac_stream_lowpass_test
+$(spectral_sac): %:$(test_prefix)%.cpp $(spectral_modules)
+	@echo "Building $(test_bin_prefix)$@"
+	@echo "Build start:  $$(date)"
+	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
+	$(cxx) -o $(test_bin_prefix)$@ $< $(spectral_obj) $(fftw_params)
+	@echo -e "Build finish: $$(date)\n"
 #------------------------------------------------------------------------------
 # End compilation patterns
 #------------------------------------------------------------------------------
