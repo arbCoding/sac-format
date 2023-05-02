@@ -120,7 +120,7 @@ std::vector<char> bitset_to_vector(std::bitset<binary_word_size> x);
 std::bitset<binary_word_size> read_word(std::ifstream* sac);
 std::bitset<2 * binary_word_size> read_two_words(std::ifstream* sac);
 std::bitset<4 * binary_word_size> read_four_words(std::ifstream* sac);
-// Can read any number of words into a vector of floats
+// Can read any number of words into a vector of doubles
 // Useful for data values
 std::vector<double> read_data(std::ifstream* sac, std::size_t n_words, int start = data_word);
 //-----------------------------------------------------------------------------

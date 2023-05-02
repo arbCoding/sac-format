@@ -227,7 +227,7 @@ namespace SAC
     int ievtyp{unset_int};
     // Quality of data [not used by SAC]
     // 45 = IGOOD  = Good data
-    // 46 = IGLCH  = Glithces
+    // 46 = IGLCH  = Glitches
     // 47 = IDROP  = Dropouts
     // 48 = ILOWSN = Low signal to noise ratio
     // 44 = IOTHER = Other
@@ -341,10 +341,11 @@ namespace SAC
     //-------------------------------------------------------------------------
     // These are double-precision versions of float headers
     // Giving them default unset_double value to be consistent with all default values
-    // double-precision version of delta
     // I prefixed all the single-precision header equivalents with `f_` to denote they
     // are floats instead of doubles (`d_` for double would've been annoying as the
     // doubles will ALWAYS be preferred; it isn't 1980 anymore)
+    //
+    // double precison version of delta
     double delta{unset_double};
     // double-precision version of b
     double b{unset_double};

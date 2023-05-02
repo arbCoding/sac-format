@@ -72,10 +72,11 @@ int main(int arg_count, char* arg_array[])
     {
       max_diff = diff;
     }
-    if (diff > tolerance)
-    {
-      same = false;
-    }
+  }
+
+  if (max_diff > tolerance)
+  {
+    same = false;
   }
 
   std::cout << "Equal to Original? (Real/Imaginary)? " << (same ? "true" : "false") << '\n';
@@ -116,10 +117,11 @@ int main(int arg_count, char* arg_array[])
     {
       max_diff = diff;
     }
-    if (diff > tolerance)
-    {
-      same = false;
-    }
+  }
+
+  if (max_diff > tolerance)
+  {
+    same = false;
   }
 
   std::cout << "Equal to Original? (Amplitude/Phase)? " << (same ? "true" : "false") << '\n';

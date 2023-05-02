@@ -71,7 +71,7 @@ cxx := $(compiler) $(params)
 #------------------------------------------------------------------------------
 # Linux or mac
 uname_s := $(shell uname -s)
-# Project directory structur
+# Project directory structure
 # Code base starts here
 base_prefix = $(CURDIR)/src/
 # Built programs will go here
@@ -130,14 +130,14 @@ all: tests
 # These only need sac_io.o
 sac_fundamental_tests: sac_type_test sac_io_test
 
-# These need sac_format.o (sac_io.o and sac_stream.o) still need to remove the FFTW requirement
+# These need sac_format.o (sac_io.o and sac_stream.o)
 sac_stream_tests: sac_stream_read_test sac_stream_write_test
 
 # These need sac_format.o and FFTW
-spectral_tests: sac_stream_fftw_test sac_stream_lowpass_test
+sac_spectral_tests: sac_stream_fftw_test sac_stream_lowpass_test
 
 # All tests
-tests: sac_fundamental_tests sac_stream_tests spectral_tests
+tests: sac_fundamental_tests sac_stream_tests sac_spectral_tests
 #------------------------------------------------------------------------------
 # End program definitions
 #------------------------------------------------------------------------------
