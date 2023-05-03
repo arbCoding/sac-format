@@ -1,4 +1,29 @@
 #------------------------------------------------------------------------------
+# Building the libraries
+#------------------------------------------------------------------------------
+# To build the libraries, execute
+# `make lib`
+#
+# This will make two statically-linked libraries
+# `sac_io.a` which is low-level Binary-SAC file I/O
+# `sac_format.a` which is high-level access to the SacStream class
+#
+# To use these libraries in your project
+# You'll need to include the headers
+# And link to the static libary
+#
+# e.g.
+# g++ -L$(CURDIR)/lib -lsac_format -I$(CURDIR)/src/header main.cpp -o your_program
+#
+# You can see the compilation patterns used to build the tests for examples of this
+#
+# Debug (big/slow/strict) or Release (small/fast/relaxed)
+debug = false
+#------------------------------------------------------------------------------
+# End building the libraries
+#-------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------
 # Setup compiler
 #------------------------------------------------------------------------------
 # Use the correct shell for bash scripts
@@ -49,11 +74,10 @@ compiler = g++-12
 param = -std=c++20 -pedantic-errors -Wall
 # Debug params only if debug is true
 # G++
+# This is needed to Dear ImGui only, as it cannot compile with G++ on MacOs
 debug_param = -fanalyzer -Weffc++ -Wextra -Wsign-conversion -Werror -Wshadow -ggdb
 # Release params only if debug is false
 release_param = -O2 -DNDEBUG
-# Debug (big/slow/strict) or Release (small/fast/relaxed)
-debug = true
 
 ifeq ($(debug), true)
 	params = $(param) $(debug_param)
@@ -78,8 +102,6 @@ base_prefix = $(CURDIR)/src/
 bin_prefix = $(CURDIR)/bin/
 # Test programs will go here
 test_bin_prefix = $(bin_prefix)tests/
-# Where the source code files for programs are stored
-src_prefix = $(base_prefix)code/
 # Where the source code files for tests are stored
 test_prefix = $(base_prefix)tests/
 # Where header (interface) files are stored
@@ -88,28 +110,10 @@ hdr_prefix = $(base_prefix)header/
 imp_prefix = $(base_prefix)implementation/
 # Built object files will go here
 obj_prefix = $(base_prefix)objects/
+# Static libraries will go here
+lib_prefix = $(CURDIR)/lib/
 #------------------------------------------------------------------------------
 # End directory structure
-#------------------------------------------------------------------------------
-
-#------------------------------------------------------------------------------
-# FFTW
-#------------------------------------------------------------------------------
-# Note that FFTW is optional and only used for spectral functions
-# If you don't want to use the spectral functions don't worry about this
-# If you do, you'll need to setup fftw_params according to your installation
-# Spectral = FFT, IFFT, Filters (lowpass, highpass, bandpass)
-ifeq ($(uname_s), Linux)
-	fftw_include := /usr/include/
-	fftw_lib := /usr/lib/x86_64-linux-gnu/
-else
-	fftw_loc := /opt/homebrew/Cellar/fftw/3.3.10_1/
-	fftw_include := $(fftw_loc)include/
-	fftw_lib := $(fftw_loc)lib/
-endif
-fftw_params = -I$(fftw_include) -L$(fftw_lib) -lfftw3 -lm
-#------------------------------------------------------------------------------
-# End FFTW
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
@@ -127,17 +131,16 @@ cxx := $(cxx) -I$(hdr_prefix)
 # All programs
 all: tests
 
-# These only need sac_io.o
+lib: sac_format
+
+# These only need sac_io.a
 sac_fundamental_tests: sac_type_test sac_io_test
 
-# These need sac_format.o (sac_io.o and sac_stream.o)
+# These need sac_format.a
 sac_stream_tests: sac_stream_read_test sac_stream_write_test
 
-# These need sac_format.o and FFTW
-sac_spectral_tests: sac_stream_fftw_test sac_stream_lowpass_test
-
 # All tests
-tests: sac_fundamental_tests sac_stream_tests sac_spectral_tests
+tests: sac_fundamental_tests sac_stream_tests
 #------------------------------------------------------------------------------
 # End program definitions
 #------------------------------------------------------------------------------
@@ -153,6 +156,8 @@ sac_io: $(imp_prefix)sac_io.cpp
 	@echo "Build start:  $$(date)"
 	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
 	$(cxx) -c -o $(obj_prefix)$@.o $<
+	@test -d $(lib_prefix) || mkdir -p $(lib_prefix)
+	ar -rcs $(lib_prefix)lib$@.a $(obj_prefix)$@.o
 	@echo -e "Build finish:  $$(date)\n"
 
 sac_stream: $(imp_prefix)sac_stream.cpp
@@ -162,33 +167,29 @@ sac_stream: $(imp_prefix)sac_stream.cpp
 	$(cxx) -c -o $(obj_prefix)$@.o $<
 	@echo -e "Build finish: $$(date)\n"
 
-sac_spectral: $(imp_prefix)sac_spectral.cpp
-	@echo "Building $@"
-	@echo "Build start:  $$(date)"
-	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
-	$(cxx) -c -o $(obj_prefix)$@.o $< $(fftw_params)
-	@echo -e "Build finish: $$(date)\n"
-
 # Manually defined for specific program
 # Modules for sac_class_test
 sf_modules := sac_io sac_stream
 sf_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(sf_modules)))
 
 # link obj_files to a single object-file
+# Use that to make a single static library
 sac_format: $(sf_modules)
-	@echo "Building $(bin_prefix)$@"
+	@echo "Building $@"
 	@echo "Build start:  $$(date)"
-	ld -r -o $(obj_prefix)$@.o $(sf_obj)
+	ar -rcs $(lib_prefix)lib$@.a $(sf_obj)
+	rm -r $(obj_prefix)
 	@echo -e "Build finish: $$(date)\n"
 
+#	ld -r -o $(obj_prefix)$@.o $(sf_obj)
 basic_modules := sac_io
-basic_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(basic_modules)))
+basic_lib := $(addsuffix .a, $(addprefix $(lib_prefix), $(basic_modules)))
 basic_sac := sac_type_test sac_io_test
 $(basic_sac): %:$(test_prefix)%.cpp $(basic_modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -o $(test_bin_prefix)$@ $< $(basic_obj)
+	$(cxx) -L$(lib_prefix) -l$(basic_modules) -o $(test_bin_prefix)$@ $<
 	@echo -e "Build finish: $$(date)\n"
 
 # Use the single object file to simplify
@@ -202,19 +203,9 @@ $(stream_sac): %:$(test_prefix)%.cpp $(stream_modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -o $(test_bin_prefix)$@ $< $(stream_obj)
+	$(cxx) -L$(lib_prefix) -l$(stream_modules) -o $(test_bin_prefix)$@ $<
 	@echo -e "Build finish: $$(date)\n"
-
-spectral_modules := sac_format sac_spectral
-spectral_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(spectral_modules)))
-spectral_sac := sac_stream_fftw_test sac_stream_lowpass_test
-$(spectral_sac): %:$(test_prefix)%.cpp $(spectral_modules)
-	@echo "Building $(test_bin_prefix)$@"
-	@echo "Build start:  $$(date)"
-	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -o $(test_bin_prefix)$@ $< $(spectral_obj) $(fftw_params)
-	@echo -e "Build finish: $$(date)\n"
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # End compilation patterns
 #------------------------------------------------------------------------------
 
@@ -222,7 +213,7 @@ $(spectral_sac): %:$(test_prefix)%.cpp $(spectral_modules)
 # Cleanup
 #------------------------------------------------------------------------------
 clean:
-	rm -rf $(bin_prefix) $(obj_prefix) *.dSYM *.csv
+	rm -rf $(bin_prefix) $(obj_prefix) $(lib_prefix) *.dSYM *.csv
 #------------------------------------------------------------------------------
 # End cleanup
 #------------------------------------------------------------------------------
