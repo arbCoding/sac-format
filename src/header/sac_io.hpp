@@ -22,9 +22,6 @@
 # include <bitset>
 // std::pow
 # include <cmath>
-// std::uint64_t
-// More concise than `long std::size_t`
-#include <cstdint>
 
 namespace SAC
 {

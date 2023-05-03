@@ -22,9 +22,7 @@
 // And will be used by default
 // If an old version is read-in, the floats will be converted to doubles and nvhdr updated
 //
-// Spectral functions are provided separately in sac_spectral.hpp/sac_spectral.cpp
-// This is so that the SacStream class can be used without needing FFTW to be installed
-// Spectral functions are optional
+// Processing functions are moving to a new project: https://github.com/arbCoding/PsSp
 
 namespace SAC
 {
@@ -422,27 +420,6 @@ namespace SAC
     void legacy_write(const std::string& file_name);
     //-------------------------------------------------------------------------
     // End writing
-    //-------------------------------------------------------------------------
-    
-    //-------------------------------------------------------------------------
-    // Time-series preprocessing
-    //-------------------------------------------------------------------------
-    // Calculate the mean of the data1 vector
-    double mean();
-    // De-mean the data (subtract the mean)
-    void demean();
-    // De-trend the data (fit a line to the data, subtract that line from it)
-    void detrend();
-    //-------------------------------------------------------------------------
-    // End time-series preprocessing
-    //-------------------------------------------------------------------------
-
-    //-------------------------------------------------------------------------
-    // Misc
-    //-------------------------------------------------------------------------
-
-    //-------------------------------------------------------------------------
-    // End misc
     //-------------------------------------------------------------------------
   };
 }
