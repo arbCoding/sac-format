@@ -404,6 +404,8 @@ namespace SAC
     // to do member-wise copying (only needed for special cases, not here)
     // Parameterized constructor (reader)
     SacStream(const std::string& file_name);
+    // Empty constructor
+    SacStream() = default;
     //-------------------------------------------------------------------------
     // End constructors
     //-------------------------------------------------------------------------
