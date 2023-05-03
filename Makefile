@@ -4,16 +4,12 @@
 # To build the libraries, execute
 # `make lib`
 #
-# This will make two statically-linked libraries
-# `libsac_io.a` which is low-level Binary-SAC file I/O
-# `libsac_format.a` which is high-level access to the SacStream class
-#
-# To use these libraries in your project
-# You'll need to include the headers
-# And link to the static libary
+# This will make two object files
+# `sac_io.o` which is low-level Binary-SAC file I/O
+# `sac_format.o` which is high-level access to the SacStream class
 #
 # e.g.
-# g++ -L$(CURDIR)/lib -lsac_format -I$(CURDIR)/src/header main.cpp -o your_program
+# g++ -I$(CURDIR)/src/header main.cpp sac_format.o -o your_program
 #
 # You can see the compilation patterns used to build the tests for examples of this
 #
@@ -109,8 +105,6 @@ hdr_prefix = $(base_prefix)header/
 imp_prefix = $(base_prefix)implementation/
 # Built object files will go here
 obj_prefix = $(base_prefix)objects/
-# Static libraries will go here
-lib_prefix = $(CURDIR)/lib/
 #------------------------------------------------------------------------------
 # End directory structure
 #------------------------------------------------------------------------------
@@ -155,8 +149,6 @@ sac_io: $(imp_prefix)sac_io.cpp
 	@echo "Build start:  $$(date)"
 	@test -d $(obj_prefix) || mkdir -p $(obj_prefix)
 	$(cxx) -c -o $(obj_prefix)$@.o $<
-	@test -d $(lib_prefix) || mkdir -p $(lib_prefix)
-	ar -rcs $(lib_prefix)lib$@.a $(obj_prefix)$@.o
 	@echo -e "Build finish:  $$(date)\n"
 
 sac_stream: $(imp_prefix)sac_stream.cpp
@@ -172,23 +164,21 @@ sf_modules := sac_io sac_stream
 sf_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(sf_modules)))
 
 # link obj_files to a single object-file
-# Use that to make a single static library
 sac_format: $(sf_modules)
 	@echo "Building $@"
 	@echo "Build start:  $$(date)"
-	ar -rcs $(lib_prefix)lib$@.a $(sf_obj)
-	rm -r $(obj_prefix)
+	ld -r -o $(obj_prefix)$@.o $(sf_obj)
 	@echo -e "Build finish: $$(date)\n"
 
 #	ld -r -o $(obj_prefix)$@.o $(sf_obj)
 basic_modules := sac_io
-basic_lib := $(addsuffix .a, $(addprefix $(lib_prefix), $(basic_modules)))
+basic_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(basic_modules)))
 basic_sac := sac_type_test sac_io_test
 $(basic_sac): %:$(test_prefix)%.cpp $(basic_modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -L$(lib_prefix) -l$(basic_modules) -o $(test_bin_prefix)$@ $<
+	$(cxx) -o $(test_bin_prefix)$@ $< $(basic_obj)
 	@echo -e "Build finish: $$(date)\n"
 
 # Use the single object file to simplify
@@ -202,7 +192,7 @@ $(stream_sac): %:$(test_prefix)%.cpp $(stream_modules)
 	@echo "Building $(test_bin_prefix)$@"
 	@echo "Build start:  $$(date)"
 	@test -d $(test_bin_prefix) || mkdir -p $(test_bin_prefix)
-	$(cxx) -L$(lib_prefix) -l$(stream_modules) -o $(test_bin_prefix)$@ $<
+	$(cxx) -o $(test_bin_prefix)$@ $< $(stream_obj)
 	@echo -e "Build finish: $$(date)\n"
 #-----------------------------------------------------------------------------
 # End compilation patterns
@@ -212,7 +202,7 @@ $(stream_sac): %:$(test_prefix)%.cpp $(stream_modules)
 # Cleanup
 #------------------------------------------------------------------------------
 clean:
-	rm -rf $(bin_prefix) $(obj_prefix) $(lib_prefix) *.dSYM *.csv
+	rm -rf $(bin_prefix) $(obj_prefix) *.dSYM *.csv
 #------------------------------------------------------------------------------
 # End cleanup
 #------------------------------------------------------------------------------

@@ -20,9 +20,9 @@ If you're interested in processing passive-source seismic data, I'm working on a
 To use this in your own project, you will need to build the libaries and then link to them at compilation while including the headers.
 See the section "How to build" for instructions on building.
 
-If you want to use only low-level IO (converting to/from binary), then use ./lib/libsac_io.a (header is sac_io.hpp).
+If you want to use only low-level IO (converting to/from binary), then use ./src/objects/sac_io.o (header is sac_io.hpp).
 
-If you want to use the high-level SacStream class, then use ./lib/libsac_format.a (header is sac_stream.hpp).
+If you want to use the high-level SacStream class, then use ./src/objects/sac_format.o (header is sac_stream.hpp).
 
 The [header](src/header/) files are heavily commented, to provide insight into what the libaries do and why.
 
