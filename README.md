@@ -42,7 +42,7 @@ To build everything, including the test programs, run:
 make
 ```
 
-You can look at the Makefile for more details (I've tried to be as explicit as possible in the comments inside).
+You can look at the [Makefile](Makefile) for more details (I've tried to be as explicit as possible in the comments inside).
 
 ---
 
