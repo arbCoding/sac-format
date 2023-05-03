@@ -114,5 +114,3 @@ I have split functionality between
 The interface files have the definitions of the necessary constants, the function names and return types, and comments on what they do (but **not** the details).
 
 If you're curious about the details of a function, you can find it in the implementation file that corresponds to its interface.
-
----
