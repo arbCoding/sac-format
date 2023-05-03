@@ -5,8 +5,8 @@
 # `make lib`
 #
 # This will make two statically-linked libraries
-# `sac_io.a` which is low-level Binary-SAC file I/O
-# `sac_format.a` which is high-level access to the SacStream class
+# `libsac_io.a` which is low-level Binary-SAC file I/O
+# `libsac_format.a` which is high-level access to the SacStream class
 #
 # To use these libraries in your project
 # You'll need to include the headers
