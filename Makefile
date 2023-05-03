@@ -26,6 +26,7 @@ debug = false
 #------------------------------------------------------------------------------
 # Setup compiler
 #------------------------------------------------------------------------------
+compiler = g++-12
 # Use the correct shell for bash scripts
 # seemed to default to /bin/sh when I use /bin/bash
 SHELL := /bin/bash
@@ -68,8 +69,6 @@ SHELL := /bin/bash
 #------------------------------------------------------------------------------
 # End note on g++-13
 #------------------------------------------------------------------------------
-# Compiler
-compiler = g++-12
 # Param is always used
 param = -std=c++20 -pedantic-errors -Wall
 # Debug params only if debug is true
