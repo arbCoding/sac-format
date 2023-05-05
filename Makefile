@@ -1,4 +1,15 @@
 #------------------------------------------------------------------------------
+# We need to know what OS we're on as it determines which compiler we use (and 
+# therefore which compiler parameters are appropriate) and how we link to the
+# necessary libraries
+#------------------------------------------------------------------------------
+# Use the correct shell for bash scripts
+# seemed to default to /bin/sh when I use /bin/bash
+SHELL := /bin/bash
+# Linux or mac
+uname_s := $(shell uname -s)
+# Debug mode or release mode
+#------------------------------------------------------------------------------
 # Building the libraries
 #------------------------------------------------------------------------------
 # To build the libraries, execute
@@ -22,10 +33,18 @@ debug = false
 #------------------------------------------------------------------------------
 # Setup compiler
 #------------------------------------------------------------------------------
-compiler = g++-12
-# Use the correct shell for bash scripts
-# seemed to default to /bin/sh when I use /bin/bash
-SHELL := /bin/bash
+# Param is always used
+param = -std=c++20 -pedantic-errors -Wall
+# Common debug params regardless of clang++ or g++
+common_debug = -Wextra -Werror -Wshadow -ggdb
+# Slightly different between MacOS and Linux
+ifeq ($(uname_s), Darwin)
+    compiler = clang++
+		debug_param = $(common_debug) -Wsign-conversion -Weffc++
+else
+    compiler = g++-12
+		debug_param = $(common_debug) -fanalyzer -Wsign-conversion -Weffc++
+endif
 #------------------------------------------------------------------------------
 # Note on g++-13
 #------------------------------------------------------------------------------
@@ -65,15 +84,6 @@ SHELL := /bin/bash
 #------------------------------------------------------------------------------
 # End note on g++-13
 #------------------------------------------------------------------------------
-# Param is always used
-param = -std=c++20 -pedantic-errors -Wall
-# Debug params only if debug is true
-# G++
-# This is needed to Dear ImGui only, as it cannot compile with G++ on MacOs
-debug_param = -fanalyzer -Weffc++ -Wextra -Wsign-conversion -Werror -Wshadow -ggdb
-# Release params only if debug is false
-release_param = -O2 -DNDEBUG
-
 ifeq ($(debug), true)
 	params = $(param) $(debug_param)
 else
@@ -88,8 +98,6 @@ cxx := $(compiler) $(params)
 #------------------------------------------------------------------------------
 # Directory structure
 #------------------------------------------------------------------------------
-# Linux or mac
-uname_s := $(shell uname -s)
 # Project directory structure
 # Code base starts here
 base_prefix = $(CURDIR)/src/
