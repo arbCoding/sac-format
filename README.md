@@ -81,6 +81,26 @@ The tests:
 
 ---
 
+## Little-Endian vs Big-Endian
+
+MacOS is a little-endian based system and therefore considers binary storage to start from the Least-Significant Bit (LSB). Linux is
+a big-endian basd system and therefore considers binary storage to start from the Most-Significan Bit (MSB). This means that MacOS
+reads/writes chunks of binary data from right-to-left, while on Linux it is done from left-to-right. For most things this was a non-issue,
+however, for strings it resulted in some amusing results. As this was primarily developed on MacOS it was originally assumed little-endianness.
+
+So on MacOS, KEVNM header could say "Central Californ" (16 character limit for that header) and Linux would read it as "fornCaliral Cent".
+The difference is easy to understand if we make the following map:
+
+1 = "Cent", 2 = "ral ", 3 = "Cali", 4 = "forn"
+
+MacOS would know to handle it as "1234", while Linux would assume "4321". I have fixed this. Now the assumption is that by default: data is read and written
+as little-endian (since the file doesn't store that information in it's header anywhere). If you get any funky results, you should confirm the endianness of the input
+file.
+
+Oddly, this was not an issue with any other portions of the data in the binary file, only the strings.
+
+---
+
 ## To Do
 
 - [X] Read [SAC](https://ds.iris.edu/files/sac-manual/manual/file_format.html) file format
@@ -92,7 +112,7 @@ The tests:
 - [X] Read spectral data
 - [X] Read general XY data
 - [X] Little-endian/Big-endian reading compatibility (Mac/Linux)
-- [ ] Confirm Little-endian/Big-endian writing compatibility (Mac/Linux) (It works for little-endian, need to confirm big-endian)
+- [X] Confirm Little-endian/Big-endian writing compatibility (Mac/Linux) (It works for little-endian, need to confirm big-endian)
 - [ ] Read general XYZ data (not enough information in specification to implement at the moment...)
 
 ---
