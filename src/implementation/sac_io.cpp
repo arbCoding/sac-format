@@ -121,15 +121,31 @@ std::string binary_to_string(std::bitset<2 * binary_word_size> x)
   std::string result{};
   constexpr std::size_t char_size{bits_per_byte};
   std::bitset<char_size> byte{};
-  // Read character by character
-  for (std::size_t i{0}; i < 2 * binary_word_size; i += char_size)
+  if (BYTE_ORDER == LITTLE_ENDIAN)
   {
-    // Build the character
-    for (std::size_t j{0}; j < char_size; ++j)
+    // Read character by character
+    for (std::size_t i{0}; i < 2 * binary_word_size; i += char_size)
     {
-      byte[j] = x[i + j];
+      // Build the character
+      for (std::size_t j{0}; j < char_size; ++j)
+      {
+        byte[j] = x[i + j];
+      }
+      result += static_cast<char>(byte.to_ulong());
     }
-    result += static_cast<char>(byte.to_ulong());
+  }
+  else
+  {
+    // Building the characters is fine, reading the characters is reverse
+    for (std::size_t i{2 * binary_word_size - 1}; i >= 0; i -= char_size)
+    {
+      // Build the character
+      for (std::size_t j{0}; j < char_size; ++j)
+      {
+        byte[j] = x[i + j];
+      }
+      result += static_cast<char>(byte.to_ulong());
+    }
   }
   return result;
 }

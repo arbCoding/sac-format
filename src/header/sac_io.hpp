@@ -19,9 +19,13 @@
 // std::memcpy(), std::copy() [strings]
 #include <cstring>
 // std::bitset
-# include <bitset>
+#include <bitset>
 // std::pow
-# include <cmath>
+#include <cmath>
+// provides BYTE_ORDER for endianness
+// Current works with big-endian (Mac)
+// little-endian is Linux
+#include <netinet/in.h>
 
 namespace SAC
 {
