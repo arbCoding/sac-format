@@ -84,21 +84,15 @@ The tests:
 ## To Do
 
 - [X] Read [SAC](https://ds.iris.edu/files/sac-manual/manual/file_format.html) file format
-
 - [X] Write SAC file format
-
 - [X] Prinout SAC header information to command line
-
 - [X] Implement SacStream class
-
 - [X] Compatible with both v6 (legacy, several decades) or v7 (new 2020+) binary SAC files
-
 - [X] Read irregularly sampled data
-
 - [X] Read spectral data
-
 - [X] Read general XY data
-
+- [X] Little-endian/Big-endian reading compatibility (Mac/Linux)
+- [ ] Confirm Little-endian/Big-endian writing compatibility (Mac/Linux) (It works for little-endian, need to confirm big-endian)
 - [ ] Read general XYZ data (not enough information in specification to implement at the moment...)
 
 ---
