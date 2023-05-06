@@ -121,31 +121,15 @@ std::string binary_to_string(std::bitset<2 * binary_word_size> x)
   std::string result{};
   constexpr std::size_t char_size{bits_per_byte};
   std::bitset<char_size> byte{};
-  if (BYTE_ORDER == LITTLE_ENDIAN)
+  // Read character by character
+  for (std::size_t i{0}; i < 2 * binary_word_size; i += char_size)
   {
-    // Read character by character
-    for (std::size_t i{0}; i < 2 * binary_word_size; i += char_size)
+    // Build the character
+    for (std::size_t j{0}; j < char_size; ++j)
     {
-      // Build the character
-      for (std::size_t j{0}; j < char_size; ++j)
-      {
-        byte[j] = x[i + j];
-      }
-      result += static_cast<char>(byte.to_ulong());
+      byte[j] = x[i + j];
     }
-  }
-  else
-  {
-    // Building the characters is fine, reading the characters is reverse
-    for (std::size_t i{2 * binary_word_size - 1}; i >= 0; i -= char_size)
-    {
-      // Build the character
-      for (std::size_t j{0}; j < char_size; ++j)
-      {
-        byte[j] = x[i + j];
-      }
-      result += static_cast<char>(byte.to_ulong());
-    }
+    result += static_cast<char>(byte.to_ulong());
   }
   return result;
 }
@@ -271,7 +255,16 @@ std::bitset<binary_word_size> read_word(std::ifstream* sac)
 
 std::bitset<2 * binary_word_size> read_two_words(std::ifstream* sac)
 {
-  return concat_words(read_word(sac), read_word(sac));
+  std::bitset<binary_word_size> word1{read_word(sac)};
+  std::bitset<binary_word_size> word2{read_word(sac)};
+  if (BYTE_ORDER == LITTLE_ENDIAN)
+  {
+    return concat_words(word1, word2);
+  }
+  else
+  {
+    return concat_words(word2, word1);
+  }
 }
 
 std::bitset<4 * binary_word_size> read_four_words(std::ifstream* sac)
