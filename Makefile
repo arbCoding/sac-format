@@ -1,7 +1,26 @@
 #------------------------------------------------------------------------------
+# Bugs
+#------------------------------------------------------------------------------
+# Note, it appears that in sac-format KString's are being read in an incorrect
+# order on Linux ("Central Californ" becomes "fornCaliral Cent")
+#
+# "Cent" = 0, "ral " = 1, "Cali" = 2, "forn" = 3
+# 0123 becomes 3210
+#
+# I suspect this has to do with MacOS and Linux having opposite
+# endiannesses.
+#
+# I need to be careful in sac_io.cpp in the binary_to_string
+# and binary_to_long_string functions to account for this different
+# (Seems like all the numerical conversions are fine, only the strings
+# are acting funky, need to test further to confirm this hypothesis)
 # We need to know what OS we're on as it determines which compiler we use (and 
 # therefore which compiler parameters are appropriate) and how we link to the
 # necessary libraries
+#------------------------------------------------------------------------------
+# End bugs
+#------------------------------------------------------------------------------
+
 #------------------------------------------------------------------------------
 # Use the correct shell for bash scripts
 # seemed to default to /bin/sh when I use /bin/bash
