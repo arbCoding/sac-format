@@ -134,8 +134,9 @@ cxx := $(cxx) -I$(hdr_prefix)
 # Program definitions
 #------------------------------------------------------------------------------
 # All programs
-all: tests
+all: lib tests
 
+# Just the object-files (none of the examples/tests)
 lib: sac_format
 
 # These only need sac_io.a
@@ -182,7 +183,7 @@ sac_format: $(sf_modules)
 	ld -r -o $(obj_prefix)$@.o $(sf_obj)
 	@echo -e "Build finish: $$(date)\n"
 
-#	ld -r -o $(obj_prefix)$@.o $(sf_obj)
+# only use the low-level io because we're not using the SacStream class
 basic_modules := sac_io
 basic_obj := $(addsuffix .o, $(addprefix $(obj_prefix), $(basic_modules)))
 basic_sac := sac_type_test sac_io_test
