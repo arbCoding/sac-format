@@ -90,8 +90,12 @@ endif
 #------------------------------------------------------------------------------
 # Release params only if debug is false
 #release_param = -O2 -DNDEBUG
-#release_param = -O3 -DNDEBUG
-release_param = -Ofast -DNDEBUG
+# -O3 has been determined to be the best mix of fast and stable.
+release_param = -O3 -DNDEBUG
+# -Ofast is a bit too loose (maybe because of fast-math)
+# Using it has caused weird bugs, both here and in PsSp, so
+# I will not be using it by default.
+#release_param = -Ofast -DNDEBUG
 ifeq ($(debug), true)
 	params = $(param) $(debug_param)
 else
