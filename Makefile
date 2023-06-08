@@ -90,6 +90,7 @@ endif
 #------------------------------------------------------------------------------
 # Release params only if debug is false
 #release_param = -O2 -DNDEBUG
+#release_param = -O3 -DNDEBUG
 release_param = -Ofast -DNDEBUG
 ifeq ($(debug), true)
 	params = $(param) $(debug_param)
