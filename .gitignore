@@ -50,3 +50,5 @@ bin/*
 *.SAC
 # Dumb MacOS
 .DS_Store
+# Static analysis stuff
+.cache
