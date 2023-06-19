@@ -1,5 +1,5 @@
-#ifndef SAC_IO_H
-#define SAC_IO_H
+#ifndef SAC_IO_HPP_20230619
+#define SAC_IO_HPP_20230619
 
 // This will be used to declare constants
 // and to forward declare functions for binary SAC-file In/Out

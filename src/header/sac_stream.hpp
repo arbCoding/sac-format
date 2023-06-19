@@ -1,5 +1,5 @@
-#ifndef SAC_CLASS_H
-#define SAC_CLASS_H
+#ifndef SAC_CLASS_HPP_20230619
+#define SAC_CLASS_HPP_20230619
 
 #include "sac_io.hpp" // my sac-format io functions
 
