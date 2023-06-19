@@ -44,50 +44,11 @@ common_debug = -Wextra -Werror -Wshadow -ggdb
 # Slightly different between MacOS and Linux
 ifeq ($(uname_s), Darwin)
     compiler = clang++
-		debug_param = $(common_debug) -Wsign-conversion -Weffc++
+	debug_param = $(common_debug) -Wsign-conversion -Weffc++
 else
-    compiler = g++-12
-		debug_param = $(common_debug) -fanalyzer -Wsign-conversion -Weffc++
+    compiler = g++-13
+	debug_param = $(common_debug) -fanalyzer -Wsign-conversion -Weffc++
 endif
-#------------------------------------------------------------------------------
-# Note on g++-13
-#------------------------------------------------------------------------------
-# Info:
-# The C++ std library included in g++-13 has problems
-# In particular, <vector> gives warnings for uninitialized values
-#
-# This is not a fault with my code, this is the std library
-# not being compliant with its own style guidelines.
-#
-# As such, on g++-13 it will not compile with debug_params
-# I have 12.2.0 
-#
-# If this gets fixed, I'll update to g++-13
-# This is true as of GCC version 13.1.0 as provided by HomeBrew
-# I believe this is related to the following gcc issues on bugzilla
-# * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107138
-# * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107919
-#
-# Summary:
-# It looks like these errors/warnings were always "happening", but the compiler
-# would suppress them because they were from the standard library.
-# This was considered non-ideal, as people wanted to see errors/warnings regardless
-# of source. End result is errors/warnings that are not terribly useful to me
-# (useful = actionable) as that would involve modifying the standard library.
-#
-# Solution:
-# Stick to gcc12 (on HomeBrew use `brew install gcc@12`) for now
-# I have 12.2.0 installed
-#
-# Alternative solution:
-# It does compile (and work) on g++-13 if you turn debug = false (release version)
-# This is because release version uses a much looser ruleset for warnings/erros
-# If you're just using this, not contributing to this, then you're likely already
-# working with the release version anyway (faster/smaller programs, faster compilation)
-# So this is possibly a non-issue for you.
-#------------------------------------------------------------------------------
-# End note on g++-13
-#------------------------------------------------------------------------------
 # Release params only if debug is false
 #release_param = -O2 -DNDEBUG
 # -O3 has been determined to be the best mix of fast and stable.
