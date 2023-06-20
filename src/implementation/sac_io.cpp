@@ -101,6 +101,8 @@ std::string binary_to_string(const std::bitset<2 * binary_word_size> x)
         for (std::size_t j{0}; j < char_size; ++j) { byte[j] = x[i + j]; }
         result += static_cast<char>(byte.to_ulong());
     }
+    // Remove trailing blank spaces
+    result.erase(std::find_if(result.rbegin(), result.rend(), [](int ch) { return !std::isspace(ch); }).base(), result.end());
     return result;
 }
 
@@ -132,20 +134,19 @@ std::bitset<4 * binary_word_size> long_string_to_binary(std::string x)
 
 std::string binary_to_long_string(const std::bitset<4 * binary_word_size> x)
 {
-  std::string result{};
-  constexpr std::size_t char_size{bits_per_byte};
-  std::bitset<char_size> byte{};
-  // Read character by character
-  for (std::size_t i{0}; i < 4 * binary_word_size; i += char_size)
-  {
-    // It builds character!
-    for (std::size_t j{0}; j < char_size; ++j)
+    std::string result{};
+    constexpr std::size_t char_size{bits_per_byte};
+    std::bitset<char_size> byte{};
+    // Read character by character
+    for (std::size_t i{0}; i < 4 * binary_word_size; i += char_size)
     {
-      byte[j] = x[i + j];
+        // It builds character!
+        for (std::size_t j{0}; j < char_size; ++j) { byte[j] = x[i + j]; }
+        result += static_cast<char>(byte.to_ulong());
     }
-    result += static_cast<char>(byte.to_ulong());
-  }
-  return result;
+    // Remove trailing blank spaces
+    result.erase(std::find_if(result.rbegin(), result.rend(), [](int ch) { return !std::isspace(ch); }).base(), result.end());
+    return result;
 }
 
 // SAC uses the right-most value for the bool (little-endian)

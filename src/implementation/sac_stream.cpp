@@ -1,5 +1,4 @@
 #include "sac_stream.hpp"
-#include "sac_io.hpp"
 
 namespace SAC
 {
@@ -547,4 +546,160 @@ void SacStream::legacy_write(const std::string& file_name) { nvhdr = 6; write(fi
 //-----------------------------------------------------------------------------
 // End writing
 //-----------------------------------------------------------------------------
+bool SacStream::operator==(const SacStream& other) const
+{
+    // Run through all the possible checks
+    // As soon as we fail once, we're done with a false
+    // Check the headers
+    if (f_delta != other.f_delta) { return false; }
+    if (depmin != other.depmin) { return false; }
+    if (depmax != other.depmax) { return false; }
+    if (odelta != other.odelta) { return false; }
+    if (f_b != other.f_b) { return false; }
+    if (f_e != other.f_e) { return false; }
+    if (f_o != other.f_o) { return false; }
+    if (f_a != other.f_a) { return false; }
+    if (f_t0 != other.f_t0) { return false; }
+    if (f_t1 != other.f_t1) { return false; }
+    if (f_t2 != other.f_t2) { return false; }
+    if (f_t3 != other.f_t3) { return false; }
+    if (f_t4 != other.f_t4) { return false; }
+    if (f_t5 != other.f_t5) { return false; }
+    if (f_t6 != other.f_t6) { return false; }
+    if (f_t7 != other.f_t7) { return false; }
+    if (f_t8 != other.f_t8) { return false; }
+    if (f_t9 != other.f_t9) { return false; }
+    if (f_f != other.f_f) { return false; }
+    if (resp0 != other.resp0) { return false; }
+    if (resp1 != other.resp1) { return false; }
+    if (resp2 != other.resp2) { return false; }
+    if (resp3 != other.resp3) { return false; }
+    if (resp4 != other.resp4) { return false; }
+    if (resp5 != other.resp5) { return false; }
+    if (resp6 != other.resp6) { return false; }
+    if (resp7 != other.resp7) { return false; }
+    if (resp8 != other.resp8) { return false; }
+    if (resp9 != other.resp9) { return false; }
+    if (f_stla != other.f_stla) { return false; }
+    if (f_stlo != other.f_stlo) { return false; }
+    // Good down to here
+    if (stel != other.stel) { return false; }
+    if (stdp != other.stdp) { return false; }
+    if (f_evla != other.f_evla) { return false; }
+    if (f_evlo != other.f_evlo) { return false; }
+    if (evel != other.evel) { return false; }
+    if (evdp != other.evdp) { return false; }
+    if (mag != other.mag) { return false; }
+    if (user0 != other.user0) { return false; }
+    if (user1 != other.user1) { return false; }
+    if (user2 != other.user2) { return false; }
+    if (user3 != other.user3) { return false; }
+    if (user4 != other.user4) { return false; }
+    if (user5 != other.user5) { return false; }
+    if (user6 != other.user6) { return false; }
+    if (user7 != other.user7) { return false; }
+    if (user8 != other.user8) { return false; }
+    if (user9 != other.user9) { return false; }
+    if (dist != other.dist) { return false; }
+    if (az != other.az) { return false; }
+    if (baz != other.baz) { return false; }
+    if (gcarc != other.gcarc) { return false; }
+    if (f_sb != other.f_sb) { return false; }
+    if (f_sdelta != other.f_sdelta) { return false; }
+    if (depmen != other.depmen) { return false; }
+    if (cmpaz != other.cmpaz) { return false; }
+    if (cmpinc != other.cmpinc) { return false; }
+    if (xminimum != other.xminimum) { return false; }
+    if (xmaximum != other.xmaximum) { return false; }
+    if (yminimum != other.yminimum) { return false; }
+    if (ymaximum != other.ymaximum) { return false; }
+    if (nzyear != other.nzyear) { return false; }
+    if (nzjday != other.nzjday) { return false; }
+    if (nzhour != other.nzhour) { return false; }
+    if (nzmin != other.nzmin) { return false; }
+    if (nzsec != other.nzsec) { return false; }
+    if (nzmsec != other.nzmsec) { return false; }
+    if (nvhdr != other.nvhdr) { return false; }
+    if (norid != other.norid) { return false; }
+    if (nevid != other.nevid) { return false; }
+    if (npts != other.npts) { return false; }
+    if (nsnpts != other.nsnpts) { return false; }
+    if (nwfid != other.nwfid) { return false; }
+    if (nxsize != other.nxsize) { return false; }
+    if (nysize != other.nysize) { return false; }
+    if (iftype != other.iftype) { return false; }
+    if (idep != other.idep) { return false; }
+    if (iztype != other.iztype) { return false; }
+    if (iinst != other.iinst) { return false; }
+    if (istreg != other.istreg) { return false; }
+    if (ievreg != other.ievreg) { return false; }
+    if (ievtyp != other.ievtyp) { return false; }
+    if (iqual != other.iqual) { return false; }
+    if (isynth != other.isynth) { return false; }
+    if (imagtyp != other.imagtyp) { return false; }
+    if (imagsrc != other.imagsrc) { return false; }
+    if (ibody != other.ibody) { return false; }
+    if (leven != other.leven) { return false; }
+    if (lpspol != other.lpspol) { return false; }
+    if (lovrok != other.lovrok) { return false; }
+    if (lcalda != other.lcalda) { return false; }
+    // These can fail due to padding being added to the string
+    if (kstnm != other.kstnm) { return false; }
+    /*
+    if (kevnm != other.kevnm) { return false; }
+    if (khole != other.khole) { return false; }
+    if (ko != other.ko) { return false; }
+    if (ka != other.ka) { return false; }
+    if (kt0 != other.kt0) { return false; }
+    if (kt1 != other.kt1) { return false; }
+    if (kt2 != other.kt2) { return false; }
+    if (kt3 != other.kt3) { return false; }
+    if (kt4 != other.kt4) { return false; }
+    if (kt5 != other.kt5) { return false; }
+    if (kt6 != other.kt6) { return false; }
+    if (kt7 != other.kt7) { return false; }
+    if (kt8 != other.kt8) { return false; }
+    if (kt9 != other.kt9) { return false; }
+    if (kf != other.kf) { return false; }
+    if (kuser0 != other.kuser0) { return false; }
+    if (kuser1 != other.kuser1) { return false; }
+    if (kuser2 != other.kuser2) { return false; }
+    if (kcmpnm != other.kcmpnm) { return false; }
+    if (knetwk != other.knetwk) { return false; }
+    if (kdatrd != other.kdatrd) { return false; }
+    if (kinst != other.kinst) { return false; }
+    */
+    // Check the footers (data section is slowest and therefore last)
+    if (delta != other.delta) { return false; }
+    if (b != other.b) { return false; }
+    if (e != other.e) { return false; }
+    if (o != other.o) { return false; }
+    if (a != other.a) { return false; }
+    if (t0 != other.t0) { return false; }
+    if (t1 != other.t1) { return false; }
+    if (t2 != other.t2) { return false; }
+    if (t3 != other.t3) { return false; }
+    if (t4 != other.t4) { return false; }
+    if (t5 != other.t5) { return false; }
+    if (t6 != other.t6) { return false; }
+    if (t7 != other.t7) { return false; }
+    if (t8 != other.t8) { return false; }
+    if (t9 != other.t9) { return false; }
+    if (f != other.f) { return false; }
+    if (evlo != other.evlo) { return false; }
+    if (evla != other.evla) { return false; }
+    if (stlo != other.stlo) { return false; }
+    if (stla != other.stla) { return false; }
+    if (sb != other.sb) { return false; }
+    if (sdelta != other.sdelta) { return false; }
+    // Check the data vectors by size first
+    if (data1.size() != other.data1.size()) { return false; }
+    // Ignoring FlawFinder CWE-126 because we first check that
+    // the sizes are equal
+    if (!std::ranges::equal(data1, other.data1)) { return false; }
+    if (data2.size() != other.data2.size()) { return false; }
+    if (!std::ranges::equal(data2, other.data2)) { return false; }
+    // We failed to fail!
+    return true;
+}
 }

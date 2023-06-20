@@ -163,7 +163,8 @@ public:
     // SAC 102.0+ auto-updates from 6 to 7 upon reading nowadays
     // The constructor for this class also updates from 6 to 7
     // though legacy writing is still supported
-    int nvhdr{unset_int};
+    // Going to use 7 as the default instead of unset
+    int nvhdr{7};
     // Origin ID
     int norid{unset_int};
     // Event ID
@@ -435,6 +436,8 @@ public:
     //-------------------------------------------------------------------------
     // End writing
     //-------------------------------------------------------------------------
+    // Overload equality check
+    bool operator==(const SacStream& other) const;
 };
 }
 #endif
