@@ -48,7 +48,11 @@ ifeq ($(uname_s), Darwin)
 	debug_param = $(common_debug) -Wsign-conversion -Weffc++
 else
     compiler = g++-13
-	debug_param = $(common_debug) -fanalyzer -Wsign-conversion -Weffc++
+	# -fanalyzer bugs out on standard library
+	# -Wsign-conversion doesn't like std::size_t on Linux (warning for long unsigned int -> long long unsigned int
+	# possibly changing signed, even though both unsigned)
+	#debug_param = $(common_debug) -fanalyzer -Wsign-conversion -Weffc++
+	debug_param = $(common_debug) -Weffc++
 endif
 # Release params only if debug is false
 #release_param = -O2 -DNDEBUG
