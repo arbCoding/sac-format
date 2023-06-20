@@ -1,4 +1,5 @@
 #include "sac_stream.hpp"
+#include "sac_io.hpp"
 
 namespace SAC
 {
@@ -228,12 +229,15 @@ SacStream::SacStream(const std::string& file_name)
     //---------------------------------------------------------------------------
     // Data
     //---------------------------------------------------------------------------
-    // These are read in and converted to doubles (originally single-precision)
-    data1 = read_data(&file, static_cast<size_t>(npts), data_word);
-    // (Unevenly sampled-data) or (spectral or xy)
-    // Same size as data1
-    if ((leven == 0) || (iftype > 1))
-    { data2 = read_data(&file, static_cast<size_t>(npts), data_word + npts); }
+    if (npts != SAC::unset_int)
+    {
+        // These are read in and converted to doubles (originally single-precision)
+        data1 = read_data(&file, static_cast<size_t>(npts), data_word);
+        // (Unevenly sampled-data) or (spectral or xy)
+        // Same size as data1
+        if ((leven == 0) || (iftype > 1))
+        { data2 = read_data(&file, static_cast<size_t>(npts), data_word + npts); }
+    }
     //---------------------------------------------------------------------------
     // End data
     //---------------------------------------------------------------------------
