@@ -1,13 +1,21 @@
 #ifndef SAC_CLASS_HPP_20230619
 #define SAC_CLASS_HPP_20230619
 
-#include "sac_io.hpp" // my sac-format io functions
-
+//-----------------------------------------------------------------------------
+// Include Statements
+//-----------------------------------------------------------------------------
+#include "sac_io.hpp"
+// Standard Library stuff, https://en.cppreference.com/w/cpp/standard_library
 #include <cmath>
+#include <string>
+#include <vector>
+//-----------------------------------------------------------------------------
+// End Include Statements
+//-----------------------------------------------------------------------------
 
-#include <string> // std::string
-#include <vector> // std::vector
-
+//-----------------------------------------------------------------------------
+// Description
+//-----------------------------------------------------------------------------
 // Define a SacStream class to make it easier to read sac files
 // Much of the header/footer values are generally SAC-exclusive
 // But in the interest of full compatibility with the file-format
@@ -23,12 +31,17 @@
 // If an old version is read-in, the floats will be converted to doubles and nvhdr updated
 //
 // Processing functions are moving to a new project: https://github.com/arbCoding/PsSp
+//-----------------------------------------------------------------------------
+// End Description
+//-----------------------------------------------------------------------------
 
 namespace SAC
 {
-  class SacStream
-  {
-  public:
+// It would be good to use multiple classes to build this structure
+// Refactor in future
+class SacStream
+{
+public:
     //-------------------------------------------------------------------------
     // Header
     //-------------------------------------------------------------------------
@@ -392,7 +405,6 @@ namespace SAC
     // appropriate header variables as single-precision floats
     // NOTE: this results in a loss of precision
     void footer_to_header();
-
     //-------------------------------------------------------------------------
     // End convenience methods
     //-------------------------------------------------------------------------
@@ -403,7 +415,7 @@ namespace SAC
     // Copy constructor is unnecessary as the compiler will default
     // to do member-wise copying (only needed for special cases, not here)
     // Parameterized constructor (reader)
-    SacStream(const std::string& file_name);
+    explicit SacStream(const std::string& file_name);
     // Empty constructor
     SacStream() = default;
     //-------------------------------------------------------------------------
@@ -423,6 +435,6 @@ namespace SAC
     //-------------------------------------------------------------------------
     // End writing
     //-------------------------------------------------------------------------
-  };
+};
 }
 #endif

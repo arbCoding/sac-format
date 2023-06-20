@@ -29,6 +29,7 @@ uname_s := $(shell uname -s)
 # You can see the compilation patterns used to build the tests for examples of this
 #
 # Debug (big/slow/strict) or Release (small/fast/relaxed)
+# The different between Debug and Release is tremendous in terms of speed
 debug = false
 #------------------------------------------------------------------------------
 # End building the libraries
