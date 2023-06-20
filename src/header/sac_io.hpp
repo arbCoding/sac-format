@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 // Include Statements
 //-----------------------------------------------------------------------------
+// String comparisons in C++ suck, boost adds needed functionality!
+#include <boost/algorithm/string.hpp>
 // provides BYTE_ORDER for endianness
 // Current works with big-endian (Mac)
 // little-endian is Linux
@@ -12,6 +14,7 @@
 #include <algorithm>
 #include <array>
 #include <bitset>
+#include <cctype>
 #include <cmath>
 #include <cstring>
 #include <fstream>
@@ -101,6 +104,8 @@ float binary_to_float(const std::bitset<binary_word_size> x);
 // SAC uses 64 bit doubles (2 words, 8 bytes)
 std::bitset<2 * binary_word_size> double_to_binary(const double x);
 double binary_to_double(const std::bitset<2 * binary_word_size> x);
+// Remove leading/trailing white-space and control characters
+std::string string_cleaning(const std::string& str);
 // Note the string conversion functions handle over-sized strings
 // by truncating them, and undersized strings by padding them with spaces
 // SAC uses either 64 bit strings (2 words, 8 bytes, 8 characters)

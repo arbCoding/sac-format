@@ -643,9 +643,7 @@ bool SacStream::operator==(const SacStream& other) const
     if (lpspol != other.lpspol) { return false; }
     if (lovrok != other.lovrok) { return false; }
     if (lcalda != other.lcalda) { return false; }
-    // These can fail due to padding being added to the string
     if (kstnm != other.kstnm) { return false; }
-    /*
     if (kevnm != other.kevnm) { return false; }
     if (khole != other.khole) { return false; }
     if (ko != other.ko) { return false; }
@@ -668,7 +666,6 @@ bool SacStream::operator==(const SacStream& other) const
     if (knetwk != other.knetwk) { return false; }
     if (kdatrd != other.kdatrd) { return false; }
     if (kinst != other.kinst) { return false; }
-    */
     // Check the footers (data section is slowest and therefore last)
     if (delta != other.delta) { return false; }
     if (b != other.b) { return false; }

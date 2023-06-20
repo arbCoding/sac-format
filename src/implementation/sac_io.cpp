@@ -65,12 +65,24 @@ std::bitset<2 * binary_word_size> double_to_binary(const double x) { return doub
 
 double binary_to_double(const std::bitset<2 * binary_word_size> x) { return double_to_bits(x).value; }
 
+// Remove leading/trailing white-space and control characters
+std::string string_cleaning(const std::string& str)
+{
+    std::string result{};
+    for (char c : str) { if (!std::iscntrl(static_cast<unsigned char>(c))) { result += c; } }
+    // Remove leading and trailing white spaces
+    boost::algorithm::trim(result);
+    return result;
+}
+
 std::bitset<2 * binary_word_size> string_to_binary(std::string x)
 {
     constexpr std::size_t string_size{2 * word_length};
     // 1 byte per character
     constexpr std::size_t char_size{bits_per_byte};
     // String must be of specific length
+    // Remove any spurious padding
+    x = string_cleaning(x);
     // Truncate if needed
     if (x.length() > string_size) { x = x.substr(0, string_size); }
     // Pad if needed
@@ -101,9 +113,7 @@ std::string binary_to_string(const std::bitset<2 * binary_word_size> x)
         for (std::size_t j{0}; j < char_size; ++j) { byte[j] = x[i + j]; }
         result += static_cast<char>(byte.to_ulong());
     }
-    // Remove trailing blank spaces
-    result.erase(std::find_if(result.rbegin(), result.rend(), [](int ch) { return !std::isspace(ch); }).base(), result.end());
-    return result;
+    return string_cleaning(result);
 }
 
 // Same as before, but twice the length
@@ -114,6 +124,8 @@ std::bitset<4 * binary_word_size> long_string_to_binary(std::string x)
 {
     constexpr std::size_t string_size{4 * word_length};
     constexpr std::size_t char_size{bits_per_byte};
+    // Remove any spurious padding
+    x = string_cleaning(x);
     // Truncate if needed
     if (x.length() > string_size) { x = x.substr(0, string_size); }
     // Pad if needed
@@ -144,9 +156,7 @@ std::string binary_to_long_string(const std::bitset<4 * binary_word_size> x)
         for (std::size_t j{0}; j < char_size; ++j) { byte[j] = x[i + j]; }
         result += static_cast<char>(byte.to_ulong());
     }
-    // Remove trailing blank spaces
-    result.erase(std::find_if(result.rbegin(), result.rend(), [](int ch) { return !std::isspace(ch); }).base(), result.end());
-    return result;
+    return string_cleaning(result);
 }
 
 // SAC uses the right-most value for the bool (little-endian)
