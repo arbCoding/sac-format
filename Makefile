@@ -125,7 +125,7 @@ cxx := $(cxx) -I$(hdr_prefix) -I$(boost_inc)
 ifeq ($(OS), Windows_NT)
 	# Fixes error of no main because windows uses WinMain
 	# instead of main
-	cxx += /entry:mainCRTStartu
+	#cxx += /entry:mainCRTStartu
 endif
 #------------------------------------------------------------------------------
 # End include my sac headers

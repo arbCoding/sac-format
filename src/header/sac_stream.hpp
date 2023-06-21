@@ -7,6 +7,7 @@
 #include "sac_io.hpp"
 // Standard Library stuff, https://en.cppreference.com/w/cpp/standard_library
 #include <cmath>
+#include <filesystem>
 #include <string>
 #include <vector>
 //-----------------------------------------------------------------------------
@@ -430,9 +431,9 @@ public:
     // Note that if the data was read using this class
     // it is automatically converted to nvhdr = v7
     // Some software doesn't like that (ObsPy seems to dislike it)
-    void write(const std::string& file_name);
+    void write(const std::filesystem::path& file_name);
     // legacy_write writes as nvhdr = v6 for compatibility
-    void legacy_write(const std::string& file_name);
+    void legacy_write(const std::filesystem::path& file_name);
     //-------------------------------------------------------------------------
     // End writing
     //-------------------------------------------------------------------------

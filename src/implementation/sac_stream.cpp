@@ -288,7 +288,7 @@ SacStream::SacStream(const std::string& file_name)
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-void SacStream::write(const std::string& file_name)
+void SacStream::write(const std::filesystem::path& file_name)
 {
     std::ofstream file(file_name, std::ios::binary | std::ios::out | std::ios::trunc);
     if (!file) { std::cerr << "Unable to write file...\n"; }
@@ -542,7 +542,7 @@ void SacStream::write(const std::string& file_name)
 }
 
 // Since nvhdr is checked before writing to determine if a footer is appropriate
-void SacStream::legacy_write(const std::string& file_name) { nvhdr = 6; write(file_name); }
+void SacStream::legacy_write(const std::filesystem::path& file_name) { nvhdr = 6; write(file_name); }
 //-----------------------------------------------------------------------------
 // End writing
 //-----------------------------------------------------------------------------
