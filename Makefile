@@ -46,12 +46,15 @@ common_debug = -Wextra -Werror -Wshadow -ggdb
 ifeq ($(uname_s), Darwin)
     compiler = clang++
 	debug_param = $(common_debug) -Wsign-conversion -Weffc++
-else
+else ifeq ($(uname_s), Linux)
     compiler = g++-13
 	# -fanalyzer bugs out on standard library
 	# -Wsign-conversion doesn't like std::size_t on Linux (warning for long unsigned int -> long long unsigned int
 	# possibly changing signed, even though both unsigned)
 	#debug_param = $(common_debug) -fanalyzer -Wsign-conversion -Weffc++
+	debug_param = $(common_debug) -Weffc++
+else
+	compiler = g++
 	debug_param = $(common_debug) -Weffc++
 endif
 # Release params only if debug is false
@@ -102,9 +105,12 @@ ifeq ($(uname_s), Darwin)
 	boost_dir = /opt/homebrew/Cellar/boost/1.82.0_1/
 	boost_inc = $(boost_dir)include/
 	boost_lib = $(boost_dir)lib/
-else
+else ifeq ($(uname_s), Linux)
 	boost_inc = /usr/include/
 	boost_lib = /usr/lib/x86_64-linux-gnu/
+else
+	boost_inc = /mingw64/include/
+	boost_list = /mingw64/lib/
 endif
 boost_params = -I$(boost_inc) -L$(boost_lib)
 #------------------------------------------------------------------------------
@@ -116,6 +122,11 @@ boost_params = -I$(boost_inc) -L$(boost_lib)
 #------------------------------------------------------------------------------
 # Compilation command with inclusion of my headers
 cxx := $(cxx) -I$(hdr_prefix) $(boost_params)
+ifeq ($(OS), Windows_NT)
+	# Fixes error of no main because windows uses WinMain
+	# instead of main
+	cxx += /entry:mainCRTStartu
+endif
 #------------------------------------------------------------------------------
 # End include my sac headers
 #------------------------------------------------------------------------------

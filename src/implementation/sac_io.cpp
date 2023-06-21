@@ -215,7 +215,7 @@ std::bitset<2 * binary_word_size> read_two_words(std::ifstream* sac)
 {
     std::bitset<binary_word_size> word1{read_word(sac)};
     std::bitset<binary_word_size> word2{read_word(sac)};
-    if (BYTE_ORDER == LITTLE_ENDIAN) { return concat_words(word1, word2); }
+    if constexpr (std::endian::native == std::endian::little) { return concat_words(word1, word2); }
     else { return concat_words(word2, word1); }
 }
 
@@ -223,7 +223,7 @@ std::bitset<4 * binary_word_size> read_four_words(std::ifstream* sac)
 {
     std::bitset<2 * binary_word_size> word12{read_two_words(sac)};
     std::bitset<2 * binary_word_size> word34{read_two_words(sac)};
-    if (BYTE_ORDER == LITTLE_ENDIAN) { return concat_words(word12, word34); }
+    if constexpr (std::endian::native == std::endian::little) { return concat_words(word12, word34); }
     else { return concat_words(word34, word12); }
 }
 

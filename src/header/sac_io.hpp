@@ -6,13 +6,10 @@
 //-----------------------------------------------------------------------------
 // String comparisons in C++ suck, boost adds needed functionality!
 #include <boost/algorithm/string.hpp>
-// provides BYTE_ORDER for endianness
-// Current works with big-endian (Mac)
-// little-endian is Linux
-#include <netinet/in.h>
 // Standard Library stuff, https://en.cppreference.com/w/cpp/standard_library
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <bitset>
 #include <cctype>
 #include <cmath>
