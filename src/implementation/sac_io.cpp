@@ -68,8 +68,9 @@ double binary_to_double(const std::bitset<2 * binary_word_size> x) { return doub
 // Remove leading/trailing white-space and control characters
 std::string string_cleaning(const std::string& str)
 {
-    std::string result{};
-    for (char c : str) { if (!std::iscntrl(static_cast<unsigned char>(c))) { result += c; } }
+    std::string result{str};
+    std::size_t null_position{str.find('\0')};
+    if (null_position != std::string::npos) { result.erase(null_position); }
     // Remove leading and trailing white spaces
     boost::algorithm::trim(result);
     return result;
@@ -125,7 +126,9 @@ std::bitset<4 * binary_word_size> long_string_to_binary(std::string x)
     constexpr std::size_t string_size{4 * word_length};
     constexpr std::size_t char_size{bits_per_byte};
     // Remove any spurious padding
+    //boost::algorithm::trim(x);
     x = string_cleaning(x);
+    //x = string_cleaning(x);
     // Truncate if needed
     if (x.length() > string_size) { x = x.substr(0, string_size); }
     // Pad if needed

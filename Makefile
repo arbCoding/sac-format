@@ -30,7 +30,7 @@ uname_s := $(shell uname -s)
 #
 # Debug (big/slow/strict) or Release (small/fast/relaxed)
 # The different between Debug and Release is tremendous in terms of speed
-debug = false
+debug = true
 #------------------------------------------------------------------------------
 # End building the libraries
 #-------------------------------------------------------------------------------
@@ -121,7 +121,7 @@ boost_params = -I$(boost_inc) -L$(boost_lib)
 # Include my sac headers
 #------------------------------------------------------------------------------
 # Compilation command with inclusion of my headers
-cxx := $(cxx) -I$(hdr_prefix) $(boost_params)
+cxx := $(cxx) -I$(hdr_prefix) -I$(boost_inc)
 ifeq ($(OS), Windows_NT)
 	# Fixes error of no main because windows uses WinMain
 	# instead of main
