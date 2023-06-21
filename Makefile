@@ -30,7 +30,7 @@ uname_s := $(shell uname -s)
 #
 # Debug (big/slow/strict) or Release (small/fast/relaxed)
 # The different between Debug and Release is tremendous in terms of speed
-debug = true
+debug = false
 #------------------------------------------------------------------------------
 # End building the libraries
 #-------------------------------------------------------------------------------

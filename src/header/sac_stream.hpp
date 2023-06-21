@@ -417,7 +417,7 @@ public:
     // Copy constructor is unnecessary as the compiler will default
     // to do member-wise copying (only needed for special cases, not here)
     // Parameterized constructor (reader)
-    explicit SacStream(const std::string& file_name);
+    explicit SacStream(const std::filesystem::path& file_name);
     // Empty constructor
     SacStream() = default;
     //-------------------------------------------------------------------------

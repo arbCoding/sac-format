@@ -64,7 +64,7 @@ void SacStream::footer_to_header()
 // Constructors
 //-----------------------------------------------------------------------------
 // Parameterized constructor (reader)
-SacStream::SacStream(const std::string& file_name)
+SacStream::SacStream(const std::filesystem::path& file_name)
 {
     //---------------------------------------------------------------------------
     // Open binary file
