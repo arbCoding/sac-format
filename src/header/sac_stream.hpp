@@ -8,6 +8,7 @@
 // Standard Library stuff, https://en.cppreference.com/w/cpp/standard_library
 #include <cmath>
 #include <filesystem>
+#include <limits>
 #include <string>
 #include <vector>
 //-----------------------------------------------------------------------------
@@ -439,6 +440,7 @@ public:
     //-------------------------------------------------------------------------
     // Overload equality check
     bool operator==(const SacStream& other) const;
+    bool equal_within_tolerance(const std::vector<double>& vector1, const std::vector<double>& vector2, const double tolerance = std::numeric_limits<float>::epsilon()) const;
 };
 }
 #endif
