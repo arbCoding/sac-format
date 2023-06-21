@@ -689,14 +689,17 @@ bool SacStream::operator==(const SacStream& other) const
     if (stla != other.stla) { return false; }
     if (sb != other.sb) { return false; }
     if (sdelta != other.sdelta) { return false; }
-    // Check the data vectors by size first as it is faster
-    if (data1.size() != other.data1.size()) { return false; }
-    if (data2.size() != other.data2.size()) { return false; }
-    // Ignoring FlawFinder CWE-126 because we first check that
-    // the sizes are equal
-    if (!std::ranges::equal(data1, other.data1)) { return false; }
-    if (!std::ranges::equal(data2, other.data2)) { return false; }
+    if (!equal_within_tolerance(data1, other.data1)) { return false; }
+    if (!equal_within_tolerance(data2, other.data2)) { return false; }
     // We failed to fail!
+    return true;
+}
+
+// Does not assume equal length, if not equal length then they're not equal within tolerance
+bool SacStream::equal_within_tolerance(const std::vector<double>& vector1, const std::vector<double>& vector2, const double tolerance) const
+{
+    if (vector1.size() != vector2.size()) { return false; }
+    for (std::size_t i{0}; i < vector1.size(); ++i) { if (std::abs(vector1[i] - vector2[i]) > tolerance) { return false; } }
     return true;
 }
 }
