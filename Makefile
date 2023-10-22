@@ -43,17 +43,19 @@ param = -std=c++20 -pedantic-errors -Wall
 # Common debug params regardless of clang++ or g++
 common_debug = -Wextra -Werror -Wshadow -ggdb
 # Slightly different between MacOS and Linux
-ifeq ($(uname_s), Darwin)
-    compiler = clang++
+ifeq ($(uname_s), Darwin) # macOS
+  compiler = clang++
 	debug_param = $(common_debug) -Wsign-conversion -Weffc++
-else ifeq ($(uname_s), Linux)
-    compiler = g++-13
+else ifeq ($(uname_s), Linux) # Linux
+	# Works fine with g++-12 (Void linux doesn't have g++-13 yet)
+  compiler = g++
+	#compiler = g++-13
 	# -fanalyzer bugs out on standard library
 	# -Wsign-conversion doesn't like std::size_t on Linux (warning for long unsigned int -> long long unsigned int
 	# possibly changing signed, even though both unsigned)
 	#debug_param = $(common_debug) -fanalyzer -Wsign-conversion -Weffc++
 	debug_param = $(common_debug) -Weffc++
-else
+else # Windows
 	compiler = g++
 	debug_param = $(common_debug) -Weffc++
 endif
