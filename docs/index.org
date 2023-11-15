@@ -1,7 +1,7 @@
 #+options: ':t *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
-#+options: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
-#+options: email:nil expand-links:t f:t inline:t num:t p:nil pri:nil prop:nil
-#+options: stat:t tags:t tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
+#+options: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:nil e:t
+#+options: email:t expand-links:t f:t inline:t num:t p:nil pri:nil prop:nil
+#+options: stat:t tags:t tasks:t tex:t timestamp:nil title:t toc:t todo:t |:t
 #+title: sac-format
 #+date: <2023-11-15 Wed>
 #+author: Alexander R. Blanchette
