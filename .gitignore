@@ -55,3 +55,6 @@ compile_commands.json
 build/*
 # Cmake-Project prefers bin by default
 bin/*
+
+# VS-Code junk
+.vscode/*
