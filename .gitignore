@@ -34,22 +34,24 @@
 # Mac stuff
 *.dSYM
 *.DS_Store
+.DS_Store
 
-# data files
-data/*
-# Compiled stuff
-bin/*
-# Be extra sure no objects
-./src/objects/*
+# langauge server
+.ccls-cache/*
+
 # Any compressed files
 *.tar.gz
-# Any csv files
-*.csv
-# Any sac files
-*.sac
-*.SAC
-# Dumb MacOS
-.DS_Store
+
 # Static analysis stuff
 .cache
+
+# Made using `bear -- make`, meant to be used by CppCheck
+# Make sure to remove all lines for boost and msgpack
+# as they cause preprocessor directive errors for CppCheck
+# took a little while to figure that out
 compile_commands.json
+
+# The build directory
+build/*
+# Cmake-Project prefers bin by default
+bin/*
