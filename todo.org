@@ -4,6 +4,13 @@
 *** TODO Benchmarks :benchmark:
 *** New tests?
 ** TODO Split SacStream into sub-classes :abstraction:
+*** TODO Improved functionality :functionality:
+**** TODO Maintain only doubles of the header/footer pairs (e.g., stla/f_stla)
+The only time this matters is at read/write. On read, we can read it in as a
+float and immediately =static_cast<double>=. On writing, we just
+=static_cast<float>= prior to writing. This will get rid of the need to deal with
+simultaneously updating the double and float versions (hard to remember which is
+which).
 *** TODO Header
 **** TODO Time
 **** TODO Event parameters
@@ -41,3 +48,18 @@ class SacStream {
 ***** TODO Data
 ***** TODO Footer
 * Inbox
+** TODO Rename the namespace
+=SAC= in all caps is annoying. Let's called it =arb_sac=. That way there is no need
+to hold down shift or use caps-lock. That would avoid any possible namespace
+collision with official SAC stuff (just in case they use the =sac= namespace).
+** TODO Rename SacStream
+It isn't a stream so it shouldn't be called one. I knew this even when I first
+wrote it, but I didn't know what else to call it and figured I'd change it
+later.
+
+Maybe call it =Seismogram=, or for less typing =Trace=. Then it'd be =SAC::Trace=
+which is nice.
+** TODO SacStream constructor should use std::filesystem::path not std::string
+** TODO Link paired headers
+e.g., az and baz should be linked, if one is edited the other is updated
+Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.

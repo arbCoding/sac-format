@@ -198,8 +198,10 @@ std::bitset<binary_word_size> read_word(std::ifstream* sac)
     std::bitset<binary_word_size> bits{};
     constexpr std::size_t char_size{bits_per_byte};
     // Where we will store the characters
+    // flawfinder: ignore
     char word[word_length];
     // Read to our character array
+    // flawfinder: ignore
     sac->read(word, word_length);
     // Take each character
     std::bitset<char_size> byte{};
@@ -255,8 +257,10 @@ void write_words(std::ofstream* sac_file, const std::vector<char>& input)
 template <typename T>
 std::vector<char> convert_to_word(const T x)
 {
+    // flawfinder: ignore
     char tmp[word_length];
     // Copy bytes from x into the tmp array
+    // flawfinder: ignore
     std::memcpy(tmp, &x, word_length);
     std::vector<char> word{};
     word.resize(word_length);
@@ -270,8 +274,10 @@ template std::vector<char> convert_to_word(const int x);
 
 std::vector<char> convert_to_word(const double x)
 {
+    // flawfinder: ignore
     char tmp[2 * word_length];
     // Copy bytes from x into the tmp array
+    // flawfinder: ignore
     std::memcpy(tmp, &x, 2 * word_length);
     std::vector<char> word{};
     word.resize(2 * word_length);
