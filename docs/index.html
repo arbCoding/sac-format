@@ -1,118 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>sac-format</title>
-<meta name="author" content="Alexander R. Blanchette" />
-<meta name="generator" content="Org Mode" />
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
-</head>
-<body>
-<div id="content" class="content">
-<h1 class="title">sac-format</h1>
-<div id="table-of-contents" role="doc-toc">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents" role="doc-toc">
-<ul>
-<li><a href="#org6030aff">1. Introduction</a></li>
-<li><a href="#org7c41a3c">2. Dependencies</a></li>
-<li><a href="#orgb099ffd">3. Quickstart</a>
-<ul>
-<li><a href="#orgd4b7e89">3.1. Include in your project</a></li>
-<li><a href="#org66a7ff9">3.2. Build Instructions</a></li>
-</ul>
-</li>
-<li><a href="#org7593df6">4. Endianness</a></li>
-</ul>
-</div>
-</div>
-<hr />
-<div id="outline-container-org6030aff" class="outline-2">
-<h2 id="org6030aff"><span class="section-number-2">1.</span> Introduction</h2>
-<div class="outline-text-2" id="text-1">
-<p>
-This repository contains libraries for reading/writing binary <a href="https://ds.iris.edu/files/sac-manual/manual/file_format.html">SAC</a> files, and
-some example/test programs.
-</p>
-
-<p>
-I wrote these following the specified format, up to the limitations that the
-specification is incomplete (looking at you, XYZ files).
-</p>
-
-<p>
-These are written in C++, following modern programming guidelines and should be
-a good starting point for your seismic data-analysis journey.
-</p>
-
-<p>
-If you&rsquo;re interested in processing passive-source seismic data, I&rsquo;m working on a
-GUI tool to do just that called <a href="https://github.com/arbCoding/PsSp">PsSp</a> (Passive-source Seismic-processing) that is
-built upon the libraries here.
-</p>
-</div>
-</div>
-<div id="outline-container-org7c41a3c" class="outline-2">
-<h2 id="org7c41a3c"><span class="section-number-2">2.</span> Dependencies</h2>
-</div>
-
-<div id="outline-container-orgb099ffd" class="outline-2">
-<h2 id="orgb099ffd"><span class="section-number-2">3.</span> Quickstart</h2>
-<div class="outline-text-2" id="text-3">
-</div>
-<div id="outline-container-orgd4b7e89" class="outline-3">
-<h3 id="orgd4b7e89"><span class="section-number-3">3.1.</span> Include in your project</h3>
-</div>
-<div id="outline-container-org66a7ff9" class="outline-3">
-<h3 id="org66a7ff9"><span class="section-number-3">3.2.</span> Build Instructions</h3>
-</div>
-</div>
-<div id="outline-container-org7593df6" class="outline-2">
-<h2 id="org7593df6"><span class="section-number-2">4.</span> Endianness</h2>
-<div class="outline-text-2" id="text-4">
-<p>
-MacOS is a little-endian system, meaning it expects binary values to start from
+<!doctype html><html xmlns=http://www.w3.org/1999/xhtml lang=en xml:lang=en><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>sac-format</title>
+<meta name=author content="Alexander R. Blanchette"><meta name=generator content="Org Mode"><link rel=stylesheet href=https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css><link rel=stylesheet href=https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css><script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js></script><script src=https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js></script><script src=https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js></script><div id=content class=content><h1 class=title>sac-format</h1><div id=table-of-contents role=doc-toc><h2>Table of Contents</h2><div id=text-table-of-contents role=doc-toc><ul><li><a href=#org3fb4731>1. Introduction</a><li><a href=#org09613aa>2. Quickstart</a><ul><li><a href=#org5b78fb5>2.1. Cmake Integration</a><li><a href=#org0b5ecfc>2.2. Build Instructions</a></ul><li><a href=#org2313c36>3. Notes</a><ul><li><a href=#org3340054>3.1. Dependencies</a><li><a href=#org7d9fbb2>3.2. Endianness</a></ul></ul></div></div><hr><div id=outline-container-org3fb4731 class=outline-2><h2 id=org3fb4731><span class=section-number-2>1.</span> Introduction</h2><div class=outline-text-2 id=text-1><p>This repository contains libraries for reading/writing binary <a href=https://ds.iris.edu/files/sac-manual/manual/file_format.html>SAC</a> files, and
+some example/test programs.<p>I wrote these following the specified format, up to the limitations that the
+specification is incomplete (looking at you, XYZ files).<p>These are written in C++, following modern programming guidelines and should be
+a good starting point for your seismic data-analysis journey.<p>If you&rsquo;re interested in processing passive-source seismic data, I&rsquo;m working on a
+GUI tool to do just that called <a href=https://github.com/arbCoding/PsSp>PsSp</a> (Passive-source Seismic-processing) that is
+built upon the libraries here.</div></div><div id=outline-container-org09613aa class=outline-2><h2 id=org09613aa><span class=section-number-2>2.</span> Quickstart</h2><div class=outline-text-2 id=text-2></div><div id=outline-container-org5b78fb5 class=outline-3><h3 id=org5b78fb5><span class=section-number-3>2.1.</span> Cmake Integration</h3></div><div id=outline-container-org0b5ecfc class=outline-3><h3 id=org0b5ecfc><span class=section-number-3>2.2.</span> Build Instructions</h3></div></div><div id=outline-container-org2313c36 class=outline-2><h2 id=org2313c36><span class=section-number-2>3.</span> Notes</h2><div class=outline-text-2 id=text-3></div><div id=outline-container-org3340054 class=outline-3><h3 id=org3340054><span class=section-number-3>3.1.</span> Dependencies</h3></div><div id=outline-container-org7d9fbb2 class=outline-3><h3 id=org7d9fbb2><span class=section-number-3>3.2.</span> Endianness</h3><div class=outline-text-3 id=text-3-2><p>MacOS is a little-endian system, meaning it expects binary values to start from
 the Least-Significant Bit (LSB). Linux is a big-endian system and expects binary
 values to start from the Most-Significan Bit (MSB). This means that MacOS
 reads/writes chunks of binary data from right-to-left, while on Linux it is done
 from left-to-right. For most I/O this was a non-issue. However, for strings it
-resulted in some amusing results.
-</p>
-
-<p>
-For example: on MacOS, KEVNM header would be read in as &ldquo;Central Californ&rdquo; (16
+resulted in some amusing results.<p>For example: on MacOS, KEVNM header would be read in as &ldquo;Central Californ&rdquo; (16
 character limit for that header) and Linux would read it as &ldquo;fornCaliral Cent&rdquo;.
-The difference is easy to understand if we make the following map:
-</p>
-
-<p>
-1 = &ldquo;Cent&rdquo;, 2 = &ldquo;ral&rdquo;, 3 = &ldquo;Cali&rdquo;, 4 = &ldquo;forn&rdquo;
-</p>
-
-<p>
-The Mac output is &ldquo;1234&rdquo;, while Linux output is &ldquo;4321&rdquo;. I have fixed this by
+The difference is easy to understand if we make the following map:<p>1 = &ldquo;Cent&rdquo;, 2 = &ldquo;ral&rdquo;, 3 = &ldquo;Cali&rdquo;, 4 = &ldquo;forn&rdquo;<p>The Mac output is &ldquo;1234&rdquo;, while Linux output is &ldquo;4321&rdquo;. I have fixed this by
 checking system endianness in the string reading functions. If you get any funky
-results, you should confirm the endianness of the input file.
-</p>
-
-<p>
-This was not an issue with any other portions of the data in the binary file,
-only the strings.
-</p>
-</div>
-</div>
-</div>
-<div id="postamble" class="status">
-<p class="author">Author: Alexander R. Blanchette</p>
-<p class="email">Email: <a href="mailto:arbCoding@gmail.com">arbCoding@gmail.com</a></p>
-</div>
-</body>
-</html>
+results, you should confirm the endianness of the input file.<p>This was not an issue with any other portions of the data in the binary file,
+only the strings.</div></div></div></div><div id=postamble class=status><p class=author>Author: Alexander R. Blanchette<p class=email>Email: <a href=mailto:arbCoding@gmail.com>arbCoding@gmail.com</a><p class=validation><a href="https://validator.w3.org/check?uri=referer">Validate</a></div>

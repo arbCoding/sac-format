@@ -25,12 +25,13 @@ a good starting point for your seismic data-analysis journey.
 If you're interested in processing passive-source seismic data, I'm working on a
 GUI tool to do just that called [[https://github.com/arbCoding/PsSp][PsSp]] (Passive-source Seismic-processing) that is
 built upon the libraries here.
-* Dependencies
 
 * Quickstart
-** Include in your project
+** Cmake Integration
 ** Build Instructions
-* Endianness
+* Notes
+** Dependencies
+** Endianness
 MacOS is a little-endian system, meaning it expects binary values to start from
 the Least-Significant Bit (LSB). Linux is a big-endian system and expects binary
 values to start from the Most-Significan Bit (MSB). This means that MacOS
