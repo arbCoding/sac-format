@@ -18,10 +18,25 @@ Short and succint
 *** GitHub.io website :website:
 Use [[https://olmon.gitlab.io/org-themes/readtheorg_inline/readtheorg_inline.html][ReadTheOrg Inline]] ([[https://github.com/fniessen/org-html-themes][GitHub]])
 **** Add theme select and dark mode
+Official maintainers are not going to implement it (keep suggesting darkreader).
+That's dumb. I get that darkreader exists and I use it myself, but you cannot
+simply assume everyone that wants to use dark mode will use darkreader.
 *** PDF :pdf:
 This involves setting up the export settings for the website for LaTeX.
 *** TODO Class diagrams :uml:
 **** TODO SacStream
+#+begin_src plantuml :cache yes :exports both :file uml/SacStream.png
+!theme vibrant
+class SacStream {
+    -Header
+    +Data
+    -Footer
+}
+#+end_src
+
+#+RESULTS[906758845fe79bf1a0ec120c4d2b7103d68a11e8]:
+[[file:uml/SacStream.png]]
+
 ***** TODO Header
 ***** TODO Data
 ***** TODO Footer
