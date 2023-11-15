@@ -1,0 +1,53 @@
+#+options: ':t *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
+#+options: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
+#+options: email:nil expand-links:t f:t inline:t num:t p:nil pri:nil prop:nil
+#+options: stat:t tags:t tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
+#+title: sac-format
+#+date: <2023-11-15 Wed>
+#+author: Alexander R. Blanchette
+#+email: arbCoding@gmail.com
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 29.1 (Org mode 9.7)
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+[[https://arbcoding.github.io/sac-format/][Documentation]]
+--------------
+* Introduction
+This repository contains libraries for reading/writing binary [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]] files, and
+some example/test programs.
+
+I wrote these following the specified format, up to the limitations that the
+specification is incomplete (looking at you, XYZ files).
+
+These are written in C++, following modern programming guidelines and should be
+a good starting point for your seismic data-analysis journey.
+
+If you're interested in processing passive-source seismic data, I'm working on a
+GUI tool to do just that called [[https://github.com/arbCoding/PsSp][PsSp]] (Passive-source Seismic-processing) that is
+built upon the libraries here.
+* Dependencies
+
+* Quickstart
+** Include in your project
+** Build Instructions
+* Endianness
+MacOS is a little-endian system, meaning it expects binary values to start from
+the Least-Significant Bit (LSB). Linux is a big-endian system and expects binary
+values to start from the Most-Significan Bit (MSB). This means that MacOS
+reads/writes chunks of binary data from right-to-left, while on Linux it is done
+from left-to-right. For most I/O this was a non-issue. However, for strings it
+resulted in some amusing results.
+
+For example: on MacOS, KEVNM header would be read in as "Central Californ" (16
+character limit for that header) and Linux would read it as "fornCaliral Cent".
+The difference is easy to understand if we make the following map:
+
+1 = "Cent", 2 = "ral", 3 = "Cali", 4 = "forn"
+
+The Mac output is "1234", while Linux output is "4321". I have fixed this by
+checking system endianness in the string reading functions. If you get any funky
+results, you should confirm the endianness of the input file.
+
+This was not an issue with any other portions of the data in the binary file,
+only the strings.

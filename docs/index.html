@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-11-15 Wed 08:20 -->
+<!-- 2023-11-15 Wed 08:28 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lrm;</title>
+<title>sac-format</title>
 <meta name="author" content="Alexander R. Blanchette" />
 <meta name="generator" content="Org Mode" />
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
@@ -18,187 +18,83 @@
 </head>
 <body>
 <div id="content" class="content">
+<h1 class="title">sac-format</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#sac-format">1. sac-format</a>
+<li><a href="#org3cfe554">1. Introduction</a></li>
+<li><a href="#orgf00b0ae">2. Dependencies</a></li>
+<li><a href="#orgecf4155">3. Quickstart</a>
 <ul>
-<li><a href="#what-is-this">1.1. What is this</a></li>
-<li><a href="#how-to-use">1.2. How to use</a></li>
-<li><a href="#how-to-build">1.3. How to build</a></li>
-<li><a href="#note">1.4. Note</a></li>
-<li><a href="#the-tests">1.5. The Tests</a></li>
-<li><a href="#little-endian-vs-big-endian">1.6. Little-Endian vs Big-Endian</a></li>
-<li><a href="#to-do">1.7. To Do</a></li>
-<li><a href="#organization">1.8. Organization</a></li>
+<li><a href="#orgf412678">3.1. Include in your project</a></li>
+<li><a href="#org36881c0">3.2. Build Instructions</a></li>
 </ul>
 </li>
+<li><a href="#org3d23368">4. Endianness</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-sac-format" class="outline-2">
-<h2 id="sac-format"><span class="section-number-2">1.</span> sac-format</h2>
-<div class="outline-text-2" id="text-sac-format">
 <p>
 <a href="https://arbcoding.github.io/sac-format/">Documentation</a>
 </p>
 <hr />
-</div>
-<div id="outline-container-what-is-this" class="outline-3">
-<h3 id="what-is-this"><span class="section-number-3">1.1.</span> What is this</h3>
-<div class="outline-text-3" id="text-what-is-this">
+<div id="outline-container-org3cfe554" class="outline-2">
+<h2 id="org3cfe554"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
 <p>
-This repository contains libraries for reading/writing binary
-<a href="https://ds.iris.edu/files/sac-manual/manual/file_format.html">SAC</a>
-files, and some example/test programs.
+This repository contains libraries for reading/writing binary <a href="https://ds.iris.edu/files/sac-manual/manual/file_format.html">SAC</a> files, and
+some example/test programs.
 </p>
 
 <p>
-I wrote these following the specified format, up to the limitations that
-the specification is incomplete (looking at you, XYZ files).
+I wrote these following the specified format, up to the limitations that the
+specification is incomplete (looking at you, XYZ files).
 </p>
 
 <p>
-These are written in C++, following modern programming guidelines and
-should be a good starting point for your seismic data-analysis journey.
+These are written in C++, following modern programming guidelines and should be
+a good starting point for your seismic data-analysis journey.
 </p>
 
 <p>
-If you&rsquo;re interested in processing passive-source seismic data, I&rsquo;m
-working on a GUI tool to do just that called
-<a href="https://github.com/arbCoding/PsSp">PsSp</a> (Passive-source
-Seismic-processing) that is built upon the libraries here.
+If you&rsquo;re interested in processing passive-source seismic data, I&rsquo;m working on a
+GUI tool to do just that called <a href="https://github.com/arbCoding/PsSp">PsSp</a> (Passive-source Seismic-processing) that is
+built upon the libraries here.
 </p>
-
-<hr />
 </div>
 </div>
-<div id="outline-container-how-to-use" class="outline-3">
-<h3 id="how-to-use"><span class="section-number-3">1.2.</span> How to use</h3>
-<div class="outline-text-3" id="text-how-to-use">
-<p>
-To use this in your own project, you will need to build the libaries and
-then link to them at compilation while including the headers. See the
-section &ldquo;How to build&rdquo; for instructions on building.
-</p>
+<div id="outline-container-orgf00b0ae" class="outline-2">
+<h2 id="orgf00b0ae"><span class="section-number-2">2.</span> Dependencies</h2>
+</div>
 
-<p>
-If you want to use only low-level IO (converting to/from binary), then
-use ./src/objects/sac<sub>io.o</sub> (header is sac<sub>io.hpp</sub>).
-</p>
-
-<p>
-If you want to use the high-level SacStream class, then use
-./src/objects/sac<sub>format.o</sub> (header is sac<sub>stream.hpp</sub>).
-</p>
-
-<p>
-The <a href="src/header/">header</a> files are heavily commented, to provide
-insight into what the libaries do and why.
-</p>
-
-<p>
-If you want to see the &ldquo;how&rdquo; then see the appropriate
-<a href="src/implementation/">implementation</a> file.
-</p>
-
-<hr />
+<div id="outline-container-orgecf4155" class="outline-2">
+<h2 id="orgecf4155"><span class="section-number-2">3.</span> Quickstart</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orgf412678" class="outline-3">
+<h3 id="orgf412678"><span class="section-number-3">3.1.</span> Include in your project</h3>
+</div>
+<div id="outline-container-org36881c0" class="outline-3">
+<h3 id="org36881c0"><span class="section-number-3">3.2.</span> Build Instructions</h3>
 </div>
 </div>
-<div id="outline-container-how-to-build" class="outline-3">
-<h3 id="how-to-build"><span class="section-number-3">1.3.</span> How to build</h3>
-<div class="outline-text-3" id="text-how-to-build">
+<div id="outline-container-org3d23368" class="outline-2">
+<h2 id="org3d23368"><span class="section-number-2">4.</span> Endianness</h2>
+<div class="outline-text-2" id="text-4">
 <p>
-These are written in C++, using modern conventions, and are tested to
-compile with the G++ compiler. To build the libaries run:
-</p>
-
-<pre class="example" id="orgf54775a">
-make lib
-</pre>
-
-<p>
-To build everything, including the test programs, run:
-</p>
-
-<pre class="example" id="org8444743">
-make
-</pre>
-
-<p>
-You can look at the <a href="Makefile">Makefile</a> for more details (I&rsquo;ve tried to be
-as explicit as possible in the comments inside).
-</p>
-
-<hr />
-</div>
-</div>
-<div id="outline-container-note" class="outline-3">
-<h3 id="note"><span class="section-number-3">1.4.</span> Note</h3>
-<div class="outline-text-3" id="text-note">
-<p>
-The default build is the release build <code>debug = false</code>. If, for whatever
-reason, you want to use the debug release, set <code>debug = true</code>. I use
-<code>debug = true</code> when developing these tools, to enforce good coding
-practices.
-</p>
-
-<hr />
-</div>
-</div>
-<div id="outline-container-the-tests" class="outline-3">
-<h3 id="the-tests"><span class="section-number-3">1.5.</span> The Tests</h3>
-<div class="outline-text-3" id="text-the-tests">
-<p>
-To build the test programs, in the top-level directory (same as this
-README.md file) run:
-</p>
-
-<pre class="example" id="orgf94cb24">
-make tests
-</pre>
-
-<p>
-You can then find the test programs in the <code>./bin/tests/</code> folder.
+MacOS is a little-endian system, meaning it expects binary values to start from
+the Least-Significant Bit (LSB). Linux is a big-endian system and expects binary
+values to start from the Most-Significan Bit (MSB). This means that MacOS
+reads/writes chunks of binary data from right-to-left, while on Linux it is done
+from left-to-right. For most I/O this was a non-issue. However, for strings it
+resulted in some amusing results.
 </p>
 
 <p>
-The tests: * <code>sac_type_test</code> - This does not take any input - This tests
-converting between standard types and binary, and back, following the
-SAC conventions. * <code>sac_io_test</code> - This requires an input sac file -
-This tests opening a sac file (low-level io) and reading some of the
-header information, which it will spit out to the console. *
-<code>sac_stream_read_test</code> - This requires an input sac file - This tests
-reading a sac file as a <code>SacStream</code> object (high-level io) - It prints
-out all the header/footer values to the console *
-<code>sac_stream_write_test</code> - This requires an input sac file - This tests
-writing out a v7 (modern) sac file (write) - This tests writing out a v6
-(legacy) sac file (legacy<sub>write</sub>) - It prints out the names of the two
-new files to the console
-</p>
-
-<hr />
-</div>
-</div>
-<div id="outline-container-little-endian-vs-big-endian" class="outline-3">
-<h3 id="little-endian-vs-big-endian"><span class="section-number-3">1.6.</span> Little-Endian vs Big-Endian</h3>
-<div class="outline-text-3" id="text-little-endian-vs-big-endian">
-<p>
-MacOS is a little-endian system, meaning it expects binary values to
-start from the Least-Significant Bit (LSB). Linux is a big-endian system
-and expects binary values to start from the Most-Significan Bit (MSB).
-This means that MacOS reads/writes chunks of binary data from
-right-to-left, while on Linux it is done from left-to-right. For most
-I/O this was a non-issue. However, for strings it resulted in some
-amusing results.
-</p>
-
-<p>
-For example: on MacOS, KEVNM header would be read in as &ldquo;Central
-Californ&rdquo; (16 character limit for that header) and Linux would read it
-as &ldquo;fornCaliral Cent&rdquo;. The difference is easy to understand if we make
-the following map:
+For example: on MacOS, KEVNM header would be read in as &ldquo;Central Californ&rdquo; (16
+character limit for that header) and Linux would read it as &ldquo;fornCaliral Cent&rdquo;.
+The difference is easy to understand if we make the following map:
 </p>
 
 <p>
@@ -206,70 +102,22 @@ the following map:
 </p>
 
 <p>
-The Mac output is &ldquo;1234&rdquo;, while Linux output is &ldquo;4321&rdquo;. I have fixed
-this by checking system endianness in the string reading functions. If
-you get any funky results, you should confirm the endianness of the
-input file.
+The Mac output is &ldquo;1234&rdquo;, while Linux output is &ldquo;4321&rdquo;. I have fixed this by
+checking system endianness in the string reading functions. If you get any funky
+results, you should confirm the endianness of the input file.
 </p>
 
 <p>
-This was not an issue with any other portions of the data in the binary
-file, only the strings.
+This was not an issue with any other portions of the data in the binary file,
+only the strings.
 </p>
-
-<hr />
-</div>
-</div>
-<div id="outline-container-to-do" class="outline-3">
-<h3 id="to-do"><span class="section-number-3">1.7.</span> To Do</h3>
-<div class="outline-text-3" id="text-to-do">
-<ul class="org-ul">
-<li class="on"><code>[X]</code> Read
-<a href="https://ds.iris.edu/files/sac-manual/manual/file_format.html">SAC</a>
-file format</li>
-<li class="on"><code>[X]</code> Write SAC file format</li>
-<li class="on"><code>[X]</code> Prinout SAC header information to command line</li>
-<li class="on"><code>[X]</code> Implement SacStream class</li>
-<li class="on"><code>[X]</code> Compatible with both v6 (legacy, several decades) or v7 (new
-2020+) binary SAC files</li>
-<li class="on"><code>[X]</code> Read irregularly sampled data</li>
-<li class="on"><code>[X]</code> Read spectral data</li>
-<li class="on"><code>[X]</code> Read general XY data</li>
-<li class="on"><code>[X]</code> Little-endian/Big-endian reading compatibility (Mac/Linux)</li>
-<li class="on"><code>[X]</code> Confirm Little-endian/Big-endian writing compatibility (Mac/Linux)</li>
-<li class="off"><code>[&#xa0;]</code> Read general XYZ data (not enough information in specification to
-implement at the moment&#x2026;)</li>
-</ul>
-
-<hr />
-</div>
-</div>
-<div id="outline-container-organization" class="outline-3">
-<h3 id="organization"><span class="section-number-3">1.8.</span> Organization</h3>
-<div class="outline-text-3" id="text-organization">
-<p>
-I have split functionality between * <b>Interface</b> files -
-<code>./src/header/*.hpp</code> * <b>Implementation</b> files -
-<code>./src/implementation/*.cpp</code>
-</p>
-
-<p>
-The interface files have the definitions of the necessary constants, the
-function names and return types, and comments on what they do (but <b>not</b>
-the details).
-</p>
-
-<p>
-If you&rsquo;re curious about the details of a function, you can find it in
-the implementation file that corresponds to its interface.
-</p>
-</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
+<p class="date">Date: 2023-11-15 Wed 00:00</p>
 <p class="author">Author: Alexander R. Blanchette</p>
-<p class="date">Created: 2023-11-15 Wed 08:20</p>
+<p class="date">Created: 2023-11-15 Wed 08:28</p>
 </div>
 </body>
 </html>
