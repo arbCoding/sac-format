@@ -9,7 +9,9 @@ set(CMAKE_BUILD_TYPE Debug)
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
-
+#===============================================================================
+# Fetch
+#===============================================================================
 include(FetchContent)
 set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 # Unit testing
@@ -21,16 +23,20 @@ FetchContent_Declare(xoshiro
   GIT_REPOSITORY https://github.com/Reputeless/Xoshiro-cpp
   GIT_TAG v1.1)
 FetchContent_MakeAvailable(Catch2 xoshiro)
-# Make ==========================================================================
-# Build flags
-# Flags for all
+# Include Xoshiro since it doesn't have a CMakeLists.txt
+include_directories(${xoshiro_SOURCE_DIR})
+#===============================================================================
+# Flags
+#===============================================================================
 # Should set presets later on, but this is good enough for now
 set(CMAKE_CXX_FLAGS "-Wall -pedantic-errors")
 # Flags for debug
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -Wextra -Wshadow -Werror")
 # Flags for release
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
-
+#==============================================================================
+# sac-format
+#==============================================================================
 project(sac-format
   LANGUAGES CXX
   DESCRIPTION "Seismic Analaysis Code Binary File Library"
@@ -49,10 +55,9 @@ add_library(sac-format STATIC
 
 set_target_properties(sac-format PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(sac-format PROPERTIES PUBLIC_HEADER src/sac_stream.hpp)
-
-# Include Xoshiro since it doesn't have a CMakeLists.txt
-include_directories(${xoshiro_SOURCE_DIR})
-
+#===============================================================================
+# Unit tests
+#===============================================================================
 # Catch2 stuff
 # Doesn't like Weffc++
 add_executable(utests

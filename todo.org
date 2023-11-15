@@ -1,0 +1,28 @@
+* sac-format :sac_format:
+** TODO Testing :testing:
+*** TODO Move Unit tests from PsSp :unit:
+*** TODO Benchmarks :benchmark:
+*** New tests?
+** TODO Split SacStream into sub-classes :abstraction:
+*** TODO Header
+**** TODO Time
+**** TODO Event parameters
+**** TODO Station parameters
+**** TODO User parameters
+**** TODO Data parameters
+*** TODO Footer
+** CI/CD GitHub workflow
+** Documentation :documentation:
+*** Update README.org :readme:
+Short and succint
+*** GitHub.io website :website:
+Use [[https://olmon.gitlab.io/org-themes/readtheorg_inline/readtheorg_inline.html][ReadTheOrg Inline]] ([[https://github.com/fniessen/org-html-themes][GitHub]])
+**** Add theme select and dark mode
+*** PDF :pdf:
+This involves setting up the export settings for the website for LaTeX.
+*** TODO Class diagrams :uml:
+**** TODO SacStream
+***** TODO Header
+***** TODO Data
+***** TODO Footer
+* Inbox

@@ -265,6 +265,46 @@ TEST_CASE("Emptry SacStream") {
       REQUIRE(test_sac.f_f == unset_float);
       REQUIRE(test_sac.resp0 == unset_float);
       REQUIRE(test_sac.resp1 == unset_float);
+      REQUIRE(test_sac.resp2 == unset_float);
+      REQUIRE(test_sac.resp3 == unset_float);
+      REQUIRE(test_sac.resp4 == unset_float);
+      REQUIRE(test_sac.resp5 == unset_float);
+      REQUIRE(test_sac.resp6 == unset_float);
+      REQUIRE(test_sac.resp7 == unset_float);
+      REQUIRE(test_sac.resp8 == unset_float);
+      REQUIRE(test_sac.resp9 == unset_float);
+      REQUIRE(test_sac.f_stla == unset_float);
+      REQUIRE(test_sac.f_stlo == unset_float);
+      REQUIRE(test_sac.stel == unset_float);
+      REQUIRE(test_sac.stdp == unset_float);
+      REQUIRE(test_sac.f_evla == unset_float);
+      REQUIRE(test_sac.f_evlo == unset_float);
+      REQUIRE(test_sac.evel == unset_float);
+      REQUIRE(test_sac.evdp == unset_float);
+      REQUIRE(test_sac.mag == unset_float);
+      REQUIRE(test_sac.user0 == unset_float);
+      REQUIRE(test_sac.user1 == unset_float);
+      REQUIRE(test_sac.user2 == unset_float);
+      REQUIRE(test_sac.user3 == unset_float);
+      REQUIRE(test_sac.user4 == unset_float);
+      REQUIRE(test_sac.user5 == unset_float);
+      REQUIRE(test_sac.user6 == unset_float);
+      REQUIRE(test_sac.user7 == unset_float);
+      REQUIRE(test_sac.user8 == unset_float);
+      REQUIRE(test_sac.user9 == unset_float);
+      REQUIRE(test_sac.dist == unset_float);
+      REQUIRE(test_sac.az == unset_float);
+      REQUIRE(test_sac.baz == unset_float);
+      REQUIRE(test_sac.gcarc == unset_float);
+      REQUIRE(test_sac.f_sb == unset_float);
+      REQUIRE(test_sac.f_sdelta == unset_float);
+      REQUIRE(test_sac.depmen == unset_float);
+      REQUIRE(test_sac.cmpaz == unset_float);
+      REQUIRE(test_sac.cmpinc == unset_float);
+      REQUIRE(test_sac.xminimum == unset_float);
+      REQUIRE(test_sac.xmaximum == unset_float);
+      REQUIRE(test_sac.yminimum == unset_float);
+      REQUIRE(test_sac.ymaximum == unset_float);
     }
   }
 }
