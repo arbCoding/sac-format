@@ -1,5 +1,5 @@
-#ifndef SAC_IO_HPP_20231115_0945
-#define SAC_IO_HPP_20231115_0945
+#ifndef SAC_FORMAT_HPP_20231115_0945
+#define SAC_FORMAT_HPP_20231115_0945
 #pragma once
 /* Standard library
   https://en.cppreference.com/w/cpp/standard_library */
@@ -19,11 +19,10 @@
 /* Boost string algorithms */
 #include <boost/algorithm/string.hpp>
 
-namespace sacfmt
-{
-//-----------------------------------------------------------------------------
+namespace sacfmt {
+//--------------------------------------------------------------------------
 // Constants
-//-----------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 // Size of data chunks in binary SAC files (called words)
 constexpr int word_length{4}; // bytes
 constexpr int bits_per_byte{8}; // binary character size
@@ -31,86 +30,75 @@ constexpr int bits_per_byte{8}; // binary character size
 constexpr int binary_word_size{word_length * bits_per_byte};
 // First word of (first) data-section
 constexpr int data_word{158};
-// Values for unset variables. These are SAC magic values
-// I'm setting there here explicitly to conform with the standard
-// Ignoring Clang unused variable for these as they are an integral
-// part of the SAC data standard
 constexpr int unset_int{-12345};
 constexpr float unset_float{-12345.0f};
 constexpr double unset_double{-12345.0};
 constexpr bool unset_bool{false};
 // This should work for two and four word string headers
 const std::string unset_word{"-12345"};
-//-----------------------------------------------------------------------------
+using word_one = std::bitset<binary_word_size>;
+using word_two = std::bitset<2 * binary_word_size>;
+using word_four = std::bitset<4 * binary_word_size>;
+//--------------------------------------------------------------------------
 // Conversions
-//-----------------------------------------------------------------------------
-// You tell it what word you want, it'll return the position in the sac-file
-// Use with the seekg() command to get to that position in the file
+//--------------------------------------------------------------------------
+// Calculate position of word in SAC-file
 int word_position(const int word_number);
-// These unions work like magic. I assume the system uses what it considers
-// the most natural way to map these to each other (uses the system endianness)
-//
-// User defined types that allow the compiler to map the two values to each
-// other and perform conversions
 // Floats to binary and back
-union float_to_bits
-{
-    float value;
-    std::bitset<binary_word_size> bits;
-
-    explicit float_to_bits(float x) : value(x){}
-    explicit float_to_bits(std::bitset<binary_word_size> binary) : bits(binary){}
-};
+union float_to_bits {
+        float value;
+        word_one bits;
+        explicit float_to_bits(float x) : value(x){}
+        explicit float_to_bits(const word_one& binary) : bits(binary){}
+    };
 // Doubles to binary and back
-union double_to_bits
-{
-    double value;
-    std::bitset<2 * binary_word_size> bits;
-
-    explicit double_to_bits(double x) : value(x){}
-    explicit double_to_bits(std::bitset<2 * binary_word_size> binary) : bits(binary){}
-};
-// Why no union int_to_bits? Tried it, didn't work, had to do something else.
-// SAC uses 32 bit integers (1 word, 4 bytes, 1 byte = 1 character)
-std::bitset<binary_word_size> int_to_binary(const int x);
-int binary_to_int(std::bitset<binary_word_size> x);
-// SAC uses 32 bit floats (1 word, 4 bytes)
-std::bitset<binary_word_size> float_to_binary(const float x);
-float binary_to_float(const std::bitset<binary_word_size> x);
+union double_to_bits {
+        double value;
+        word_two bits;
+        explicit double_to_bits(double x) : value(x){}
+        explicit double_to_bits(const word_two& binary) : bits(binary){}
+    };
+// SAC uses 32 bit ints
+word_one int_to_binary(const int x);
+int binary_to_int(word_one x);
+// SAC uses 32 bit floats
+word_one float_to_binary(const float x);
+float binary_to_float(const word_one& x);
 // SAC uses 64 bit doubles (2 words, 8 bytes)
-std::bitset<2 * binary_word_size> double_to_binary(const double x);
-double binary_to_double(const std::bitset<2 * binary_word_size> x);
+word_two double_to_binary(const double x);
+double binary_to_double(const word_two& x);
 // Remove leading/trailing white-space and control characters
 std::string string_cleaning(const std::string& str);
 // Note the string conversion functions handle over-sized strings
 // by truncating them, and undersized strings by padding them with spaces
 // SAC uses either 64 bit strings (2 words, 8 bytes, 8 characters)
-std::bitset<2 * binary_word_size> string_to_binary(std::string x);
-std::string binary_to_string(const std::bitset<2 * binary_word_size> x);
+word_two string_to_binary(std::string x);
+std::string binary_to_string(const word_two& x);
 // 128 bit string (4 words, 16 bytes, only KEVNM header, 16 characters)
-std::bitset<4 * binary_word_size> long_string_to_binary(std::string x);
-std::string binary_to_long_string(const std::bitset<4 * binary_word_size> x);
+word_four long_string_to_binary(std::string x);
+std::string binary_to_long_string(const word_four& x);
 // Booleans
-std::bitset<binary_word_size> bool_to_binary(const bool x);
-bool binary_to_bool(const std::bitset<binary_word_size> x);
+word_one bool_to_binary(const bool x);
+bool binary_to_bool(const word_one& x);
 // Concat words
 // For some reason, template functions didn't want to work for these...
-std::bitset<2 * binary_word_size> concat_words(const std::bitset<binary_word_size> x, const std::bitset<binary_word_size> y);
-std::bitset<4 * binary_word_size> concat_words(const std::bitset<2 * binary_word_size> x, const std::bitset<2 * binary_word_size> y);
-//-----------------------------------------------------------------------------
+word_two concat_words(const word_one& x, const word_one& y);
+word_four concat_words(const word_two& x, const word_two& y);
+//--------------------------------------------------------------------------
 // Reading
-//-----------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 // Can read 1, 2, or 4 words and return as a binary bitset
 // Conversion functions are then used to do the conversions
-std::bitset<binary_word_size> read_word(std::ifstream* sac);
-std::bitset<2 * binary_word_size> read_two_words(std::ifstream* sac);
-std::bitset<4 * binary_word_size> read_four_words(std::ifstream* sac);
+word_one read_word(std::ifstream* sac);
+word_two read_two_words(std::ifstream* sac);
+word_four read_four_words(std::ifstream* sac);
 // Can read any number of words into a vector of doubles
 // Useful for data values
-std::vector<double> read_data(std::ifstream* sac, const std::size_t n_words, const int start = data_word);
-//-----------------------------------------------------------------------------
+std::vector<double> read_data(std::ifstream* sac, const size_t n_words,
+                              const int start = data_word);
+//--------------------------------------------------------------------------
 // Writing
-//-----------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 // The below writing functions all work, though they are a bit funky
 // Using std::vector because more flexible
 // Allows writing arbitrary amount of data to file
@@ -123,39 +111,15 @@ std::vector<char> convert_to_word(const T x);
 // Special for double-precision numbers (2 words, not 1)
 std::vector<char> convert_to_word(const double x);
 // Template function to convert string to SAC word(s)
-template <std::size_t N>
+template <size_t N>
 std::array<char, N> convert_to_words(const std::string& s, int n_words = 1);
 // Convert a bool value to a word
 std::vector<char> bool_to_word(const bool b);
-//-----------------------------------------------------------------------------
-// Description
-//-----------------------------------------------------------------------------
-// Define a SacStream class to make it easier to read sac files
-// Much of the header/footer values are generally SAC-exclusive
-// But in the interest of full compatibility with the file-format
-// They are included
-//
-// Because SAC is moving to the new version (NVHDR = 7) where it prefers
-// to use the double-precision footer values over the header values
-// I'm going to preface the single-precision version f_ (only if there is a
-// footer equivalent!)
-//
-// Footer values will have the regular name (instead of prefixed with d_ for double)
-// And will be used by default
-// If an old version is read-in, the floats will be converted to doubles and nvhdr updated
-//
-// Processing functions are moving to a new project: https://github.com/arbCoding/PsSp
-//-----------------------------------------------------------------------------
-// End Description
-//-----------------------------------------------------------------------------
-
-// It would be good to use multiple classes to build this structure
-// Refactor in future
 class Trace {
 public:
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Header
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Increment between evenly spaced samples [required]
     float f_delta{unset_float};
     // Minimum value of dependent variable
@@ -386,7 +350,7 @@ public:
     //  98 = ISUN     = Sun: a = 696000000.0 m, f = 8.189e-6
     //  99 = IMERCURY = Mercury: a = 2439700.0 m, f = 0.0
     // 100 = IVENUS   = Venus: a = 6051800.0 m, f = 0.0
-    //      Note: Looking into WGS84 on Wikipedia: a is semi-major axis (equatorial), f is 'inverse flattening' 
+    //      Note: Looking into WGS84 on Wikipedia: a is semi-major axis (equatorial), f is 'inverse flattening'
     //       ((a-c) / a), it is the square of the eccentricity
     // 101 = IEARTH   = Earth: a = 6378137.0 m, f = 1.0 / 298.257223563 ( = 0.0033528106647474805) (this IS WGS84)
     // 102 = IMOON    = Moon: a = 1737400.0 m, f = 0.0
@@ -440,9 +404,9 @@ public:
     std::string kdatrd{unset_word};
     // Generic name of recording instrument
     std::string kinst{unset_word};
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Data
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // data1 is the first data chunk in the SAC-file
     // It is ALWAYS present
     // SAC format uses single-precision, we convert to double for computing
@@ -451,9 +415,9 @@ public:
     // data2 is the second data chunk in the SAC-file
     // It is CONDITIONALLY present
     std::vector<double> data2{};
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Footer (if nvhdr = 7)
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // These are double-precision versions of float headers
     // Giving them default unset_double value to be consistent with all default values
     // I prefixed all the single-precision header equivalents with `f_` to denote they
@@ -463,7 +427,7 @@ public:
     // double precison version of delta
     double delta{unset_double};
     // double-precision version of b
-    double b{unset_double};
+     double b{unset_double};
     // double-precision version of e
     double e{unset_double};
     // double-precision version of o
@@ -495,9 +459,9 @@ public:
     double sb{unset_double};
     // double-precision version of sdelta
     double sdelta{unset_double};
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Convenience methods
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Take the single-precision values from the header and insert them into the
     // appropriate footer variables as double-precision values
     void header_to_footer();
@@ -505,18 +469,18 @@ public:
     // appropriate header variables as single-precision floats
     // NOTE: this results in a loss of precision
     void footer_to_header();
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Constructors
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Copy constructor is unnecessary as the compiler will default
     // to do member-wise copying (only needed for special cases, not here)
     // Parameterized constructor (reader)
     explicit Trace(const std::filesystem::path& file_name);
     // Empty constructor
     Trace() = default;
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Writing
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Allows writing out to binary sac file format
     // Note that if the data was read using this class
     // it is automatically converted to nvhdr = v7
@@ -524,12 +488,13 @@ public:
     void write(const std::filesystem::path& file_name);
     // legacy_write writes as nvhdr = v6 for compatibility
     void legacy_write(const std::filesystem::path& file_name);
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // Overload equality check
     bool operator==(const Trace& other) const;
     bool equal_within_tolerance(const std::vector<double>& vector1,
                                 const std::vector<double>& vector2,
-                                const double tolerance = std::numeric_limits<float>::epsilon()) const;
+                                const double tolerance =
+                                std::numeric_limits<float>::epsilon()) const;
 };
 }
 #endif

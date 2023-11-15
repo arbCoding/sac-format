@@ -32,6 +32,12 @@ include_directories(${xoshiro_SOURCE_DIR})
 set(CMAKE_CXX_FLAGS "-Wall -pedantic-errors")
 # Flags for debug
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -Wextra -Wshadow -Werror")
+# Flags for thread-sanitizer
+set(CMAKE_CXX_FLAGS_THREAD "-O0 -ggdb -Wextra -Wshadow -Werror -fsanitize=thread -pthread")
+# Flags for Address sanitizer
+set(CMAKE_CXX_FLAGS_ADDRESS "-O0 -ggdb -Wextra -Wshadow -Werror -fsanitize=address -fno-omit-frame-pointer")
+# Flags for Memory sanitizer
+#set(CMAKE_CXX_FLAGS_MEMORY "-O0 -ggdb -Wextra -Wshadow -Werror -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer")
 # Flags for release
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 #==============================================================================
@@ -59,6 +65,7 @@ set_target_properties(sac-format PROPERTIES PUBLIC_HEADER src/sac_format.hpp)
 # Catch2 stuff
 add_executable(utests
   src/sac_format.hpp
+  src/util.hpp
   src/utests.cpp)
 
 target_link_libraries(utests
@@ -67,6 +74,7 @@ target_link_libraries(utests
 
 add_executable(benchmark
   src/sac_format.hpp
+  src/util.hpp
   src/benchmark.cpp)
 
 target_link_libraries(benchmark

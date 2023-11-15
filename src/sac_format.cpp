@@ -1,201 +1,152 @@
 #include "sac_format.hpp"
 
 // Implementation of the interface in sac_format.hpp
-namespace sacfmt
-{
+namespace sacfmt {
 //-----------------------------------------------------------------------------
 // Conversions
 //-----------------------------------------------------------------------------
 int word_position(const int word_number) { return (word_number * word_length); }
 
-//-----------------------------------------------------------------------------
-// Convert integer to binary using two's complement for negatives
-//-----------------------------------------------------------------------------
-std::bitset<binary_word_size> int_to_binary(const int x)
-{
-    std::bitset<binary_word_size> bits{};
-    if (x >= 0) { bits = std::bitset<binary_word_size>(static_cast<std::size_t>(x)); }
-    else { bits = std::bitset<binary_word_size>(static_cast<std::size_t>(std::pow(2, binary_word_size) + x)); }
+word_one int_to_binary(const int x) {
+    word_one bits{};
+    if (x >= 0) { bits = word_one(static_cast<size_t>(x)); }
+    else { bits = word_one(static_cast<size_t>(std::pow(2, binary_word_size) + x)); }
     return bits;
 }
-//-----------------------------------------------------------------------------
-// End Convert integer to binary using two's complement for negatives
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// Convert binary number to integer using two's complement for negatives
-//-----------------------------------------------------------------------------
-// Check if negative number
-// If first number is 1 (true), then number is negative. Otherwise it
-// is positive test reads position from right to left (not left to right!)
-// hence why it looks like we're reading the final value (for a bitset the
-// final value is the left-most value)
-// Bitwise not operator flips 0's and 1's
-// a) 0001 (+1) -> 1110 (-2)
-// c) 1111 (-1) -> 0000 (0)
-// Add one
-// a) 1110 (-2) -> 1111 (-1)
-// c) 0000 (0)  -> 0001 (+1)
-int binary_to_int(std::bitset<binary_word_size> x)
-{
+int binary_to_int(word_one x) {
     int result{};
-    if (x.test(binary_word_size - 1))
-    {
+    if (x.test(binary_word_size - 1)) {
       x = ~x;
       result = static_cast<int>(x.to_ulong());
       result += 1;
       // Change sign to make it as negative
       result *= -1;
-    }
-    else { result = static_cast<int>(x.to_ulong()); }
+    } else { result = static_cast<int>(x.to_ulong()); }
     return result;
 }
-//-----------------------------------------------------------------------------
-// End Convert binary number to integer using two's complement for negatives
-//-----------------------------------------------------------------------------
 
 // Union makes this so easy
-std::bitset<binary_word_size> float_to_binary(const float x) { return float_to_bits(x).bits; }
+word_one float_to_binary(const float x) { return float_to_bits(x).bits; }
 
-float binary_to_float(const std::bitset<binary_word_size> x) { return float_to_bits(x).value; }
+float binary_to_float(const word_one& x) { return float_to_bits(x).value; }
 
 // Once again, union to the rescue!
-std::bitset<2 * binary_word_size> double_to_binary(const double x) { return double_to_bits(x).bits; }
+word_two double_to_binary(const double x) { return double_to_bits(x).bits; }
 
-double binary_to_double(const std::bitset<2 * binary_word_size> x) { return double_to_bits(x).value; }
+double binary_to_double(const word_two& x) { return double_to_bits(x).value; }
 
 // Remove leading/trailing white-space and control characters
-std::string string_cleaning(const std::string& str)
-{
+std::string string_cleaning(const std::string& str) {
     std::string result{str};
-    std::size_t null_position{str.find('\0')};
+    size_t null_position{str.find('\0')};
     if (null_position != std::string::npos) { result.erase(null_position); }
     // Remove leading and trailing white spaces
     boost::algorithm::trim(result);
     return result;
 }
 
-std::bitset<2 * binary_word_size> string_to_binary(std::string x)
-{
-    constexpr std::size_t string_size{2 * word_length};
+word_two string_to_binary(std::string x) {
+    constexpr size_t string_size{2 * word_length};
     // 1 byte per character
-    constexpr std::size_t char_size{bits_per_byte};
+    constexpr size_t char_size{bits_per_byte};
     // String must be of specific length
     // Remove any spurious padding
     x = string_cleaning(x);
     // Truncate if needed
-    if (x.length() > string_size) { x = x.substr(0, string_size); }
+    if (x.length() > string_size) { x.resize(string_size); }
     // Pad if needed
     else if (x.length() < string_size) { x = x.append(string_size - x.length(), ' '); }
     // Two words (8 characters)
-    std::bitset<2 * binary_word_size> bits{};
+    word_two bits{};
     // 1 character
     std::bitset<char_size> byte{};
-    std::size_t character{};
-    for (std::size_t i{0}; i < string_size; ++i)
-    {
-        character = static_cast<std::size_t>(x[i]);
+    for (size_t i{0}; i < string_size; ++i) {
+        size_t character{static_cast<size_t>(x[i])};
         byte = std::bitset<char_size>(character);
-        for (std::size_t j{0}; j < char_size; ++j) { bits[(i * char_size) + j] = byte[j]; }
+        for (size_t j{0}; j < char_size; ++j) { bits[(i * char_size) + j] = byte[j]; }
     }
     return bits;
 }
 
-std::string binary_to_string(const std::bitset<2 * binary_word_size> x)
-{
+std::string binary_to_string(const word_two& x) {
     std::string result{};
-    constexpr std::size_t char_size{bits_per_byte};
+    constexpr size_t char_size{bits_per_byte};
     std::bitset<char_size> byte{};
     // Read character by character
-    for (std::size_t i{0}; i < 2 * binary_word_size; i += char_size)
-    {
+    for (size_t i{0}; i < 2 * binary_word_size; i += char_size) {
         // Build the character
-        for (std::size_t j{0}; j < char_size; ++j) { byte[j] = x[i + j]; }
+        for (size_t j{0}; j < char_size; ++j) { byte[j] = x[i + j]; }
         result += static_cast<char>(byte.to_ulong());
     }
     return string_cleaning(result);
 }
 
-// Same as before, but twice the length
-// Cannot use template since compiler cannot decide which function
-// to use based upon input (in-case user make string longer than it
-// should be)
-std::bitset<4 * binary_word_size> long_string_to_binary(std::string x)
-{
-    constexpr std::size_t string_size{4 * word_length};
-    constexpr std::size_t char_size{bits_per_byte};
+word_four long_string_to_binary(std::string x) {
+    constexpr size_t string_size{4 * word_length};
+    constexpr size_t char_size{bits_per_byte};
     // Remove any spurious padding
     //boost::algorithm::trim(x);
     x = string_cleaning(x);
     //x = string_cleaning(x);
     // Truncate if needed
-    if (x.length() > string_size) { x = x.substr(0, string_size); }
+    if (x.length() > string_size) { x.resize(string_size); }
     // Pad if needed
     else if (x.length() < string_size) { x = x.append(string_size - x.length(), ' '); }
     // Four words (16 characters)
-    std::bitset<4 * binary_word_size> bits{};
+    word_four bits{};
     // One character
     std::bitset<char_size> byte{};
-    std::size_t character{};
-    for (std::size_t i{0}; i < string_size; ++i)
-    {
-        character = static_cast<std::size_t>(x[i]);
+    for (size_t i{0}; i < string_size; ++i) {
+        size_t character{static_cast<size_t>(x[i])};
         byte = std::bitset<char_size>(character);
-        for (std::size_t j{0}; j < char_size; ++j) { bits[(i * char_size) + j] = byte[j]; }
+        for (size_t j{0}; j < char_size; ++j) { bits[(i * char_size) + j] = byte[j]; }
     }
     return bits;
 }
 
-std::string binary_to_long_string(const std::bitset<4 * binary_word_size> x)
-{
+std::string binary_to_long_string(const word_four& x) {
     std::string result{};
-    constexpr std::size_t char_size{bits_per_byte};
+    constexpr size_t char_size{bits_per_byte};
     std::bitset<char_size> byte{};
     // Read character by character
-    for (std::size_t i{0}; i < 4 * binary_word_size; i += char_size)
-    {
+    for (size_t i{0}; i < 4 * binary_word_size; i += char_size) {
         // It builds character!
-        for (std::size_t j{0}; j < char_size; ++j) { byte[j] = x[i + j]; }
+        for (size_t j{0}; j < char_size; ++j) { byte[j] = x[i + j]; }
         result += static_cast<char>(byte.to_ulong());
     }
     return string_cleaning(result);
 }
 
-// SAC uses the right-most value for the bool (little-endian)
-// big-endian would be the left-most (read Gulliver's Travels!)
-std::bitset<binary_word_size> bool_to_binary(const bool x)
-{
-    std::bitset<binary_word_size> result{};
+word_one bool_to_binary(const bool x) {
+    word_one result{};
     result[0] = x;
     return result;
 }
 
-bool binary_to_bool(const std::bitset<binary_word_size> x) { return x[0]; }
+bool binary_to_bool(const word_one& x) { return x[0]; }
 
-std::bitset<2 * binary_word_size> concat_words(const std::bitset<binary_word_size> x, const std::bitset<binary_word_size> y)
-{
-    std::bitset<2 * binary_word_size> result{};
-    for (std::size_t i{0}; i < binary_word_size; ++i) { result[i] = x[i]; result[i + binary_word_size] = y[i]; }
+word_two concat_words(const word_one& x, const word_one& y) {
+    word_two result{};
+    for (size_t i{0}; i < binary_word_size; ++i) {
+        result[i] = x[i]; result[i + binary_word_size] = y[i];
+    }
     return result;
 }
 
-std::bitset<4 * binary_word_size> concat_words(const std::bitset<2 * binary_word_size> x, const std::bitset<2 * binary_word_size> y)
-{
-    std::bitset<4 * binary_word_size> result{};
-    for (std::size_t i{0}; i < 2 * binary_word_size; ++i) { result[i] = x[i]; result[i + (2 * binary_word_size)] = y[i]; }
+word_four concat_words(const word_two& x, const word_two& y) {
+    word_four result{};
+    for (size_t i{0}; i < 2 * binary_word_size; ++i) {
+        result[i] = x[i]; result[i + (2 * binary_word_size)] = y[i];
+    }
     return result;
 }
-//-----------------------------------------------------------------------------
-// End conversions
-//-----------------------------------------------------------------------------
-
 //-----------------------------------------------------------------------------
 // Reading
 //-----------------------------------------------------------------------------
-std::bitset<binary_word_size> read_word(std::ifstream* sac)
-{
-    std::bitset<binary_word_size> bits{};
-    constexpr std::size_t char_size{bits_per_byte};
+word_one read_word(std::ifstream* sac) {
+    word_one bits{};
+    constexpr size_t char_size{bits_per_byte};
     // Where we will store the characters
     // flawfinder: ignore
     char word[word_length];
@@ -204,58 +155,54 @@ std::bitset<binary_word_size> read_word(std::ifstream* sac)
     sac->read(word, word_length);
     // Take each character
     std::bitset<char_size> byte{};
-    std::size_t character{};
-    for (std::size_t i{0}; i < word_length; ++i)
-    {
-        character = static_cast<std::size_t>(word[i]);
+    for (size_t i{0}; i < word_length; ++i) {
+        size_t character{static_cast<size_t>(word[i])};
         byte = std::bitset<char_size>(character);
         // bit-by-bit
-        for (std::size_t j{0}; j < char_size; ++j) { bits[(i * char_size) + j] = byte[j]; }
+        for (size_t j{0}; j < char_size; ++j) {
+            bits[(i * char_size) + j] = byte[j];
+        }
     }
     return bits;
 }
 
-std::bitset<2 * binary_word_size> read_two_words(std::ifstream* sac)
-{
-    std::bitset<binary_word_size> word1{read_word(sac)};
-    std::bitset<binary_word_size> word2{read_word(sac)};
-    if constexpr (std::endian::native == std::endian::little) { return concat_words(word1, word2); }
-    else { return concat_words(word2, word1); }
+word_two read_two_words(std::ifstream* sac) {
+    word_one word1{read_word(sac)};
+    word_one word2{read_word(sac)};
+    if constexpr (std::endian::native == std::endian::little) {
+        return concat_words(word1, word2);
+    } else { return concat_words(word2, word1); }
 }
 
-std::bitset<4 * binary_word_size> read_four_words(std::ifstream* sac)
-{
-    std::bitset<2 * binary_word_size> word12{read_two_words(sac)};
-    std::bitset<2 * binary_word_size> word34{read_two_words(sac)};
-    if constexpr (std::endian::native == std::endian::little) { return concat_words(word12, word34); }
-    else { return concat_words(word34, word12); }
+word_four read_four_words(std::ifstream* sac) {
+    word_two word12{read_two_words(sac)};
+    word_two word34{read_two_words(sac)};
+    if constexpr (std::endian::native == std::endian::little) {
+        return concat_words(word12, word34);
+    } else { return concat_words(word34, word12); }
 }
 
-std::vector<double> read_data(std::ifstream* sac, const std::size_t n_words, const int start)
-{
+std::vector<double> read_data(std::ifstream* sac, const size_t n_words,
+                              const int start) {
     sac->seekg(word_position(start));
     std::vector<double> result{};
     result.resize(n_words);
-    for (std::size_t i{0}; i < n_words; ++i) { result[i] = static_cast<double>(binary_to_float(read_word(sac))); }
+    for (size_t i{0}; i < n_words; ++i) {
+        result[i] = static_cast<double>(binary_to_float(read_word(sac)));
+    }
     return result;
 }
 //-----------------------------------------------------------------------------
-// End reading
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-void write_words(std::ofstream* sac_file, const std::vector<char>& input)
-{
+void write_words(std::ofstream* sac_file, const std::vector<char>& input) {
     std::ofstream& sac = *sac_file;
     if (sac.is_open()) { for (char c : input) { sac.write(&c, sizeof(char)); } }
 }
 
 // Template on the typename to make possible to handle float or int
 template <typename T>
-std::vector<char> convert_to_word(const T x)
-{
+std::vector<char> convert_to_word(const T x) {
     // flawfinder: ignore
     char tmp[word_length];
     // Copy bytes from x into the tmp array
@@ -263,7 +210,7 @@ std::vector<char> convert_to_word(const T x)
     std::memcpy(tmp, &x, word_length);
     std::vector<char> word{};
     word.resize(word_length);
-    for (int i{0}; i < word_length; ++i) { word[static_cast<std::size_t>(i)] = tmp[i]; }
+    for (int i{0}; i < word_length; ++i) { word[static_cast<size_t>(i)] = tmp[i]; }
     return word;
 }
 
@@ -271,8 +218,7 @@ std::vector<char> convert_to_word(const T x)
 template std::vector<char> convert_to_word(const float x);
 template std::vector<char> convert_to_word(const int x);
 
-std::vector<char> convert_to_word(const double x)
-{
+std::vector<char> convert_to_word(const double x) {
     // flawfinder: ignore
     char tmp[2 * word_length];
     // Copy bytes from x into the tmp array
@@ -280,39 +226,41 @@ std::vector<char> convert_to_word(const double x)
     std::memcpy(tmp, &x, 2 * word_length);
     std::vector<char> word{};
     word.resize(2 * word_length);
-    for (int i{0}; i < 2 * word_length; ++i) { word[static_cast<std::size_t>(i)] = tmp[i]; }
+    for (int i{0}; i < 2 * word_length; ++i) { word[static_cast<size_t>(i)] = tmp[i]; }
     return word;
 }
 
 // Variable sized words for the 'K' headers
-template <std::size_t N>
-std::array<char, N> convert_to_words(const std::string& s, int n_words)
-{
+template <size_t N>
+std::array<char, N> convert_to_words(const std::string& s, int n_words) {
     std::array<char, N> all_words;
     // String to null-terminated character array
     const char* c_str = s.c_str();
-    for (std::size_t i{0}; i < static_cast<std::size_t>(n_words * word_length); ++i) { all_words[i] = c_str[i]; }
+    for (int i{0}; i < (n_words * word_length); ++i) {
+        all_words[static_cast<size_t>(i)] = c_str[i];
+    }
     return all_words;
 }
 
 // Explicit instantiation
-template std::array<char, word_length> convert_to_words(const std::string& s, int n_words = 1);
-template std::array<char, 2 * word_length> convert_to_words(const std::string& s, int n_words = 2);
-template std::array<char, 4 * word_length> convert_to_words(const std::string& s, int n_words = 4);
+template std::array<char, word_length> convert_to_words(const std::string& s,
+                                                        int n_words = 1);
+template std::array<char, 2 * word_length> convert_to_words(const std::string& s,
+                                                            int n_words = 2);
+template std::array<char, 4 * word_length> convert_to_words(const std::string& s,
+                                                            int n_words = 4);
 
-std::vector<char> bool_to_word(const bool b)
-{
+std::vector<char> bool_to_word(const bool b) {
     std::vector<char> result;
     result.resize(word_length);
     result[0] = b;
-    for (std::size_t i{1}; i < word_length; ++i) { result[i] = 0; }
+    for (int i{1}; i < word_length; ++i) { result[i] = 0; }
     return result;
 }
 //-----------------------------------------------------------------------------
 // Convenience methods
 //-----------------------------------------------------------------------------
-void Trace::header_to_footer()
-{
+void Trace::header_to_footer() {
     delta = static_cast<double>(f_delta);
     b = static_cast<double>(f_b);
     e = static_cast<double>(f_e);
@@ -337,8 +285,7 @@ void Trace::header_to_footer()
     sdelta = static_cast<double>(f_sdelta);
 }
 
-void Trace::footer_to_header()
-{
+void Trace::footer_to_header() {
     f_delta = static_cast<float>(delta);
     f_b = static_cast<float>(b);
     f_e = static_cast<float>(e);
@@ -363,29 +310,16 @@ void Trace::footer_to_header()
     f_sdelta = static_cast<float>(sdelta);
 }
 //-----------------------------------------------------------------------------
-// End convenience functions
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 // Constructors
 //-----------------------------------------------------------------------------
 // Parameterized constructor (reader)
-Trace::Trace(const std::filesystem::path& file_name)
-{
-    //---------------------------------------------------------------------------
-    // Open binary file
-    //---------------------------------------------------------------------------
+Trace::Trace(const std::filesystem::path& file_name) {
     std::ifstream file(file_name, std::ifstream::binary);
-    if (!file)
-    {
+    if (!file) {
       std::cerr << "file could not be read...\n";
     }
     // Make sure we're at the start
     file.seekg(0);
-    //---------------------------------------------------------------------------
-    // End open binary file
-    //---------------------------------------------------------------------------
-
     //---------------------------------------------------------------------------
     // Header
     //---------------------------------------------------------------------------
@@ -460,7 +394,7 @@ Trace::Trace(const std::filesystem::path& file_name)
     yminimum = binary_to_float(read_word(&file)); 
     ymaximum = binary_to_float(read_word(&file)); 
     // Skip 'unused' (x7)
-    for (std::size_t i{0}; i < 7; ++i) { read_word(&file); }
+    for (size_t i{0}; i < 7; ++i) { read_word(&file); }
     // Date_time headers
     nzyear = binary_to_int(read_word(&file));
     nzjday = binary_to_int(read_word(&file));
@@ -493,7 +427,7 @@ Trace::Trace(const std::filesystem::path& file_name)
     imagsrc = binary_to_int(read_word(&file)); 
     ibody = binary_to_int(read_word(&file)); 
     // Skip 'unused' (x7)
-    for (std::size_t i{0}; i < 7; ++i) { read_word(&file); }
+    for (size_t i{0}; i < 7; ++i) { read_word(&file); }
     // Logical headers
     leven = binary_to_bool(read_word(&file));
     lpspol = binary_to_bool(read_word(&file)); 
@@ -528,14 +462,9 @@ Trace::Trace(const std::filesystem::path& file_name)
     kdatrd = binary_to_string(read_two_words(&file));
     kinst = binary_to_string(read_two_words(&file));
     //---------------------------------------------------------------------------
-    // End header
-    //---------------------------------------------------------------------------
-
-    //---------------------------------------------------------------------------
     // Data
     //---------------------------------------------------------------------------
-    if (npts != sacfmt::unset_int)
-    {
+    if (npts != sacfmt::unset_int) {
         // These are read in and converted to doubles (originally single-precision)
         data1 = read_data(&file, static_cast<size_t>(npts), data_word);
         // (Unevenly sampled-data) or (spectral or xy)
@@ -544,17 +473,12 @@ Trace::Trace(const std::filesystem::path& file_name)
         { data2 = read_data(&file, static_cast<size_t>(npts), data_word + npts); }
     }
     //---------------------------------------------------------------------------
-    // End data
-    //---------------------------------------------------------------------------
-    
-    //---------------------------------------------------------------------------
     // Footer (if nvhdr = 7)
     //---------------------------------------------------------------------------
     // NOTE: NVHDR = 6 was the format for SEVERAL DECADES, NVHDR = 7 is from 2020
     //   and beyond
     // New version of format, load in the footer values after data section(s)
-    if (nvhdr == 7)
-    {
+    if (nvhdr == 7) {
         delta = binary_to_double(read_two_words(&file));
         b = binary_to_double(read_two_words(&file));
         e = binary_to_double(read_two_words(&file));
@@ -579,27 +503,16 @@ Trace::Trace(const std::filesystem::path& file_name)
         sdelta = binary_to_double(read_two_words(&file));
         // Make sure things are consistent
         footer_to_header();
-    }
-    // Convert to NVHDR = 7
-    else { header_to_footer(); nvhdr = 7; }
-    //---------------------------------------------------------------------------
-    // End footer 
-    //---------------------------------------------------------------------------
+    } else { header_to_footer(); nvhdr = 7; }
     file.close();
 }
 //-----------------------------------------------------------------------------
-// End constructors
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-void Trace::write(const std::filesystem::path& file_name)
-{
-    std::ofstream file(file_name, std::ios::binary | std::ios::out | std::ios::trunc);
+void Trace::write(const std::filesystem::path& file_name) {
+    std::ofstream file(file_name, std::ios::binary
+                       | std::ios::out | std::ios::trunc);
     if (!file) { std::cerr << "Unable to write file...\n"; }
-    // Make sure things are consistent just in case footer values changed,
-    // but header values did not
     footer_to_header();
     //---------------------------------------------------------------------------
     // Header
@@ -609,15 +522,13 @@ void Trace::write(const std::filesystem::path& file_name)
     write_words(&file, convert_to_word(depmax));
     // Fill 'unused'
     write_words(&file, convert_to_word(depmax));
-
     write_words(&file, convert_to_word(odelta));
     write_words(&file, convert_to_word(f_b));
     write_words(&file, convert_to_word(f_e));
     write_words(&file, convert_to_word(f_o));
     write_words(&file, convert_to_word(f_a));
     // Fill 'internal'
-    write_words(&file, convert_to_word(f_a)); // Could give this a name and a value...
-
+    write_words(&file, convert_to_word(f_a));
     write_words(&file, convert_to_word(f_t0));
     write_words(&file, convert_to_word(f_t1));
     write_words(&file, convert_to_word(f_t2));
@@ -672,9 +583,7 @@ void Trace::write(const std::filesystem::path& file_name)
     write_words(&file, convert_to_word(yminimum));
     write_words(&file, convert_to_word(ymaximum));
     // Fill 'unused' (x7)
-    // Could give these names and values
-    for (std::size_t i{0}; i < 7; ++i) { write_words(&file, convert_to_word(ymaximum)); }
-
+    for (int i{0}; i < 7; ++i) { write_words(&file, convert_to_word(ymaximum)); }
     write_words(&file, convert_to_word(nzyear));
     write_words(&file, convert_to_word(nzjday));
     write_words(&file, convert_to_word(nzhour));
@@ -690,16 +599,12 @@ void Trace::write(const std::filesystem::path& file_name)
     write_words(&file, convert_to_word(nxsize));
     write_words(&file, convert_to_word(nysize));
     // Fill 'unused'
-    // could give a name and a value
     write_words(&file, convert_to_word(nysize));
-
     write_words(&file, convert_to_word(iftype));
     write_words(&file, convert_to_word(idep));
     write_words(&file, convert_to_word(iztype));
     // Fill 'unused'
-    // could give a name and a vlue
     write_words(&file, convert_to_word(iztype));
-
     write_words(&file, convert_to_word(iinst));
     write_words(&file, convert_to_word(istreg));
     write_words(&file, convert_to_word(ievreg));
@@ -710,17 +615,13 @@ void Trace::write(const std::filesystem::path& file_name)
     write_words(&file, convert_to_word(imagsrc));
     write_words(&file, convert_to_word(ibody));
     // Fill 'unused' (x7)
-    // could give these names and values
-    for (std::size_t i{0}; i < 7; ++i) { write_words(&file, convert_to_word(ibody)); }
-
+    for (int i{0}; i < 7; ++i) { write_words(&file, convert_to_word(ibody)); }
     write_words(&file, bool_to_word(leven));
     write_words(&file, bool_to_word(lpspol));
     write_words(&file, bool_to_word(lovrok));
     write_words(&file, bool_to_word(lcalda));
     // Fill 'unused'
-    // could give this a name and a value
     write_words(&file, bool_to_word(lcalda));
-
     // Strings are handled differently
     std::array<char, 2 * word_length> two_words;
     two_words = convert_to_words<sizeof(two_words)>(kstnm, 2);
@@ -793,31 +694,27 @@ void Trace::write(const std::filesystem::path& file_name)
     two_words = convert_to_words<sizeof(two_words)>(kinst, 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
     //---------------------------------------------------------------------------
-    // End header
-    //---------------------------------------------------------------------------
-
-    //---------------------------------------------------------------------------
     // Data
     //---------------------------------------------------------------------------
     // We go from double to float (loss in precision, but matches the data standard)
     // This way we do double-precision in all interal calculations, only lose precision
     // on outputting data to SAC file.
-    for (double x : data1) { write_words(&file, convert_to_word(static_cast<float>(x))); }
+    for (double x : data1) {
+        write_words(&file, convert_to_word(static_cast<float>(x)));
+    }
     // (Unevenly sampled-data) or (spectral or xy)
-    if ((leven == 0) || (iftype > 1))
-    { for (double x : data2) { write_words(&file, convert_to_word(static_cast<float>(x))); } }
-    //---------------------------------------------------------------------------
-    // End data
-    //---------------------------------------------------------------------------
-
+    if ((leven == 0) || (iftype > 1)) {
+        for (double x : data2) {
+            write_words(&file, convert_to_word(static_cast<float>(x)));
+        }
+    }
     //---------------------------------------------------------------------------
     // Footer
     //---------------------------------------------------------------------------
     // Because upon reading we convert to NVHDR = 7 this should be automatically ran
     // But incase you specifically wanted to make NVHDR = 6 for legacy writing I wouldn't want
     // the write-out to be borked (say, generating synthetics using the old standard)
-    if (nvhdr == 7)
-    {
+    if (nvhdr == 7) {
         write_words(&file, convert_to_word(delta));
         write_words(&file, convert_to_word(b));
         write_words(&file, convert_to_word(e));
@@ -841,21 +738,16 @@ void Trace::write(const std::filesystem::path& file_name)
         write_words(&file, convert_to_word(sb));
         write_words(&file, convert_to_word(sdelta));
     }
-    //---------------------------------------------------------------------------
-    // End footer
-    //---------------------------------------------------------------------------
     file.close();
 }
 
 // Since nvhdr is checked before writing to determine if a footer is appropriate
-void Trace::legacy_write(const std::filesystem::path& file_name) { nvhdr = 6; write(file_name); }
-//-----------------------------------------------------------------------------
-// End writing
-//-----------------------------------------------------------------------------
-bool Trace::operator==(const Trace& other) const
-{
-    // Run through all the possible checks
-    // As soon as we fail once, we're done with a false
+void Trace::legacy_write(const std::filesystem::path& file_name) {
+    nvhdr = 6; write(file_name);
+}
+
+// This is a prime example for why refactoring is needed...
+bool Trace::operator==(const Trace& other) const {
     // Check the headers
     if (f_delta != other.f_delta) { return false; }
     if (depmin != other.depmin) { return false; }
@@ -888,7 +780,6 @@ bool Trace::operator==(const Trace& other) const
     if (resp9 != other.resp9) { return false; }
     if (f_stla != other.f_stla) { return false; }
     if (f_stlo != other.f_stlo) { return false; }
-    // Good down to here
     if (stel != other.stel) { return false; }
     if (stdp != other.stdp) { return false; }
     if (f_evla != other.f_evla) { return false; }
@@ -997,15 +888,17 @@ bool Trace::operator==(const Trace& other) const
     if (sdelta != other.sdelta) { return false; }
     if (!equal_within_tolerance(data1, other.data1)) { return false; }
     if (!equal_within_tolerance(data2, other.data2)) { return false; }
-    // We failed to fail!
     return true;
 }
 
 // Does not assume equal length, if not equal length then they're not equal within tolerance
-bool Trace::equal_within_tolerance(const std::vector<double>& vector1, const std::vector<double>& vector2, const double tolerance) const
-{
+bool Trace::equal_within_tolerance(const std::vector<double>& vector1,
+                                   const std::vector<double>& vector2,
+                                   const double tolerance) const {
     if (vector1.size() != vector2.size()) { return false; }
-    for (std::size_t i{0}; i < vector1.size(); ++i) { if (std::abs(vector1[i] - vector2[i]) > tolerance) { return false; } }
+    for (size_t i{0}; i < vector1.size(); ++i) {
+        if (std::abs(vector1[i] - vector2[i]) > tolerance) { return false; }
+    }
     return true;
 }
 }
