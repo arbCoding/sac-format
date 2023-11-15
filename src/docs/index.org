@@ -1,6 +1,6 @@
 #+options: ':t *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
 #+options: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:nil e:t
-#+options: email:t expand-links:t f:t inline:t num:t p:nil pri:nil prop:nil
+#+options: email:t expand-links:t f:t inline:t num:nil p:nil pri:nil prop:nil
 #+options: stat:t tags:t tasks:t tex:t timestamp:nil title:t toc:t todo:t |:t
 #+title: sac-format
 #+date: <2023-11-15 Wed>
@@ -13,23 +13,49 @@
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 --------------
 * Introduction
-This repository contains libraries for reading/writing binary [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]] files, and
-some example/test programs.
+sac-format is a single-header C++ library designed to make working with binary
+[[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]]-files as easy as possible. I wrote sac-format in the 2020 standard of the
+C++ programming language (C++20), which has the benefit of being easy to read.
+It follows the SAC-file format specifications---it is incomplete where the
+specification is incomplete (XYZ files and a few header conventions, see below
+for details).
 
-I wrote these following the specified format, up to the limitations that the
-specification is incomplete (looking at you, XYZ files).
-
-These are written in C++, following modern programming guidelines and should be
-a good starting point for your seismic data-analysis journey.
-
-If you're interested in processing passive-source seismic data, I'm working on a
-GUI tool to do just that called [[https://github.com/arbCoding/PsSp][PsSp]] (Passive-source Seismic-processing) that is
-built upon the libraries here.
+** Why sac-format
+sac-format is Free and Open Source Software (FOSS) released under the MIT
+license. Anyone can use it, for any purpose (including proprietary software),
+anywhere in the world. It is operating system agnostic and confirmed to run on
+Windows, macOS, and Linux systems.
+*** Trace class
+sac-format includes the =Trace= class for seismic traces that provides high-level
+object-oriented abstraction to seismic data. With the =Trace= class, you don't
+need to worry about manually reading SAC-files word-by-word. It is compatible
+with =v6= and =v7= SAC-files and can automatically detect which on read. File output
+defaults to =v7= SAC-files and there is a legacy-write function for =v6= output.
+*** Low-level I/O
+If you want to roll your own SAC-file processing workflow you can use the
+low-level I/O functionality built into sac-format. All functions are tested and
+confirmed working---they're used to build the =Trace= class.
+*** Safe
+sac-format is *safe*---testing is an important part of software development. The
+sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
+Everything from low-level binary conversions to high-level =Trace= reading/writing
+are tested and confirmed working. New tests added when they are imagined.
+*** Fast
+sac-format is *fast*---along with extensive testing, it is also extensively
+benchmarked. Run the benchmarks yourself to determine how sac-format performs on
+your system.
 
 * Quickstart
 ** Cmake Integration
 ** Build Instructions
 * Notes
+** Why C++20 and not C++23?
+Compiler restrictions---many of the features of C++23 [[https://en.cppreference.com/w/cpp/compiler_support/23][require]] GCC-13+ and
+Clang-16+. Many systems, especially older ones, still use GCC-12 and
+Clang-15---which has excellent support for [[https://en.cppreference.com/w/cpp/compiler_support/20][C++20]].
+
+My goals are for sac-format to be accessible and modern---C++20 provides the bet
+fit.
 ** Dependencies
 ** Endianness
 MacOS is a little-endian system, meaning it expects binary values to start from

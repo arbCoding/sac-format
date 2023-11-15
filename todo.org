@@ -1,8 +1,18 @@
 * sac-format :sac_format:
+** DONE Rename SacStream
+It isn't a stream so it shouldn't be called one. I knew this even when I first
+wrote it, but I didn't know what else to call it and figured I'd change it
+later.
+
+Maybe call it =Seismogram=, or for less typing =Trace=. Then it'd be =SAC::Trace=
+which is nice.
+** DONE SacStream constructor should use std::filesystem::path not std::string
+** TODO Link paired headers
+e.g., az and baz should be linked, if one is edited the other is updated
+Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.
 ** TODO Testing :testing:
-*** TODO Move Unit tests from PsSp :unit:
+*** DONE Move Unit tests from PsSp :unit:
 *** TODO Benchmarks :benchmark:
-*** New tests?
 ** TODO Split SacStream into sub-classes :abstraction:
 *** TODO Improved functionality :functionality:
 **** TODO Maintain only doubles of the header/footer pairs (e.g., stla/f_stla)
@@ -21,17 +31,19 @@ which).
 ** CI/CD GitHub workflow
 ** Documentation :documentation:
 *** Update README.org :readme:
-Short and succint
+Short and succinct
 *** GitHub.io website :website:
-Use [[https://olmon.gitlab.io/org-themes/readtheorg_inline/readtheorg_inline.html][ReadTheOrg Inline]] ([[https://github.com/fniessen/org-html-themes][GitHub]])
-**** Add theme select and dark mode
+**** DONE Use [[https://olmon.gitlab.io/org-themes/readtheorg_inline/readtheorg_inline.html][ReadTheOrg Inline]] ([[https://github.com/fniessen/org-html-themes][GitHub]])
+***** IDEA Add theme select and dark mode
 Official maintainers are not going to implement it (keep suggesting darkreader).
 That's dumb. I get that darkreader exists and I use it myself, but you cannot
 simply assume everyone that wants to use dark mode will use darkreader.
+**** TODO Fill in documentation
 *** PDF :pdf:
 This involves setting up the export settings for the website for LaTeX.
 *** TODO Class diagrams :uml:
 **** TODO SacStream
+#+name: example_uml
 #+begin_src plantuml :cache yes :exports both :file uml/SacStream.png
 !theme vibrant
 class SacStream {
@@ -41,25 +53,9 @@ class SacStream {
 }
 #+end_src
 
-#+RESULTS[906758845fe79bf1a0ec120c4d2b7103d68a11e8]:
-[[file:uml/SacStream.png]]
-
 ***** TODO Header
 ***** TODO Data
 ***** TODO Footer
+** DONE Namespace sacfmt
+** DONE Make single-header!
 * Inbox
-** TODO Rename the namespace
-=SAC= in all caps is annoying. Let's called it =arb_sac=. That way there is no need
-to hold down shift or use caps-lock. That would avoid any possible namespace
-collision with official SAC stuff (just in case they use the =sac= namespace).
-** TODO Rename SacStream
-It isn't a stream so it shouldn't be called one. I knew this even when I first
-wrote it, but I didn't know what else to call it and figured I'd change it
-later.
-
-Maybe call it =Seismogram=, or for less typing =Trace=. Then it'd be =SAC::Trace=
-which is nice.
-** TODO SacStream constructor should use std::filesystem::path not std::string
-** TODO Link paired headers
-e.g., az and baz should be linked, if one is edited the other is updated
-Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.

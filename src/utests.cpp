@@ -11,13 +11,13 @@
 /* Xoshiro Random Number generator */
 #include <XoshiroCpp.hpp>
 /* My stuff */
-#include "sac_stream.hpp"
+#include "sac_format.hpp"
 
-using namespace SAC;
+using namespace sacfmt;
 namespace fs = std::filesystem;
 
 //==============================================================================
-// Basic I/O tests (file writing/reading goes with SacStream)
+// Basic I/O tests (file writing/reading goes with Trace)
 TEST_CASE("Basic constants") {
   SECTION("Constants (constexpr)") {
     REQUIRE(word_length == 4);
@@ -275,9 +275,9 @@ void print_control_characters(const std::string& str)
     std::cout << '\n';
 }
 //==============================================================================
-// SacStream tests
-TEST_CASE("Empty SacStream Default Creation") {
-  SacStream test_sac{};
+// Trace tests
+TEST_CASE("Empty Trace Default Creation") {
+  Trace test_sac{};
   SECTION("Default Headers/Footers") {
     SECTION("Floats") {
       REQUIRE(test_sac.f_delta == unset_float);
@@ -436,8 +436,8 @@ TEST_CASE("Empty SacStream Default Creation") {
   }
 }
 
-SacStream gen_fake_sac() {
-  SacStream sac{};
+Trace gen_fake_sac() {
+  Trace sac{};
   sac.f_delta = 0.025f;
   sac.delta = 0.025;
   sac.depmin = -1.11f;
@@ -582,13 +582,13 @@ SacStream gen_fake_sac() {
   return sac;
 }
 
-TEST_CASE("SacStream Save/Load") {
-  SacStream test_sac = gen_fake_sac();
+TEST_CASE("Trace Save/Load") {
+  Trace test_sac = gen_fake_sac();
   fs::path tmp_dir{fs::temp_directory_path()};
   fs::path tmp_file{tmp_dir / "test.SAC"};
   SECTION("I/O Zeros") {
     test_sac.write(tmp_file);
-    SacStream in_sac = SacStream(tmp_file.string());
+    Trace in_sac = Trace(tmp_file.string());
     REQUIRE(test_sac == in_sac);
     fs::remove(tmp_file);
   }
@@ -596,7 +596,7 @@ TEST_CASE("SacStream Save/Load") {
     random_vector(test_sac.data1);
     if (!test_sac.data2.empty()) { random_vector(test_sac.data2); }
     test_sac.write(tmp_file);
-    SacStream in_sac = SacStream(tmp_file.string());
+    Trace in_sac = Trace(tmp_file.string());
     REQUIRE(test_sac == in_sac);
     fs::remove(tmp_file);
   }
