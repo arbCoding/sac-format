@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-11-15 Wed 08:07 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="author" content="Alexander R. Blanchette" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#sac-format">1. sac-format</a>
+<ul>
+<li><a href="#what-is-this">1.1. What is this</a></li>
+<li><a href="#how-to-use">1.2. How to use</a></li>
+<li><a href="#how-to-build">1.3. How to build</a></li>
+<li><a href="#note">1.4. Note</a></li>
+<li><a href="#the-tests">1.5. The Tests</a></li>
+<li><a href="#little-endian-vs-big-endian">1.6. Little-Endian vs Big-Endian</a></li>
+<li><a href="#to-do">1.7. To Do</a></li>
+<li><a href="#organization">1.8. Organization</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sac-format" class="outline-2">
+<h2 id="sac-format"><span class="section-number-2">1.</span> sac-format</h2>
+<div class="outline-text-2" id="text-sac-format">
+<hr />
+</div>
+<div id="outline-container-what-is-this" class="outline-3">
+<h3 id="what-is-this"><span class="section-number-3">1.1.</span> What is this</h3>
+<div class="outline-text-3" id="text-what-is-this">
+<p>
+This repository contains libraries for reading/writing binary
+<a href="https://ds.iris.edu/files/sac-manual/manual/file_format.html">SAC</a>
+files, and some example/test programs.
+</p>
+
+<p>
+I wrote these following the specified format, up to the limitations that
+the specification is incomplete (looking at you, XYZ files).
+</p>
+
+<p>
+These are written in C++, following modern programming guidelines and
+should be a good starting point for your seismic data-analysis journey.
+</p>
+
+<p>
+If you&rsquo;re interested in processing passive-source seismic data, I&rsquo;m
+working on a GUI tool to do just that called
+<a href="https://github.com/arbCoding/PsSp">PsSp</a> (Passive-source
+Seismic-processing) that is built upon the libraries here.
+</p>
+
+<hr />
+</div>
+</div>
+<div id="outline-container-how-to-use" class="outline-3">
+<h3 id="how-to-use"><span class="section-number-3">1.2.</span> How to use</h3>
+<div class="outline-text-3" id="text-how-to-use">
+<p>
+To use this in your own project, you will need to build the libaries and
+then link to them at compilation while including the headers. See the
+section &ldquo;How to build&rdquo; for instructions on building.
+</p>
+
+<p>
+If you want to use only low-level IO (converting to/from binary), then
+use ./src/objects/sac<sub>io.o</sub> (header is sac<sub>io.hpp</sub>).
+</p>
+
+<p>
+If you want to use the high-level SacStream class, then use
+./src/objects/sac<sub>format.o</sub> (header is sac<sub>stream.hpp</sub>).
+</p>
+
+<p>
+The <a href="src/header/">header</a> files are heavily commented, to provide
+insight into what the libaries do and why.
+</p>
+
+<p>
+If you want to see the &ldquo;how&rdquo; then see the appropriate
+<a href="src/implementation/">implementation</a> file.
+</p>
+
+<hr />
+</div>
+</div>
+<div id="outline-container-how-to-build" class="outline-3">
+<h3 id="how-to-build"><span class="section-number-3">1.3.</span> How to build</h3>
+<div class="outline-text-3" id="text-how-to-build">
+<p>
+These are written in C++, using modern conventions, and are tested to
+compile with the G++ compiler. To build the libaries run:
+</p>
+
+<pre class="example" id="orgd1184ce">
+make lib
+</pre>
+
+<p>
+To build everything, including the test programs, run:
+</p>
+
+<pre class="example" id="org1b38484">
+make
+</pre>
+
+<p>
+You can look at the <a href="Makefile">Makefile</a> for more details (I&rsquo;ve tried to be
+as explicit as possible in the comments inside).
+</p>
+
+<hr />
+</div>
+</div>
+<div id="outline-container-note" class="outline-3">
+<h3 id="note"><span class="section-number-3">1.4.</span> Note</h3>
+<div class="outline-text-3" id="text-note">
+<p>
+The default build is the release build <code>debug = false</code>. If, for whatever
+reason, you want to use the debug release, set <code>debug = true</code>. I use
+<code>debug = true</code> when developing these tools, to enforce good coding
+practices.
+</p>
+
+<hr />
+</div>
+</div>
+<div id="outline-container-the-tests" class="outline-3">
+<h3 id="the-tests"><span class="section-number-3">1.5.</span> The Tests</h3>
+<div class="outline-text-3" id="text-the-tests">
+<p>
+To build the test programs, in the top-level directory (same as this
+README.md file) run:
+</p>
+
+<pre class="example" id="orgbdce49a">
+make tests
+</pre>
+
+<p>
+You can then find the test programs in the <code>./bin/tests/</code> folder.
+</p>
+
+<p>
+The tests: * <code>sac_type_test</code> - This does not take any input - This tests
+converting between standard types and binary, and back, following the
+SAC conventions. * <code>sac_io_test</code> - This requires an input sac file -
+This tests opening a sac file (low-level io) and reading some of the
+header information, which it will spit out to the console. *
+<code>sac_stream_read_test</code> - This requires an input sac file - This tests
+reading a sac file as a <code>SacStream</code> object (high-level io) - It prints
+out all the header/footer values to the console *
+<code>sac_stream_write_test</code> - This requires an input sac file - This tests
+writing out a v7 (modern) sac file (write) - This tests writing out a v6
+(legacy) sac file (legacy<sub>write</sub>) - It prints out the names of the two
+new files to the console
+</p>
+
+<hr />
+</div>
+</div>
+<div id="outline-container-little-endian-vs-big-endian" class="outline-3">
+<h3 id="little-endian-vs-big-endian"><span class="section-number-3">1.6.</span> Little-Endian vs Big-Endian</h3>
+<div class="outline-text-3" id="text-little-endian-vs-big-endian">
+<p>
+MacOS is a little-endian system, meaning it expects binary values to
+start from the Least-Significant Bit (LSB). Linux is a big-endian system
+and expects binary values to start from the Most-Significan Bit (MSB).
+This means that MacOS reads/writes chunks of binary data from
+right-to-left, while on Linux it is done from left-to-right. For most
+I/O this was a non-issue. However, for strings it resulted in some
+amusing results.
+</p>
+
+<p>
+For example: on MacOS, KEVNM header would be read in as &ldquo;Central
+Californ&rdquo; (16 character limit for that header) and Linux would read it
+as &ldquo;fornCaliral Cent&rdquo;. The difference is easy to understand if we make
+the following map:
+</p>
+
+<p>
+1 = &ldquo;Cent&rdquo;, 2 = &ldquo;ral&rdquo;, 3 = &ldquo;Cali&rdquo;, 4 = &ldquo;forn&rdquo;
+</p>
+
+<p>
+The Mac output is &ldquo;1234&rdquo;, while Linux output is &ldquo;4321&rdquo;. I have fixed
+this by checking system endianness in the string reading functions. If
+you get any funky results, you should confirm the endianness of the
+input file.
+</p>
+
+<p>
+This was not an issue with any other portions of the data in the binary
+file, only the strings.
+</p>
+
+<hr />
+</div>
+</div>
+<div id="outline-container-to-do" class="outline-3">
+<h3 id="to-do"><span class="section-number-3">1.7.</span> To Do</h3>
+<div class="outline-text-3" id="text-to-do">
+<ul class="org-ul">
+<li class="on"><code>[X]</code> Read
+<a href="https://ds.iris.edu/files/sac-manual/manual/file_format.html">SAC</a>
+file format</li>
+<li class="on"><code>[X]</code> Write SAC file format</li>
+<li class="on"><code>[X]</code> Prinout SAC header information to command line</li>
+<li class="on"><code>[X]</code> Implement SacStream class</li>
+<li class="on"><code>[X]</code> Compatible with both v6 (legacy, several decades) or v7 (new
+2020+) binary SAC files</li>
+<li class="on"><code>[X]</code> Read irregularly sampled data</li>
+<li class="on"><code>[X]</code> Read spectral data</li>
+<li class="on"><code>[X]</code> Read general XY data</li>
+<li class="on"><code>[X]</code> Little-endian/Big-endian reading compatibility (Mac/Linux)</li>
+<li class="on"><code>[X]</code> Confirm Little-endian/Big-endian writing compatibility (Mac/Linux)</li>
+<li class="off"><code>[&#xa0;]</code> Read general XYZ data (not enough information in specification to
+implement at the moment&#x2026;)</li>
+</ul>
+
+<hr />
+</div>
+</div>
+<div id="outline-container-organization" class="outline-3">
+<h3 id="organization"><span class="section-number-3">1.8.</span> Organization</h3>
+<div class="outline-text-3" id="text-organization">
+<p>
+I have split functionality between * <b>Interface</b> files -
+<code>./src/header/*.hpp</code> * <b>Implementation</b> files -
+<code>./src/implementation/*.cpp</code>
+</p>
+
+<p>
+The interface files have the definitions of the necessary constants, the
+function names and return types, and comments on what they do (but <b>not</b>
+the details).
+</p>
+
+<p>
+If you&rsquo;re curious about the details of a function, you can find it in
+the implementation file that corresponds to its interface.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Alexander R. Blanchette</p>
+<p class="date">Created: 2023-11-15 Wed 08:07</p>
+</div>
+</body>
+</html>
