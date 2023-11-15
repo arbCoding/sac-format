@@ -16,11 +16,11 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 FetchContent_Declare(Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2
   GIT_TAG v3.4.0)
-# Logging
-FetchContent_Declare(spdlog
-  GIT_REPOSITORY https://github.com/gabime/spdlog
-  GIT_TAG v1.12.0)
-FetchContent_MakeAvailable(Catch2 spdlog)
+# Random number generation
+FetchContent_Declare(xoshiro
+  GIT_REPOSITORY https://github.com/Reputeless/Xoshiro-cpp
+  GIT_TAG v1.1)
+FetchContent_MakeAvailable(Catch2 xoshiro)
 # Make ==========================================================================
 # Build flags
 # Flags for all
@@ -50,6 +50,9 @@ add_library(sac-format STATIC
 set_target_properties(sac-format PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(sac-format PROPERTIES PUBLIC_HEADER src/sac_stream.hpp)
 
+# Include Xoshiro since it doesn't have a CMakeLists.txt
+include_directories(${xoshiro_SOURCE_DIR})
+
 # Catch2 stuff
 # Doesn't like Weffc++
 add_executable(utests
@@ -57,7 +60,6 @@ add_executable(utests
   src/utests.cpp)
 
 target_link_libraries(utests
-  PRIVATE spdlog::spdlog_header_only
   PRIVATE Catch2::Catch2WithMain
   sac-format)
 
