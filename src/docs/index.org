@@ -25,7 +25,7 @@ sac-format is Free and Open Source Software (FOSS) released under the MIT
 license. Anyone can use it, for any purpose (including proprietary software),
 anywhere in the world. It is operating system agnostic and confirmed to run on
 Windows, macOS, and Linux systems.
-*** Trace class
+*** High-level Trace class
 sac-format includes the =Trace= class for seismic traces that provides high-level
 object-oriented abstraction to seismic data. With the =Trace= class, you don't
 need to worry about manually reading SAC-files word-by-word. It is compatible
@@ -34,7 +34,7 @@ defaults to =v7= SAC-files and there is a legacy-write function for =v6= output.
 *** Low-level I/O
 If you want to roll your own SAC-file processing workflow you can use the
 low-level I/O functionality built into sac-format. All functions are tested and
-confirmed working---they're used to build the =Trace= class.
+confirmed working---they're used to build the =Trace= class!
 *** Safe
 sac-format is *safe*---testing is an important part of software development. The
 sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
@@ -44,10 +44,32 @@ are tested and confirmed working. New tests added when they are imagined.
 sac-format is *fast*---along with extensive testing, it is also extensively
 benchmarked. Run the benchmarks yourself to determine how sac-format performs on
 your system.
+*** Easy
+sac-format is *easy*---it is single-header and object-oriented. It is easy to
+integrate into any project using [[https://cmake.org/][CMake]]. See the [[Quickstart]] section to get up and
+running immediately.
 
 * Quickstart
 ** Cmake Integration
 ** Build Instructions
+** Examples
+*** Empty Trace class
+#+name: empty_trace_example
+#+begin_src cpp :cache yes :returns code :results verbatim :flags -std=c++20 -L../../bin/libsac-format.a -I../
+#include <iostream>
+#include <sac_format.hpp>
+
+using namespace sacfmt;
+
+int main() {
+    Trace trace{};
+    std::cout << trace.kstnm << '\n';
+    return EXIT_SUCCESS;
+}
+#+end_src
+
+#+RESULTS: empty_trace_example
+
 * Notes
 ** Why C++20 and not C++23?
 Compiler restrictions---many of the features of C++23 [[https://en.cppreference.com/w/cpp/compiler_support/23][require]] GCC-13+ and
