@@ -13,48 +13,50 @@
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 --------------
 * Introduction
-sac-format is a single-header statically-linked library designed to make working
-with binary [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]]-files as easy as possible. It is written in the 2020 standard of
-the C++ programming language (C++20), which has the benefit of being easy to
-read. It follows the SAC-file format specifications---it is incomplete where the
-specification is incomplete (XYZ files and a few header conventions, see below
-for details).
+sac-format is a single-header statically linked library designed to make working
+with binary [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]]-files as easy as possible. Written in C++20, it follows a modern
+and easy to read programming-style while providing the high performance brought
+by C++.
 
-sac-format is being actively developed on [[https://github.com/arbCoding/sac-format][GitHub]]!
+sac-format's actively developed on [[https://github.com/arbCoding/sac-format][GitHub]]!
 
 ** Why sac-format
 sac-format is Free and Open Source Software (FOSS) released under the MIT
 license. Anyone can use it, for any purpose (including proprietary software),
-anywhere in the world. It is operating system agnostic and confirmed to run on
-Windows, macOS, and Linux systems.
-*** High-level Trace class
+anywhere in the world. sac-format's operating system agnostic and confirmed to
+run on Windows, macOS, and Linux systems.
+*** High-Level Trace Class
 sac-format includes the =Trace= class for seismic traces that provides high-level
 object-oriented abstraction to seismic data. With the =Trace= class, you don't
 need to worry about manually reading SAC-files word-by-word. It is compatible
 with =v6= and =v7= SAC-files and can automatically detect the version upon reading.
-File output defaults to =v7= SAC-files and there is a legacy-write function for =v6=
+File output defaults to =v7= SAC-files and there is a /legacy-write/ function for =v6=
 output.
-*** Low-level I/O
+*** Low-Level I/O
 If you want to roll your own SAC-file processing workflow you can use the
-low-level I/O functionality built into sac-format. All functions are tested and
+low-level I/O functionality built into sac-format. All functions tested and
 confirmed working---they're used to build the =Trace= class!
 *** Safe
-sac-format is *safe*---testing is an important part of software development. The
+sac-format's *safe*---testing is an important part of software development. The
 sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
 Everything from low-level binary conversions to high-level =Trace= reading/writing
-are tested and confirmed working. New tests added when they are imagined.
+are tested and confirmed working. New tests added when they're imagined.
 *** Fast
-sac-format is *fast*---along with extensive testing, it is also extensively
-benchmarked. Run the benchmarks yourself to determine how sac-format performs on
-your system.
+sac-format's *fast*---it's written in C++ and extensively benchmarked. You can run
+the benchmarks yourself to find how sac-format performs on your system.
 *** Easy
-sac-format is *easy*---it is single-header and object-oriented. It is easy to
-integrate into any project using [[https://cmake.org/][CMake]]. See the [[Quickstart]] section to get up and
-running immediately.
+sac-format's *easy*---single-header makes integration to any project a breeze.
+[[https://cmake.org/][CMake]] makes building on different platforms a breeze. Object-oriented design
+makes use simple and intuitive. See the [[Quickstart]] section to get up and
+running.
 *** Compact
-In total (header + implementation--excluding comments) sac-format is under 1000
-lines of code. This small size makes it easy to use on any sort of hardware
-(such as a [[https://www.raspberrypi.com/][Raspberry Pi]]).
+sac-format's *compact*---in total (header + implementation--excluding comments)
+there are fewer than 1500 lines of code. This small size makes it easy to use on
+any sort of hardware (such as a [[https://www.raspberrypi.com/][Raspberry Pi]]).
+*** Documentation
+sac-format's extensively *documented*---both online and in the code. Nothing's
+hidden---nothing's obscured. Curious how something works? Check the
+documentation and in-code comments.
 
 * Quickstart
 ** Manual Instructions
@@ -74,9 +76,9 @@ mkdir bin && cd bin/
 cmake .. && make
 #+end_src
 *** Use
-To use, simply link to the compiled library (=libsac-format.a= on Linux/macOS,
+To use, link to the compiled library (=libsac-format.a= on Linux/macOS,
 =libsac-format.lib= on Windows) and include =src/sac_format.hpp=.
-** Cmake Integration
+** CMake Integration
 To integrate sac-format into your CMake project, add it to your =CMakeLists.txt=.
 #+begin_example
 include(FetchContent)
@@ -99,7 +101,7 @@ target_link_libraries_library(your_executable
 #+end_example
 
 ** Examples
-*** Empty Trace class
+*** Empty Trace Class
 #+name: empty_trace_example
 #+begin_src cpp :cache yes :returns code :results verbatim :flags -std=c++20 -L../../bin/libsac-format.a -I../
 #include <iostream>
@@ -119,31 +121,11 @@ int main() {
 
 * Notes
 ** Why C++20 and not C++23
-Compiler restrictions---many of the features of C++23 [[https://en.cppreference.com/w/cpp/compiler_support/23][require]] GCC-13+ and
-Clang-16+. Many systems, especially older ones, still use GCC-12 and
-Clang-15---which has excellent support for [[https://en.cppreference.com/w/cpp/compiler_support/20][C++20]].
+Compiler restrictions---C++23 support [[https://en.cppreference.com/w/cpp/compiler_support/23][requires]] GCC-13+ and Clang-16+. Many
+systems, still use GCC-12 and Clang-15---which has near complete support for
+[[https://en.cppreference.com/w/cpp/compiler_support/20][C++20]].
 
-My goals are for sac-format to be accessible and modern---C++20 provides the bet
-fit.
+sac-format aims to be accessible, modern, safe, and fast---C++20 provides the
+best fit.
 ** Dependencies
-The only dependency is on [[https://www.boost.org/users/history/version_1_83_0.html][boost 1.83.0]].
-** Endianness
-MacOS is a little-endian system, meaning it expects binary values to start from
-the Least-Significant Bit (LSB). Linux is a big-endian system and expects binary
-values to start from the Most-Significan Bit (MSB). This means that MacOS
-reads/writes chunks of binary data from right-to-left, while on Linux it is done
-from left-to-right. For most I/O this was a non-issue. However, for strings it
-resulted in some amusing results.
-
-For example: on MacOS, KEVNM header would be read in as "Central Californ" (16
-character limit for that header) and Linux would read it as "fornCaliral Cent".
-The difference is easy to understand if we make the following map:
-
-1 = "Cent", 2 = "ral", 3 = "Cali", 4 = "forn"
-
-The Mac output is "1234", while Linux output is "4321". I have fixed this by
-checking system endianness in the string reading functions. If you get any funky
-results, you should confirm the endianness of the input file.
-
-This was not an issue with any other portions of the data in the binary file,
-only the strings.
+1) [[https://www.boost.org/users/history/version_1_83_0.html][boost 1.83.0]].

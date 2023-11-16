@@ -419,6 +419,80 @@ TEST_CASE("Location") {
     REQUIRE(loc.depth == unset_double);
     REQUIRE(loc.elevation == unset_double);
   }
+  SECTION("Equality") {
+    SECTION("Default") {
+      const Location loc1{};
+      const Location loc2{};
+      REQUIRE(loc1 == loc2);
+    }
+    SECTION("Latitude") {
+      Location loc1{};
+      Location loc2{};
+      loc1.latitude = 1.2345;
+      loc2.latitude = 1.2345;
+      REQUIRE(loc1 == loc2);
+    }
+    SECTION("Longitude") {
+      Location loc1{};
+      Location loc2{};
+      loc1.longitude = 2.3456;
+      loc2.longitude = 2.3456;
+      REQUIRE(loc1 == loc2);
+    }
+    SECTION("Depth") {
+      Location loc1{};
+      Location loc2{};
+      loc1.depth = 15.3975;
+      loc2.depth = 15.3975;
+      REQUIRE(loc1 == loc2);
+    }
+    SECTION("Elevation") {
+      Location loc1{};
+      Location loc2{};
+      loc1.elevation = 0.578;
+      loc2.elevation = 0.578;
+      REQUIRE(loc1 == loc2);
+    }
+    SECTION("All") {
+      Location loc1{};
+      Location loc2{};
+      loc1.latitude = -35.01;
+      loc2.latitude = -35.01;
+      loc1.longitude = 183.92;
+      loc2.longitude = 183.92;
+      loc1.depth = 15.38;
+      loc2.depth = 15.38;
+      loc1.elevation = -1.83;
+      loc2.elevation = -1.83;
+      REQUIRE(loc1 == loc2);
+    }
+  }
+  SECTION("Inequality") {
+    SECTION("Latitude") {
+      Location loc1{};
+      const Location loc2{};
+      loc1.latitude = 28.697;
+      REQUIRE(loc1 != loc2);
+    }
+    SECTION("Longitude") {
+      Location loc1{};
+      const Location loc2{};
+      loc1.longitude = 78.3297;
+      REQUIRE(loc1 != loc2);
+    }
+    SECTION("Depth") {
+      Location loc1{};
+      const Location loc2{};
+      loc1.depth = 15.35;
+      REQUIRE(loc1 != loc2);
+    }
+    SECTION("Elevation") {
+      Location loc1{};
+      const Location loc2{};
+      loc1.elevation = -0.23;
+      REQUIRE(loc1 != loc2);
+    }
+  }
 }
 //------------------------------------------------------------------------------
 // User tests
