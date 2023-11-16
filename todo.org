@@ -10,10 +10,10 @@ which is nice.
 ** TODO Link paired headers
 e.g., az and baz should be linked, if one is edited the other is updated
 Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.
-** TODO Testing :testing:
+** DONE Testing :testing:
 *** DONE Move Unit tests from PsSp :unit:
-*** TODO Benchmarks :benchmark:
-** TODO Split SacStream into sub-classes :abstraction:
+*** DONE Benchmarks :benchmark:
+** TODO Refactor Trace :refactor:
 *** TODO Improved functionality :functionality:
 **** TODO Maintain only doubles of the header/footer pairs (e.g., stla/f_stla)
 The only time this matters is at read/write. On read, we can read it in as a

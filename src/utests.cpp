@@ -407,3 +407,113 @@ TEST_CASE("Trace Save/Load") {
     fs::remove(tmp_file);
   }
 }
+//==============================================================================
+// Trace2 tests
+//------------------------------------------------------------------------------
+// Location tests
+TEST_CASE("Location") {
+  SECTION("Default") {
+    const Location loc{};
+    REQUIRE(loc.latitude == unset_double);
+    REQUIRE(loc.longitude == unset_double);
+    REQUIRE(loc.depth == unset_double);
+    REQUIRE(loc.elevation == unset_double);
+  }
+}
+//------------------------------------------------------------------------------
+// User tests
+TEST_CASE("User") {
+  SECTION("Default") {
+    const User user{};
+    REQUIRE(user.t0 == unset_double);
+    REQUIRE(user.t1 == unset_double);
+    REQUIRE(user.t2 == unset_double);
+    REQUIRE(user.t3 == unset_double);
+    REQUIRE(user.t4 == unset_double);
+    REQUIRE(user.t5 == unset_double);
+    REQUIRE(user.t6 == unset_double);
+    REQUIRE(user.t7 == unset_double);
+    REQUIRE(user.t8 == unset_double);
+    REQUIRE(user.t9 == unset_double);
+    REQUIRE(user.kt0 == unset_word);
+    REQUIRE(user.kt1 == unset_word);
+    REQUIRE(user.kt2 == unset_word);
+    REQUIRE(user.kt3 == unset_word);
+    REQUIRE(user.kt4 == unset_word);
+    REQUIRE(user.kt5 == unset_word);
+    REQUIRE(user.kt6 == unset_word);
+    REQUIRE(user.kt7 == unset_word);
+    REQUIRE(user.kt8 == unset_word);
+    REQUIRE(user.kt9 == unset_word);
+    REQUIRE(user.user0 == unset_float);
+    REQUIRE(user.user1 == unset_float);
+    REQUIRE(user.user2 == unset_float);
+    REQUIRE(user.user3 == unset_float);
+    REQUIRE(user.user4 == unset_float);
+    REQUIRE(user.user5 == unset_float);
+    REQUIRE(user.user6 == unset_float);
+    REQUIRE(user.user7 == unset_float);
+    REQUIRE(user.user8 == unset_float);
+    REQUIRE(user.user9 == unset_float);
+    REQUIRE(user.kuser0 == unset_word);
+    REQUIRE(user.kuser1 == unset_word);
+    REQUIRE(user.kuser2 == unset_word);
+  }
+}
+//------------------------------------------------------------------------------
+// Instrument tests
+TEST_CASE("Instrument") {
+  SECTION("Default") {
+    const Instrument inst{};
+    REQUIRE(inst.resp0 == unset_float);
+    REQUIRE(inst.resp1 == unset_float);
+    REQUIRE(inst.resp2 == unset_float);
+    REQUIRE(inst.resp3 == unset_float);
+    REQUIRE(inst.resp4 == unset_float);
+    REQUIRE(inst.resp5 == unset_float);
+    REQUIRE(inst.resp6 == unset_float);
+    REQUIRE(inst.resp7 == unset_float);
+    REQUIRE(inst.resp8 == unset_float);
+    REQUIRE(inst.resp9 == unset_float);
+    REQUIRE(inst.cmpaz == unset_float);
+    REQUIRE(inst.cmpinc == unset_float);
+    REQUIRE(inst.iinst == unset_int);
+    REQUIRE(inst.kcmpnm == unset_word);
+    REQUIRE(inst.kinst == unset_word);
+  }
+}
+//------------------------------------------------------------------------------
+// Event tests
+TEST_CASE("Event") {
+  SECTION("Default") {
+    const Event event{};
+    const Location loc{};
+    REQUIRE(event.location == loc);
+    REQUIRE(event.origin_time == unset_double);
+    REQUIRE(event.ko == unset_word);
+    REQUIRE(event.first_arrival == unset_double);
+    REQUIRE(event.ka == unset_word);
+    REQUIRE(event.fini_time == unset_double);
+    REQUIRE(event.kf == unset_word);
+    REQUIRE(event.magnitude == unset_float);
+    REQUIRE(event.nevid == unset_int);
+    REQUIRE(event.ievreg == unset_int);
+    REQUIRE(event.ievtyp == unset_int);
+    REQUIRE(event.imagtyp == unset_int);
+    REQUIRE(event.kevnm == unset_word);
+  }
+}
+//------------------------------------------------------------------------------
+// Station tests
+
+//------------------------------------------------------------------------------
+// Date tests
+
+//------------------------------------------------------------------------------
+// Data tests
+
+//------------------------------------------------------------------------------
+// File tests
+
+//------------------------------------------------------------------------------
+// Trace2 tests

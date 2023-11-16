@@ -115,6 +115,210 @@ template <size_t N>
 std::array<char, N> convert_to_words(const std::string& s, int n_words = 1);
 // Convert a bool value to a word
 std::vector<char> bool_to_word(const bool b);
+// Used for event and station locations
+class Location {
+public:
+    // stla, f_stla, evla, f_evla
+    double latitude{unset_double};
+    // stlo, f_stlo, evlo, f_evlo
+    double longitude{unset_double};
+    // stdp, evdp
+    double depth{unset_double};
+    // stel, evel
+    double elevation{unset_double};
+    // Overload equality check
+    bool operator==(const Location& other) const;
+};
+// Variables the user would set (picking, calculations, etc.)
+class User {
+public:
+    double t0{unset_double};
+    double t1{unset_double};
+    double t2{unset_double};
+    double t3{unset_double};
+    double t4{unset_double};
+    double t5{unset_double};
+    double t6{unset_double};
+    double t7{unset_double};
+    double t8{unset_double};
+    double t9{unset_double};
+    std::string kt0{unset_word};
+    std::string kt1{unset_word};
+    std::string kt2{unset_word};
+    std::string kt3{unset_word};
+    std::string kt4{unset_word};
+    std::string kt5{unset_word};
+    std::string kt6{unset_word};
+    std::string kt7{unset_word};
+    std::string kt8{unset_word};
+    std::string kt9{unset_word};
+    float user0{unset_float};
+    float user1{unset_float};
+    float user2{unset_float};
+    float user3{unset_float};
+    float user4{unset_float};
+    float user5{unset_float};
+    float user6{unset_float};
+    float user7{unset_float};
+    float user8{unset_float};
+    float user9{unset_float};
+    std::string kuser0{unset_word};
+    std::string kuser1{unset_word};
+    std::string kuser2{unset_word};
+    // Overload equality check
+    bool operator==(const User& other) const;
+};
+// Information about the equipment
+class Instrument {
+public:
+    float resp0{unset_float};
+    float resp1{unset_float};
+    float resp2{unset_float};
+    float resp3{unset_float};
+    float resp4{unset_float};
+    float resp5{unset_float};
+    float resp6{unset_float};
+    float resp7{unset_float};
+    float resp8{unset_float};
+    float resp9{unset_float};
+    float cmpaz{unset_float};
+    float cmpinc{unset_float};
+    int iinst{unset_int};
+    std::string kcmpnm{unset_word};
+    std::string kinst{unset_word};
+    // Overload equality check
+    bool operator==(const Instrument& other) const;
+};
+// Information about the event
+class Event {
+public:
+    Location location{};
+    // o, f_o
+    double origin_time{unset_double};
+    std::string ko{unset_word};
+    // a, f_a
+    double first_arrival{unset_double};
+    std::string ka{unset_word};
+    // f
+    double fini_time{unset_double};
+    std::string kf{unset_word};
+    // mag
+    float magnitude{unset_float};
+    int nevid{unset_int};
+    int ievreg{unset_int};
+    int ievtyp{unset_int};
+    int imagtyp{unset_int};
+    std::string kevnm{unset_word};
+    // Overload equality check
+    bool operator==(const Event& other) const;
+};
+// Information about the station
+class Station {
+public:
+    Location location{};
+    Instrument instrument{};
+    int istreg{unset_int};
+    bool lpspol{unset_bool};
+    std::string kstnm{unset_word};
+    std::string knetwk{unset_word};
+    std::string khole{unset_word};
+    // Overload equality check
+    bool operator==(const Station& other) const;
+};
+// Reference date
+class Date {
+public:
+    int nzyear{unset_int};
+    int nzjday{unset_int};
+    int nzhour{unset_int};
+    int nzmin{unset_int};
+    int nzsec{unset_int};
+    int nzmsec{unset_int};
+    // Overload equality check
+    bool operator==(const Date& other) const;
+};
+// Information about the data
+class Data {
+public:
+    float depmin{unset_float};
+    float depmen{unset_float};
+    float depmax{unset_float};
+    // b, f_b
+    double begin_time{unset_double};
+    // e, f_e
+    double end_time{unset_double};
+    float dist{unset_float};
+    float az{unset_float};
+    float baz{unset_float};
+    float gcarc{unset_float};
+    // sb, f_sb
+    double origin_begin{unset_double};
+    double delta{unset_double};
+    double odelta{unset_double};
+    double sdelta{unset_double};
+    float xminimum{unset_float};
+    float xmaximum{unset_float};
+    float yminimum{unset_float};
+    float ymaximum{unset_float};
+    Date reference_date{};
+    // norid
+    int origin_id{unset_int};
+    int npts{unset_int};
+    int nsnpts{unset_int};
+    // nwfid
+    int waveform_id{unset_int};
+    int nxsize{unset_int};
+    int nysize{unset_int};
+    int idep{unset_int};
+    // iztype
+    int reference_date_type{unset_int};
+    // iqual
+    int quality{unset_int};
+    // isynth
+    int synthetic{unset_int};
+    // imagsrc
+    int magnitude_source{unset_int};
+    // ibody
+    int reference_body{unset_int};
+    // leven
+    bool evenly_sampled{unset_bool};
+    // lcalda
+    bool calc_geometry{unset_bool};
+    std::string kdatrd{unset_word};
+    std::vector<double> data1{};
+    std::vector<double> data2{};
+    // Overload equality check
+    bool operator==(const Data& other) const;
+    bool equal_within_tolerance(const std::vector<double>& vector1,
+                                const std::vector<double>& vector2,
+                                const double tolerance =
+                                std::numeric_limits<float>::epsilon()) const;
+};
+// Information about the file
+class File {
+public:
+    // nvhdr
+    int version{7};
+    // iftype
+    int type{unset_int};
+    // lovrok
+    bool overwrite{unset_bool};
+    std::filesystem::path path{};
+    // Overload equality check
+    bool operator==(const File& other) const;
+};
+// This is the replacement Trace class
+class Trace2 {
+public:
+    Station station{};
+    Event event{};
+    User user{};
+    Data data{};
+    File file{};
+    explicit Trace2(const std::filesystem::path& path);
+    // Overload equality check
+    bool operator==(const Trace2& other) const;
+};
 class Trace {
 public:
     //----------------------------------------------------------------------
