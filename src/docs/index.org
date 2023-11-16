@@ -14,11 +14,13 @@
 --------------
 * Introduction
 sac-format is a single-header statically-linked library designed to make working
-with binary [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]]-files as easy as possible. I wrote sac-format in the 2020
-standard of the C++ programming language (C++20), which has the benefit of being
-easy to read. It follows the SAC-file format specifications---it is incomplete
-where the specification is incomplete (XYZ files and a few header conventions,
-see below for details).
+with binary [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]]-files as easy as possible. It is written in the 2020 standard of
+the C++ programming language (C++20), which has the benefit of being easy to
+read. It follows the SAC-file format specifications---it is incomplete where the
+specification is incomplete (XYZ files and a few header conventions, see below
+for details).
+
+sac-format is being actively developed on [[https://github.com/arbCoding/sac-format][GitHub]]!
 
 ** Why sac-format
 sac-format is Free and Open Source Software (FOSS) released under the MIT
@@ -55,8 +57,47 @@ lines of code. This small size makes it easy to use on any sort of hardware
 (such as a [[https://www.raspberrypi.com/][Raspberry Pi]]).
 
 * Quickstart
+** Manual Instructions
+*** Build Instructions
+Building is as easy as cloning the repository, running CMake for your preferred
+build tool, and then building.
+**** Ninja
+#+begin_src bash :returns code :eval no
+git clone https://github.com/arbCoding/sac-format.git
+mkdir bin && cd bin/
+cmake -G Ninja .. && ninja
+#+end_src
+**** Make
+#+begin_src bash :returns code :eval no
+git clone https://github.com/arbCoding/sac-format.git
+mkdir bin && cd bin/
+cmake .. && make
+#+end_src
+*** Use
+To use, simply link to the compiled library (=libsac-format.a= on Linux/macOS,
+=libsac-format.lib= on Windows) and include =src/sac_format.hpp=.
 ** Cmake Integration
-** Build Instructions
+To integrate sac-format into your CMake project, add it to your =CMakeLists.txt=.
+#+begin_example
+include(FetchContent)
+set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
+FetchContent_Declare(sac-format
+    GIT_REPOSITORY https://github.com/arbCoding/sac-format
+    GIT_TAG vX.X.X)
+FetchContent_MakeAvailable(sac-format)
+include_directory(${sacformat_SOURCE_DIR/src})
+
+project (your_project
+    LANGUAGES CXX)
+
+add_executable(your_executable
+    your_sources
+    sac_format.hpp)
+
+target_link_libraries_library(your_executable
+    PRIVATE sac-format)
+#+end_example
+
 ** Examples
 *** Empty Trace class
 #+name: empty_trace_example
@@ -85,6 +126,7 @@ Clang-15---which has excellent support for [[https://en.cppreference.com/w/cpp/c
 My goals are for sac-format to be accessible and modern---C++20 provides the bet
 fit.
 ** Dependencies
+The only dependency is on [[https://www.boost.org/users/history/version_1_83_0.html][boost 1.83.0]].
 ** Endianness
 MacOS is a little-endian system, meaning it expects binary values to start from
 the Least-Significant Bit (LSB). Linux is a big-endian system and expects binary

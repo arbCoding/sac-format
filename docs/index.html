@@ -1,29 +1,55 @@
 <!doctype html><html xmlns=http://www.w3.org/1999/xhtml lang=en xml:lang=en><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>sac-format</title>
-<meta name=author content="Alexander R. Blanchette"><meta name=generator content="Org Mode"><link rel=stylesheet href=https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css><link rel=stylesheet href=https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css><script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js></script><script src=https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js></script><script src=https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js></script><div id=content class=content><h1 class=title>sac-format</h1><div id=table-of-contents role=doc-toc><h2>Table of Contents</h2><div id=text-table-of-contents role=doc-toc><ul><li><a href=#orgac09871>Introduction</a><ul><li><a href=#org09d42a6>Why sac-format</a><ul><li><a href=#org5a8af7e>High-level Trace class</a><li><a href=#org6872539>Low-level I/O</a><li><a href=#orga58dd8b>Safe</a><li><a href=#org34bb7f6>Fast</a><li><a href=#org9c33976>Easy</a><li><a href=#orga47f6dd>Compact</a></ul></ul><li><a href=#orgb2239b8>Quickstart</a><ul><li><a href=#org7cbfbfc>Cmake Integration</a><li><a href=#orge8cb3da>Build Instructions</a><li><a href=#org71f271a>Examples</a><ul><li><a href=#orgc41d502>Empty Trace class</a></ul></ul><li><a href=#org838748c>Notes</a><ul><li><a href=#org6d258dc>Why C++20 and not C++23</a><li><a href=#org84a89b8>Dependencies</a><li><a href=#orgd4fad80>Endianness</a></ul></ul></div></div><hr><div id=outline-container-orgac09871 class=outline-2><h2 id=orgac09871>Introduction</h2><div class=outline-text-2 id=text-orgac09871><p>sac-format is a single-header statically-linked library designed to make working
-with binary <a href=https://ds.iris.edu/files/sac-manual/manual/file_format.html>SAC</a>-files as easy as possible. I wrote sac-format in the 2020
-standard of the C++ programming language (C++20), which has the benefit of being
-easy to read. It follows the SAC-file format specifications&#8212;it is incomplete
-where the specification is incomplete (XYZ files and a few header conventions,
-see below for details).</div><div id=outline-container-org09d42a6 class=outline-3><h3 id=org09d42a6>Why sac-format</h3><div class=outline-text-3 id=text-org09d42a6><p>sac-format is Free and Open Source Software (FOSS) released under the MIT
+<meta name=author content="Alexander R. Blanchette"><meta name=generator content="Org Mode"><link rel=stylesheet href=https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css><link rel=stylesheet href=https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css><script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js></script><script src=https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js></script><script src=https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js></script><div id=content class=content><h1 class=title>sac-format</h1><div id=table-of-contents role=doc-toc><h2>Table of Contents</h2><div id=text-table-of-contents role=doc-toc><ul><li><a href=#orgb59b8ef>Introduction</a><ul><li><a href=#orgcea18e6>Why sac-format</a><ul><li><a href=#orgb592d75>High-level Trace class</a><li><a href=#org5b9a896>Low-level I/O</a><li><a href=#org0ef6a57>Safe</a><li><a href=#orgd8d8751>Fast</a><li><a href=#orgac9b188>Easy</a><li><a href=#org492de6a>Compact</a></ul></ul><li><a href=#org5fd4ad9>Quickstart</a><ul><li><a href=#orga4841a3>Manual Instructions</a><ul><li><a href=#orgb4a5126>Build Instructions</a><li><a href=#org09bc491>Use</a></ul><li><a href=#org6e7d031>Cmake Integration</a><li><a href=#orge4fbb05>Examples</a><ul><li><a href=#org593178e>Empty Trace class</a></ul></ul><li><a href=#orga8af20f>Notes</a><ul><li><a href=#orgb8bb8ff>Why C++20 and not C++23</a><li><a href=#org1617790>Dependencies</a><li><a href=#orgd59b1d0>Endianness</a></ul></ul></div></div><hr><div id=outline-container-orgb59b8ef class=outline-2><h2 id=orgb59b8ef>Introduction</h2><div class=outline-text-2 id=text-orgb59b8ef><p>sac-format is a single-header statically-linked library designed to make working
+with binary <a href=https://ds.iris.edu/files/sac-manual/manual/file_format.html>SAC</a>-files as easy as possible. It is written in the 2020 standard of
+the C++ programming language (C++20), which has the benefit of being easy to
+read. It follows the SAC-file format specifications&#8212;it is incomplete where the
+specification is incomplete (XYZ files and a few header conventions, see below
+for details).<p>sac-format is being actively developed on <a href=https://github.com/arbCoding/sac-format>GitHub</a>!</div><div id=outline-container-orgcea18e6 class=outline-3><h3 id=orgcea18e6>Why sac-format</h3><div class=outline-text-3 id=text-orgcea18e6><p>sac-format is Free and Open Source Software (FOSS) released under the MIT
 license. Anyone can use it, for any purpose (including proprietary software),
 anywhere in the world. It is operating system agnostic and confirmed to run on
-Windows, macOS, and Linux systems.</div><div id=outline-container-org5a8af7e class=outline-4><h4 id=org5a8af7e>High-level Trace class</h4><div class=outline-text-4 id=text-org5a8af7e><p>sac-format includes the <code>Trace</code> class for seismic traces that provides high-level
+Windows, macOS, and Linux systems.</div><div id=outline-container-orgb592d75 class=outline-4><h4 id=orgb592d75>High-level Trace class</h4><div class=outline-text-4 id=text-orgb592d75><p>sac-format includes the <code>Trace</code> class for seismic traces that provides high-level
 object-oriented abstraction to seismic data. With the <code>Trace</code> class, you don&rsquo;t
 need to worry about manually reading SAC-files word-by-word. It is compatible
 with <code>v6</code> and <code>v7</code> SAC-files and can automatically detect the version upon reading.
 File output defaults to <code>v7</code> SAC-files and there is a legacy-write function for <code>v6</code>
-output.</div></div><div id=outline-container-org6872539 class=outline-4><h4 id=org6872539>Low-level I/O</h4><div class=outline-text-4 id=text-org6872539><p>If you want to roll your own SAC-file processing workflow you can use the
+output.</div></div><div id=outline-container-org5b9a896 class=outline-4><h4 id=org5b9a896>Low-level I/O</h4><div class=outline-text-4 id=text-org5b9a896><p>If you want to roll your own SAC-file processing workflow you can use the
 low-level I/O functionality built into sac-format. All functions are tested and
-confirmed working&#8212;they&rsquo;re used to build the <code>Trace</code> class!</div></div><div id=outline-container-orga58dd8b class=outline-4><h4 id=orga58dd8b>Safe</h4><div class=outline-text-4 id=text-orga58dd8b><p>sac-format is <b>safe</b>&#8212;testing is an important part of software development. The
+confirmed working&#8212;they&rsquo;re used to build the <code>Trace</code> class!</div></div><div id=outline-container-org0ef6a57 class=outline-4><h4 id=org0ef6a57>Safe</h4><div class=outline-text-4 id=text-org0ef6a57><p>sac-format is <b>safe</b>&#8212;testing is an important part of software development. The
 sac-format library is extensively tested using the <a href=https://github.com/catchorg/Catch2>Catch2</a> testing framework.
 Everything from low-level binary conversions to high-level <code>Trace</code> reading/writing
-are tested and confirmed working. New tests added when they are imagined.</div></div><div id=outline-container-org34bb7f6 class=outline-4><h4 id=org34bb7f6>Fast</h4><div class=outline-text-4 id=text-org34bb7f6><p>sac-format is <b>fast</b>&#8212;along with extensive testing, it is also extensively
+are tested and confirmed working. New tests added when they are imagined.</div></div><div id=outline-container-orgd8d8751 class=outline-4><h4 id=orgd8d8751>Fast</h4><div class=outline-text-4 id=text-orgd8d8751><p>sac-format is <b>fast</b>&#8212;along with extensive testing, it is also extensively
 benchmarked. Run the benchmarks yourself to determine how sac-format performs on
-your system.</div></div><div id=outline-container-org9c33976 class=outline-4><h4 id=org9c33976>Easy</h4><div class=outline-text-4 id=text-org9c33976><p>sac-format is <b>easy</b>&#8212;it is single-header and object-oriented. It is easy to
-integrate into any project using <a href=https://cmake.org/>CMake</a>. See the <a href=#orgb2239b8>Quickstart</a> section to get up and
-running immediately.</div></div><div id=outline-container-orga47f6dd class=outline-4><h4 id=orga47f6dd>Compact</h4><div class=outline-text-4 id=text-orga47f6dd><p>In total (header + implementation&#8211;excluding comments) sac-format is under 1000
+your system.</div></div><div id=outline-container-orgac9b188 class=outline-4><h4 id=orgac9b188>Easy</h4><div class=outline-text-4 id=text-orgac9b188><p>sac-format is <b>easy</b>&#8212;it is single-header and object-oriented. It is easy to
+integrate into any project using <a href=https://cmake.org/>CMake</a>. See the <a href=#org5fd4ad9>Quickstart</a> section to get up and
+running immediately.</div></div><div id=outline-container-org492de6a class=outline-4><h4 id=org492de6a>Compact</h4><div class=outline-text-4 id=text-org492de6a><p>In total (header + implementation&#8211;excluding comments) sac-format is under 1000
 lines of code. This small size makes it easy to use on any sort of hardware
-(such as a <a href=https://www.raspberrypi.com/>Raspberry Pi</a>).</div></div></div></div><div id=outline-container-orgb2239b8 class=outline-2><h2 id=orgb2239b8>Quickstart</h2><div class=outline-text-2 id=text-orgb2239b8></div><div id=outline-container-org7cbfbfc class=outline-3><h3 id=org7cbfbfc>Cmake Integration</h3></div><div id=outline-container-orge8cb3da class=outline-3><h3 id=orge8cb3da>Build Instructions</h3></div><div id=outline-container-org71f271a class=outline-3><h3 id=org71f271a>Examples</h3><div class=outline-text-3 id=text-org71f271a></div><div id=outline-container-orgc41d502 class=outline-4><h4 id=orgc41d502>Empty Trace class</h4><div class=outline-text-4 id=text-orgc41d502><div class=org-src-container><pre class="src src-cpp" id=orgc969aa7>#include &lt;iostream&gt;
+(such as a <a href=https://www.raspberrypi.com/>Raspberry Pi</a>).</div></div></div></div><div id=outline-container-org5fd4ad9 class=outline-2><h2 id=org5fd4ad9>Quickstart</h2><div class=outline-text-2 id=text-org5fd4ad9></div><div id=outline-container-orga4841a3 class=outline-3><h3 id=orga4841a3>Manual Instructions</h3><div class=outline-text-3 id=text-orga4841a3></div><div id=outline-container-orgb4a5126 class=outline-4><h4 id=orgb4a5126>Build Instructions</h4><div class=outline-text-4 id=text-orgb4a5126><p>Building is as easy as cloning the repository, running CMake for your preferred
+build tool, and then building.</div><ul class=org-ul><li><a id=orgd2b200c></a>Ninja<br><div class=outline-text-5 id=text-orgd2b200c><div class=org-src-container><pre class="src src-bash">git clone https://github.com/arbCoding/sac-format.git
+mkdir bin &amp;&amp; cd bin/
+cmake -G Ninja .. &amp;&amp; ninja
+</pre></div></div><li><a id=orgaa0e231></a>Make<br><div class=outline-text-5 id=text-orgaa0e231><div class=org-src-container><pre class="src src-bash">git clone https://github.com/arbCoding/sac-format.git
+mkdir bin &amp;&amp; cd bin/
+cmake .. &amp;&amp; make
+</pre></div></div></ul></div><div id=outline-container-org09bc491 class=outline-4><h4 id=org09bc491>Use</h4><div class=outline-text-4 id=text-org09bc491><p>To use, simply link to the compiled library (<code>libsac-format.a</code> on Linux/macOS,
+<code>libsac-format.lib</code> on Windows) and include <code>src/sac_format.hpp</code>.</div></div></div><div id=outline-container-org6e7d031 class=outline-3><h3 id=org6e7d031>Cmake Integration</h3><div class=outline-text-3 id=text-org6e7d031><p>To integrate sac-format into your CMake project, add it to your <code>CMakeLists.txt</code>.<pre class=example id=org9ea6430>
+include(FetchContent)
+set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
+FetchContent_Declare(sac-format
+    GIT_REPOSITORY https://github.com/arbCoding/sac-format
+    GIT_TAG vX.X.X)
+FetchContent_MakeAvailable(sac-format)
+include_directory(${sacformat_SOURCE_DIR/src})
+
+project (your_project
+    LANGUAGES CXX)
+
+add_executable(your_executable
+    your_sources
+    sac_format.hpp)
+
+target_link_libraries_library(your_executable
+    PRIVATE sac-format)
+</pre></div></div><div id=outline-container-orge4fbb05 class=outline-3><h3 id=orge4fbb05>Examples</h3><div class=outline-text-3 id=text-orge4fbb05></div><div id=outline-container-org593178e class=outline-4><h4 id=org593178e>Empty Trace class</h4><div class=outline-text-4 id=text-org593178e><div class=org-src-container><pre class="src src-cpp" id=orgaee2c7e>#include &lt;iostream&gt;
 #include &lt;sac_format.hpp&gt;
 
 using namespace sacfmt;
@@ -33,10 +59,10 @@ int main() {
     std::cout &lt;&lt; trace.kstnm &lt;&lt; '\n';
     return EXIT_SUCCESS;
 }
-</pre></div></div></div></div></div><div id=outline-container-org838748c class=outline-2><h2 id=org838748c>Notes</h2><div class=outline-text-2 id=text-org838748c></div><div id=outline-container-org6d258dc class=outline-3><h3 id=org6d258dc>Why C++20 and not C++23</h3><div class=outline-text-3 id=text-org6d258dc><p>Compiler restrictions&#8212;many of the features of C++23 <a href=https://en.cppreference.com/w/cpp/compiler_support/23>require</a> GCC-13+ and
+</pre></div></div></div></div></div><div id=outline-container-orga8af20f class=outline-2><h2 id=orga8af20f>Notes</h2><div class=outline-text-2 id=text-orga8af20f></div><div id=outline-container-orgb8bb8ff class=outline-3><h3 id=orgb8bb8ff>Why C++20 and not C++23</h3><div class=outline-text-3 id=text-orgb8bb8ff><p>Compiler restrictions&#8212;many of the features of C++23 <a href=https://en.cppreference.com/w/cpp/compiler_support/23>require</a> GCC-13+ and
 Clang-16+. Many systems, especially older ones, still use GCC-12 and
 Clang-15&#8212;which has excellent support for <a href=https://en.cppreference.com/w/cpp/compiler_support/20>C++20</a>.<p>My goals are for sac-format to be accessible and modern&#8212;C++20 provides the bet
-fit.</div></div><div id=outline-container-org84a89b8 class=outline-3><h3 id=org84a89b8>Dependencies</h3></div><div id=outline-container-orgd4fad80 class=outline-3><h3 id=orgd4fad80>Endianness</h3><div class=outline-text-3 id=text-orgd4fad80><p>MacOS is a little-endian system, meaning it expects binary values to start from
+fit.</div></div><div id=outline-container-org1617790 class=outline-3><h3 id=org1617790>Dependencies</h3><div class=outline-text-3 id=text-org1617790><p>The only dependency is on <a href=https://www.boost.org/users/history/version_1_83_0.html>boost 1.83.0</a>.</div></div><div id=outline-container-orgd59b1d0 class=outline-3><h3 id=orgd59b1d0>Endianness</h3><div class=outline-text-3 id=text-orgd59b1d0><p>MacOS is a little-endian system, meaning it expects binary values to start from
 the Least-Significant Bit (LSB). Linux is a big-endian system and expects binary
 values to start from the Most-Significan Bit (MSB). This means that MacOS
 reads/writes chunks of binary data from right-to-left, while on Linux it is done
