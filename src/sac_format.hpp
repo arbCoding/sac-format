@@ -316,6 +316,7 @@ public:
     Data data{};
     File file{};
     explicit Trace2(const std::filesystem::path& path);
+    Trace2() = default;
     // Overload equality check
     bool operator==(const Trace2& other) const;
 };

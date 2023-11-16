@@ -505,15 +505,101 @@ TEST_CASE("Event") {
 }
 //------------------------------------------------------------------------------
 // Station tests
-
+TEST_CASE("Station") {
+  SECTION("Default") {
+    const Station station{};
+    const Location loc{};
+    const Instrument inst{};
+    REQUIRE(station.location == loc);
+    REQUIRE(station.instrument == inst);
+    REQUIRE(station.istreg == unset_int);
+    REQUIRE(station.lpspol == unset_bool);
+    REQUIRE(station.kstnm == unset_word);
+    REQUIRE(station.knetwk == unset_word);
+    REQUIRE(station.khole == unset_word);
+  }
+}
 //------------------------------------------------------------------------------
 // Date tests
-
+TEST_CASE("Date") {
+  SECTION("Default") {
+    const Date date{};
+    REQUIRE(date.nzyear == unset_int);
+    REQUIRE(date.nzjday == unset_int);
+    REQUIRE(date.nzhour == unset_int);
+    REQUIRE(date.nzmin == unset_int);
+    REQUIRE(date.nzsec == unset_int);
+    REQUIRE(date.nzmsec == unset_int);
+  }
+}
 //------------------------------------------------------------------------------
 // Data tests
-
+TEST_CASE("Data") {
+  SECTION("Default") {
+    const Data data{};
+    const Date date{};
+    REQUIRE(data.depmin == unset_float);
+    REQUIRE(data.depmen == unset_float);
+    REQUIRE(data.depmax == unset_float);
+    REQUIRE(data.begin_time == unset_double);
+    REQUIRE(data.end_time == unset_double);
+    REQUIRE(data.dist == unset_float);
+    REQUIRE(data.az == unset_float);
+    REQUIRE(data.baz == unset_float);
+    REQUIRE(data.gcarc == unset_float);
+    REQUIRE(data.origin_begin == unset_double);
+    REQUIRE(data.delta == unset_double);
+    REQUIRE(data.odelta == unset_double);
+    REQUIRE(data.sdelta == unset_double);
+    REQUIRE(data.xminimum == unset_float);
+    REQUIRE(data.xmaximum == unset_float);
+    REQUIRE(data.yminimum == unset_float);
+    REQUIRE(data.ymaximum == unset_float);
+    REQUIRE(data.reference_date == date);
+    REQUIRE(data.origin_id == unset_int);
+    REQUIRE(data.npts == unset_int);
+    REQUIRE(data.nsnpts == unset_int);
+    REQUIRE(data.waveform_id == unset_int);
+    REQUIRE(data.nxsize == unset_int);
+    REQUIRE(data.nysize == unset_int);
+    REQUIRE(data.idep == unset_int);
+    REQUIRE(data.reference_date_type == unset_int);
+    REQUIRE(data.quality == unset_int);
+    REQUIRE(data.synthetic == unset_int);
+    REQUIRE(data.magnitude_source == unset_int);
+    REQUIRE(data.reference_body == unset_int);
+    REQUIRE(data.evenly_sampled == unset_bool);
+    REQUIRE(data.calc_geometry == unset_bool);
+    REQUIRE(data.kdatrd == unset_word);
+    REQUIRE(data.data1.empty());
+    REQUIRE(data.data2.empty());
+  }
+}
 //------------------------------------------------------------------------------
 // File tests
-
+TEST_CASE("File") {
+  SECTION("Default") {
+    const File file{};
+    REQUIRE(file.version == 7);
+    REQUIRE(file.type == unset_int);
+    REQUIRE(file.overwrite == unset_bool);
+    REQUIRE(file.path.empty());
+  }
+}
 //------------------------------------------------------------------------------
 // Trace2 tests
+TEST_CASE("Trace2") {
+  SECTION("Default") {
+    const Trace2 trace2{};
+    const Station station{};
+    const Event event{};
+    const User user{};
+    const Data data{};
+    const File file{};
+    REQUIRE(trace2.station == station);
+    REQUIRE(trace2.event == event);
+    REQUIRE(trace2.user == user);
+    REQUIRE(trace2.data == data);
+    REQUIRE(trace2.file == file);
+  }
+}
