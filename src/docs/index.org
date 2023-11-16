@@ -23,10 +23,10 @@ sac-format's actively developed on [[https://github.com/arbCoding/sac-format][Gi
 ** Why sac-format
 sac-format is Free and Open Source Software (FOSS) released under the MIT
 license. Anyone can use it, for any purpose (including proprietary software),
-anywhere in the world. sac-format's operating system agnostic and confirmed to
-run on Windows, macOS, and Linux systems.
+anywhere in the world. sac-format's operating system agnostic and confirmed
+working on Windows, macOS, and Linux systems.
 *** High-Level Trace Class
-sac-format includes the =Trace= class for seismic traces that provides high-level
+sac-format includes the =Trace= class for seismic traces, providing high-level
 object-oriented abstraction to seismic data. With the =Trace= class, you don't
 need to worry about manually reading SAC-files word-by-word. It is compatible
 with =v6= and =v7= SAC-files and can automatically detect the version upon reading.
@@ -40,19 +40,19 @@ confirmed working---they're used to build the =Trace= class!
 sac-format's *safe*---testing is an important part of software development. The
 sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
 Everything from low-level binary conversions to high-level =Trace= reading/writing
-are tested and confirmed working. New tests added when they're imagined.
+are tested and confirmed working. New tests added when they're imagined. Check
+and run the tests yourself---see =utests.cpp=.
 *** Fast
 sac-format's *fast*---it's written in C++ and extensively benchmarked. You can run
-the benchmarks yourself to find how sac-format performs on your system.
+the benchmarks yourself to find out how sac-format performs on your system.
 *** Easy
-sac-format's *easy*---single-header makes integration to any project a breeze.
-[[https://cmake.org/][CMake]] makes building on different platforms a breeze. Object-oriented design
-makes use simple and intuitive. See the [[Quickstart]] section to get up and
-running.
-*** Compact
-sac-format's *compact*---in total (header + implementation--excluding comments)
-there are fewer than 1500 lines of code. This small size makes it easy to use on
-any sort of hardware (such as a [[https://www.raspberrypi.com/][Raspberry Pi]]).
+sac-format's *easy*---single-header makes integration to any project simple. [[https://cmake.org/][CMake]]
+makes building on different platforms a breeze. Object-oriented design makes use
+easy and intuitive. See the [[Quickstart]] section to get up and running.
+*** Small
+sac-format's *small*---in total (header + implementation--excluding comments) adds
+to fewer than 1500 lines of code. Small size opens to door to using on any sort
+of hardware (old or new).
 *** Documentation
 sac-format's extensively *documented*---both online and in the code. Nothing's
 hidden---nothing's obscured. Curious how something works? Check the
@@ -125,7 +125,7 @@ Compiler restrictions---C++23 support [[https://en.cppreference.com/w/cpp/compil
 systems, still use GCC-12 and Clang-15---which has near complete support for
 [[https://en.cppreference.com/w/cpp/compiler_support/20][C++20]].
 
-sac-format aims to be accessible, modern, safe, and fast---C++20 provides the
-best fit.
+sac-format strives for accessibility, modernity, safety, and speed---C++20
+provides the best fit.
 ** Dependencies
 1) [[https://www.boost.org/users/history/version_1_83_0.html][boost 1.83.0]].

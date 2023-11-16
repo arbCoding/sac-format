@@ -264,183 +264,38 @@ std::vector<char> bool_to_word(const bool b) {
 //------------------------------------------------------------------------------
 // Trace2
 //------------------------------------------------------------------------------
-bool Location::operator==(const Location& other) const {
-    if (latitude != other.latitude) { return false; }
-    if (longitude != other.longitude) { return false; }
-    if (depth != other.depth) { return false; }
-    if (elevation != other.elevation) { return false; }
-    return true;
+Trace2::Trace2() {
+    std::ranges::fill(floats.begin(), floats.end(), unset_float);
+    std::ranges::fill(doubles.begin(), doubles.end(), unset_double);
+    std::ranges::fill(ints.begin(), ints.end(), unset_int);
+    std::ranges::fill(bools.begin(), bools.end(), unset_bool);
+    std::ranges::fill(strings.begin(), strings.end(), unset_word);
+    //std::ranges::fill(data.begin(), data.end(), std::vector<double>{});
 }
 
-bool User::operator==(const User& other) const {
-    if (t0 != other.t0) { return false; }
-    if (t1 != other.t1) { return false; }
-    if (t2 != other.t2) { return false; }
-    if (t3 != other.t3) { return false; }
-    if (t4 != other.t4) { return false; }
-    if (t5 != other.t5) { return false; }
-    if (t6 != other.t6) { return false; }
-    if (t7 != other.t7) { return false; }
-    if (t8 != other.t8) { return false; }
-    if (t9 != other.t9) { return false; }
-    if (kt0 != other.kt0) { return false; }
-    if (kt1 != other.kt1) { return false; }
-    if (kt2 != other.kt2) { return false; }
-    if (kt3 != other.kt3) { return false; }
-    if (kt4 != other.kt4) { return false; }
-    if (kt5 != other.kt5) { return false; }
-    if (kt6 != other.kt6) { return false; }
-    if (kt7 != other.kt7) { return false; }
-    if (kt8 != other.kt8) { return false; }
-    if (kt9 != other.kt9) { return false; }
-    if (user0 != other.user0) { return false; }
-    if (user1 != other.user1) { return false; }
-    if (user2 != other.user2) { return false; }
-    if (user3 != other.user3) { return false; }
-    if (user4 != other.user4) { return false; }
-    if (user5 != other.user5) { return false; }
-    if (user6 != other.user6) { return false; }
-    if (user7 != other.user7) { return false; }
-    if (user8 != other.user8) { return false; }
-    if (user9 != other.user9) { return false; }
-    if (kuser0 != other.kuser0) { return false; }
-    if (kuser1 != other.kuser1) { return false; }
-    if (kuser2 != other.kuser2) { return false; }
-    return true;
+float Trace2::get_float(const std::string_view& x) const {
+    return floats[sac_map.at(x)];
 }
 
-bool Instrument::operator==(const Instrument& other) const {
-    if (resp0 != other.resp0) { return false; }
-    if (resp1 != other.resp1) { return false; }
-    if (resp2 != other.resp2) { return false; }
-    if (resp3 != other.resp3) { return false; }
-    if (resp4 != other.resp4) { return false; }
-    if (resp5 != other.resp5) { return false; }
-    if (resp6 != other.resp6) { return false; }
-    if (resp7 != other.resp7) { return false; }
-    if (resp8 != other.resp8) { return false; }
-    if (resp9 != other.resp9) { return false; }
-    if (cmpaz != other.cmpaz) { return false; }
-    if (cmpinc != other.cmpinc) { return false; }
-    if (iinst != other.iinst) { return false; }
-    if (kcmpnm != other.kcmpnm) { return false; }
-    if (kinst != other.kinst) { return false; }
-    return true;
+double Trace2::get_double(const std::string_view& x) const {
+    return doubles[sac_map.at(x)];
 }
 
-bool Event::operator==(const Event& other) const {
-    if (location != other.location) { return false; }
-    if (origin_time != other.origin_time) { return false; }
-    if (ko != other.ko) { return false; }
-    if (first_arrival != other.first_arrival) { return false; }
-    if (ka != other.ka) { return false; }
-    if (fini_time != other.fini_time) { return false; }
-    if (kf != other.kf) { return false; }
-    if (magnitude != other.magnitude) { return false; }
-    if (nevid != other.nevid) { return false; }
-    if (ievreg != other.ievreg) { return false; }
-    if (ievtyp != other.ievtyp) { return false; }
-    if (imagtyp != other.imagtyp) { return false; }
-    if (kevnm != other.kevnm) { return false; }
-    return true;
+int Trace2::get_int(const std::string_view& x) const {
+    return ints[sac_map.at(x)];
 }
 
-bool Station::operator==(const Station& other) const {
-    if (location != other.location) { return false; }
-    if (instrument != other.instrument) { return false; }
-    if (istreg != other.istreg) { return false; }
-    if (lpspol != other.lpspol) { return false; }
-    if (kstnm != other.kstnm) { return false; }
-    if (knetwk != other.knetwk) { return false; }
-    if (khole != other.khole) { return false; }
-    return true;
+bool Trace2::get_bool(const std::string_view& x) const {
+    return bools[sac_map.at(x)];
 }
 
-bool Date::operator==(const Date& other) const {
-    if (nzyear != other.nzyear) { return false; }
-    if (nzjday != other.nzjday) { return false; }
-    if (nzhour != other.nzhour) { return false; }
-    if (nzmin != other.nzmin) { return false; }
-    if (nzsec != other.nzsec) { return false; }
-    if (nzmsec != other.nzmsec) { return false; }
-    return true;
+std::string Trace2::get_string(const std::string_view& x) const {
+    return strings[sac_map.at(x)];
 }
 
-bool Data::operator==(const Data& other) const {
-    if (depmin != other.depmin) { return false; }
-    if (depmen != other.depmen) { return false; }
-    if (depmax != other.depmax) { return false; }
-    if (begin_time != other.begin_time) { return false; }
-    if (end_time != other.end_time) { return false; }
-    if (dist != other.dist) { return false; }
-    if (az != other.az) { return false; }
-    if (baz != other.baz) { return false; }
-    if (gcarc != other.gcarc) { return false; }
-    if (origin_begin != other.origin_begin) { return false; }
-    if (delta != other.delta) { return false; }
-    if (odelta != other.odelta) { return false; }
-    if (sdelta != other.sdelta) { return false; }
-    if (xminimum != other.xminimum) { return false; }
-    if (xmaximum != other.xmaximum) { return false; }
-    if (yminimum != other.yminimum) { return false; }
-    if (ymaximum != other.ymaximum) { return false; }
-    if (reference_date != other.reference_date) { return false; }
-    if (origin_id != other.origin_id) { return false; }
-    if (npts != other.npts) { return false; }
-    if (nsnpts != other.nsnpts) { return false; }
-    if (waveform_id != other.waveform_id) { return false; }
-    if (nxsize != other.nxsize) { return false; }
-    if (nysize != other.nysize) { return false; }
-    if (idep != other.idep) { return false; }
-    if (reference_date_type != other.reference_date_type) { return false; }
-    if (quality != other.quality) { return false; }
-    if (synthetic != other.synthetic) { return false; }
-    if (magnitude_source != other.magnitude_source) { return false; }
-    if (reference_body != other.reference_body) { return false; }
-    if (evenly_sampled != other.evenly_sampled) { return false; }
-    if (calc_geometry != other.calc_geometry) { return false; }
-    if (kdatrd != other.kdatrd) { return false; }
-    if (!equal_within_tolerance(data1, other.data1)) { return false; }
-    if (!equal_within_tolerance(data2, other.data2)) { return false; }
-    return true;
+std::vector<double> Trace2::get_data(const std::string_view& x) const {
+    return data[sac_map.at(x)];
 }
-
-bool Data::equal_within_tolerance(const std::vector<double>& vector1,
-                                  const std::vector<double>& vector2,
-                                  const double tolerance) const {
-    if (vector1.size() != vector2.size()) { return false; }
-    for (size_t i{0}; i < vector1.size(); ++i) {
-        if (std::abs(vector1[i] - vector2[i]) > tolerance) { return false; }
-    }
-    return true;
-}
-
-bool File::operator==(const File& other) const {
-    if (version != other.version) { return false; }
-    if (type != other.type) { return false; }
-    if (overwrite != other.overwrite) { return false; }
-    // Don't check path
-    return true;
-}
-
-bool Trace2::operator==(const Trace2& other) const {
-    if (station != other.station) { return false; }
-    if (event != other.event) { return false; }
-    if (user != other.user) { return false; }
-    if (file != other.file) { return false; }
-    if (data != other.data) { return false; }
-    return true;
-}
-
-/*
-Trace2::Trace2(const std::filesystem::path& path) {
-    std::ifstream file(path, std::ifstream::binary);
-    if (!file) {
-        std:: cerr << "File: " << path.string() << "could not be read...\n";
-    }
-    file.seekg(0);
-}
-*/
 //------------------------------------------------------------------------------
 // Trace
 //------------------------------------------------------------------------------
