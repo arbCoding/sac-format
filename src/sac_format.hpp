@@ -117,6 +117,10 @@ template <size_t N>
 std::array<char, N> convert_to_words(const std::string& s, int n_words = 1);
 // Convert a bool value to a word
 std::vector<char> bool_to_word(const bool b);
+bool equal_within_tolerance(const std::vector<double>& vector1,
+                                const std::vector<double>& vector2,
+                                const double tolerance =
+                                std::numeric_limits<float>::epsilon());
 // This is the replacement Trace class
 // Lookup maps
 const std::unordered_map<std::string_view, int> sac_map = {
@@ -247,6 +251,251 @@ public:
     explicit Trace2();
     explicit Trace2(const std::filesystem::path& path);
     bool operator==(const Trace2& other) const;
+    // Getters
+    // Floats
+    float depmin() const;
+    float depmax() const;
+    float odelta() const;
+    float resp0() const;
+    float resp1() const;
+    float resp2() const;
+    float resp3() const;
+    float resp4() const;
+    float resp5() const;
+    float resp6() const;
+    float resp7() const;
+    float resp8() const;
+    float resp9() const;
+    float stel() const;
+    float stdp() const;
+    float evel() const;
+    float evdp() const;
+    float mag() const;
+    float user0() const;
+    float user1() const;
+    float user2() const;
+    float user3() const;
+    float user4() const;
+    float user5() const;
+    float user6() const;
+    float user7() const;
+    float user8() const;
+    float user9() const;
+    float dist() const;
+    float az() const;
+    float baz() const;
+    float gcarc() const;
+    float depmen() const;
+    float cmpaz() const;
+    float xminimum() const;
+    float xmaximum() const;
+    float yminimum() const;
+    float ymaximum() const;
+    // Doubles
+    double delta() const;
+    double b() const;
+    double e() const;
+    double o() const;
+    double a() const;
+    double t0() const;
+    double t1() const;
+    double t2() const;
+    double t3() const;
+    double t4() const;
+    double t5() const;
+    double t6() const;
+    double t7() const;
+    double t8() const;
+    double t9() const;
+    double f() const;
+    double stla() const;
+    double stlo() const;
+    double evla() const;
+    double evlo() const;
+    double sb() const;
+    double sdelta() const;
+    // Ints
+    int nzyear() const;
+    int nzjday() const;
+    int nzhour() const;
+    int nzmin() const;
+    int nzsec() const;
+    int nzmsec() const;
+    int nvhdr() const;
+    int norid() const;
+    int nevid() const;
+    int npts() const;
+    int nsnpts() const;
+    int nwfid() const;
+    int nxsize() const;
+    int nysize() const;
+    int iftype() const;
+    int idep() const;
+    int iztype() const;
+    int iinst() const;
+    int istreg() const;
+    int ievreg() const;
+    int ievtyp() const;
+    int iqual() const;
+    int isynth() const;
+    int imagtyp() const;
+    int imagsrc() const;
+    int ibody() const;
+    // Bools
+    bool leven() const;
+    bool lpspol() const;
+    bool lovrok() const;
+    bool lcalda() const;
+    // Strings
+    std::string kstnm() const;
+    std::string kevnm() const;
+    std::string khole() const;
+    std::string ko() const;
+    std::string ka() const;
+    std::string kt0() const;
+    std::string kt1() const;
+    std::string kt2() const;
+    std::string kt3() const;
+    std::string kt4() const;
+    std::string kt5() const;
+    std::string kt6() const;
+    std::string kt7() const;
+    std::string kt8() const;
+    std::string kt9() const;
+    std::string kf() const;
+    std::string kuser0() const;
+    std::string kuser1() const;
+    std::string kuser2() const;
+    std::string kcmpnm() const;
+    std::string knetwk() const;
+    std::string kdatrd() const;
+    std::string kinst() const;
+    // Data
+    std::vector<double> data1() const;
+    std::vector<double> data2() const;
+    // Setters
+    // Floats
+    void depmin(const float x);
+    void depmax(const float x);
+    void odelta(const float x);
+    void resp0(const float x);
+    void resp1(const float x);
+    void resp2(const float x);
+    void resp3(const float x);
+    void resp4(const float x);
+    void resp5(const float x);
+    void resp6(const float x);
+    void resp7(const float x);
+    void resp8(const float x);
+    void resp9(const float x);
+    void stel(const float x);
+    void stdp(const float x);
+    void evel(const float x);
+    void evdp(const float x);
+    void mag(const float x);
+    void user0(const float x);
+    void user1(const float x);
+    void user2(const float x);
+    void user3(const float x);
+    void user4(const float x);
+    void user5(const float x);
+    void user6(const float x);
+    void user7(const float x);
+    void user8(const float x);
+    void user9(const float x);
+    void dist(const float x);
+    void az(const float x);
+    void baz(const float x);
+    void gcarc(const float x);
+    void depmen(const float x);
+    void cmpaz(const float x);
+    void xminimum(const float x);
+    void xmaximum(const float x);
+    void yminimum(const float x);
+    void ymaximum(const float x);
+    // Doubles
+    // Doubles
+    void delta(const double x);
+    void b(const double x);
+    void e(const double x);
+    void o(const double x);
+    void a(const double x);
+    void t0(const double x);
+    void t1(const double x);
+    void t2(const double x);
+    void t3(const double x);
+    void t4(const double x);
+    void t5(const double x);
+    void t6(const double x);
+    void t7(const double x);
+    void t8(const double x);
+    void t9(const double x);
+    void f(const double x);
+    void stla(const double x);
+    void stlo(const double x);
+    void evla(const double x);
+    void evlo(const double x);
+    void sb(const double x);
+    void sdelta(const double x);
+    // Ints
+    void nzyear(const int x);
+    void nzjday(const int x);
+    void nzhour(const int x);
+    void nzmin(const int x);
+    void nzsec(const int x);
+    void nzmsec(const int x);
+    void nvhdr(const int x);
+    void norid(const int x);
+    void nevid(const int x);
+    void npts(const int x);
+    void nsnpts(const int x);
+    void nwfid(const int x);
+    void nxsize(const int x);
+    void nysize(const int x);
+    void iftype(const int x);
+    void idep(const int x);
+    void iztype(const int x);
+    void iinst(const int x);
+    void istreg(const int x);
+    void ievreg(const int x);
+    void ievtyp(const int x);
+    void iqual(const int x);
+    void isynth(const int x);
+    void imagtyp(const int x);
+    void imagsrc(const int x);
+    void ibody(const int x);
+    // Bools
+    void leven(const bool x);
+    void lpspol(const bool x);
+    void lovrok(const bool x);
+    void lcalda(const bool x);
+    // Strings
+    void kstnm(const std::string& x);
+    void kevnm(const std::string& x);
+    void khole(const std::string& x);
+    void ko(const std::string& x);
+    void ka(const std::string& x);
+    void kt0(const std::string& x);
+    void kt1(const std::string& x);
+    void kt2(const std::string& x);
+    void kt3(const std::string& x);
+    void kt4(const std::string& x);
+    void kt5(const std::string& x);
+    void kt6(const std::string& x);
+    void kt7(const std::string& x);
+    void kt8(const std::string& x);
+    void kt9(const std::string& x);
+    void kf(const std::string& x);
+    void kuser0(const std::string& x);
+    void kuser1(const std::string& x);
+    void kuser2(const std::string& x);
+    void kcmpnm(const std::string& x);
+    void knetwk(const std::string& x);
+    void kdatrd(const std::string& x);
+    void kinst(const std::string& x);
+    // Data
+    void data1(const std::vector<double>& x);
+    void data2(const std::vector<double>& x);
 private:
     std::array<float, 39> floats{};
     std::array<double, 22> doubles{};
@@ -254,15 +503,8 @@ private:
     std::array<bool, 4> bools{};
     std::array<std::string, 23> strings{};
     std::array<std::vector<double>, 2> data{};
-    // Getters
-    float get_float(const std::string_view& x) const;
-    double get_double(const std::string_view& x) const;
-    int get_int(const std::string_view& x) const;
-    bool get_bool(const std::string_view& x) const;
-    std::string get_string(const std::string_view& x) const;
-    std::vector<double> get_data(const std::string_view& x) const;
-    // Setters
 };
+// This is will be obsolete soon! Trace2 is the future!
 class Trace {
 public:
     //----------------------------------------------------------------------
@@ -639,10 +881,6 @@ public:
     //----------------------------------------------------------------------
     // Overload equality check
     bool operator==(const Trace& other) const;
-    bool equal_within_tolerance(const std::vector<double>& vector1,
-                                const std::vector<double>& vector2,
-                                const double tolerance =
-                                std::numeric_limits<float>::epsilon()) const;
 };
 }
 #endif
