@@ -8,17 +8,17 @@
 ;; Define the publishing project
 (setq org-publish-project-alist
       ;; Take org files and generate the html pages
-      `(("pages"
+      `(("html"
          :base-directory "./src/docs"
          :base-extension "org"
          :publishing-directory "./docs/"
          :publishing-function org-html-publish-to-html)
-        ("docs"
+        ("pdf"
          :base-directory "./src/docs"
          :base-extension "org"
          :publishing-directory "./docs/"
          :publishing-function org-latex-publish-to-pdf)
-        ("arbCoding.github.io/sac-format" :components ("pages", "docs"))))
+        ("arbCoding.github.io/sac-format" :components ("html", "pdf"))))
 
 ;; Generate the site output
 (org-publish-all t)

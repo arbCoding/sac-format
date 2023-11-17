@@ -198,7 +198,13 @@ int main() {
 
 ** Trace class
 
-*** Structure
+*** Reading SAC
+
+*** Writing SAC
+
+*** Getters and Setters
+
+*** Internal Structure
 
 **** 'floats' array
 
@@ -211,12 +217,6 @@ int main() {
 **** 'strings' array
 
 **** 'data' array
-
-*** Reading SAC
-
-*** Writing SAC
-
-*** Getters and Setters
 
 ** Low-Level I/O
 
