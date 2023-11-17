@@ -502,11 +502,17 @@ public:
     void data1(const std::vector<double>& x);
     void data2(const std::vector<double>& x);
 private:
+    //cppcheck-suppress unusedStructMember
     std::array<float, 39> floats{};
+    //cppcheck-suppress unusedStructMember
     std::array<double, 22> doubles{};
+    //cppcheck-suppress unusedStructMember
     std::array<int, 26> ints{};
+    //cppcheck-suppress unusedStructMember
     std::array<bool, 4> bools{};
+    //cppcheck-suppress unusedStructMember
     std::array<std::string, 23> strings{};
+    //cppcheck-suppress unusedStructMember
     std::array<std::vector<double>, 2> data{};
 };
 };
