@@ -25,6 +25,12 @@ FetchContent_Declare(xoshiro
 FetchContent_MakeAvailable(Catch2 xoshiro)
 # Include Xoshiro since it doesn't have a CMakeLists.txt
 include_directories(${xoshiro_SOURCE_DIR})
+# HomeBew Boost on macOS
+find_package(Boost 1.83 REQUIRED CONFIG HINTS /opt/homebrew/Cellar/boost/1.83.0/lib/cmake)
+if (Boost_FOUND)
+  message("Boost_INCLUDE_DIRS=${Boost_INCLUDE_DIRS}")
+  include_directories(${Boost_INCLUDE_DIRS})
+endif()
 #===============================================================================
 # Flags
 #===============================================================================
