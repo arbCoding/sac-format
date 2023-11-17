@@ -60,6 +60,7 @@ Trace gen_fake_trace() {
   sac.b(0.1);
   sac.e(0.0);
   sac.a(5.78);
+  sac.o(83.213);
   sac.t0(1.234);
   sac.t1(-1.234);
   sac.t2(2.345);

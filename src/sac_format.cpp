@@ -267,11 +267,17 @@ bool equal_within_tolerance(const std::vector<double>& vector1,
                             const double tolerance) {
     if (vector1.size() != vector2.size()) { return false; }
     for (size_t i{0}; i < vector1.size(); ++i) {
-        if (std::abs(vector1[i] - vector2[i]) > tolerance) { return false; }
+        if (!equal_within_tolerance(vector1[i], vector2[i], tolerance)) {
+            return false;
+        }
     }
     return true;
 }
-
+bool equal_within_tolerance(const double x1, const double x2,
+                            const double tolerance) {
+    if (std::abs(x1 - x2) > tolerance) { return false; }
+    return true;
+}
 //------------------------------------------------------------------------------
 // Trace
 //------------------------------------------------------------------------------
@@ -294,251 +300,250 @@ bool Trace::operator==(const Trace& other) const {
 }
 // Getters
 // Floats
-float Trace::depmin() const { return floats[sac_map.at("depmin")]; }
-float Trace::depmax() const { return floats[sac_map.at("depmax")]; }
-float Trace::odelta() const { return floats[sac_map.at("odelta")]; }
-float Trace::resp0() const { return floats[sac_map.at("resp0")]; }
-float Trace::resp1() const { return floats[sac_map.at("resp1")]; }
-float Trace::resp2() const { return floats[sac_map.at("resp2")]; }
-float Trace::resp3() const { return floats[sac_map.at("resp3")]; }
-float Trace::resp4() const { return floats[sac_map.at("resp4")]; }
-float Trace::resp5() const { return floats[sac_map.at("resp5")]; }
-float Trace::resp6() const { return floats[sac_map.at("resp6")]; }
-float Trace::resp7() const { return floats[sac_map.at("resp7")]; }
-float Trace::resp8() const { return floats[sac_map.at("resp8")]; }
-float Trace::resp9() const { return floats[sac_map.at("resp9")]; }
-float Trace::stel() const { return floats[sac_map.at("stel")]; }
-float Trace::stdp() const { return floats[sac_map.at("stdp")]; }
-float Trace::evel() const { return floats[sac_map.at("evel")]; }
-float Trace::evdp() const { return floats[sac_map.at("evdp")]; }
-float Trace::mag() const { return floats[sac_map.at("mag")]; }
-float Trace::user0() const { return floats[sac_map.at("user0")]; }
-float Trace::user1() const { return floats[sac_map.at("user1")]; }
-float Trace::user2() const { return floats[sac_map.at("user2")]; }
-float Trace::user3() const { return floats[sac_map.at("user3")]; }
-float Trace::user4() const { return floats[sac_map.at("user4")]; }
-float Trace::user5() const { return floats[sac_map.at("user5")]; }
-float Trace::user6() const { return floats[sac_map.at("user6")]; }
-float Trace::user7() const { return floats[sac_map.at("user7")]; }
-float Trace::user8() const { return floats[sac_map.at("user8")]; }
-float Trace::user9() const { return floats[sac_map.at("user9")]; }
-float Trace::dist() const { return floats[sac_map.at("dist")]; }
-float Trace::az() const { return floats[sac_map.at("az")]; }
-float Trace::baz() const { return floats[sac_map.at("baz")]; }
-float Trace::gcarc() const { return floats[sac_map.at("gcarc")]; }
-float Trace::depmen() const { return floats[sac_map.at("depmen")]; }
-float Trace::cmpaz() const { return floats[sac_map.at("cmpaz")]; }
-float Trace::cmpinc() const { return floats[sac_map.at("cmpinc")]; }
-float Trace::xminimum() const { return floats[sac_map.at("xminimum")]; }
-float Trace::xmaximum() const { return floats[sac_map.at("xmaximum")]; }
-float Trace::yminimum() const { return floats[sac_map.at("yminimum")]; }
-float Trace::ymaximum() const { return floats[sac_map.at("ymaximum")]; }
+float Trace::depmin() const { return floats[sac_map.at(name::depmin)]; }
+float Trace::depmax() const { return floats[sac_map.at(name::depmax)]; }
+float Trace::odelta() const { return floats[sac_map.at(name::odelta)]; }
+float Trace::resp0() const { return floats[sac_map.at(name::resp0)]; }
+float Trace::resp1() const { return floats[sac_map.at(name::resp1)]; }
+float Trace::resp2() const { return floats[sac_map.at(name::resp2)]; }
+float Trace::resp3() const { return floats[sac_map.at(name::resp3)]; }
+float Trace::resp4() const { return floats[sac_map.at(name::resp4)]; }
+float Trace::resp5() const { return floats[sac_map.at(name::resp5)]; }
+float Trace::resp6() const { return floats[sac_map.at(name::resp6)]; }
+float Trace::resp7() const { return floats[sac_map.at(name::resp7)]; }
+float Trace::resp8() const { return floats[sac_map.at(name::resp8)]; }
+float Trace::resp9() const { return floats[sac_map.at(name::resp9)]; }
+float Trace::stel() const { return floats[sac_map.at(name::stel)]; }
+float Trace::stdp() const { return floats[sac_map.at(name::stdp)]; }
+float Trace::evel() const { return floats[sac_map.at(name::evel)]; }
+float Trace::evdp() const { return floats[sac_map.at(name::evdp)]; }
+float Trace::mag() const { return floats[sac_map.at(name::mag)]; }
+float Trace::user0() const { return floats[sac_map.at(name::user0)]; }
+float Trace::user1() const { return floats[sac_map.at(name::user1)]; }
+float Trace::user2() const { return floats[sac_map.at(name::user2)]; }
+float Trace::user3() const { return floats[sac_map.at(name::user3)]; }
+float Trace::user4() const { return floats[sac_map.at(name::user4)]; }
+float Trace::user5() const { return floats[sac_map.at(name::user5)]; }
+float Trace::user6() const { return floats[sac_map.at(name::user6)]; }
+float Trace::user7() const { return floats[sac_map.at(name::user7)]; }
+float Trace::user8() const { return floats[sac_map.at(name::user8)]; }
+float Trace::user9() const { return floats[sac_map.at(name::user9)]; }
+float Trace::dist() const { return floats[sac_map.at(name::dist)]; }
+float Trace::az() const { return floats[sac_map.at(name::az)]; }
+float Trace::baz() const { return floats[sac_map.at(name::baz)]; }
+float Trace::gcarc() const { return floats[sac_map.at(name::gcarc)]; }
+float Trace::depmen() const { return floats[sac_map.at(name::depmen)]; }
+float Trace::cmpaz() const { return floats[sac_map.at(name::cmpaz)]; }
+float Trace::cmpinc() const { return floats[sac_map.at(name::cmpinc)]; }
+float Trace::xminimum() const { return floats[sac_map.at(name::xminimum)]; }
+float Trace::xmaximum() const { return floats[sac_map.at(name::xmaximum)]; }
+float Trace::yminimum() const { return floats[sac_map.at(name::yminimum)]; }
+float Trace::ymaximum() const { return floats[sac_map.at(name::ymaximum)]; }
 // Doubles
-double Trace::delta() const { return doubles[sac_map.at("delta")]; }
-double Trace::b() const { return doubles[sac_map.at("b")]; }
-double Trace::e() const { return doubles[sac_map.at("e")]; }
-double Trace::o() const { return doubles[sac_map.at("o")]; }
-double Trace::a() const { return doubles[sac_map.at("a")]; }
-double Trace::t0() const { return doubles[sac_map.at("t0")]; }
-double Trace::t1() const { return doubles[sac_map.at("t1")]; }
-double Trace::t2() const { return doubles[sac_map.at("t2")]; }
-double Trace::t3() const { return doubles[sac_map.at("t3")]; }
-double Trace::t4() const { return doubles[sac_map.at("t4")]; }
-double Trace::t5() const { return doubles[sac_map.at("t5")]; }
-double Trace::t6() const { return doubles[sac_map.at("t6")]; }
-double Trace::t7() const { return doubles[sac_map.at("t7")]; }
-double Trace::t8() const { return doubles[sac_map.at("t8")]; }
-double Trace::t9() const { return doubles[sac_map.at("t9")]; }
-double Trace::f() const { return doubles[sac_map.at("f")]; }
-double Trace::stla() const { return doubles[sac_map.at("stla")]; }
-double Trace::stlo() const { return doubles[sac_map.at("stlo")]; }
-double Trace::evla() const { return doubles[sac_map.at("evla")]; }
-double Trace::evlo() const { return doubles[sac_map.at("evlo")]; }
-double Trace::sb() const { return doubles[sac_map.at("sb")]; }
-double Trace::sdelta() const { return doubles[sac_map.at("sdelta")]; }
+double Trace::delta() const { return doubles[sac_map.at(name::delta)]; }
+double Trace::b() const { return doubles[sac_map.at(name::b)]; }
+double Trace::e() const { return doubles[sac_map.at(name::e)]; }
+double Trace::o() const { return doubles[sac_map.at(name::o)]; }
+double Trace::a() const { return doubles[sac_map.at(name::a)]; }
+double Trace::t0() const { return doubles[sac_map.at(name::t0)]; }
+double Trace::t1() const { return doubles[sac_map.at(name::t1)]; }
+double Trace::t2() const { return doubles[sac_map.at(name::t2)]; }
+double Trace::t3() const { return doubles[sac_map.at(name::t3)]; }
+double Trace::t4() const { return doubles[sac_map.at(name::t4)]; }
+double Trace::t5() const { return doubles[sac_map.at(name::t5)]; }
+double Trace::t6() const { return doubles[sac_map.at(name::t6)]; }
+double Trace::t7() const { return doubles[sac_map.at(name::t7)]; }
+double Trace::t8() const { return doubles[sac_map.at(name::t8)]; }
+double Trace::t9() const { return doubles[sac_map.at(name::t9)]; }
+double Trace::f() const { return doubles[sac_map.at(name::f)]; }
+double Trace::stla() const { return doubles[sac_map.at(name::stla)]; }
+double Trace::stlo() const { return doubles[sac_map.at(name::stlo)]; }
+double Trace::evla() const { return doubles[sac_map.at(name::evla)]; }
+double Trace::evlo() const { return doubles[sac_map.at(name::evlo)]; }
+double Trace::sb() const { return doubles[sac_map.at(name::sb)]; }
+double Trace::sdelta() const { return doubles[sac_map.at(name::sdelta)]; }
 // Ints
-int Trace::nzyear() const { return ints[sac_map.at("nzyear")]; }
-int Trace::nzjday() const { return ints[sac_map.at("nzjday")]; }
-int Trace::nzhour() const { return ints[sac_map.at("nzhour")]; }
-int Trace::nzmin() const { return ints[sac_map.at("nzmin")]; }
-int Trace::nzsec() const { return ints[sac_map.at("nzsec")]; }
-int Trace::nzmsec() const { return ints[sac_map.at("nzmsec")]; }
-int Trace::nvhdr() const { return ints[sac_map.at("nvhdr")]; }
-int Trace::norid() const { return ints[sac_map.at("norid")]; }
-int Trace::nevid() const { return ints[sac_map.at("nevid")]; }
-int Trace::npts() const { return ints[sac_map.at("npts")]; }
-int Trace::nsnpts() const { return ints[sac_map.at("nsnpts")]; }
-int Trace::nwfid() const { return ints[sac_map.at("nwfid")]; }
-int Trace::nxsize() const { return ints[sac_map.at("nxsize")]; }
-int Trace::nysize() const { return ints[sac_map.at("nysize")]; }
-int Trace::iftype() const { return ints[sac_map.at("iftype")]; }
-int Trace::idep() const { return ints[sac_map.at("idep")]; }
-int Trace::iztype() const { return ints[sac_map.at("iztype")]; }
-int Trace::iinst() const { return ints[sac_map.at("iinst")]; }
-int Trace::istreg() const { return ints[sac_map.at("istreg")]; }
-int Trace::ievreg() const { return ints[sac_map.at("ievreg")]; }
-int Trace::ievtyp() const { return ints[sac_map.at("ievtyp")]; }
-int Trace::iqual() const { return ints[sac_map.at("iqual")]; }
-int Trace::isynth() const { return ints[sac_map.at("isynth")]; }
-int Trace::imagtyp() const { return ints[sac_map.at("imagtyp")]; }
-int Trace::imagsrc() const { return ints[sac_map.at("imagsrc")]; }
-int Trace::ibody() const { return ints[sac_map.at("ibody")]; }
+int Trace::nzyear() const { return ints[sac_map.at(name::nzyear)]; }
+int Trace::nzjday() const { return ints[sac_map.at(name::nzjday)]; }
+int Trace::nzhour() const { return ints[sac_map.at(name::nzhour)]; }
+int Trace::nzmin() const { return ints[sac_map.at(name::nzmin)]; }
+int Trace::nzsec() const { return ints[sac_map.at(name::nzsec)]; }
+int Trace::nzmsec() const { return ints[sac_map.at(name::nzmsec)]; }
+int Trace::nvhdr() const { return ints[sac_map.at(name::nvhdr)]; }
+int Trace::norid() const { return ints[sac_map.at(name::norid)]; }
+int Trace::nevid() const { return ints[sac_map.at(name::nevid)]; }
+int Trace::npts() const { return ints[sac_map.at(name::npts)]; }
+int Trace::nsnpts() const { return ints[sac_map.at(name::nsnpts)]; }
+int Trace::nwfid() const { return ints[sac_map.at(name::nwfid)]; }
+int Trace::nxsize() const { return ints[sac_map.at(name::nxsize)]; }
+int Trace::nysize() const { return ints[sac_map.at(name::nysize)]; }
+int Trace::iftype() const { return ints[sac_map.at(name::iftype)]; }
+int Trace::idep() const { return ints[sac_map.at(name::idep)]; }
+int Trace::iztype() const { return ints[sac_map.at(name::iztype)]; }
+int Trace::iinst() const { return ints[sac_map.at(name::iinst)]; }
+int Trace::istreg() const { return ints[sac_map.at(name::istreg)]; }
+int Trace::ievreg() const { return ints[sac_map.at(name::ievreg)]; }
+int Trace::ievtyp() const { return ints[sac_map.at(name::ievtyp)]; }
+int Trace::iqual() const { return ints[sac_map.at(name::iqual)]; }
+int Trace::isynth() const { return ints[sac_map.at(name::isynth)]; }
+int Trace::imagtyp() const { return ints[sac_map.at(name::imagtyp)]; }
+int Trace::imagsrc() const { return ints[sac_map.at(name::imagsrc)]; }
+int Trace::ibody() const { return ints[sac_map.at(name::ibody)]; }
 // Bools
-bool Trace::leven() const { return bools[sac_map.at("leven")]; }
-bool Trace::lpspol() const { return bools[sac_map.at("lpspol")]; }
-bool Trace::lovrok() const { return bools[sac_map.at("lovrok")]; }
-bool Trace::lcalda() const { return bools[sac_map.at("lcalda")]; }
+bool Trace::leven() const { return bools[sac_map.at(name::leven)]; }
+bool Trace::lpspol() const { return bools[sac_map.at(name::lpspol)]; }
+bool Trace::lovrok() const { return bools[sac_map.at(name::lovrok)]; }
+bool Trace::lcalda() const { return bools[sac_map.at(name::lcalda)]; }
 // Strings
-std::string Trace::kstnm() const { return strings[sac_map.at("kstnm")]; }
-std::string Trace::kevnm() const { return strings[sac_map.at("kevnm")]; }
-std::string Trace::khole() const { return strings[sac_map.at("khole")]; }
-std::string Trace::ko() const { return strings[sac_map.at("ko")]; }
-std::string Trace::ka() const { return strings[sac_map.at("ka")]; }
-std::string Trace::kt0() const { return strings[sac_map.at("kt0")]; }
-std::string Trace::kt1() const { return strings[sac_map.at("kt1")]; }
-std::string Trace::kt2() const { return strings[sac_map.at("kt2")]; }
-std::string Trace::kt3() const { return strings[sac_map.at("kt3")]; }
-std::string Trace::kt4() const { return strings[sac_map.at("kt4")]; }
-std::string Trace::kt5() const { return strings[sac_map.at("kt5")]; }
-std::string Trace::kt6() const { return strings[sac_map.at("kt6")]; }
-std::string Trace::kt7() const { return strings[sac_map.at("kt7")]; }
-std::string Trace::kt8() const { return strings[sac_map.at("kt8")]; }
-std::string Trace::kt9() const { return strings[sac_map.at("kt9")]; }
-std::string Trace::kf() const { return strings[sac_map.at("kf")]; }
-std::string Trace::kuser0() const { return strings[sac_map.at("kuser0")]; }
-std::string Trace::kuser1() const { return strings[sac_map.at("kuser1")]; }
-std::string Trace::kuser2() const { return strings[sac_map.at("kuser2")]; }
-std::string Trace::kcmpnm() const { return strings[sac_map.at("kcmpnm")]; }
-std::string Trace::knetwk() const { return strings[sac_map.at("knetwk")]; }
-std::string Trace::kdatrd() const { return strings[sac_map.at("kdatrd")]; }
-std::string Trace::kinst() const { return strings[sac_map.at("kinst")]; }
+std::string Trace::kstnm() const { return strings[sac_map.at(name::kstnm)]; }
+std::string Trace::kevnm() const { return strings[sac_map.at(name::kevnm)]; }
+std::string Trace::khole() const { return strings[sac_map.at(name::khole)]; }
+std::string Trace::ko() const { return strings[sac_map.at(name::ko)]; }
+std::string Trace::ka() const { return strings[sac_map.at(name::ka)]; }
+std::string Trace::kt0() const { return strings[sac_map.at(name::kt0)]; }
+std::string Trace::kt1() const { return strings[sac_map.at(name::kt1)]; }
+std::string Trace::kt2() const { return strings[sac_map.at(name::kt2)]; }
+std::string Trace::kt3() const { return strings[sac_map.at(name::kt3)]; }
+std::string Trace::kt4() const { return strings[sac_map.at(name::kt4)]; }
+std::string Trace::kt5() const { return strings[sac_map.at(name::kt5)]; }
+std::string Trace::kt6() const { return strings[sac_map.at(name::kt6)]; }
+std::string Trace::kt7() const { return strings[sac_map.at(name::kt7)]; }
+std::string Trace::kt8() const { return strings[sac_map.at(name::kt8)]; }
+std::string Trace::kt9() const { return strings[sac_map.at(name::kt9)]; }
+std::string Trace::kf() const { return strings[sac_map.at(name::kf)]; }
+std::string Trace::kuser0() const { return strings[sac_map.at(name::kuser0)]; }
+std::string Trace::kuser1() const { return strings[sac_map.at(name::kuser1)]; }
+std::string Trace::kuser2() const { return strings[sac_map.at(name::kuser2)]; }
+std::string Trace::kcmpnm() const { return strings[sac_map.at(name::kcmpnm)]; }
+std::string Trace::knetwk() const { return strings[sac_map.at(name::knetwk)]; }
+std::string Trace::kdatrd() const { return strings[sac_map.at(name::kdatrd)]; }
+std::string Trace::kinst() const { return strings[sac_map.at(name::kinst)]; }
 // Data
-std::vector<double> Trace::data1() const { return data[sac_map.at("data1")]; }
-std::vector<double> Trace::data2() const { return data[sac_map.at("data2")]; }
+std::vector<double> Trace::data1() const { return data[sac_map.at(name::data1)]; }
+std::vector<double> Trace::data2() const { return data[sac_map.at(name::data2)]; }
 // Setters
 // Floats
-void Trace::depmin(const float x) { floats[sac_map.at("depmin")] = x; }
-void Trace::depmax(const float x) { floats[sac_map.at("depmax")] = x; }
-void Trace::odelta(const float x) { floats[sac_map.at("odelta")] = x; }
-void Trace::resp0(const float x) { floats[sac_map.at("resp0")] = x; }
-void Trace::resp1(const float x) { floats[sac_map.at("resp1")] = x; }
-void Trace::resp2(const float x) { floats[sac_map.at("resp2")] = x; }
-void Trace::resp3(const float x) { floats[sac_map.at("resp3")] = x; }
-void Trace::resp4(const float x) { floats[sac_map.at("resp4")] = x; }
-void Trace::resp5(const float x) { floats[sac_map.at("resp5")] = x; }
-void Trace::resp6(const float x) { floats[sac_map.at("resp6")] = x; }
-void Trace::resp7(const float x) { floats[sac_map.at("resp7")] = x; }
-void Trace::resp8(const float x) { floats[sac_map.at("resp8")] = x; }
-void Trace::resp9(const float x) { floats[sac_map.at("resp9")] = x; }
-void Trace::stel(const float x) { floats[sac_map.at("stel")] = x; }
-void Trace::stdp(const float x) { floats[sac_map.at("stdp")] = x; }
-void Trace::evel(const float x) { floats[sac_map.at("evel")] = x; }
-void Trace::evdp(const float x) { floats[sac_map.at("evdp")] = x; }
-void Trace::mag(const float x) { floats[sac_map.at("mag")] = x; }
-void Trace::user0(const float x) { floats[sac_map.at("user0")] = x; }
-void Trace::user1(const float x) { floats[sac_map.at("user1")] = x; }
-void Trace::user2(const float x) { floats[sac_map.at("user2")] = x; }
-void Trace::user3(const float x) { floats[sac_map.at("user3")] = x; }
-void Trace::user4(const float x) { floats[sac_map.at("user4")] = x; }
-void Trace::user5(const float x) { floats[sac_map.at("user5")] = x; }
-void Trace::user6(const float x) { floats[sac_map.at("user6")] = x; }
-void Trace::user7(const float x) { floats[sac_map.at("user7")] = x; }
-void Trace::user8(const float x) { floats[sac_map.at("user8")] = x; }
-void Trace::user9(const float x) { floats[sac_map.at("user9")] = x; }
-void Trace::dist(const float x) { floats[sac_map.at("dist")] = x; }
-void Trace::az(const float x) { floats[sac_map.at("az")] = x; }
-void Trace::baz(const float x) { floats[sac_map.at("baz")] = x; }
-void Trace::gcarc(const float x) { floats[sac_map.at("gcarc")] = x; }
-void Trace::depmen(const float x) { floats[sac_map.at("depmen")] = x; }
-void Trace::cmpaz(const float x) { floats[sac_map.at("cmpaz")] = x; }
-void Trace::cmpinc(const float x) { floats[sac_map.at("cmpinc")] = x; }
-void Trace::xminimum(const float x) { floats[sac_map.at("xminimum")] = x; }
-void Trace::xmaximum(const float x) { floats[sac_map.at("xmaximum")] = x; }
-void Trace::yminimum(const float x) { floats[sac_map.at("yminimum")] = x; }
-void Trace::ymaximum(const float x) { floats[sac_map.at("ymaximum")] = x; }
+void Trace::depmin(const float x) { floats[sac_map.at(name::depmin)] = x; }
+void Trace::depmax(const float x) { floats[sac_map.at(name::depmax)] = x; }
+void Trace::odelta(const float x) { floats[sac_map.at(name::odelta)] = x; }
+void Trace::resp0(const float x) { floats[sac_map.at(name::resp0)] = x; }
+void Trace::resp1(const float x) { floats[sac_map.at(name::resp1)] = x; }
+void Trace::resp2(const float x) { floats[sac_map.at(name::resp2)] = x; }
+void Trace::resp3(const float x) { floats[sac_map.at(name::resp3)] = x; }
+void Trace::resp4(const float x) { floats[sac_map.at(name::resp4)] = x; }
+void Trace::resp5(const float x) { floats[sac_map.at(name::resp5)] = x; }
+void Trace::resp6(const float x) { floats[sac_map.at(name::resp6)] = x; }
+void Trace::resp7(const float x) { floats[sac_map.at(name::resp7)] = x; }
+void Trace::resp8(const float x) { floats[sac_map.at(name::resp8)] = x; }
+void Trace::resp9(const float x) { floats[sac_map.at(name::resp9)] = x; }
+void Trace::stel(const float x) { floats[sac_map.at(name::stel)] = x; }
+void Trace::stdp(const float x) { floats[sac_map.at(name::stdp)] = x; }
+void Trace::evel(const float x) { floats[sac_map.at(name::evel)] = x; }
+void Trace::evdp(const float x) { floats[sac_map.at(name::evdp)] = x; }
+void Trace::mag(const float x) { floats[sac_map.at(name::mag)] = x; }
+void Trace::user0(const float x) { floats[sac_map.at(name::user0)] = x; }
+void Trace::user1(const float x) { floats[sac_map.at(name::user1)] = x; }
+void Trace::user2(const float x) { floats[sac_map.at(name::user2)] = x; }
+void Trace::user3(const float x) { floats[sac_map.at(name::user3)] = x; }
+void Trace::user4(const float x) { floats[sac_map.at(name::user4)] = x; }
+void Trace::user5(const float x) { floats[sac_map.at(name::user5)] = x; }
+void Trace::user6(const float x) { floats[sac_map.at(name::user6)] = x; }
+void Trace::user7(const float x) { floats[sac_map.at(name::user7)] = x; }
+void Trace::user8(const float x) { floats[sac_map.at(name::user8)] = x; }
+void Trace::user9(const float x) { floats[sac_map.at(name::user9)] = x; }
+void Trace::dist(const float x) { floats[sac_map.at(name::dist)] = x; }
+void Trace::az(const float x) { floats[sac_map.at(name::az)] = x; }
+void Trace::baz(const float x) { floats[sac_map.at(name::baz)] = x; }
+void Trace::gcarc(const float x) { floats[sac_map.at(name::gcarc)] = x; }
+void Trace::depmen(const float x) { floats[sac_map.at(name::depmen)] = x; }
+void Trace::cmpaz(const float x) { floats[sac_map.at(name::cmpaz)] = x; }
+void Trace::cmpinc(const float x) { floats[sac_map.at(name::cmpinc)] = x; }
+void Trace::xminimum(const float x) { floats[sac_map.at(name::xminimum)] = x; }
+void Trace::xmaximum(const float x) { floats[sac_map.at(name::xmaximum)] = x; }
+void Trace::yminimum(const float x) { floats[sac_map.at(name::yminimum)] = x; }
+void Trace::ymaximum(const float x) { floats[sac_map.at(name::ymaximum)] = x; }
 // Doubles
-// Doubles
-void Trace::delta(const double x) { doubles[sac_map.at("delta")] = x; }
-void Trace::b(const double x) { doubles[sac_map.at("b")] = x; }
-void Trace::e(const double x) { doubles[sac_map.at("e")] = x; }
-void Trace::o(const double x) { doubles[sac_map.at("o")] = x; }
-void Trace::a(const double x) { doubles[sac_map.at("a")] = x; }
-void Trace::t0(const double x) { doubles[sac_map.at("t0")] = x; }
-void Trace::t1(const double x) { doubles[sac_map.at("t1")] = x; }
-void Trace::t2(const double x) { doubles[sac_map.at("t2")] = x; }
-void Trace::t3(const double x) { doubles[sac_map.at("t3")] = x; }
-void Trace::t4(const double x) { doubles[sac_map.at("t4")] = x; }
-void Trace::t5(const double x) { doubles[sac_map.at("t5")] = x; }
-void Trace::t6(const double x) { doubles[sac_map.at("t6")] = x; }
-void Trace::t7(const double x) { doubles[sac_map.at("t7")] = x; }
-void Trace::t8(const double x) { doubles[sac_map.at("t8")] = x; }
-void Trace::t9(const double x) { doubles[sac_map.at("t9")] = x; }
-void Trace::f(const double x) { doubles[sac_map.at("f")] = x; }
-void Trace::stla(const double x) { doubles[sac_map.at("stla")] = x; }
-void Trace::stlo(const double x) { doubles[sac_map.at("stlo")] = x; }
-void Trace::evla(const double x) { doubles[sac_map.at("evla")] = x; }
-void Trace::evlo(const double x) { doubles[sac_map.at("evlo")] = x; }
-void Trace::sb(const double x) { doubles[sac_map.at("sb")] = x; }
-void Trace::sdelta(const double x) { doubles[sac_map.at("sdelta")] = x; }
+void Trace::delta(const double x) { doubles[sac_map.at(name::delta)] = x; }
+void Trace::b(const double x) { doubles[sac_map.at(name::b)] = x; }
+void Trace::e(const double x) { doubles[sac_map.at(name::e)] = x; }
+void Trace::o(const double x) { doubles[sac_map.at(name::o)] = x; }
+void Trace::a(const double x) { doubles[sac_map.at(name::a)] = x; }
+void Trace::t0(const double x) { doubles[sac_map.at(name::t0)] = x; }
+void Trace::t1(const double x) { doubles[sac_map.at(name::t1)] = x; }
+void Trace::t2(const double x) { doubles[sac_map.at(name::t2)] = x; }
+void Trace::t3(const double x) { doubles[sac_map.at(name::t3)] = x; }
+void Trace::t4(const double x) { doubles[sac_map.at(name::t4)] = x; }
+void Trace::t5(const double x) { doubles[sac_map.at(name::t5)] = x; }
+void Trace::t6(const double x) { doubles[sac_map.at(name::t6)] = x; }
+void Trace::t7(const double x) { doubles[sac_map.at(name::t7)] = x; }
+void Trace::t8(const double x) { doubles[sac_map.at(name::t8)] = x; }
+void Trace::t9(const double x) { doubles[sac_map.at(name::t9)] = x; }
+void Trace::f(const double x) { doubles[sac_map.at(name::f)] = x; }
+void Trace::stla(const double x) { doubles[sac_map.at(name::stla)] = x; }
+void Trace::stlo(const double x) { doubles[sac_map.at(name::stlo)] = x; }
+void Trace::evla(const double x) { doubles[sac_map.at(name::evla)] = x; }
+void Trace::evlo(const double x) { doubles[sac_map.at(name::evlo)] = x; }
+void Trace::sb(const double x) { doubles[sac_map.at(name::sb)] = x; }
+void Trace::sdelta(const double x) { doubles[sac_map.at(name::sdelta)] = x; }
 // Ints
-void Trace::nzyear(const int x) { ints[sac_map.at("nzyear")] = x; }
-void Trace::nzjday(const int x) { ints[sac_map.at("nzjday")] = x; }
-void Trace::nzhour(const int x) { ints[sac_map.at("nzhour")] = x; }
-void Trace::nzmin(const int x) { ints[sac_map.at("nzmin")] = x; }
-void Trace::nzsec(const int x) { ints[sac_map.at("nzsec")] = x; }
-void Trace::nzmsec(const int x) { ints[sac_map.at("nzmsec")] = x; }
-void Trace::nvhdr(const int x) { ints[sac_map.at("nvhdr")] = x; }
-void Trace::norid(const int x) { ints[sac_map.at("norid")] = x; }
-void Trace::nevid(const int x) { ints[sac_map.at("nevid")] = x; }
-void Trace::npts(const int x) { ints[sac_map.at("npts")] = x; }
-void Trace::nsnpts(const int x) { ints[sac_map.at("nsnpts")] = x; }
-void Trace::nwfid(const int x) { ints[sac_map.at("nwfid")] = x; }
-void Trace::nxsize(const int x) { ints[sac_map.at("nxsize")] = x; }
-void Trace::nysize(const int x) { ints[sac_map.at("nysize")] = x; }
-void Trace::iftype(const int x) { ints[sac_map.at("iftype")] = x; }
-void Trace::idep(const int x) { ints[sac_map.at("idep")] = x; }
-void Trace::iztype(const int x) { ints[sac_map.at("iztype")] = x; }
-void Trace::iinst(const int x) { ints[sac_map.at("iinst")] = x; }
-void Trace::istreg(const int x) { ints[sac_map.at("istreg")] = x; }
-void Trace::ievreg(const int x) { ints[sac_map.at("ievreg")] = x; }
-void Trace::ievtyp(const int x) { ints[sac_map.at("ievtyp")] = x; }
-void Trace::iqual(const int x) { ints[sac_map.at("iqual")] = x; }
-void Trace::isynth(const int x) { ints[sac_map.at("isynth")] = x; }
-void Trace::imagtyp(const int x) { ints[sac_map.at("imagtyp")] = x; }
-void Trace::imagsrc(const int x) { ints[sac_map.at("imagsrc")] = x; }
-void Trace::ibody(const int x) { ints[sac_map.at("ibody")] = x; }
+void Trace::nzyear(const int x) { ints[sac_map.at(name::nzyear)] = x; }
+void Trace::nzjday(const int x) { ints[sac_map.at(name::nzjday)] = x; }
+void Trace::nzhour(const int x) { ints[sac_map.at(name::nzhour)] = x; }
+void Trace::nzmin(const int x) { ints[sac_map.at(name::nzmin)] = x; }
+void Trace::nzsec(const int x) { ints[sac_map.at(name::nzsec)] = x; }
+void Trace::nzmsec(const int x) { ints[sac_map.at(name::nzmsec)] = x; }
+void Trace::nvhdr(const int x) { ints[sac_map.at(name::nvhdr)] = x; }
+void Trace::norid(const int x) { ints[sac_map.at(name::norid)] = x; }
+void Trace::nevid(const int x) { ints[sac_map.at(name::nevid)] = x; }
+void Trace::npts(const int x) { ints[sac_map.at(name::npts)] = x; }
+void Trace::nsnpts(const int x) { ints[sac_map.at(name::nsnpts)] = x; }
+void Trace::nwfid(const int x) { ints[sac_map.at(name::nwfid)] = x; }
+void Trace::nxsize(const int x) { ints[sac_map.at(name::nxsize)] = x; }
+void Trace::nysize(const int x) { ints[sac_map.at(name::nysize)] = x; }
+void Trace::iftype(const int x) { ints[sac_map.at(name::iftype)] = x; }
+void Trace::idep(const int x) { ints[sac_map.at(name::idep)] = x; }
+void Trace::iztype(const int x) { ints[sac_map.at(name::iztype)] = x; }
+void Trace::iinst(const int x) { ints[sac_map.at(name::iinst)] = x; }
+void Trace::istreg(const int x) { ints[sac_map.at(name::istreg)] = x; }
+void Trace::ievreg(const int x) { ints[sac_map.at(name::ievreg)] = x; }
+void Trace::ievtyp(const int x) { ints[sac_map.at(name::ievtyp)] = x; }
+void Trace::iqual(const int x) { ints[sac_map.at(name::iqual)] = x; }
+void Trace::isynth(const int x) { ints[sac_map.at(name::isynth)] = x; }
+void Trace::imagtyp(const int x) { ints[sac_map.at(name::imagtyp)] = x; }
+void Trace::imagsrc(const int x) { ints[sac_map.at(name::imagsrc)] = x; }
+void Trace::ibody(const int x) { ints[sac_map.at(name::ibody)] = x; }
 // Bools
-void Trace::leven(const bool x) { bools[sac_map.at("leven")] = x; }
-void Trace::lpspol(const bool x) { bools[sac_map.at("lpspol")] = x; }
-void Trace::lovrok(const bool x) { bools[sac_map.at("lovrok")] = x; }
-void Trace::lcalda(const bool x) { bools[sac_map.at("lcalda")] = x; }
+void Trace::leven(const bool x) { bools[sac_map.at(name::leven)] = x; }
+void Trace::lpspol(const bool x) { bools[sac_map.at(name::lpspol)] = x; }
+void Trace::lovrok(const bool x) { bools[sac_map.at(name::lovrok)] = x; }
+void Trace::lcalda(const bool x) { bools[sac_map.at(name::lcalda)] = x; }
 // Strings
-void Trace::kstnm(const std::string& x) { strings[sac_map.at("kstnm")] = x; }
-void Trace::kevnm(const std::string& x) { strings[sac_map.at("kevnm")] = x; }
-void Trace::khole(const std::string& x) { strings[sac_map.at("khole")] = x; }
-void Trace::ko(const std::string& x) { strings[sac_map.at("ko")] = x; }
-void Trace::ka(const std::string& x) { strings[sac_map.at("ka")] = x; }
-void Trace::kt0(const std::string& x) { strings[sac_map.at("kt0")] = x; }
-void Trace::kt1(const std::string& x) { strings[sac_map.at("kt1")] = x; }
-void Trace::kt2(const std::string& x) { strings[sac_map.at("kt2")] = x; }
-void Trace::kt3(const std::string& x) { strings[sac_map.at("kt3")] = x; }
-void Trace::kt4(const std::string& x) { strings[sac_map.at("kt4")] = x; }
-void Trace::kt5(const std::string& x) { strings[sac_map.at("kt5")] = x; }
-void Trace::kt6(const std::string& x) { strings[sac_map.at("kt6")] = x; }
-void Trace::kt7(const std::string& x) { strings[sac_map.at("kt7")] = x; }
-void Trace::kt8(const std::string& x) { strings[sac_map.at("kt8")] = x; }
-void Trace::kt9(const std::string& x) { strings[sac_map.at("kt9")] = x; }
-void Trace::kf(const std::string& x) { strings[sac_map.at("kf")] = x; }
-void Trace::kuser0(const std::string& x) { strings[sac_map.at("kuser0")] = x; }
-void Trace::kuser1(const std::string& x) { strings[sac_map.at("kuser1")] = x; }
-void Trace::kuser2(const std::string& x) { strings[sac_map.at("kuser2")] = x; }
-void Trace::kcmpnm(const std::string& x) { strings[sac_map.at("kcmpnm")] = x; }
-void Trace::knetwk(const std::string& x) { strings[sac_map.at("knetwk")] = x; }
-void Trace::kdatrd(const std::string& x) { strings[sac_map.at("kdatrd")] = x; }
-void Trace::kinst(const std::string& x) { strings[sac_map.at("kinst")] = x; }
+void Trace::kstnm(const std::string& x) { strings[sac_map.at(name::kstnm)] = x; }
+void Trace::kevnm(const std::string& x) { strings[sac_map.at(name::kevnm)] = x; }
+void Trace::khole(const std::string& x) { strings[sac_map.at(name::khole)] = x; }
+void Trace::ko(const std::string& x) { strings[sac_map.at(name::ko)] = x; }
+void Trace::ka(const std::string& x) { strings[sac_map.at(name::ka)] = x; }
+void Trace::kt0(const std::string& x) { strings[sac_map.at(name::kt0)] = x; }
+void Trace::kt1(const std::string& x) { strings[sac_map.at(name::kt1)] = x; }
+void Trace::kt2(const std::string& x) { strings[sac_map.at(name::kt2)] = x; }
+void Trace::kt3(const std::string& x) { strings[sac_map.at(name::kt3)] = x; }
+void Trace::kt4(const std::string& x) { strings[sac_map.at(name::kt4)] = x; }
+void Trace::kt5(const std::string& x) { strings[sac_map.at(name::kt5)] = x; }
+void Trace::kt6(const std::string& x) { strings[sac_map.at(name::kt6)] = x; }
+void Trace::kt7(const std::string& x) { strings[sac_map.at(name::kt7)] = x; }
+void Trace::kt8(const std::string& x) { strings[sac_map.at(name::kt8)] = x; }
+void Trace::kt9(const std::string& x) { strings[sac_map.at(name::kt9)] = x; }
+void Trace::kf(const std::string& x) { strings[sac_map.at(name::kf)] = x; }
+void Trace::kuser0(const std::string& x) { strings[sac_map.at(name::kuser0)] = x; }
+void Trace::kuser1(const std::string& x) { strings[sac_map.at(name::kuser1)] = x; }
+void Trace::kuser2(const std::string& x) { strings[sac_map.at(name::kuser2)] = x; }
+void Trace::kcmpnm(const std::string& x) { strings[sac_map.at(name::kcmpnm)] = x; }
+void Trace::knetwk(const std::string& x) { strings[sac_map.at(name::knetwk)] = x; }
+void Trace::kdatrd(const std::string& x) { strings[sac_map.at(name::kdatrd)] = x; }
+void Trace::kinst(const std::string& x) { strings[sac_map.at(name::kinst)] = x; }
 // Data
-void Trace::data1(const std::vector<double>& x) { data[sac_map.at("data1")] = x; }
-void Trace::data2(const std::vector<double>& x) { data[sac_map.at("data2")] = x; }
+void Trace::data1(const std::vector<double>& x) { data[sac_map.at(name::data1)] = x; }
+void Trace::data2(const std::vector<double>& x) { data[sac_map.at(name::data2)] = x; }
 //------------------------------------------------------------------------------
 // Read
 Trace::Trace(const std::filesystem::path& path) {
