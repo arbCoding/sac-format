@@ -228,190 +228,9 @@ TEST_CASE("Binary Conversion") {
 }
 //==============================================================================
 // Trace tests
-TEST_CASE("Empty Trace Default Creation") {
-  Trace test_sac{};
-  SECTION("Default Headers/Footers") {
-    SECTION("Floats") {
-      REQUIRE(test_sac.f_delta == unset_float);
-      REQUIRE(test_sac.depmin == unset_float);
-      REQUIRE(test_sac.depmax == unset_float);
-      REQUIRE(test_sac.odelta == unset_float);
-      REQUIRE(test_sac.f_b == unset_float);
-      REQUIRE(test_sac.f_e == unset_float);
-      REQUIRE(test_sac.f_o == unset_float);
-      REQUIRE(test_sac.f_a == unset_float);
-      REQUIRE(test_sac.f_t0 == unset_float);
-      REQUIRE(test_sac.f_t1 == unset_float);
-      REQUIRE(test_sac.f_t2 == unset_float);
-      REQUIRE(test_sac.f_t3 == unset_float);
-      REQUIRE(test_sac.f_t4 == unset_float);
-      REQUIRE(test_sac.f_t5 == unset_float);
-      REQUIRE(test_sac.f_t6 == unset_float);
-      REQUIRE(test_sac.f_t7 == unset_float);
-      REQUIRE(test_sac.f_t8 == unset_float);
-      REQUIRE(test_sac.f_t9 == unset_float);
-      REQUIRE(test_sac.f_f == unset_float);
-      REQUIRE(test_sac.resp0 == unset_float);
-      REQUIRE(test_sac.resp1 == unset_float);
-      REQUIRE(test_sac.resp2 == unset_float);
-      REQUIRE(test_sac.resp3 == unset_float);
-      REQUIRE(test_sac.resp4 == unset_float);
-      REQUIRE(test_sac.resp5 == unset_float);
-      REQUIRE(test_sac.resp6 == unset_float);
-      REQUIRE(test_sac.resp7 == unset_float);
-      REQUIRE(test_sac.resp8 == unset_float);
-      REQUIRE(test_sac.resp9 == unset_float);
-      REQUIRE(test_sac.f_stla == unset_float);
-      REQUIRE(test_sac.f_stlo == unset_float);
-      REQUIRE(test_sac.stel == unset_float);
-      REQUIRE(test_sac.stdp == unset_float);
-      REQUIRE(test_sac.f_evla == unset_float);
-      REQUIRE(test_sac.f_evlo == unset_float);
-      REQUIRE(test_sac.evel == unset_float);
-      REQUIRE(test_sac.evdp == unset_float);
-      REQUIRE(test_sac.mag == unset_float);
-      REQUIRE(test_sac.user0 == unset_float);
-      REQUIRE(test_sac.user1 == unset_float);
-      REQUIRE(test_sac.user2 == unset_float);
-      REQUIRE(test_sac.user3 == unset_float);
-      REQUIRE(test_sac.user4 == unset_float);
-      REQUIRE(test_sac.user5 == unset_float);
-      REQUIRE(test_sac.user6 == unset_float);
-      REQUIRE(test_sac.user7 == unset_float);
-      REQUIRE(test_sac.user8 == unset_float);
-      REQUIRE(test_sac.user9 == unset_float);
-      REQUIRE(test_sac.dist == unset_float);
-      REQUIRE(test_sac.az == unset_float);
-      REQUIRE(test_sac.baz == unset_float);
-      REQUIRE(test_sac.gcarc == unset_float);
-      REQUIRE(test_sac.f_sb == unset_float);
-      REQUIRE(test_sac.f_sdelta == unset_float);
-      REQUIRE(test_sac.depmen == unset_float);
-      REQUIRE(test_sac.cmpaz == unset_float);
-      REQUIRE(test_sac.cmpinc == unset_float);
-      REQUIRE(test_sac.xminimum == unset_float);
-      REQUIRE(test_sac.xmaximum == unset_float);
-      REQUIRE(test_sac.yminimum == unset_float);
-      REQUIRE(test_sac.ymaximum == unset_float);
-    }
-    SECTION("Ints") {
-      REQUIRE(test_sac.nzyear == unset_int);
-      REQUIRE(test_sac.nzjday == unset_int);
-      REQUIRE(test_sac.nzhour == unset_int);
-      REQUIRE(test_sac.nzmin == unset_int);
-      REQUIRE(test_sac.nzsec == unset_int);
-      REQUIRE(test_sac.nzmsec == unset_int);
-      REQUIRE(test_sac.nvhdr == 7);
-      REQUIRE(test_sac.norid == unset_int);
-      REQUIRE(test_sac.nevid == unset_int);
-      REQUIRE(test_sac.npts == unset_int);
-      REQUIRE(test_sac.nsnpts == unset_int);
-      REQUIRE(test_sac.nwfid == unset_int);
-      REQUIRE(test_sac.nxsize == unset_int);
-      REQUIRE(test_sac.nysize == unset_int);
-      REQUIRE(test_sac.iftype == unset_int);
-      REQUIRE(test_sac.idep == unset_int);
-      REQUIRE(test_sac.iztype == unset_int);
-      REQUIRE(test_sac.iinst == unset_int);
-      REQUIRE(test_sac.istreg == unset_int);
-      REQUIRE(test_sac.ievreg == unset_int);
-      REQUIRE(test_sac.ievtyp == unset_int);
-      REQUIRE(test_sac.iqual == unset_int);
-      REQUIRE(test_sac.isynth == unset_int);
-      REQUIRE(test_sac.imagtyp == unset_int);
-      REQUIRE(test_sac.imagsrc == unset_int);
-      REQUIRE(test_sac.ibody == unset_int);
-    }
-    SECTION("Bools") {
-      REQUIRE(test_sac.leven == unset_bool);
-      REQUIRE(test_sac.lpspol == unset_bool);
-      REQUIRE(test_sac.lovrok == unset_bool);
-      REQUIRE(test_sac.lcalda == unset_bool);
-    }
-    SECTION("Strings") {
-      SECTION("Standard") {
-        REQUIRE(test_sac.kstnm == unset_word);
-        REQUIRE(test_sac.khole == unset_word);
-        REQUIRE(test_sac.ko == unset_word);
-        REQUIRE(test_sac.ka == unset_word);
-        REQUIRE(test_sac.kt0 == unset_word);
-        REQUIRE(test_sac.kt1 == unset_word);
-        REQUIRE(test_sac.kt2 == unset_word);
-        REQUIRE(test_sac.kt3 == unset_word);
-        REQUIRE(test_sac.kt4 == unset_word);
-        REQUIRE(test_sac.kt5 == unset_word);
-        REQUIRE(test_sac.kt6 == unset_word);
-        REQUIRE(test_sac.kt7 == unset_word);
-        REQUIRE(test_sac.kt8 == unset_word);
-        REQUIRE(test_sac.kt9 == unset_word);
-        REQUIRE(test_sac.kf == unset_word);
-        REQUIRE(test_sac.kuser0 == unset_word);
-        REQUIRE(test_sac.kuser1 == unset_word);
-        REQUIRE(test_sac.kuser2 == unset_word);
-        REQUIRE(test_sac.kcmpnm == unset_word);
-        REQUIRE(test_sac.knetwk == unset_word);
-        REQUIRE(test_sac.kdatrd == unset_word);
-        REQUIRE(test_sac.kinst == unset_word);
-      }
-      SECTION("Double") {
-        REQUIRE(test_sac.kevnm == unset_word);
-      }
-    }
-    SECTION("Data Vectors") {
-      REQUIRE(test_sac.data1.empty());
-      REQUIRE(test_sac.data2.empty());
-    }
-    SECTION("Doubles") {
-      REQUIRE(test_sac.delta == unset_double);
-      REQUIRE(test_sac.b == unset_double);
-      REQUIRE(test_sac.e == unset_double);
-      REQUIRE(test_sac.o == unset_double);
-      REQUIRE(test_sac.a == unset_double);
-      REQUIRE(test_sac.t0 == unset_double);
-      REQUIRE(test_sac.t1 == unset_double);
-      REQUIRE(test_sac.t2 == unset_double);
-      REQUIRE(test_sac.t3 == unset_double);
-      REQUIRE(test_sac.t4 == unset_double);
-      REQUIRE(test_sac.t5 == unset_double);
-      REQUIRE(test_sac.t6 == unset_double);
-      REQUIRE(test_sac.t7 == unset_double);
-      REQUIRE(test_sac.t8 == unset_double);
-      REQUIRE(test_sac.t9 == unset_double);
-      REQUIRE(test_sac.f == unset_double);
-      REQUIRE(test_sac.evlo == unset_double);
-      REQUIRE(test_sac.evla == unset_double);
-      REQUIRE(test_sac.stlo == unset_double);
-      REQUIRE(test_sac.stla == unset_double);
-      REQUIRE(test_sac.sb == unset_double);
-      REQUIRE(test_sac.sdelta == unset_double);
-    }
-  }
-}
-
-TEST_CASE("Trace Save/Load") {
-  Trace test_sac = gen_fake_sac();
-  fs::path tmp_dir{fs::temp_directory_path()};
-  fs::path tmp_file{tmp_dir / "test.SAC"};
-  SECTION("I/O Zeros") {
-    test_sac.write(tmp_file);
-    Trace in_sac = Trace(tmp_file);
-    REQUIRE(test_sac == in_sac);
-    fs::remove(tmp_file);
-  }
-  SECTION("I/O Random") {
-    random_vector(test_sac.data1);
-    if (!test_sac.data2.empty()) { random_vector(test_sac.data2); }
-    test_sac.write(tmp_file);
-    Trace in_sac = Trace(tmp_file);
-    REQUIRE(test_sac == in_sac);
-    fs::remove(tmp_file);
-  }
-}
-//==============================================================================
-// Trace2 tests
 //------------------------------------------------------------------------------
-TEST_CASE("Trace 2 Default Construction") {
-  const Trace2 trace{};
+TEST_CASE("Trace Default Construction") {
+  const Trace trace{};
   // Floats
   SECTION("Floats") {
     REQUIRE(trace.depmin() == unset_float);
@@ -448,6 +267,7 @@ TEST_CASE("Trace 2 Default Construction") {
     REQUIRE(trace.gcarc() == unset_float);
     REQUIRE(trace.depmen() == unset_float);
     REQUIRE(trace.cmpaz() == unset_float);
+    REQUIRE(trace.cmpinc() == unset_float);
     REQUIRE(trace.xminimum() == unset_float);
     REQUIRE(trace.xmaximum() == unset_float);
     REQUIRE(trace.yminimum() == unset_float);
@@ -542,8 +362,8 @@ TEST_CASE("Trace 2 Default Construction") {
   }
 }
 
-TEST_CASE("Trace 2 Setters") {
-  Trace2 trace{};
+TEST_CASE("Trace Setters") {
+  Trace trace{};
   SECTION("Floats") {
     float value{0.001f};
     trace.depmin(value);
@@ -680,6 +500,10 @@ TEST_CASE("Trace 2 Setters") {
     value = 4.7f;
     trace.cmpaz(value);
     REQUIRE(trace.cmpaz() == value);
+
+    value = 97.3f;
+    trace.cmpinc(value);
+    REQUIRE(trace.cmpinc() == value);
 
     value = 5.6f;
     trace.xminimum(value);
@@ -1022,17 +846,301 @@ TEST_CASE("Trace 2 Setters") {
   }
 }
 
-TEST_CASE("Trace2 Equality") {
+TEST_CASE("Trace Equality") {
   SECTION("Default Construction") {
-    const Trace2 trace1{};
-    const Trace2 trace2{};
+    const Trace trace1{};
+    const Trace trace2{};
     REQUIRE(trace1 == trace2);
   }
   // Confirmed it'll fail if you try to make them equal
   SECTION("Inequality") {
-    const Trace2 trace1{};
-    Trace2 trace2{};
+    const Trace trace1{};
+    Trace trace2{};
     trace2.kinst("Hello");
     REQUIRE(trace1 != trace2);
+  }
+}
+
+TEST_CASE("Trace Read/Write") {
+  Trace trace = gen_fake_trace();
+  fs::path tmp_dir{fs::temp_directory_path()};
+  fs::path tmp_file{tmp_dir / "test.SAC"};
+  SECTION("Default Construction") {
+    trace.write(tmp_file);
+    Trace in = Trace(tmp_file);
+    fs::remove(tmp_file);
+    SECTION("Float") {
+      REQUIRE(trace.depmin() == in.depmin());
+      REQUIRE(trace.depmax() == in.depmax());
+      REQUIRE(trace.odelta() == in.odelta());
+      REQUIRE(trace.resp0() == in.resp0());
+      REQUIRE(trace.resp1() == in.resp1());
+      REQUIRE(trace.resp2() == in.resp2());
+      REQUIRE(trace.resp3() == in.resp3());
+      REQUIRE(trace.resp4() == in.resp4());
+      REQUIRE(trace.resp5() == in.resp5());
+      REQUIRE(trace.resp6() == in.resp6());
+      REQUIRE(trace.resp7() == in.resp7());
+      REQUIRE(trace.resp8() == in.resp8());
+      REQUIRE(trace.resp9() == in.resp9());
+      REQUIRE(trace.stel() == in.stel());
+      REQUIRE(trace.stdp() == in.stdp());
+      REQUIRE(trace.evel() == in.evel());
+      REQUIRE(trace.evdp() == in.evdp());
+      REQUIRE(trace.mag() == in.mag());
+      REQUIRE(trace.user1() == in.user1());
+      REQUIRE(trace.user2() == in.user2());
+      REQUIRE(trace.user3() == in.user3());
+      REQUIRE(trace.user4() == in.user4());
+      REQUIRE(trace.user5() == in.user5());
+      REQUIRE(trace.user6() == in.user6());
+      REQUIRE(trace.user7() == in.user7());
+      REQUIRE(trace.user8() == in.user8());
+      REQUIRE(trace.user9() == in.user9());
+      REQUIRE(trace.dist() == in.dist());
+      REQUIRE(trace.az() == in.az());
+      REQUIRE(trace.baz() == in.baz());
+      REQUIRE(trace.gcarc() == in.gcarc());
+      REQUIRE(trace.depmen() == in.depmen());
+      REQUIRE(trace.cmpaz() == in.cmpaz());
+      REQUIRE(trace.cmpinc() == in.cmpinc());
+      REQUIRE(trace.xminimum() == in.xminimum());
+      REQUIRE(trace.xmaximum() == in.xmaximum());
+      REQUIRE(trace.yminimum() == in.yminimum());
+      REQUIRE(trace.ymaximum() == in.ymaximum());
+    }
+    SECTION("Doubles") {
+      REQUIRE(trace.delta() == in.delta());
+      REQUIRE(trace.b() == in.b());
+      REQUIRE(trace.e() == in.e());
+      REQUIRE(trace.o() == in.o());
+      REQUIRE(trace.a() == in.a());
+      REQUIRE(trace.t0() == in.t0());
+      REQUIRE(trace.t1() == in.t1());
+      REQUIRE(trace.t2() == in.t2());
+      REQUIRE(trace.t3() == in.t3());
+      REQUIRE(trace.t4() == in.t4());
+      REQUIRE(trace.t5() == in.t5());
+      REQUIRE(trace.t6() == in.t6());
+      REQUIRE(trace.t7() == in.t7());
+      REQUIRE(trace.t8() == in.t8());
+      REQUIRE(trace.t9() == in.t9());
+      REQUIRE(trace.f() == in.f());
+      REQUIRE(trace.stla() == in.stla());
+      REQUIRE(trace.stlo() == in.stlo());
+      REQUIRE(trace.evla() == in.evla());
+      REQUIRE(trace.evlo() == in.evlo());
+      REQUIRE(trace.sb() == in.sb());
+      REQUIRE(trace.sdelta() == in.sdelta());
+    }
+    SECTION("Integers") {
+      REQUIRE(trace.nzyear() == in.nzyear());
+      REQUIRE(trace.nzjday() == in.nzjday());
+      REQUIRE(trace.nzhour() == in.nzhour());
+      REQUIRE(trace.nzmin() == in.nzmin());
+      REQUIRE(trace.nzsec() == in.nzsec());
+      REQUIRE(trace.nzmsec() == in.nzmsec());
+      REQUIRE(trace.nvhdr() == in.nvhdr());
+      REQUIRE(trace.norid() == in.norid());
+      REQUIRE(trace.nevid() == in.nevid());
+      REQUIRE(trace.npts() == in.npts());
+      REQUIRE(trace.nsnpts() == in.nsnpts());
+      REQUIRE(trace.nsnpts() == in.nsnpts());
+      REQUIRE(trace.nwfid() == in.nwfid());
+      REQUIRE(trace.nxsize() == in.nxsize());
+      REQUIRE(trace.nysize() == in.nysize());
+      REQUIRE(trace.iftype() == in.iftype());
+      REQUIRE(trace.idep() == in.idep());
+      REQUIRE(trace.iztype() == in.iztype());
+      REQUIRE(trace.iinst() == in.iinst());
+      REQUIRE(trace.istreg() == in.istreg());
+      REQUIRE(trace.ievreg() == in.ievreg());
+      REQUIRE(trace.ievtyp() == in.ievtyp());
+      REQUIRE(trace.iqual() == in.iqual());
+      REQUIRE(trace.isynth() == in.isynth());
+      REQUIRE(trace.imagtyp() == in.imagtyp());
+      REQUIRE(trace.imagsrc() == in.imagsrc());
+      REQUIRE(trace.ibody() == in.ibody());
+    }
+    SECTION("Booleans") {
+      REQUIRE(trace.leven() == in.leven());
+      REQUIRE(trace.lpspol() == in.lpspol());
+      REQUIRE(trace.lovrok() == in.lovrok());
+      REQUIRE(trace.lcalda() == in.lcalda());
+    }
+    SECTION("Strings") {
+      REQUIRE(trace.kstnm() == in.kstnm());
+      REQUIRE(trace.kevnm() == in.kevnm());
+      REQUIRE(trace.khole() == in.khole());
+      REQUIRE(trace.ko() == in.ko());
+      REQUIRE(trace.ka() == in.ka());
+      REQUIRE(trace.kt0() == in.kt0());
+      REQUIRE(trace.kt1() == in.kt1());
+      REQUIRE(trace.kt2() == in.kt2());
+      REQUIRE(trace.kt3() == in.kt3());
+      REQUIRE(trace.kt4() == in.kt4());
+      REQUIRE(trace.kt5() == in.kt5());
+      REQUIRE(trace.kt6() == in.kt6());
+      REQUIRE(trace.kt7() == in.kt7());
+      REQUIRE(trace.kt8() == in.kt8());
+      REQUIRE(trace.kt9() == in.kt9());
+      REQUIRE(trace.kf() == in.kf());
+      REQUIRE(trace.kuser0() == in.kuser0());
+      REQUIRE(trace.kuser1() == in.kuser1());
+      REQUIRE(trace.kuser2() == in.kuser2());
+      REQUIRE(trace.kcmpnm() == in.kcmpnm());
+      REQUIRE(trace.knetwk() == in.knetwk());
+      REQUIRE(trace.kdatrd() == in.kdatrd());
+      REQUIRE(trace.kinst() == in.kinst());
+    }
+    SECTION("Data") {
+      REQUIRE(trace.data1() == in.data1());
+      REQUIRE(trace.data2() == in.data2());
+    }
+    SECTION("Everthing") {
+      REQUIRE(trace == in);
+    }
+  }
+  SECTION("Random I/O") {
+    std::vector data{trace.data1()};
+    random_vector(data);
+    trace.data1(data);
+    data = trace.data2();
+    if (!data.empty()) { random_vector(data); trace.data2(data); }
+    trace.write(tmp_file);
+    Trace in = Trace(tmp_file);
+    // Fails
+    fs::remove(tmp_file);
+    SECTION("Floats") {
+      REQUIRE(trace.depmin() == in.depmin());
+      REQUIRE(trace.depmax() == in.depmax());
+      REQUIRE(trace.odelta() == in.odelta());
+      REQUIRE(trace.resp0() == in.resp0());
+      REQUIRE(trace.resp1() == in.resp1());
+      REQUIRE(trace.resp2() == in.resp2());
+      REQUIRE(trace.resp3() == in.resp3());
+      REQUIRE(trace.resp4() == in.resp4());
+      REQUIRE(trace.resp5() == in.resp5());
+      REQUIRE(trace.resp6() == in.resp6());
+      REQUIRE(trace.resp7() == in.resp7());
+      REQUIRE(trace.resp8() == in.resp8());
+      REQUIRE(trace.resp9() == in.resp9());
+      REQUIRE(trace.stel() == in.stel());
+      REQUIRE(trace.stdp() == in.stdp());
+      REQUIRE(trace.evel() == in.evel());
+      REQUIRE(trace.evdp() == in.evdp());
+      REQUIRE(trace.mag() == in.mag());
+      REQUIRE(trace.user0() == in.user0());
+      REQUIRE(trace.user1() == in.user1());
+      REQUIRE(trace.user2() == in.user2());
+      REQUIRE(trace.user3() == in.user3());
+      REQUIRE(trace.user4() == in.user4());
+      REQUIRE(trace.user5() == in.user5());
+      REQUIRE(trace.user6() == in.user6());
+      REQUIRE(trace.user7() == in.user7());
+      REQUIRE(trace.user8() == in.user8());
+      REQUIRE(trace.user9() == in.user9());
+      REQUIRE(trace.dist() == in.dist());
+      REQUIRE(trace.az() == in.az());
+      REQUIRE(trace.baz() == in.baz());
+      REQUIRE(trace.gcarc() == in.gcarc());
+      REQUIRE(trace.depmen() == in.depmen());
+      REQUIRE(trace.cmpaz() == in.cmpaz());
+      REQUIRE(trace.cmpinc() == in.cmpinc());
+      REQUIRE(trace.xminimum() == in.xminimum());
+      REQUIRE(trace.xmaximum() == in.xmaximum());
+      REQUIRE(trace.yminimum() == in.yminimum());
+      REQUIRE(trace.ymaximum() == in.ymaximum());
+    }
+    SECTION("Doubles") {
+      REQUIRE(trace.delta() == in.delta());
+      REQUIRE(trace.b() == in.b());
+      REQUIRE(trace.e() == in.e());
+      REQUIRE(trace.o() == in.o());
+      REQUIRE(trace.a() == in.a());
+      REQUIRE(trace.t0() == in.t0());
+      REQUIRE(trace.t1() == in.t1());
+      REQUIRE(trace.t2() == in.t2());
+      REQUIRE(trace.t3() == in.t3());
+      REQUIRE(trace.t4() == in.t4());
+      REQUIRE(trace.t5() == in.t5());
+      REQUIRE(trace.t6() == in.t6());
+      REQUIRE(trace.t7() == in.t7());
+      REQUIRE(trace.t8() == in.t8());
+      REQUIRE(trace.t9() == in.t9());
+      REQUIRE(trace.f() == in.f());
+      REQUIRE(trace.stla() == in.stla());
+      REQUIRE(trace.stlo() == in.stlo());
+      REQUIRE(trace.evla() == in.evla());
+      REQUIRE(trace.evlo() == in.evlo());
+      REQUIRE(trace.sb() == in.sb());
+      REQUIRE(trace.sdelta() == in.sdelta());
+    }
+    SECTION("Integers") {
+      REQUIRE(trace.nzyear() == in.nzyear());
+      REQUIRE(trace.nzjday() == in.nzjday());
+      REQUIRE(trace.nzhour() == in.nzhour());
+      REQUIRE(trace.nzmin() == in.nzmin());
+      REQUIRE(trace.nzsec() == in.nzsec());
+      REQUIRE(trace.nzmsec() == in.nzmsec());
+      REQUIRE(trace.nvhdr() == in.nvhdr());
+      REQUIRE(trace.norid() == in.norid());
+      REQUIRE(trace.nevid() == in.nevid());
+      REQUIRE(trace.npts() == in.npts());
+      REQUIRE(trace.nsnpts() == in.nsnpts());
+      REQUIRE(trace.nwfid() == in.nwfid());
+      REQUIRE(trace.nxsize() == in.nxsize());
+      REQUIRE(trace.nysize() == in.nysize());
+      REQUIRE(trace.iftype() == in.iftype());
+      REQUIRE(trace.idep() == in.idep());
+      REQUIRE(trace.iztype() == in.iztype());
+      REQUIRE(trace.iinst() == in.iinst());
+      REQUIRE(trace.istreg() == in.istreg());
+      REQUIRE(trace.ievreg() == in.ievreg());
+      REQUIRE(trace.ievtyp() == in.ievtyp());
+      REQUIRE(trace.iqual() == in.iqual());
+      REQUIRE(trace.isynth() == in.isynth());
+      REQUIRE(trace.imagtyp() == in.imagtyp());
+      REQUIRE(trace.imagsrc() == in.imagsrc());
+      REQUIRE(trace.ibody() == in.ibody());
+    }
+    SECTION("Booleans") {
+      REQUIRE(trace.leven() == in.leven());
+      REQUIRE(trace.lpspol() == in.lpspol());
+      REQUIRE(trace.lovrok() == in.lovrok());
+      REQUIRE(trace.lcalda() == in.lcalda());
+    }
+    SECTION("Strings") {
+      REQUIRE(trace.kstnm() == in.kstnm());
+      REQUIRE(trace.kevnm() == in.kevnm());
+      REQUIRE(trace.khole() == in.khole());
+      REQUIRE(trace.ko() == in.ko());
+      REQUIRE(trace.ka() == in.ka());
+      REQUIRE(trace.kt0() == in.kt0());
+      REQUIRE(trace.kt1() == in.kt1());
+      REQUIRE(trace.kt2() == in.kt2());
+      REQUIRE(trace.kt3() == in.kt3());
+      REQUIRE(trace.kt4() == in.kt4());
+      REQUIRE(trace.kt5() == in.kt5());
+      REQUIRE(trace.kt6() == in.kt6());
+      REQUIRE(trace.kt7() == in.kt7());
+      REQUIRE(trace.kt8() == in.kt8());
+      REQUIRE(trace.kt9() == in.kt9());
+      REQUIRE(trace.kf() == in.kf());
+      REQUIRE(trace.kuser0() == in.kuser0());
+      REQUIRE(trace.kuser1() == in.kuser1());
+      REQUIRE(trace.kuser2() == in.kuser2());
+      REQUIRE(trace.kcmpnm() == in.kcmpnm());
+      REQUIRE(trace.knetwk() == in.knetwk());
+      REQUIRE(trace.kdatrd() == in.kdatrd());
+      REQUIRE(trace.kinst() == in.kinst());
+    }
+    SECTION("Data") {
+      REQUIRE(equal_within_tolerance(trace.data1(), in.data1()));
+      REQUIRE(equal_within_tolerance(trace.data2(), in.data2()));
+    }
+    SECTION("Everything") {
+      REQUIRE(trace == in);
+    }
   }
 }

@@ -273,9 +273,9 @@ bool equal_within_tolerance(const std::vector<double>& vector1,
 }
 
 //------------------------------------------------------------------------------
-// Trace2
+// Trace
 //------------------------------------------------------------------------------
-Trace2::Trace2() {
+Trace::Trace() {
     std::ranges::fill(floats.begin(), floats.end(), unset_float);
     std::ranges::fill(doubles.begin(), doubles.end(), unset_double);
     std::ranges::fill(ints.begin(), ints.end(), unset_int);
@@ -283,890 +283,671 @@ Trace2::Trace2() {
     std::ranges::fill(strings.begin(), strings.end(), unset_word);
 }
 
-bool Trace2::operator==(const Trace2& other) const {
+bool Trace::operator==(const Trace& other) const {
     if (floats != other.floats) { return false; }
     if (doubles != other.doubles) { return false; }
     if (ints != other.ints) { return false; }
     if (strings != other.strings) { return false; }
-    if (data != other.data) { return false; }
+    if (!equal_within_tolerance(data[0], other.data[0])) { return false; }
+    if (!equal_within_tolerance(data[1], other.data[1])) { return false; }
     return true;
 }
 // Getters
 // Floats
-float Trace2::depmin() const { return floats[sac_map.at("depmin")]; }
-float Trace2::depmax() const { return floats[sac_map.at("depmax")]; }
-float Trace2::odelta() const { return floats[sac_map.at("odelta")]; }
-float Trace2::resp0() const { return floats[sac_map.at("resp0")]; }
-float Trace2::resp1() const { return floats[sac_map.at("resp1")]; }
-float Trace2::resp2() const { return floats[sac_map.at("resp2")]; }
-float Trace2::resp3() const { return floats[sac_map.at("resp3")]; }
-float Trace2::resp4() const { return floats[sac_map.at("resp4")]; }
-float Trace2::resp5() const { return floats[sac_map.at("resp5")]; }
-float Trace2::resp6() const { return floats[sac_map.at("resp6")]; }
-float Trace2::resp7() const { return floats[sac_map.at("resp7")]; }
-float Trace2::resp8() const { return floats[sac_map.at("resp8")]; }
-float Trace2::resp9() const { return floats[sac_map.at("resp9")]; }
-float Trace2::stel() const { return floats[sac_map.at("stel")]; }
-float Trace2::stdp() const { return floats[sac_map.at("stdp")]; }
-float Trace2::evel() const { return floats[sac_map.at("evel")]; }
-float Trace2::evdp() const { return floats[sac_map.at("evdp")]; }
-float Trace2::mag() const { return floats[sac_map.at("mag")]; }
-float Trace2::user0() const { return floats[sac_map.at("user0")]; }
-float Trace2::user1() const { return floats[sac_map.at("user1")]; }
-float Trace2::user2() const { return floats[sac_map.at("user2")]; }
-float Trace2::user3() const { return floats[sac_map.at("user3")]; }
-float Trace2::user4() const { return floats[sac_map.at("user4")]; }
-float Trace2::user5() const { return floats[sac_map.at("user5")]; }
-float Trace2::user6() const { return floats[sac_map.at("user6")]; }
-float Trace2::user7() const { return floats[sac_map.at("user7")]; }
-float Trace2::user8() const { return floats[sac_map.at("user8")]; }
-float Trace2::user9() const { return floats[sac_map.at("user9")]; }
-float Trace2::dist() const { return floats[sac_map.at("dist")]; }
-float Trace2::az() const { return floats[sac_map.at("az")]; }
-float Trace2::baz() const { return floats[sac_map.at("baz")]; }
-float Trace2::gcarc() const { return floats[sac_map.at("gcarc")]; }
-float Trace2::depmen() const { return floats[sac_map.at("depmen")]; }
-float Trace2::cmpaz() const { return floats[sac_map.at("cmpaz")]; }
-float Trace2::xminimum() const { return floats[sac_map.at("xminimum")]; }
-float Trace2::xmaximum() const { return floats[sac_map.at("xmaximum")]; }
-float Trace2::yminimum() const { return floats[sac_map.at("yminimum")]; }
-float Trace2::ymaximum() const { return floats[sac_map.at("ymaximum")]; }
+float Trace::depmin() const { return floats[sac_map.at("depmin")]; }
+float Trace::depmax() const { return floats[sac_map.at("depmax")]; }
+float Trace::odelta() const { return floats[sac_map.at("odelta")]; }
+float Trace::resp0() const { return floats[sac_map.at("resp0")]; }
+float Trace::resp1() const { return floats[sac_map.at("resp1")]; }
+float Trace::resp2() const { return floats[sac_map.at("resp2")]; }
+float Trace::resp3() const { return floats[sac_map.at("resp3")]; }
+float Trace::resp4() const { return floats[sac_map.at("resp4")]; }
+float Trace::resp5() const { return floats[sac_map.at("resp5")]; }
+float Trace::resp6() const { return floats[sac_map.at("resp6")]; }
+float Trace::resp7() const { return floats[sac_map.at("resp7")]; }
+float Trace::resp8() const { return floats[sac_map.at("resp8")]; }
+float Trace::resp9() const { return floats[sac_map.at("resp9")]; }
+float Trace::stel() const { return floats[sac_map.at("stel")]; }
+float Trace::stdp() const { return floats[sac_map.at("stdp")]; }
+float Trace::evel() const { return floats[sac_map.at("evel")]; }
+float Trace::evdp() const { return floats[sac_map.at("evdp")]; }
+float Trace::mag() const { return floats[sac_map.at("mag")]; }
+float Trace::user0() const { return floats[sac_map.at("user0")]; }
+float Trace::user1() const { return floats[sac_map.at("user1")]; }
+float Trace::user2() const { return floats[sac_map.at("user2")]; }
+float Trace::user3() const { return floats[sac_map.at("user3")]; }
+float Trace::user4() const { return floats[sac_map.at("user4")]; }
+float Trace::user5() const { return floats[sac_map.at("user5")]; }
+float Trace::user6() const { return floats[sac_map.at("user6")]; }
+float Trace::user7() const { return floats[sac_map.at("user7")]; }
+float Trace::user8() const { return floats[sac_map.at("user8")]; }
+float Trace::user9() const { return floats[sac_map.at("user9")]; }
+float Trace::dist() const { return floats[sac_map.at("dist")]; }
+float Trace::az() const { return floats[sac_map.at("az")]; }
+float Trace::baz() const { return floats[sac_map.at("baz")]; }
+float Trace::gcarc() const { return floats[sac_map.at("gcarc")]; }
+float Trace::depmen() const { return floats[sac_map.at("depmen")]; }
+float Trace::cmpaz() const { return floats[sac_map.at("cmpaz")]; }
+float Trace::cmpinc() const { return floats[sac_map.at("cmpinc")]; }
+float Trace::xminimum() const { return floats[sac_map.at("xminimum")]; }
+float Trace::xmaximum() const { return floats[sac_map.at("xmaximum")]; }
+float Trace::yminimum() const { return floats[sac_map.at("yminimum")]; }
+float Trace::ymaximum() const { return floats[sac_map.at("ymaximum")]; }
 // Doubles
-double Trace2::delta() const { return doubles[sac_map.at("delta")]; }
-double Trace2::b() const { return doubles[sac_map.at("b")]; }
-double Trace2::e() const { return doubles[sac_map.at("e")]; }
-double Trace2::o() const { return doubles[sac_map.at("o")]; }
-double Trace2::a() const { return doubles[sac_map.at("a")]; }
-double Trace2::t0() const { return doubles[sac_map.at("t0")]; }
-double Trace2::t1() const { return doubles[sac_map.at("t1")]; }
-double Trace2::t2() const { return doubles[sac_map.at("t2")]; }
-double Trace2::t3() const { return doubles[sac_map.at("t3")]; }
-double Trace2::t4() const { return doubles[sac_map.at("t4")]; }
-double Trace2::t5() const { return doubles[sac_map.at("t5")]; }
-double Trace2::t6() const { return doubles[sac_map.at("t6")]; }
-double Trace2::t7() const { return doubles[sac_map.at("t7")]; }
-double Trace2::t8() const { return doubles[sac_map.at("t8")]; }
-double Trace2::t9() const { return doubles[sac_map.at("t9")]; }
-double Trace2::f() const { return doubles[sac_map.at("f")]; }
-double Trace2::stla() const { return doubles[sac_map.at("stla")]; }
-double Trace2::stlo() const { return doubles[sac_map.at("stlo")]; }
-double Trace2::evla() const { return doubles[sac_map.at("evla")]; }
-double Trace2::evlo() const { return doubles[sac_map.at("evlo")]; }
-double Trace2::sb() const { return doubles[sac_map.at("sb")]; }
-double Trace2::sdelta() const { return doubles[sac_map.at("sdelta")]; }
+double Trace::delta() const { return doubles[sac_map.at("delta")]; }
+double Trace::b() const { return doubles[sac_map.at("b")]; }
+double Trace::e() const { return doubles[sac_map.at("e")]; }
+double Trace::o() const { return doubles[sac_map.at("o")]; }
+double Trace::a() const { return doubles[sac_map.at("a")]; }
+double Trace::t0() const { return doubles[sac_map.at("t0")]; }
+double Trace::t1() const { return doubles[sac_map.at("t1")]; }
+double Trace::t2() const { return doubles[sac_map.at("t2")]; }
+double Trace::t3() const { return doubles[sac_map.at("t3")]; }
+double Trace::t4() const { return doubles[sac_map.at("t4")]; }
+double Trace::t5() const { return doubles[sac_map.at("t5")]; }
+double Trace::t6() const { return doubles[sac_map.at("t6")]; }
+double Trace::t7() const { return doubles[sac_map.at("t7")]; }
+double Trace::t8() const { return doubles[sac_map.at("t8")]; }
+double Trace::t9() const { return doubles[sac_map.at("t9")]; }
+double Trace::f() const { return doubles[sac_map.at("f")]; }
+double Trace::stla() const { return doubles[sac_map.at("stla")]; }
+double Trace::stlo() const { return doubles[sac_map.at("stlo")]; }
+double Trace::evla() const { return doubles[sac_map.at("evla")]; }
+double Trace::evlo() const { return doubles[sac_map.at("evlo")]; }
+double Trace::sb() const { return doubles[sac_map.at("sb")]; }
+double Trace::sdelta() const { return doubles[sac_map.at("sdelta")]; }
 // Ints
-int Trace2::nzyear() const { return ints[sac_map.at("nzyear")]; }
-int Trace2::nzjday() const { return ints[sac_map.at("nzjday")]; }
-int Trace2::nzhour() const { return ints[sac_map.at("nzhour")]; }
-int Trace2::nzmin() const { return ints[sac_map.at("nzmin")]; }
-int Trace2::nzsec() const { return ints[sac_map.at("nzsec")]; }
-int Trace2::nzmsec() const { return ints[sac_map.at("nzmsec")]; }
-int Trace2::nvhdr() const { return ints[sac_map.at("nvhdr")]; }
-int Trace2::norid() const { return ints[sac_map.at("norid")]; }
-int Trace2::nevid() const { return ints[sac_map.at("nevid")]; }
-int Trace2::npts() const { return ints[sac_map.at("npts")]; }
-int Trace2::nsnpts() const { return ints[sac_map.at("nsnpts")]; }
-int Trace2::nwfid() const { return ints[sac_map.at("nwfid")]; }
-int Trace2::nxsize() const { return ints[sac_map.at("nxsize")]; }
-int Trace2::nysize() const { return ints[sac_map.at("nysize")]; }
-int Trace2::iftype() const { return ints[sac_map.at("iftype")]; }
-int Trace2::idep() const { return ints[sac_map.at("idep")]; }
-int Trace2::iztype() const { return ints[sac_map.at("iztype")]; }
-int Trace2::iinst() const { return ints[sac_map.at("iinst")]; }
-int Trace2::istreg() const { return ints[sac_map.at("istreg")]; }
-int Trace2::ievreg() const { return ints[sac_map.at("ievreg")]; }
-int Trace2::ievtyp() const { return ints[sac_map.at("ievtyp")]; }
-int Trace2::iqual() const { return ints[sac_map.at("iqual")]; }
-int Trace2::isynth() const { return ints[sac_map.at("isynth")]; }
-int Trace2::imagtyp() const { return ints[sac_map.at("imagtyp")]; }
-int Trace2::imagsrc() const { return ints[sac_map.at("imagsrc")]; }
-int Trace2::ibody() const { return ints[sac_map.at("ibody")]; }
+int Trace::nzyear() const { return ints[sac_map.at("nzyear")]; }
+int Trace::nzjday() const { return ints[sac_map.at("nzjday")]; }
+int Trace::nzhour() const { return ints[sac_map.at("nzhour")]; }
+int Trace::nzmin() const { return ints[sac_map.at("nzmin")]; }
+int Trace::nzsec() const { return ints[sac_map.at("nzsec")]; }
+int Trace::nzmsec() const { return ints[sac_map.at("nzmsec")]; }
+int Trace::nvhdr() const { return ints[sac_map.at("nvhdr")]; }
+int Trace::norid() const { return ints[sac_map.at("norid")]; }
+int Trace::nevid() const { return ints[sac_map.at("nevid")]; }
+int Trace::npts() const { return ints[sac_map.at("npts")]; }
+int Trace::nsnpts() const { return ints[sac_map.at("nsnpts")]; }
+int Trace::nwfid() const { return ints[sac_map.at("nwfid")]; }
+int Trace::nxsize() const { return ints[sac_map.at("nxsize")]; }
+int Trace::nysize() const { return ints[sac_map.at("nysize")]; }
+int Trace::iftype() const { return ints[sac_map.at("iftype")]; }
+int Trace::idep() const { return ints[sac_map.at("idep")]; }
+int Trace::iztype() const { return ints[sac_map.at("iztype")]; }
+int Trace::iinst() const { return ints[sac_map.at("iinst")]; }
+int Trace::istreg() const { return ints[sac_map.at("istreg")]; }
+int Trace::ievreg() const { return ints[sac_map.at("ievreg")]; }
+int Trace::ievtyp() const { return ints[sac_map.at("ievtyp")]; }
+int Trace::iqual() const { return ints[sac_map.at("iqual")]; }
+int Trace::isynth() const { return ints[sac_map.at("isynth")]; }
+int Trace::imagtyp() const { return ints[sac_map.at("imagtyp")]; }
+int Trace::imagsrc() const { return ints[sac_map.at("imagsrc")]; }
+int Trace::ibody() const { return ints[sac_map.at("ibody")]; }
 // Bools
-bool Trace2::leven() const { return bools[sac_map.at("leven")]; }
-bool Trace2::lpspol() const { return bools[sac_map.at("lpspol")]; }
-bool Trace2::lovrok() const { return bools[sac_map.at("lovrok")]; }
-bool Trace2::lcalda() const { return bools[sac_map.at("lcalda")]; }
+bool Trace::leven() const { return bools[sac_map.at("leven")]; }
+bool Trace::lpspol() const { return bools[sac_map.at("lpspol")]; }
+bool Trace::lovrok() const { return bools[sac_map.at("lovrok")]; }
+bool Trace::lcalda() const { return bools[sac_map.at("lcalda")]; }
 // Strings
-std::string Trace2::kstnm() const { return strings[sac_map.at("kstnm")]; }
-std::string Trace2::kevnm() const { return strings[sac_map.at("kevnm")]; }
-std::string Trace2::khole() const { return strings[sac_map.at("khole")]; }
-std::string Trace2::ko() const { return strings[sac_map.at("ko")]; }
-std::string Trace2::ka() const { return strings[sac_map.at("ka")]; }
-std::string Trace2::kt0() const { return strings[sac_map.at("kt0")]; }
-std::string Trace2::kt1() const { return strings[sac_map.at("kt1")]; }
-std::string Trace2::kt2() const { return strings[sac_map.at("kt2")]; }
-std::string Trace2::kt3() const { return strings[sac_map.at("kt3")]; }
-std::string Trace2::kt4() const { return strings[sac_map.at("kt4")]; }
-std::string Trace2::kt5() const { return strings[sac_map.at("kt5")]; }
-std::string Trace2::kt6() const { return strings[sac_map.at("kt6")]; }
-std::string Trace2::kt7() const { return strings[sac_map.at("kt7")]; }
-std::string Trace2::kt8() const { return strings[sac_map.at("kt8")]; }
-std::string Trace2::kt9() const { return strings[sac_map.at("kt9")]; }
-std::string Trace2::kf() const { return strings[sac_map.at("kf")]; }
-std::string Trace2::kuser0() const { return strings[sac_map.at("kuser0")]; }
-std::string Trace2::kuser1() const { return strings[sac_map.at("kuser1")]; }
-std::string Trace2::kuser2() const { return strings[sac_map.at("kuser2")]; }
-std::string Trace2::kcmpnm() const { return strings[sac_map.at("kcmpnm")]; }
-std::string Trace2::knetwk() const { return strings[sac_map.at("knetwk")]; }
-std::string Trace2::kdatrd() const { return strings[sac_map.at("kdatrd")]; }
-std::string Trace2::kinst() const { return strings[sac_map.at("kinst")]; }
+std::string Trace::kstnm() const { return strings[sac_map.at("kstnm")]; }
+std::string Trace::kevnm() const { return strings[sac_map.at("kevnm")]; }
+std::string Trace::khole() const { return strings[sac_map.at("khole")]; }
+std::string Trace::ko() const { return strings[sac_map.at("ko")]; }
+std::string Trace::ka() const { return strings[sac_map.at("ka")]; }
+std::string Trace::kt0() const { return strings[sac_map.at("kt0")]; }
+std::string Trace::kt1() const { return strings[sac_map.at("kt1")]; }
+std::string Trace::kt2() const { return strings[sac_map.at("kt2")]; }
+std::string Trace::kt3() const { return strings[sac_map.at("kt3")]; }
+std::string Trace::kt4() const { return strings[sac_map.at("kt4")]; }
+std::string Trace::kt5() const { return strings[sac_map.at("kt5")]; }
+std::string Trace::kt6() const { return strings[sac_map.at("kt6")]; }
+std::string Trace::kt7() const { return strings[sac_map.at("kt7")]; }
+std::string Trace::kt8() const { return strings[sac_map.at("kt8")]; }
+std::string Trace::kt9() const { return strings[sac_map.at("kt9")]; }
+std::string Trace::kf() const { return strings[sac_map.at("kf")]; }
+std::string Trace::kuser0() const { return strings[sac_map.at("kuser0")]; }
+std::string Trace::kuser1() const { return strings[sac_map.at("kuser1")]; }
+std::string Trace::kuser2() const { return strings[sac_map.at("kuser2")]; }
+std::string Trace::kcmpnm() const { return strings[sac_map.at("kcmpnm")]; }
+std::string Trace::knetwk() const { return strings[sac_map.at("knetwk")]; }
+std::string Trace::kdatrd() const { return strings[sac_map.at("kdatrd")]; }
+std::string Trace::kinst() const { return strings[sac_map.at("kinst")]; }
 // Data
-std::vector<double> Trace2::data1() const { return data[sac_map.at("data1")]; }
-std::vector<double> Trace2::data2() const { return data[sac_map.at("data2")]; }
+std::vector<double> Trace::data1() const { return data[sac_map.at("data1")]; }
+std::vector<double> Trace::data2() const { return data[sac_map.at("data2")]; }
 // Setters
 // Floats
-void Trace2::depmin(const float x) { floats[sac_map.at("depmin")] = x; }
-void Trace2::depmax(const float x) { floats[sac_map.at("depmax")] = x; }
-void Trace2::odelta(const float x) { floats[sac_map.at("odelta")] = x; }
-void Trace2::resp0(const float x) { floats[sac_map.at("resp0")] = x; }
-void Trace2::resp1(const float x) { floats[sac_map.at("resp1")] = x; }
-void Trace2::resp2(const float x) { floats[sac_map.at("resp2")] = x; }
-void Trace2::resp3(const float x) { floats[sac_map.at("resp3")] = x; }
-void Trace2::resp4(const float x) { floats[sac_map.at("resp4")] = x; }
-void Trace2::resp5(const float x) { floats[sac_map.at("resp5")] = x; }
-void Trace2::resp6(const float x) { floats[sac_map.at("resp6")] = x; }
-void Trace2::resp7(const float x) { floats[sac_map.at("resp7")] = x; }
-void Trace2::resp8(const float x) { floats[sac_map.at("resp8")] = x; }
-void Trace2::resp9(const float x) { floats[sac_map.at("resp9")] = x; }
-void Trace2::stel(const float x) { floats[sac_map.at("stel")] = x; }
-void Trace2::stdp(const float x) { floats[sac_map.at("stdp")] = x; }
-void Trace2::evel(const float x) { floats[sac_map.at("evel")] = x; }
-void Trace2::evdp(const float x) { floats[sac_map.at("evdp")] = x; }
-void Trace2::mag(const float x) { floats[sac_map.at("mag")] = x; }
-void Trace2::user0(const float x) { floats[sac_map.at("user0")] = x; }
-void Trace2::user1(const float x) { floats[sac_map.at("user1")] = x; }
-void Trace2::user2(const float x) { floats[sac_map.at("user2")] = x; }
-void Trace2::user3(const float x) { floats[sac_map.at("user3")] = x; }
-void Trace2::user4(const float x) { floats[sac_map.at("user4")] = x; }
-void Trace2::user5(const float x) { floats[sac_map.at("user5")] = x; }
-void Trace2::user6(const float x) { floats[sac_map.at("user6")] = x; }
-void Trace2::user7(const float x) { floats[sac_map.at("user7")] = x; }
-void Trace2::user8(const float x) { floats[sac_map.at("user8")] = x; }
-void Trace2::user9(const float x) { floats[sac_map.at("user9")] = x; }
-void Trace2::dist(const float x) { floats[sac_map.at("dist")] = x; }
-void Trace2::az(const float x) { floats[sac_map.at("az")] = x; }
-void Trace2::baz(const float x) { floats[sac_map.at("baz")] = x; }
-void Trace2::gcarc(const float x) { floats[sac_map.at("gcarc")] = x; }
-void Trace2::depmen(const float x) { floats[sac_map.at("depmen")] = x; }
-void Trace2::cmpaz(const float x) { floats[sac_map.at("cmpaz")] = x; }
-void Trace2::xminimum(const float x) { floats[sac_map.at("xminimum")] = x; }
-void Trace2::xmaximum(const float x) { floats[sac_map.at("xmaximum")] = x; }
-void Trace2::yminimum(const float x) { floats[sac_map.at("yminimum")] = x; }
-void Trace2::ymaximum(const float x) { floats[sac_map.at("ymaximum")] = x; }
+void Trace::depmin(const float x) { floats[sac_map.at("depmin")] = x; }
+void Trace::depmax(const float x) { floats[sac_map.at("depmax")] = x; }
+void Trace::odelta(const float x) { floats[sac_map.at("odelta")] = x; }
+void Trace::resp0(const float x) { floats[sac_map.at("resp0")] = x; }
+void Trace::resp1(const float x) { floats[sac_map.at("resp1")] = x; }
+void Trace::resp2(const float x) { floats[sac_map.at("resp2")] = x; }
+void Trace::resp3(const float x) { floats[sac_map.at("resp3")] = x; }
+void Trace::resp4(const float x) { floats[sac_map.at("resp4")] = x; }
+void Trace::resp5(const float x) { floats[sac_map.at("resp5")] = x; }
+void Trace::resp6(const float x) { floats[sac_map.at("resp6")] = x; }
+void Trace::resp7(const float x) { floats[sac_map.at("resp7")] = x; }
+void Trace::resp8(const float x) { floats[sac_map.at("resp8")] = x; }
+void Trace::resp9(const float x) { floats[sac_map.at("resp9")] = x; }
+void Trace::stel(const float x) { floats[sac_map.at("stel")] = x; }
+void Trace::stdp(const float x) { floats[sac_map.at("stdp")] = x; }
+void Trace::evel(const float x) { floats[sac_map.at("evel")] = x; }
+void Trace::evdp(const float x) { floats[sac_map.at("evdp")] = x; }
+void Trace::mag(const float x) { floats[sac_map.at("mag")] = x; }
+void Trace::user0(const float x) { floats[sac_map.at("user0")] = x; }
+void Trace::user1(const float x) { floats[sac_map.at("user1")] = x; }
+void Trace::user2(const float x) { floats[sac_map.at("user2")] = x; }
+void Trace::user3(const float x) { floats[sac_map.at("user3")] = x; }
+void Trace::user4(const float x) { floats[sac_map.at("user4")] = x; }
+void Trace::user5(const float x) { floats[sac_map.at("user5")] = x; }
+void Trace::user6(const float x) { floats[sac_map.at("user6")] = x; }
+void Trace::user7(const float x) { floats[sac_map.at("user7")] = x; }
+void Trace::user8(const float x) { floats[sac_map.at("user8")] = x; }
+void Trace::user9(const float x) { floats[sac_map.at("user9")] = x; }
+void Trace::dist(const float x) { floats[sac_map.at("dist")] = x; }
+void Trace::az(const float x) { floats[sac_map.at("az")] = x; }
+void Trace::baz(const float x) { floats[sac_map.at("baz")] = x; }
+void Trace::gcarc(const float x) { floats[sac_map.at("gcarc")] = x; }
+void Trace::depmen(const float x) { floats[sac_map.at("depmen")] = x; }
+void Trace::cmpaz(const float x) { floats[sac_map.at("cmpaz")] = x; }
+void Trace::cmpinc(const float x) { floats[sac_map.at("cmpinc")] = x; }
+void Trace::xminimum(const float x) { floats[sac_map.at("xminimum")] = x; }
+void Trace::xmaximum(const float x) { floats[sac_map.at("xmaximum")] = x; }
+void Trace::yminimum(const float x) { floats[sac_map.at("yminimum")] = x; }
+void Trace::ymaximum(const float x) { floats[sac_map.at("ymaximum")] = x; }
 // Doubles
 // Doubles
-void Trace2::delta(const double x) { doubles[sac_map.at("delta")] = x; }
-void Trace2::b(const double x) { doubles[sac_map.at("b")] = x; }
-void Trace2::e(const double x) { doubles[sac_map.at("e")] = x; }
-void Trace2::o(const double x) { doubles[sac_map.at("o")] = x; }
-void Trace2::a(const double x) { doubles[sac_map.at("a")] = x; }
-void Trace2::t0(const double x) { doubles[sac_map.at("t0")] = x; }
-void Trace2::t1(const double x) { doubles[sac_map.at("t1")] = x; }
-void Trace2::t2(const double x) { doubles[sac_map.at("t2")] = x; }
-void Trace2::t3(const double x) { doubles[sac_map.at("t3")] = x; }
-void Trace2::t4(const double x) { doubles[sac_map.at("t4")] = x; }
-void Trace2::t5(const double x) { doubles[sac_map.at("t5")] = x; }
-void Trace2::t6(const double x) { doubles[sac_map.at("t6")] = x; }
-void Trace2::t7(const double x) { doubles[sac_map.at("t7")] = x; }
-void Trace2::t8(const double x) { doubles[sac_map.at("t8")] = x; }
-void Trace2::t9(const double x) { doubles[sac_map.at("t9")] = x; }
-void Trace2::f(const double x) { doubles[sac_map.at("f")] = x; }
-void Trace2::stla(const double x) { doubles[sac_map.at("stla")] = x; }
-void Trace2::stlo(const double x) { doubles[sac_map.at("stlo")] = x; }
-void Trace2::evla(const double x) { doubles[sac_map.at("evla")] = x; }
-void Trace2::evlo(const double x) { doubles[sac_map.at("evlo")] = x; }
-void Trace2::sb(const double x) { doubles[sac_map.at("sb")] = x; }
-void Trace2::sdelta(const double x) { doubles[sac_map.at("sdelta")] = x; }
+void Trace::delta(const double x) { doubles[sac_map.at("delta")] = x; }
+void Trace::b(const double x) { doubles[sac_map.at("b")] = x; }
+void Trace::e(const double x) { doubles[sac_map.at("e")] = x; }
+void Trace::o(const double x) { doubles[sac_map.at("o")] = x; }
+void Trace::a(const double x) { doubles[sac_map.at("a")] = x; }
+void Trace::t0(const double x) { doubles[sac_map.at("t0")] = x; }
+void Trace::t1(const double x) { doubles[sac_map.at("t1")] = x; }
+void Trace::t2(const double x) { doubles[sac_map.at("t2")] = x; }
+void Trace::t3(const double x) { doubles[sac_map.at("t3")] = x; }
+void Trace::t4(const double x) { doubles[sac_map.at("t4")] = x; }
+void Trace::t5(const double x) { doubles[sac_map.at("t5")] = x; }
+void Trace::t6(const double x) { doubles[sac_map.at("t6")] = x; }
+void Trace::t7(const double x) { doubles[sac_map.at("t7")] = x; }
+void Trace::t8(const double x) { doubles[sac_map.at("t8")] = x; }
+void Trace::t9(const double x) { doubles[sac_map.at("t9")] = x; }
+void Trace::f(const double x) { doubles[sac_map.at("f")] = x; }
+void Trace::stla(const double x) { doubles[sac_map.at("stla")] = x; }
+void Trace::stlo(const double x) { doubles[sac_map.at("stlo")] = x; }
+void Trace::evla(const double x) { doubles[sac_map.at("evla")] = x; }
+void Trace::evlo(const double x) { doubles[sac_map.at("evlo")] = x; }
+void Trace::sb(const double x) { doubles[sac_map.at("sb")] = x; }
+void Trace::sdelta(const double x) { doubles[sac_map.at("sdelta")] = x; }
 // Ints
-void Trace2::nzyear(const int x) { ints[sac_map.at("nzyear")] = x; }
-void Trace2::nzjday(const int x) { ints[sac_map.at("nzjday")] = x; }
-void Trace2::nzhour(const int x) { ints[sac_map.at("nzhour")] = x; }
-void Trace2::nzmin(const int x) { ints[sac_map.at("nzmin")] = x; }
-void Trace2::nzsec(const int x) { ints[sac_map.at("nzsec")] = x; }
-void Trace2::nzmsec(const int x) { ints[sac_map.at("nzmsec")] = x; }
-void Trace2::nvhdr(const int x) { ints[sac_map.at("nvhdr")] = x; }
-void Trace2::norid(const int x) { ints[sac_map.at("norid")] = x; }
-void Trace2::nevid(const int x) { ints[sac_map.at("nevid")] = x; }
-void Trace2::npts(const int x) { ints[sac_map.at("npts")] = x; }
-void Trace2::nsnpts(const int x) { ints[sac_map.at("nsnpts")] = x; }
-void Trace2::nwfid(const int x) { ints[sac_map.at("nwfid")] = x; }
-void Trace2::nxsize(const int x) { ints[sac_map.at("nxsize")] = x; }
-void Trace2::nysize(const int x) { ints[sac_map.at("nysize")] = x; }
-void Trace2::iftype(const int x) { ints[sac_map.at("iftype")] = x; }
-void Trace2::idep(const int x) { ints[sac_map.at("idep")] = x; }
-void Trace2::iztype(const int x) { ints[sac_map.at("iztype")] = x; }
-void Trace2::iinst(const int x) { ints[sac_map.at("iinst")] = x; }
-void Trace2::istreg(const int x) { ints[sac_map.at("istreg")] = x; }
-void Trace2::ievreg(const int x) { ints[sac_map.at("ievreg")] = x; }
-void Trace2::ievtyp(const int x) { ints[sac_map.at("ievtyp")] = x; }
-void Trace2::iqual(const int x) { ints[sac_map.at("iqual")] = x; }
-void Trace2::isynth(const int x) { ints[sac_map.at("isynth")] = x; }
-void Trace2::imagtyp(const int x) { ints[sac_map.at("imagtyp")] = x; }
-void Trace2::imagsrc(const int x) { ints[sac_map.at("imagsrc")] = x; }
-void Trace2::ibody(const int x) { ints[sac_map.at("ibody")] = x; }
+void Trace::nzyear(const int x) { ints[sac_map.at("nzyear")] = x; }
+void Trace::nzjday(const int x) { ints[sac_map.at("nzjday")] = x; }
+void Trace::nzhour(const int x) { ints[sac_map.at("nzhour")] = x; }
+void Trace::nzmin(const int x) { ints[sac_map.at("nzmin")] = x; }
+void Trace::nzsec(const int x) { ints[sac_map.at("nzsec")] = x; }
+void Trace::nzmsec(const int x) { ints[sac_map.at("nzmsec")] = x; }
+void Trace::nvhdr(const int x) { ints[sac_map.at("nvhdr")] = x; }
+void Trace::norid(const int x) { ints[sac_map.at("norid")] = x; }
+void Trace::nevid(const int x) { ints[sac_map.at("nevid")] = x; }
+void Trace::npts(const int x) { ints[sac_map.at("npts")] = x; }
+void Trace::nsnpts(const int x) { ints[sac_map.at("nsnpts")] = x; }
+void Trace::nwfid(const int x) { ints[sac_map.at("nwfid")] = x; }
+void Trace::nxsize(const int x) { ints[sac_map.at("nxsize")] = x; }
+void Trace::nysize(const int x) { ints[sac_map.at("nysize")] = x; }
+void Trace::iftype(const int x) { ints[sac_map.at("iftype")] = x; }
+void Trace::idep(const int x) { ints[sac_map.at("idep")] = x; }
+void Trace::iztype(const int x) { ints[sac_map.at("iztype")] = x; }
+void Trace::iinst(const int x) { ints[sac_map.at("iinst")] = x; }
+void Trace::istreg(const int x) { ints[sac_map.at("istreg")] = x; }
+void Trace::ievreg(const int x) { ints[sac_map.at("ievreg")] = x; }
+void Trace::ievtyp(const int x) { ints[sac_map.at("ievtyp")] = x; }
+void Trace::iqual(const int x) { ints[sac_map.at("iqual")] = x; }
+void Trace::isynth(const int x) { ints[sac_map.at("isynth")] = x; }
+void Trace::imagtyp(const int x) { ints[sac_map.at("imagtyp")] = x; }
+void Trace::imagsrc(const int x) { ints[sac_map.at("imagsrc")] = x; }
+void Trace::ibody(const int x) { ints[sac_map.at("ibody")] = x; }
 // Bools
-void Trace2::leven(const bool x) { bools[sac_map.at("leven")] = x; }
-void Trace2::lpspol(const bool x) { bools[sac_map.at("lpspol")] = x; }
-void Trace2::lovrok(const bool x) { bools[sac_map.at("lovrok")] = x; }
-void Trace2::lcalda(const bool x) { bools[sac_map.at("lcalda")] = x; }
+void Trace::leven(const bool x) { bools[sac_map.at("leven")] = x; }
+void Trace::lpspol(const bool x) { bools[sac_map.at("lpspol")] = x; }
+void Trace::lovrok(const bool x) { bools[sac_map.at("lovrok")] = x; }
+void Trace::lcalda(const bool x) { bools[sac_map.at("lcalda")] = x; }
 // Strings
-void Trace2::kstnm(const std::string& x) { strings[sac_map.at("kstnm")] = x; }
-void Trace2::kevnm(const std::string& x) { strings[sac_map.at("kevnm")] = x; }
-void Trace2::khole(const std::string& x) { strings[sac_map.at("khole")] = x; }
-void Trace2::ko(const std::string& x) { strings[sac_map.at("ko")] = x; }
-void Trace2::ka(const std::string& x) { strings[sac_map.at("ka")] = x; }
-void Trace2::kt0(const std::string& x) { strings[sac_map.at("kt0")] = x; }
-void Trace2::kt1(const std::string& x) { strings[sac_map.at("kt1")] = x; }
-void Trace2::kt2(const std::string& x) { strings[sac_map.at("kt2")] = x; }
-void Trace2::kt3(const std::string& x) { strings[sac_map.at("kt3")] = x; }
-void Trace2::kt4(const std::string& x) { strings[sac_map.at("kt4")] = x; }
-void Trace2::kt5(const std::string& x) { strings[sac_map.at("kt5")] = x; }
-void Trace2::kt6(const std::string& x) { strings[sac_map.at("kt6")] = x; }
-void Trace2::kt7(const std::string& x) { strings[sac_map.at("kt7")] = x; }
-void Trace2::kt8(const std::string& x) { strings[sac_map.at("kt8")] = x; }
-void Trace2::kt9(const std::string& x) { strings[sac_map.at("kt9")] = x; }
-void Trace2::kf(const std::string& x) { strings[sac_map.at("kf")] = x; }
-void Trace2::kuser0(const std::string& x) { strings[sac_map.at("kuser0")] = x; }
-void Trace2::kuser1(const std::string& x) { strings[sac_map.at("kuser1")] = x; }
-void Trace2::kuser2(const std::string& x) { strings[sac_map.at("kuser2")] = x; }
-void Trace2::kcmpnm(const std::string& x) { strings[sac_map.at("kcmpnm")] = x; }
-void Trace2::knetwk(const std::string& x) { strings[sac_map.at("knetwk")] = x; }
-void Trace2::kdatrd(const std::string& x) { strings[sac_map.at("kdatrd")] = x; }
-void Trace2::kinst(const std::string& x) { strings[sac_map.at("kinst")] = x; }
+void Trace::kstnm(const std::string& x) { strings[sac_map.at("kstnm")] = x; }
+void Trace::kevnm(const std::string& x) { strings[sac_map.at("kevnm")] = x; }
+void Trace::khole(const std::string& x) { strings[sac_map.at("khole")] = x; }
+void Trace::ko(const std::string& x) { strings[sac_map.at("ko")] = x; }
+void Trace::ka(const std::string& x) { strings[sac_map.at("ka")] = x; }
+void Trace::kt0(const std::string& x) { strings[sac_map.at("kt0")] = x; }
+void Trace::kt1(const std::string& x) { strings[sac_map.at("kt1")] = x; }
+void Trace::kt2(const std::string& x) { strings[sac_map.at("kt2")] = x; }
+void Trace::kt3(const std::string& x) { strings[sac_map.at("kt3")] = x; }
+void Trace::kt4(const std::string& x) { strings[sac_map.at("kt4")] = x; }
+void Trace::kt5(const std::string& x) { strings[sac_map.at("kt5")] = x; }
+void Trace::kt6(const std::string& x) { strings[sac_map.at("kt6")] = x; }
+void Trace::kt7(const std::string& x) { strings[sac_map.at("kt7")] = x; }
+void Trace::kt8(const std::string& x) { strings[sac_map.at("kt8")] = x; }
+void Trace::kt9(const std::string& x) { strings[sac_map.at("kt9")] = x; }
+void Trace::kf(const std::string& x) { strings[sac_map.at("kf")] = x; }
+void Trace::kuser0(const std::string& x) { strings[sac_map.at("kuser0")] = x; }
+void Trace::kuser1(const std::string& x) { strings[sac_map.at("kuser1")] = x; }
+void Trace::kuser2(const std::string& x) { strings[sac_map.at("kuser2")] = x; }
+void Trace::kcmpnm(const std::string& x) { strings[sac_map.at("kcmpnm")] = x; }
+void Trace::knetwk(const std::string& x) { strings[sac_map.at("knetwk")] = x; }
+void Trace::kdatrd(const std::string& x) { strings[sac_map.at("kdatrd")] = x; }
+void Trace::kinst(const std::string& x) { strings[sac_map.at("kinst")] = x; }
 // Data
-void Trace2::data1(const std::vector<double>& x) { data[sac_map.at("data1")] = x; }
-void Trace2::data2(const std::vector<double>& x) { data[sac_map.at("data2")] = x; }
+void Trace::data1(const std::vector<double>& x) { data[sac_map.at("data1")] = x; }
+void Trace::data2(const std::vector<double>& x) { data[sac_map.at("data2")] = x; }
 //------------------------------------------------------------------------------
-// Trace
-//------------------------------------------------------------------------------
-void Trace::header_to_footer() {
-    delta = static_cast<double>(f_delta);
-    b = static_cast<double>(f_b);
-    e = static_cast<double>(f_e);
-    o = static_cast<double>(f_o);
-    a = static_cast<double>(f_a);
-    t0 = static_cast<double>(f_t0);
-    t1 = static_cast<double>(f_t1);
-    t2 = static_cast<double>(f_t2);
-    t3 = static_cast<double>(f_t3);
-    t4 = static_cast<double>(f_t4);
-    t5 = static_cast<double>(f_t5);
-    t6 = static_cast<double>(f_t6);
-    t7 = static_cast<double>(f_t7);
-    t8 = static_cast<double>(f_t8);
-    t9 = static_cast<double>(f_t9);
-    f = static_cast<double>(f_f);
-    evlo = static_cast<double>(f_evlo);
-    evla = static_cast<double>(f_evla);
-    stlo = static_cast<double>(f_stlo);
-    stla = static_cast<double>(f_stla);
-    sb = static_cast<double>(f_sb);
-    sdelta = static_cast<double>(f_sdelta);
-}
-
-void Trace::footer_to_header() {
-    f_delta = static_cast<float>(delta);
-    f_b = static_cast<float>(b);
-    f_e = static_cast<float>(e);
-    f_o = static_cast<float>(o);
-    f_a = static_cast<float>(a);
-    f_t0 = static_cast<float>(t0);
-    f_t1 = static_cast<float>(t1);
-    f_t2 = static_cast<float>(t2);
-    f_t3 = static_cast<float>(t3);
-    f_t4 = static_cast<float>(t4);
-    f_t5 = static_cast<float>(t5);
-    f_t6 = static_cast<float>(t6);
-    f_t7 = static_cast<float>(t7);
-    f_t8 = static_cast<float>(t8);
-    f_t9 = static_cast<float>(t9);
-    f_f = static_cast<float>(f);
-    f_evlo = static_cast<float>(evlo);
-    f_evla = static_cast<float>(evla);
-    f_stlo = static_cast<float>(stlo);
-    f_stla = static_cast<float>(stla);
-    f_sb = static_cast<float>(sb);
-    f_sdelta = static_cast<float>(sdelta);
-}
-//-----------------------------------------------------------------------------
-// Constructors
-//-----------------------------------------------------------------------------
-// Parameterized constructor (reader)
-Trace::Trace(const std::filesystem::path& file_name) {
-    std::ifstream file(file_name, std::ifstream::binary);
-    if (!file) {
-      std::cerr << "file could not be read...\n";
-    }
-    // Make sure we're at the start
+// Read
+Trace::Trace(const std::filesystem::path& path) {
+    std::ifstream file(path, std::ifstream::binary);
+    if (!file) { std::cerr << path.string() << " could not be read.\n"; return; }
     file.seekg(0);
-    //---------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Header
-    //---------------------------------------------------------------------------
-    f_delta  = binary_to_float(read_word(&file));
-    depmin = binary_to_float(read_word(&file));
-    depmax = binary_to_float(read_word(&file));
+    delta(binary_to_float(read_word(&file)));
+    depmin(binary_to_float(read_word(&file)));
+    depmax(binary_to_float(read_word(&file)));
     // Skip 'unused'
     read_word(&file);
-    odelta = binary_to_float(read_word(&file)); 
-    f_b = binary_to_float(read_word(&file));
-    f_e = binary_to_float(read_word(&file));
-    f_o = binary_to_float(read_word(&file));
-    f_a = binary_to_float(read_word(&file)); 
+    odelta(binary_to_float(read_word(&file)));
+    b(binary_to_float(read_word(&file)));
+    e(binary_to_float(read_word(&file)));
+    o(binary_to_float(read_word(&file)));
+    a(binary_to_float(read_word(&file)));
     // Skip 'internal'
     read_word(&file);
-    // Arrival time picking headers
-    f_t0 = binary_to_float(read_word(&file)); 
-    f_t1 = binary_to_float(read_word(&file)); 
-    f_t2 = binary_to_float(read_word(&file)); 
-    f_t3 = binary_to_float(read_word(&file)); 
-    f_t4 = binary_to_float(read_word(&file)); 
-    f_t5 = binary_to_float(read_word(&file)); 
-    f_t6 = binary_to_float(read_word(&file)); 
-    f_t7 = binary_to_float(read_word(&file)); 
-    f_t8 = binary_to_float(read_word(&file)); 
-    f_t9 = binary_to_float(read_word(&file)); 
-    f_f = binary_to_float(read_word(&file)); 
-    // Resp headers
-    resp0 = binary_to_float(read_word(&file)); 
-    resp1 = binary_to_float(read_word(&file)); 
-    resp2 = binary_to_float(read_word(&file)); 
-    resp3 = binary_to_float(read_word(&file)); 
-    resp4 = binary_to_float(read_word(&file));
-    resp5 = binary_to_float(read_word(&file)); 
-    resp6 = binary_to_float(read_word(&file)); 
-    resp7 = binary_to_float(read_word(&file)); 
-    resp8 = binary_to_float(read_word(&file)); 
-    resp9 = binary_to_float(read_word(&file)); 
+    // T# pick headers
+    t0(binary_to_float(read_word(&file)));
+    t1(binary_to_float(read_word(&file)));
+    t2(binary_to_float(read_word(&file)));
+    t3(binary_to_float(read_word(&file)));
+    t4(binary_to_float(read_word(&file)));
+    t5(binary_to_float(read_word(&file)));
+    t6(binary_to_float(read_word(&file)));
+    t7(binary_to_float(read_word(&file)));
+    t8(binary_to_float(read_word(&file)));
+    t9(binary_to_float(read_word(&file)));
+    f(binary_to_float(read_word(&file)));
+    // Response headers
+    resp0(binary_to_float(read_word(&file)));
+    resp1(binary_to_float(read_word(&file)));
+    resp2(binary_to_float(read_word(&file)));
+    resp3(binary_to_float(read_word(&file)));
+    resp4(binary_to_float(read_word(&file)));
+    resp5(binary_to_float(read_word(&file)));
+    resp6(binary_to_float(read_word(&file)));
+    resp7(binary_to_float(read_word(&file)));
+    resp8(binary_to_float(read_word(&file)));
+    resp9(binary_to_float(read_word(&file)));
     // Station headers
-    f_stla = binary_to_float(read_word(&file));
-    f_stlo = binary_to_float(read_word(&file));
-    stel = binary_to_float(read_word(&file));
-    stdp = binary_to_float(read_word(&file));
+    stla(binary_to_float(read_word(&file)));
+    stlo(binary_to_float(read_word(&file)));
+    stel(binary_to_float(read_word(&file)));
+    stdp(binary_to_float(read_word(&file)));
     // Event headers
-    f_evla = binary_to_float(read_word(&file));
-    f_evlo = binary_to_float(read_word(&file));
-    evel = binary_to_float(read_word(&file));
-    evdp = binary_to_float(read_word(&file));
-    mag = binary_to_float(read_word(&file));
-    // User headers
-    user0 = binary_to_float(read_word(&file)); 
-    user1 = binary_to_float(read_word(&file)); 
-    user2 = binary_to_float(read_word(&file)); 
-    user3 = binary_to_float(read_word(&file)); 
-    user4 = binary_to_float(read_word(&file)); 
-    user5 = binary_to_float(read_word(&file)); 
-    user6 = binary_to_float(read_word(&file)); 
-    user7 = binary_to_float(read_word(&file)); 
-    user8 = binary_to_float(read_word(&file)); 
-    user9 = binary_to_float(read_word(&file)); 
-    dist = binary_to_float(read_word(&file));
-    az = binary_to_float(read_word(&file));
-    baz = binary_to_float(read_word(&file));
-    gcarc = binary_to_float(read_word(&file));
-    f_sb = binary_to_float(read_word(&file));
-    f_sdelta = binary_to_float(read_word(&file));
-    depmen = binary_to_float(read_word(&file)); 
-    cmpaz = binary_to_float(read_word(&file));
-    cmpinc = binary_to_float(read_word(&file));
-    xminimum = binary_to_float(read_word(&file)); 
-    xmaximum = binary_to_float(read_word(&file)); 
-    yminimum = binary_to_float(read_word(&file)); 
-    ymaximum = binary_to_float(read_word(&file)); 
+    evla(binary_to_float(read_word(&file)));
+    evlo(binary_to_float(read_word(&file)));
+    evel(binary_to_float(read_word(&file)));
+    evdp(binary_to_float(read_word(&file)));
+    mag(binary_to_float(read_word(&file)));
+    // User misc headers
+    user0(binary_to_float(read_word(&file)));
+    user1(binary_to_float(read_word(&file)));
+    user2(binary_to_float(read_word(&file)));
+    user3(binary_to_float(read_word(&file)));
+    user4(binary_to_float(read_word(&file)));
+    user5(binary_to_float(read_word(&file)));
+    user6(binary_to_float(read_word(&file)));
+    user7(binary_to_float(read_word(&file)));
+    user8(binary_to_float(read_word(&file)));
+    user9(binary_to_float(read_word(&file)));
+    // Geometry headers
+    dist(binary_to_float(read_word(&file)));
+    az(binary_to_float(read_word(&file)));
+    baz(binary_to_float(read_word(&file)));
+    gcarc(binary_to_float(read_word(&file)));
+    // Metadata headers
+    sb(binary_to_float(read_word(&file)));
+    sdelta(binary_to_float(read_word(&file)));
+    depmen(binary_to_float(read_word(&file)));
+    cmpaz(binary_to_float(read_word(&file)));
+    cmpinc(binary_to_float(read_word(&file)));
+    xminimum(binary_to_float(read_word(&file)));
+    xmaximum(binary_to_float(read_word(&file)));
+    yminimum(binary_to_float(read_word(&file)));
+    ymaximum(binary_to_float(read_word(&file)));
     // Skip 'unused' (x7)
-    for (size_t i{0}; i < 7; ++i) { read_word(&file); }
-    // Date_time headers
-    nzyear = binary_to_int(read_word(&file));
-    nzjday = binary_to_int(read_word(&file));
-    nzhour = binary_to_int(read_word(&file));
-    nzmin = binary_to_int(read_word(&file));
-    nzsec = binary_to_int(read_word(&file));
-    nzmsec = binary_to_int(read_word(&file));
-    nvhdr = binary_to_int(read_word(&file));
-    norid = binary_to_int(read_word(&file)); 
-    nevid = binary_to_int(read_word(&file)); 
-    npts = binary_to_int(read_word(&file));
-    nsnpts = binary_to_int(read_word(&file));
-    nwfid = binary_to_int(read_word(&file)); 
-    nxsize = binary_to_int(read_word(&file)); 
-    nysize = binary_to_int(read_word(&file)); 
+    for (int i{0}; i < 7; ++i ) { read_word(&file); }
+    // Date/time headers
+    nzyear(binary_to_int(read_word(&file)));
+    nzjday(binary_to_int(read_word(&file)));
+    nzhour(binary_to_int(read_word(&file)));
+    nzmin(binary_to_int(read_word(&file)));
+    nzsec(binary_to_int(read_word(&file)));
+    nzmsec(binary_to_int(read_word(&file)));
+    // More metadata headers
+    nvhdr(binary_to_int(read_word(&file)));
+    norid(binary_to_int(read_word(&file)));
+    nevid(binary_to_int(read_word(&file)));
+    npts(binary_to_int(read_word(&file)));
+    nsnpts(binary_to_int(read_word(&file)));
+    nwfid(binary_to_int(read_word(&file)));
+    nxsize(binary_to_int(read_word(&file)));
+    nysize(binary_to_int(read_word(&file)));
     // Skip 'unused'
     read_word(&file);
-    iftype = binary_to_int(read_word(&file));
-    idep = binary_to_int(read_word(&file)); 
-    iztype = binary_to_int(read_word(&file)); 
+    iftype(binary_to_int(read_word(&file)));
+    idep(binary_to_int(read_word(&file)));
+    iztype(binary_to_int(read_word(&file)));
     // Skip 'unused'
     read_word(&file);
-    iinst = binary_to_int(read_word(&file)); 
-    istreg = binary_to_int(read_word(&file)); 
-    ievreg = binary_to_int(read_word(&file));
-    ievtyp = binary_to_int(read_word(&file));
-    iqual = binary_to_int(read_word(&file));
-    isynth = binary_to_int(read_word(&file));
-    imagtyp = binary_to_int(read_word(&file));
-    imagsrc = binary_to_int(read_word(&file)); 
-    ibody = binary_to_int(read_word(&file)); 
+    iinst(binary_to_int(read_word(&file)));
+    istreg(binary_to_int(read_word(&file)));
+    ievreg(binary_to_int(read_word(&file)));
+    ievtyp(binary_to_int(read_word(&file)));
+    iqual(binary_to_int(read_word(&file)));
+    isynth(binary_to_int(read_word(&file)));
+    imagtyp(binary_to_int(read_word(&file)));
+    imagsrc(binary_to_int(read_word(&file)));
+    ibody(binary_to_int(read_word(&file)));
     // Skip 'unused' (x7)
-    for (size_t i{0}; i < 7; ++i) { read_word(&file); }
+    for (int i{0}; i < 7; ++i) { read_word(&file); }
     // Logical headers
-    leven = binary_to_bool(read_word(&file));
-    lpspol = binary_to_bool(read_word(&file)); 
-    lovrok = binary_to_bool(read_word(&file));
-    lcalda = binary_to_bool(read_word(&file));
+    leven(binary_to_bool(read_word(&file)));
+    lpspol(binary_to_bool(read_word(&file)));
+    lovrok(binary_to_bool(read_word(&file)));
+    lcalda(binary_to_bool(read_word(&file)));
     // Skip 'unused'
     read_word(&file);
-    // KSTNM is 2 words long (like all other 'K' headers)
-    kstnm = binary_to_string(read_two_words(&file));
-    // KEVNM is 4 words long (special rule!)
-    kevnm = binary_to_long_string(read_four_words(&file));
-    // All other 'K' headers are 2 words long
-    khole = binary_to_string(read_two_words(&file));
-    ko = binary_to_string(read_two_words(&file));
-    ka = binary_to_string(read_two_words(&file));
-    kt0 = binary_to_string(read_two_words(&file));
-    kt1 = binary_to_string(read_two_words(&file));
-    kt2 = binary_to_string(read_two_words(&file));
-    kt3 = binary_to_string(read_two_words(&file));
-    kt4 = binary_to_string(read_two_words(&file));
-    kt5 = binary_to_string(read_two_words(&file));
-    kt6 = binary_to_string(read_two_words(&file));
-    kt7 = binary_to_string(read_two_words(&file));
-    kt8 = binary_to_string(read_two_words(&file));
-    kt9 = binary_to_string(read_two_words(&file));
-    kf = binary_to_string(read_two_words(&file));
-    kuser0 = binary_to_string(read_two_words(&file));
-    kuser1 = binary_to_string(read_two_words(&file));
-    kuser2 = binary_to_string(read_two_words(&file));
-    kcmpnm = binary_to_string(read_two_words(&file));
-    knetwk = binary_to_string(read_two_words(&file));
-    kdatrd = binary_to_string(read_two_words(&file));
-    kinst = binary_to_string(read_two_words(&file));
-    //---------------------------------------------------------------------------
-    // Data
-    //---------------------------------------------------------------------------
-    if (npts != sacfmt::unset_int) {
-        // These are read in and converted to doubles (originally single-precision)
-        data1 = read_data(&file, static_cast<size_t>(npts), data_word);
-        // (Unevenly sampled-data) or (spectral or xy)
-        // Same size as data1
-        if ((leven == 0) || (iftype > 1))
-        { data2 = read_data(&file, static_cast<size_t>(npts), data_word + npts); }
+    // KSTNM is 2 words (normal)
+    kstnm(binary_to_string(read_two_words(&file)));
+    // KEVNM is 4 words long (unique!)
+    kevnm(binary_to_long_string(read_four_words(&file)));
+    // All other 'K' headers are 2 words
+    khole(binary_to_string(read_two_words(&file)));
+    ko(binary_to_string(read_two_words(&file)));
+    ka(binary_to_string(read_two_words(&file)));
+    kt0(binary_to_string(read_two_words(&file)));
+    kt1(binary_to_string(read_two_words(&file)));
+    kt2(binary_to_string(read_two_words(&file)));
+    kt3(binary_to_string(read_two_words(&file)));
+    kt4(binary_to_string(read_two_words(&file)));
+    kt5(binary_to_string(read_two_words(&file)));
+    kt6(binary_to_string(read_two_words(&file)));
+    kt7(binary_to_string(read_two_words(&file)));
+    kt8(binary_to_string(read_two_words(&file)));
+    kt9(binary_to_string(read_two_words(&file)));
+    kf(binary_to_string(read_two_words(&file)));
+    kuser0(binary_to_string(read_two_words(&file)));
+    kuser1(binary_to_string(read_two_words(&file)));
+    kuser2(binary_to_string(read_two_words(&file)));
+    kcmpnm(binary_to_string(read_two_words(&file)));
+    knetwk(binary_to_string(read_two_words(&file)));
+    kdatrd(binary_to_string(read_two_words(&file)));
+    kinst(binary_to_string(read_two_words(&file)));
+    //--------------------------------------------------------------------------
+    // DATA
+    if (npts() != unset_int) {
+        // Originally floats, read as doubles
+        data1(read_data(&file, static_cast<size_t>(npts()), data_word));
+        // Uneven or spectral data
+        if ((leven() == false) || (iftype() > 1)) {
+            data2(read_data(&file, static_cast<size_t>(npts()),
+                            data_word + npts()));
+        }
     }
-    //---------------------------------------------------------------------------
-    // Footer (if nvhdr = 7)
-    //---------------------------------------------------------------------------
-    // NOTE: NVHDR = 6 was the format for SEVERAL DECADES, NVHDR = 7 is from 2020
-    //   and beyond
-    // New version of format, load in the footer values after data section(s)
-    if (nvhdr == 7) {
-        delta = binary_to_double(read_two_words(&file));
-        b = binary_to_double(read_two_words(&file));
-        e = binary_to_double(read_two_words(&file));
-        o = binary_to_double(read_two_words(&file));
-        a = binary_to_double(read_two_words(&file));
-        t0 = binary_to_double(read_two_words(&file));
-        t1 = binary_to_double(read_two_words(&file));
-        t2 = binary_to_double(read_two_words(&file));
-        t3 = binary_to_double(read_two_words(&file));
-        t4 = binary_to_double(read_two_words(&file));
-        t5 = binary_to_double(read_two_words(&file));
-        t6 = binary_to_double(read_two_words(&file));
-        t7 = binary_to_double(read_two_words(&file));
-        t8 = binary_to_double(read_two_words(&file));
-        t9 = binary_to_double(read_two_words(&file));
-        f = binary_to_double(read_two_words(&file));
-        evlo = binary_to_double(read_two_words(&file));
-        evla = binary_to_double(read_two_words(&file));
-        stlo = binary_to_double(read_two_words(&file));
-        stla = binary_to_double(read_two_words(&file));
-        sb = binary_to_double(read_two_words(&file));
-        sdelta = binary_to_double(read_two_words(&file));
-        // Make sure things are consistent
-        footer_to_header();
-    } else { header_to_footer(); nvhdr = 7; }
+    //--------------------------------------------------------------------------
+    // Footer
+    if (nvhdr() == 7) {
+        delta(binary_to_double(read_two_words(&file)));
+        b(binary_to_double(read_two_words(&file)));
+        e(binary_to_double(read_two_words(&file)));
+        o(binary_to_double(read_two_words(&file)));
+        a(binary_to_double(read_two_words(&file)));
+        t0(binary_to_double(read_two_words(&file)));
+        t1(binary_to_double(read_two_words(&file)));
+        t2(binary_to_double(read_two_words(&file)));
+        t3(binary_to_double(read_two_words(&file)));
+        t4(binary_to_double(read_two_words(&file)));
+        t5(binary_to_double(read_two_words(&file)));
+        t6(binary_to_double(read_two_words(&file)));
+        t7(binary_to_double(read_two_words(&file)));
+        t8(binary_to_double(read_two_words(&file)));
+        t9(binary_to_double(read_two_words(&file)));
+        f(binary_to_double(read_two_words(&file)));
+        evlo(binary_to_double(read_two_words(&file)));
+        evla(binary_to_double(read_two_words(&file)));
+        stlo(binary_to_double(read_two_words(&file)));
+        stla(binary_to_double(read_two_words(&file)));
+        sb(binary_to_double(read_two_words(&file)));
+        sdelta(binary_to_double(read_two_words(&file)));
+    } else { nvhdr(7); }
     file.close();
 }
-//-----------------------------------------------------------------------------
-// Writing
-//-----------------------------------------------------------------------------
-void Trace::write(const std::filesystem::path& file_name) {
-    std::ofstream file(file_name, std::ios::binary
+//------------------------------------------------------------------------------
+// Write
+void Trace::write(const std::filesystem::path& path) {
+    std::ofstream file(path, std::ios::binary
                        | std::ios::out | std::ios::trunc);
-    if (!file) { std::cerr << "Unable to write file...\n"; }
-    footer_to_header();
-    //---------------------------------------------------------------------------
-    // Header
-    //---------------------------------------------------------------------------
-    write_words(&file, convert_to_word(f_delta));
-    write_words(&file, convert_to_word(depmin));
-    write_words(&file, convert_to_word(depmax));
+    if (!file) { std::cerr << path.string() << "cannot be written.\n"; return; }
+    write_words(&file, convert_to_word(static_cast<float>(delta())));
+    write_words(&file, convert_to_word(depmin()));
+    write_words(&file, convert_to_word(depmax()));
     // Fill 'unused'
-    write_words(&file, convert_to_word(depmax));
-    write_words(&file, convert_to_word(odelta));
-    write_words(&file, convert_to_word(f_b));
-    write_words(&file, convert_to_word(f_e));
-    write_words(&file, convert_to_word(f_o));
-    write_words(&file, convert_to_word(f_a));
+    write_words(&file, convert_to_word(depmax()));
+    write_words(&file, convert_to_word(odelta()));
+    write_words(&file, convert_to_word(static_cast<float>(b())));
+    write_words(&file, convert_to_word(static_cast<float>(e())));
+    write_words(&file, convert_to_word(static_cast<float>(o())));
+    write_words(&file, convert_to_word(static_cast<float>(a())));
     // Fill 'internal'
-    write_words(&file, convert_to_word(f_a));
-    write_words(&file, convert_to_word(f_t0));
-    write_words(&file, convert_to_word(f_t1));
-    write_words(&file, convert_to_word(f_t2));
-    write_words(&file, convert_to_word(f_t3));
-    write_words(&file, convert_to_word(f_t4));
-    write_words(&file, convert_to_word(f_t5));
-    write_words(&file, convert_to_word(f_t6));
-    write_words(&file, convert_to_word(f_t7));
-    write_words(&file, convert_to_word(f_t8));
-    write_words(&file, convert_to_word(f_t9));
-    write_words(&file, convert_to_word(f_f));
-    write_words(&file, convert_to_word(resp0));
-    write_words(&file, convert_to_word(resp1));
-    write_words(&file, convert_to_word(resp2));
-    write_words(&file, convert_to_word(resp3));
-    write_words(&file, convert_to_word(resp4));
-    write_words(&file, convert_to_word(resp5));
-    write_words(&file, convert_to_word(resp6));
-    write_words(&file, convert_to_word(resp7));
-    write_words(&file, convert_to_word(resp8));
-    write_words(&file, convert_to_word(resp9));
-    write_words(&file, convert_to_word(f_stla));
-    write_words(&file, convert_to_word(f_stlo));
-    write_words(&file, convert_to_word(stel));
-    write_words(&file, convert_to_word(stdp));
-    write_words(&file, convert_to_word(f_evla));
-    write_words(&file, convert_to_word(f_evlo));
-    write_words(&file, convert_to_word(evel));
-    write_words(&file, convert_to_word(evdp));
-    write_words(&file, convert_to_word(mag));
-    write_words(&file, convert_to_word(user0));
-    write_words(&file, convert_to_word(user1));
-    write_words(&file, convert_to_word(user2));
-    write_words(&file, convert_to_word(user3));
-    write_words(&file, convert_to_word(user4));
-    write_words(&file, convert_to_word(user5));
-    write_words(&file, convert_to_word(user6));
-    write_words(&file, convert_to_word(user7));
-    write_words(&file, convert_to_word(user8));
-    write_words(&file, convert_to_word(user9));
-    write_words(&file, convert_to_word(dist));
-    write_words(&file, convert_to_word(az));
-    write_words(&file, convert_to_word(baz));
-    write_words(&file, convert_to_word(gcarc));
-    write_words(&file, convert_to_word(f_sb));
-    write_words(&file, convert_to_word(f_sdelta));
-    write_words(&file, convert_to_word(depmen));
-    write_words(&file, convert_to_word(cmpaz));
-    write_words(&file, convert_to_word(cmpinc));
-    write_words(&file, convert_to_word(xminimum));
-    write_words(&file, convert_to_word(xmaximum));
-    write_words(&file, convert_to_word(yminimum));
-    write_words(&file, convert_to_word(ymaximum));
+    write_words(&file, convert_to_word(depmin()));
+    write_words(&file, convert_to_word(static_cast<float>(t0())));
+    write_words(&file, convert_to_word(static_cast<float>(t1())));
+    write_words(&file, convert_to_word(static_cast<float>(t2())));
+    write_words(&file, convert_to_word(static_cast<float>(t3())));
+    write_words(&file, convert_to_word(static_cast<float>(t4())));
+    write_words(&file, convert_to_word(static_cast<float>(t5())));
+    write_words(&file, convert_to_word(static_cast<float>(t6())));
+    write_words(&file, convert_to_word(static_cast<float>(t7())));
+    write_words(&file, convert_to_word(static_cast<float>(t8())));
+    write_words(&file, convert_to_word(static_cast<float>(t9())));
+    write_words(&file, convert_to_word(static_cast<float>(f())));
+    write_words(&file, convert_to_word(resp0()));
+    write_words(&file, convert_to_word(resp1()));
+    write_words(&file, convert_to_word(resp2()));
+    write_words(&file, convert_to_word(resp3()));
+    write_words(&file, convert_to_word(resp4()));
+    write_words(&file, convert_to_word(resp5()));
+    write_words(&file, convert_to_word(resp6()));
+    write_words(&file, convert_to_word(resp7()));
+    write_words(&file, convert_to_word(resp8()));
+    write_words(&file, convert_to_word(resp9()));
+    write_words(&file, convert_to_word(static_cast<float>(stla())));
+    write_words(&file, convert_to_word(static_cast<float>(stlo())));
+    write_words(&file, convert_to_word(stel()));
+    write_words(&file, convert_to_word(stdp()));
+    write_words(&file, convert_to_word(static_cast<float>(evla())));
+    write_words(&file, convert_to_word(static_cast<float>(evlo())));
+    write_words(&file, convert_to_word(evel()));
+    write_words(&file, convert_to_word(evdp()));
+    write_words(&file, convert_to_word(mag()));
+    write_words(&file, convert_to_word(user0()));
+    write_words(&file, convert_to_word(user1()));
+    write_words(&file, convert_to_word(user2()));
+    write_words(&file, convert_to_word(user3()));
+    write_words(&file, convert_to_word(user4()));
+    write_words(&file, convert_to_word(user5()));
+    write_words(&file, convert_to_word(user6()));
+    write_words(&file, convert_to_word(user7()));
+    write_words(&file, convert_to_word(user8()));
+    write_words(&file, convert_to_word(user9()));
+    write_words(&file, convert_to_word(dist()));
+    write_words(&file, convert_to_word(az()));
+    write_words(&file, convert_to_word(baz()));
+    write_words(&file, convert_to_word(gcarc()));
+    write_words(&file, convert_to_word(static_cast<float>(sb())));
+    write_words(&file, convert_to_word(static_cast<float>(sdelta())));
+    write_words(&file, convert_to_word(depmen()));
+    write_words(&file, convert_to_word(cmpaz()));
+    write_words(&file, convert_to_word(cmpinc()));
+    write_words(&file, convert_to_word(xminimum()));
+    write_words(&file, convert_to_word(xmaximum()));
+    write_words(&file, convert_to_word(yminimum()));
+    write_words(&file, convert_to_word(ymaximum()));
     // Fill 'unused' (x7)
-    for (int i{0}; i < 7; ++i) { write_words(&file, convert_to_word(ymaximum)); }
-    write_words(&file, convert_to_word(nzyear));
-    write_words(&file, convert_to_word(nzjday));
-    write_words(&file, convert_to_word(nzhour));
-    write_words(&file, convert_to_word(nzmin));
-    write_words(&file, convert_to_word(nzsec));
-    write_words(&file, convert_to_word(nzmsec));
-    write_words(&file, convert_to_word(nvhdr));
-    write_words(&file, convert_to_word(norid));
-    write_words(&file, convert_to_word(nevid));
-    write_words(&file, convert_to_word(npts));
-    write_words(&file, convert_to_word(nsnpts));
-    write_words(&file, convert_to_word(nwfid));
-    write_words(&file, convert_to_word(nxsize));
-    write_words(&file, convert_to_word(nysize));
+    for (int i{0}; i < 7; ++i) { write_words(&file, convert_to_word(az())); }
+    write_words(&file, convert_to_word(nzyear()));
+    write_words(&file, convert_to_word(nzjday()));
+    write_words(&file, convert_to_word(nzhour()));
+    write_words(&file, convert_to_word(nzmin()));
+    write_words(&file, convert_to_word(nzsec()));
+    write_words(&file, convert_to_word(nzmsec()));
+    write_words(&file, convert_to_word(nvhdr()));
+    write_words(&file, convert_to_word(norid()));
+    write_words(&file, convert_to_word(nevid()));
+    write_words(&file, convert_to_word(npts()));
+    write_words(&file, convert_to_word(nsnpts()));
+    write_words(&file, convert_to_word(nwfid()));
+    write_words(&file, convert_to_word(nxsize()));
+    write_words(&file, convert_to_word(nysize()));
     // Fill 'unused'
-    write_words(&file, convert_to_word(nysize));
-    write_words(&file, convert_to_word(iftype));
-    write_words(&file, convert_to_word(idep));
-    write_words(&file, convert_to_word(iztype));
+    write_words(&file, convert_to_word(nysize()));
+    write_words(&file, convert_to_word(iftype()));
+    write_words(&file, convert_to_word(idep()));
+    write_words(&file, convert_to_word(iztype()));
     // Fill 'unused'
-    write_words(&file, convert_to_word(iztype));
-    write_words(&file, convert_to_word(iinst));
-    write_words(&file, convert_to_word(istreg));
-    write_words(&file, convert_to_word(ievreg));
-    write_words(&file, convert_to_word(ievtyp));
-    write_words(&file, convert_to_word(iqual));
-    write_words(&file, convert_to_word(isynth));
-    write_words(&file, convert_to_word(imagtyp));
-    write_words(&file, convert_to_word(imagsrc));
-    write_words(&file, convert_to_word(ibody));
+    write_words(&file, convert_to_word(iztype()));
+    write_words(&file, convert_to_word(iinst()));
+    write_words(&file, convert_to_word(istreg()));
+    write_words(&file, convert_to_word(ievreg()));
+    write_words(&file, convert_to_word(ievtyp()));
+    write_words(&file, convert_to_word(iqual()));
+    write_words(&file, convert_to_word(isynth()));
+    write_words(&file, convert_to_word(imagtyp()));
+    write_words(&file, convert_to_word(imagsrc()));
+    write_words(&file, convert_to_word(ibody()));
     // Fill 'unused' (x7)
-    for (int i{0}; i < 7; ++i) { write_words(&file, convert_to_word(ibody)); }
-    write_words(&file, bool_to_word(leven));
-    write_words(&file, bool_to_word(lpspol));
-    write_words(&file, bool_to_word(lovrok));
-    write_words(&file, bool_to_word(lcalda));
+    for (int i{0}; i < 7; ++i) { write_words(&file, convert_to_word(ibody())); }
+    write_words(&file, bool_to_word(leven()));
+    write_words(&file, bool_to_word(lpspol()));
+    write_words(&file, bool_to_word(lovrok()));
+    write_words(&file, bool_to_word(lcalda()));
     // Fill 'unused'
-    write_words(&file, bool_to_word(lcalda));
-    // Strings are handled differently
-    std::array<char, 2 * word_length> two_words;
-    two_words = convert_to_words<sizeof(two_words)>(kstnm, 2);
+    write_words(&file, bool_to_word(lcalda()));
+    // Strings are special
+    std::array<char, 2 * word_length> two_words{
+        convert_to_words<sizeof(two_words)>(kstnm(), 2)};
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    std::array<char, 4 * word_length> four_words;
-    four_words = convert_to_words<sizeof(four_words)>(kevnm, 4);
+    std::array<char, 4 * word_length> four_words{
+        convert_to_words<sizeof(four_words)>(kevnm(), 4)};
     write_words(&file, std::vector<char>(four_words.begin(), four_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(khole, 2);
+    two_words = convert_to_words<sizeof(two_words)>(khole(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(ko, 2);
+    two_words = convert_to_words<sizeof(two_words)>(ko(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(ka, 2);
+    two_words = convert_to_words<sizeof(two_words)>(ka(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt0, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kt0(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt1, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kt1(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt2, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kt2(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt3, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kt3(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt4, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kt4(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt5, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kt5(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt6, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kt6(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt7, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kt7(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt8, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kt8(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt9, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kt9(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kf, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kf(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kuser0, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kuser0(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kuser1, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kuser1(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kuser2, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kuser2(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kcmpnm, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kcmpnm(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(knetwk, 2);
+    two_words = convert_to_words<sizeof(two_words)>(knetwk(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kdatrd, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kdatrd(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kinst, 2);
+    two_words = convert_to_words<sizeof(two_words)>(kinst(), 2);
     write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-    //---------------------------------------------------------------------------
     // Data
-    //---------------------------------------------------------------------------
-    // We go from double to float (loss in precision, but matches the data standard)
-    // This way we do double-precision in all interal calculations, only lose precision
-    // on outputting data to SAC file.
-    for (double x : data1) {
+    for (double x : data1()) {
         write_words(&file, convert_to_word(static_cast<float>(x)));
     }
-    // (Unevenly sampled-data) or (spectral or xy)
-    if ((leven == 0) || (iftype > 1)) {
-        for (double x : data2) {
+    if ((leven() == false) || (iftype() > 1)) {
+        for (double x : data2()) {
             write_words(&file, convert_to_word(static_cast<float>(x)));
         }
     }
-    //---------------------------------------------------------------------------
     // Footer
-    //---------------------------------------------------------------------------
-    // Because upon reading we convert to NVHDR = 7 this should be automatically ran
-    // But incase you specifically wanted to make NVHDR = 6 for legacy writing I wouldn't want
-    // the write-out to be borked (say, generating synthetics using the old standard)
-    if (nvhdr == 7) {
-        write_words(&file, convert_to_word(delta));
-        write_words(&file, convert_to_word(b));
-        write_words(&file, convert_to_word(e));
-        write_words(&file, convert_to_word(o));
-        write_words(&file, convert_to_word(a));
-        write_words(&file, convert_to_word(t0));
-        write_words(&file, convert_to_word(t1));
-        write_words(&file, convert_to_word(t2));
-        write_words(&file, convert_to_word(t3));
-        write_words(&file, convert_to_word(t4));
-        write_words(&file, convert_to_word(t5));
-        write_words(&file, convert_to_word(t6));
-        write_words(&file, convert_to_word(t7));
-        write_words(&file, convert_to_word(t8));
-        write_words(&file, convert_to_word(t9));
-        write_words(&file, convert_to_word(f));
-        write_words(&file, convert_to_word(evlo));
-        write_words(&file, convert_to_word(evla));
-        write_words(&file, convert_to_word(stlo));
-        write_words(&file, convert_to_word(stla));
-        write_words(&file, convert_to_word(sb));
-        write_words(&file, convert_to_word(sdelta));
+    if (nvhdr() == 7) {
+        write_words(&file, convert_to_word(delta()));
+        write_words(&file, convert_to_word(b()));
+        write_words(&file, convert_to_word(e()));
+        write_words(&file, convert_to_word(o()));
+        write_words(&file, convert_to_word(a()));
+        write_words(&file, convert_to_word(t0()));
+        write_words(&file, convert_to_word(t1()));
+        write_words(&file, convert_to_word(t2()));
+        write_words(&file, convert_to_word(t3()));
+        write_words(&file, convert_to_word(t4()));
+        write_words(&file, convert_to_word(t5()));
+        write_words(&file, convert_to_word(t6()));
+        write_words(&file, convert_to_word(t7()));
+        write_words(&file, convert_to_word(t8()));
+        write_words(&file, convert_to_word(t9()));
+        write_words(&file, convert_to_word(f()));
+        write_words(&file, convert_to_word(evlo()));
+        write_words(&file, convert_to_word(evla()));
+        write_words(&file, convert_to_word(stlo()));
+        write_words(&file, convert_to_word(stla()));
+        write_words(&file, convert_to_word(sb()));
+        write_words(&file, convert_to_word(sdelta()));
     }
     file.close();
 }
 
-// Since nvhdr is checked before writing to determine if a footer is appropriate
-void Trace::legacy_write(const std::filesystem::path& file_name) {
-    nvhdr = 6; write(file_name);
+void Trace::legacy_write(const std::filesystem::path& path) {
+    nvhdr(6);
+    write(path);
 }
-
-// This is a prime example for why refactoring is needed...
-bool Trace::operator==(const Trace& other) const {
-    // Check the headers
-    if (f_delta != other.f_delta) { return false; }
-    if (depmin != other.depmin) { return false; }
-    if (depmax != other.depmax) { return false; }
-    if (odelta != other.odelta) { return false; }
-    if (f_b != other.f_b) { return false; }
-    if (f_e != other.f_e) { return false; }
-    if (f_o != other.f_o) { return false; }
-    if (f_a != other.f_a) { return false; }
-    if (f_t0 != other.f_t0) { return false; }
-    if (f_t1 != other.f_t1) { return false; }
-    if (f_t2 != other.f_t2) { return false; }
-    if (f_t3 != other.f_t3) { return false; }
-    if (f_t4 != other.f_t4) { return false; }
-    if (f_t5 != other.f_t5) { return false; }
-    if (f_t6 != other.f_t6) { return false; }
-    if (f_t7 != other.f_t7) { return false; }
-    if (f_t8 != other.f_t8) { return false; }
-    if (f_t9 != other.f_t9) { return false; }
-    if (f_f != other.f_f) { return false; }
-    if (resp0 != other.resp0) { return false; }
-    if (resp1 != other.resp1) { return false; }
-    if (resp2 != other.resp2) { return false; }
-    if (resp3 != other.resp3) { return false; }
-    if (resp4 != other.resp4) { return false; }
-    if (resp5 != other.resp5) { return false; }
-    if (resp6 != other.resp6) { return false; }
-    if (resp7 != other.resp7) { return false; }
-    if (resp8 != other.resp8) { return false; }
-    if (resp9 != other.resp9) { return false; }
-    if (f_stla != other.f_stla) { return false; }
-    if (f_stlo != other.f_stlo) { return false; }
-    if (stel != other.stel) { return false; }
-    if (stdp != other.stdp) { return false; }
-    if (f_evla != other.f_evla) { return false; }
-    if (f_evlo != other.f_evlo) { return false; }
-    if (evel != other.evel) { return false; }
-    if (evdp != other.evdp) { return false; }
-    if (mag != other.mag) { return false; }
-    if (user0 != other.user0) { return false; }
-    if (user1 != other.user1) { return false; }
-    if (user2 != other.user2) { return false; }
-    if (user3 != other.user3) { return false; }
-    if (user4 != other.user4) { return false; }
-    if (user5 != other.user5) { return false; }
-    if (user6 != other.user6) { return false; }
-    if (user7 != other.user7) { return false; }
-    if (user8 != other.user8) { return false; }
-    if (user9 != other.user9) { return false; }
-    if (dist != other.dist) { return false; }
-    if (az != other.az) { return false; }
-    if (baz != other.baz) { return false; }
-    if (gcarc != other.gcarc) { return false; }
-    if (f_sb != other.f_sb) { return false; }
-    if (f_sdelta != other.f_sdelta) { return false; }
-    if (depmen != other.depmen) { return false; }
-    if (cmpaz != other.cmpaz) { return false; }
-    if (cmpinc != other.cmpinc) { return false; }
-    if (xminimum != other.xminimum) { return false; }
-    if (xmaximum != other.xmaximum) { return false; }
-    if (yminimum != other.yminimum) { return false; }
-    if (ymaximum != other.ymaximum) { return false; }
-    if (nzyear != other.nzyear) { return false; }
-    if (nzjday != other.nzjday) { return false; }
-    if (nzhour != other.nzhour) { return false; }
-    if (nzmin != other.nzmin) { return false; }
-    if (nzsec != other.nzsec) { return false; }
-    if (nzmsec != other.nzmsec) { return false; }
-    if (nvhdr != other.nvhdr) { return false; }
-    if (norid != other.norid) { return false; }
-    if (nevid != other.nevid) { return false; }
-    if (npts != other.npts) { return false; }
-    if (nsnpts != other.nsnpts) { return false; }
-    if (nwfid != other.nwfid) { return false; }
-    if (nxsize != other.nxsize) { return false; }
-    if (nysize != other.nysize) { return false; }
-    if (iftype != other.iftype) { return false; }
-    if (idep != other.idep) { return false; }
-    if (iztype != other.iztype) { return false; }
-    if (iinst != other.iinst) { return false; }
-    if (istreg != other.istreg) { return false; }
-    if (ievreg != other.ievreg) { return false; }
-    if (ievtyp != other.ievtyp) { return false; }
-    if (iqual != other.iqual) { return false; }
-    if (isynth != other.isynth) { return false; }
-    if (imagtyp != other.imagtyp) { return false; }
-    if (imagsrc != other.imagsrc) { return false; }
-    if (ibody != other.ibody) { return false; }
-    if (leven != other.leven) { return false; }
-    if (lpspol != other.lpspol) { return false; }
-    if (lovrok != other.lovrok) { return false; }
-    if (lcalda != other.lcalda) { return false; }
-    if (kstnm != other.kstnm) { return false; }
-    if (kevnm != other.kevnm) { return false; }
-    if (khole != other.khole) { return false; }
-    if (ko != other.ko) { return false; }
-    if (ka != other.ka) { return false; }
-    if (kt0 != other.kt0) { return false; }
-    if (kt1 != other.kt1) { return false; }
-    if (kt2 != other.kt2) { return false; }
-    if (kt3 != other.kt3) { return false; }
-    if (kt4 != other.kt4) { return false; }
-    if (kt5 != other.kt5) { return false; }
-    if (kt6 != other.kt6) { return false; }
-    if (kt7 != other.kt7) { return false; }
-    if (kt8 != other.kt8) { return false; }
-    if (kt9 != other.kt9) { return false; }
-    if (kf != other.kf) { return false; }
-    if (kuser0 != other.kuser0) { return false; }
-    if (kuser1 != other.kuser1) { return false; }
-    if (kuser2 != other.kuser2) { return false; }
-    if (kcmpnm != other.kcmpnm) { return false; }
-    if (knetwk != other.knetwk) { return false; }
-    if (kdatrd != other.kdatrd) { return false; }
-    if (kinst != other.kinst) { return false; }
-    // Check the footers (data section is slowest and therefore last)
-    if (delta != other.delta) { return false; }
-    if (b != other.b) { return false; }
-    if (e != other.e) { return false; }
-    if (o != other.o) { return false; }
-    if (a != other.a) { return false; }
-    if (t0 != other.t0) { return false; }
-    if (t1 != other.t1) { return false; }
-    if (t2 != other.t2) { return false; }
-    if (t3 != other.t3) { return false; }
-    if (t4 != other.t4) { return false; }
-    if (t5 != other.t5) { return false; }
-    if (t6 != other.t6) { return false; }
-    if (t7 != other.t7) { return false; }
-    if (t8 != other.t8) { return false; }
-    if (t9 != other.t9) { return false; }
-    if (f != other.f) { return false; }
-    if (evlo != other.evlo) { return false; }
-    if (evla != other.evla) { return false; }
-    if (stlo != other.stlo) { return false; }
-    if (stla != other.stla) { return false; }
-    if (sb != other.sb) { return false; }
-    if (sdelta != other.sdelta) { return false; }
-    if (!equal_within_tolerance(data1, other.data1)) { return false; }
-    if (!equal_within_tolerance(data2, other.data2)) { return false; }
-    return true;
-}
-}
+};

@@ -13,33 +13,30 @@ Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.
 ** DONE Testing :testing:
 *** DONE Move Unit tests from PsSp :unit:
 *** DONE Benchmarks :benchmark:
-** TODO Refactor Trace :refactor:
-*** TODO Improved functionality :functionality:
-**** TODO Maintain only doubles of the header/footer pairs (e.g., stla/f_stla)
+** DONE Refactor Trace :refactor:
+*** DONE Improved functionality :functionality:
+**** DONE Maintain only doubles of the header/footer pairs (e.g., stla/f_stla)
 The only time this matters is at read/write. On read, we can read it in as a
 float and immediately =static_cast<double>=. On writing, we just
 =static_cast<float>= prior to writing. This will get rid of the need to deal with
 simultaneously updating the double and float versions (hard to remember which is
 which).
-*** TODO Header
-**** TODO Time
-**** TODO Event parameters
-**** TODO Station parameters
-**** TODO User parameters
-**** TODO Data parameters
-*** TODO Footer
+*** DONE Getters and setters
+*** DONE Store data in single-type arrays
+**** DONE Use lookup table
+Lookup table to keep track of where data is stored.
 ** CI/CD GitHub workflow
 ** Documentation :documentation:
-*** Update README.org :readme:
+*** TODO Update README.org :readme:
 Short and succinct
-*** GitHub.io website :website:
+*** TODO GitHub.io website :website:
 **** DONE Use [[https://olmon.gitlab.io/org-themes/readtheorg_inline/readtheorg_inline.html][ReadTheOrg Inline]] ([[https://github.com/fniessen/org-html-themes][GitHub]])
 ***** IDEA Add theme select and dark mode
 Official maintainers are not going to implement it (keep suggesting darkreader).
 That's dumb. I get that darkreader exists and I use it myself, but you cannot
 simply assume everyone that wants to use dark mode will use darkreader.
 **** TODO Fill in documentation
-*** PDF :pdf:
+*** TODO PDF :pdf:
 This involves setting up the export settings for the website for LaTeX.
 *** TODO Class diagrams :uml:
 **** TODO SacStream
@@ -53,9 +50,6 @@ class SacStream {
 }
 #+end_src
 
-***** TODO Header
-***** TODO Data
-***** TODO Footer
 ** DONE Namespace sacfmt
 ** DONE Make single-header!
 * Inbox

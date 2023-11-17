@@ -101,23 +101,34 @@ target_link_libraries_library(your_executable
 #+end_example
 
 ** Examples
-*** Empty Trace Class
+*** Reading and Writing
 #+name: empty_trace_example
-#+begin_src cpp :cache yes :returns code :results verbatim :flags -std=c++20 -L../../bin/libsac-format.a -I../
+#+begin_src cpp :cache no :returns code :results verbatim :flags -std=c++20 -L../../bin/libsac-format.a -I../
+#include <filesystem>
 #include <iostream>
 #include <sac_format.hpp>
 
 using namespace sacfmt;
+namespace fs = std::filesystem;
 
 int main() {
-    Trace trace{};
-    std::cout << trace.kstnm << '\n';
+    Trace trace1{};
+    // Change header variable
+    trace1.kstnm("Station1");
+    fs::path file{"./test.SAC"};
+    // Write
+    trace1.write(file);
+    // Read
+    Trace trace2 = Trace(file);
+    // Confirm equality
+    std::cout << (trace1 == trace2) << '\n';
+    std::cout << "Hello\n";
+    fs::remove(file);
     return EXIT_SUCCESS;
 }
 #+end_src
 
-#+RESULTS[54cc08fec9656b4ff5aec836cc57b715d6b9acf4]: empty_trace_example
-: -12345
+#+RESULTS: empty_trace_example
 
 * Notes
 ** Why C++20 and not C++23

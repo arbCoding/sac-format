@@ -203,7 +203,7 @@ TEST_CASE("Input/Output") {
     }
   }
   SECTION("Non-Empty Trace") {
-    Trace test_sac = gen_fake_sac();
+    Trace test_sac = gen_fake_trace();
     // Done building
     fs::path tmp_dir{fs::temp_directory_path()};
     fs::path tmp_file{tmp_dir / "test.SAC"};
@@ -233,14 +233,21 @@ TEST_CASE("Input/Output") {
     }
     SECTION("Randomizing data") {
       BENCHMARK("Random vector generation.") {
-        random_vector(test_sac.data1);
+        std::vector<double> data{};
+        data.resize(test_sac.npts());
+        random_vector(data);
         return;
       };
     }
     SECTION("Comparison Between Out and In Random") {
-      random_vector(test_sac.data1);
-      if (test_sac.leven == false || test_sac.iftype > 1) {
-        random_vector(test_sac.data2);
+      std::vector<double> data{};
+      data.resize(test_sac.npts());
+      random_vector(data);
+      test_sac.data1(data);
+      if (test_sac.leven() == false || test_sac.iftype() > 1) {
+        data.resize(test_sac.data2().size());
+        random_vector(data);
+        test_sac.data2(data);
       }
       test_sac.write(tmp_file);
       Trace in_sac = Trace(tmp_file);
