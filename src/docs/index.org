@@ -720,7 +720,7 @@ Date the data was read onto a computer.
 
 **** =kinst=
 
-Text for [[=iinst=][=iinst]].
+Text for [[=iinst=][=iinst=]].
 
 *** Data (2)
 
