@@ -1,6 +1,6 @@
 #+options: ':t *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
 #+options: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:nil e:t
-#+options: email:t expand-links:t f:t inline:t num:nil p:nil pri:nil prop:nil
+#+options: email:t expand-links:t f:t inline:t num:t p:nil pri:nil prop:nil
 #+options: stat:t tags:t tasks:t tex:t timestamp:nil title:t toc:t todo:t |:t
 #+title: sac-format
 #+date: \today
@@ -14,11 +14,25 @@
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+latex_class: article
 #+latex_class_options:
-#+latex_header: \usepackage[margin=1.0in]{geometry}
+#+latex_header: \usepackage{mathtools}
+#+latex_header: \usepackage[twoside, letterpaper, lmargin=1.0in, rmargin=0.75in, bmargin=0.60in, tmargin=0.75in]{geometry}
+#+latex_header: \usepackage{fancyhdr}
+#+latex_header: \usepackage{hyperref}
+#+latex_header: \usepackage[protrusion=true, activate={true,nocompatibility}, final, tracking=true, kerning = true, spacing=false, factor=1100]{microtype}
+#+latex_header: \usepackage{bookmark}
+#+latex_header: \usepackage{booktabs}
+#+latex_header: \usepackage[subtle]{savetrees}
+#+latex_header: \usepackage{lastpage}
+#+latex_header: \pagestyle{fancy}
+#+latex_header: \fancyhf{}
+#+latex_header: \fancyfoot[LE, RO]{Page \thepage \hspace{1pt} of \pageref{LastPage}}
+#+latex_header: \fancyhead{}
+#+latex_header: \fancyhead[C]{sac-format} \fancyhead[LO, RE]{\emph{User Manual}} \fancyhead[LE, RO]{\today}
+#+latex_header: \hypersetup{colorlinks=true, linkcolor=black} \urlstyle{same}
 #+latex_header_extra:
 #+description:
 #+keywords:
-#+subtitle:
+#+subtitle: C++20 SAC-file Library @@latex:\\@@ @@html:<br>@@ User Manual
 #+latex_engraved_theme:
 #+latex_compiler: pdflatex
 --------------
@@ -178,7 +192,7 @@ Mean value of the dependent variable.
 **** =depmax=
 Maximum value of the dependent variable.
 **** =odelta=
-Modified (/observational/) value of [[=delta=]].
+Modified (/observational/) value of [[=delta=][=delta=]].
 **** =resp[0--9]=
 Instrument response parameters (poles, zeros, and a constant).
 
@@ -236,13 +250,13 @@ Instrument measurement incident angle, decimal degrees from upward vertical
 *NOTE:* SEED/MINISEED use dip angle, decimal degrees down from horizontal (dip
  0\deg = incident 90\deg).
 **** =xminimum=
-Spectral-only equivalent of [[=depmin=]] ($f_{0}$ or $\omega_{0}$).
+Spectral-only equivalent of [[=depmin=][=depmin=]] ($f_{0}$ or $\omega_{0}$).
 **** =xmaximum=
-Spectral-only equivalent of [[=depmax=]] ($f_{max}$ or $\omega_{max}$).
+Spectral-only equivalent of [[=depmax=][=depmax=]] ($f_{max}$ or $\omega_{max}$).
 **** =yminimum=
-Spectral-only equivalent of [[=b=]].
+Spectral-only equivalent of [[=b=][=b=]].
 **** =ymaximum=
-Spectral-only equivalent of [[=e=]].
+Spectral-only equivalent of [[=e=][=e=]].
 *** Double (22)
 64-bit (2 words, 8 bytes)
 
@@ -273,9 +287,9 @@ Event latitude in decimal degrees, N/S positive/negative.
 **** =evlo=
 Event longitude in decimal degrees, E/W positive/negative.
 **** =sb=
-Original (/saved/) [[=b=]] value.
+Original (/saved/) [[=b=][=b=]] value.
 **** =sdelta=
-Original (/saved/) [[=delta=]] value.
+Original (/saved/) [[=delta=][=delta=]] value.
 *** Integer (26)
 32-bit (1 word, 4 bytes)
 **** =nzyear=
@@ -306,11 +320,11 @@ Event ID.
 **** =npts=
 /Number of points/ in data.
 **** =nsnpts=
-Original (/saved/) [[=npts=]].
+Original (/saved/) [[=npts=][=npts=]].
 **** =nwfid=
 Waveform ID.
 **** =nxsize=
-Spectral-only equivalent of [[=npts=]] (length of spectrum).
+Spectral-only equivalent of [[=npts=][=npts=]] (length of spectrum).
 **** =nysize=
 Spectral-only, width of spectrum.
 **** =iftype=
@@ -479,7 +493,7 @@ If true, then it is okay to overwrite the file.
 **** =lcalda=
 Calculate geometry flag.
 
-If true, then calculate [[=dist=]], [[=az=]], [[=baz=]], and [[=gcarc=]] from [[=stla=]], [[=stlo=]], [[=evla=]], and [[=evlo=]].
+If true, then calculate [[=dist=][=dist=]], [[=az=][=az=]], [[=baz=][=baz=]], and [[=gcarc=][=gcarc=]] from [[=stla=][=stla=]], [[=stlo=][=stlo=]], [[=evla=][=evla=]], and [[=evlo=][=evlo=]].
 *** String (23)
 32/64-bit (2/4 words, 8/16 bytes, 8/16 characters)
 **** =kstnm=
@@ -493,19 +507,19 @@ Nuclear---hole identifier.
 
 Other---Location identifier (LOCID).
 **** =ko=
-Text for [[=o=]].
+Text for [[=o=][=o=]].
 **** =ka=
-Text for [[=a=]].
+Text for [[=a=][=a=]].
 **** =kt(0--9)=
-Text for [[=t(0--9)=]].
+Text for [[=t(0--9)=][=t(0--9)=]].
 **** =kf=
-Text for [[=f=]].
+Text for [[=f=][=f=]].
 **** =kuser(0--2)=
-Text for the first three of [[=user(0--9)=]].
+Text for the first three of [[=user(0--9)=][=user(0--9)=]].
 **** =kdatrd=
 Date the data was read onto a computer.
 **** =kinst=
-Text for [[=iinst=]].
+Text for [[=iinst=][=iinst]].
 *** Data (2)
 32-bit (2 words, 8 bytes) in-file/64-bit (4 words, 16 bytes) in-memory
 
@@ -514,9 +528,9 @@ are double-precision.
 **** =data1=
 The first data vector---*always* present in a SAC-file and begins at word 158.
 **** =data2=
-The second data vector---*conditionally* present and begins after [[=data1=]].
+The second data vector---*conditionally* present and begins after [[=data1=][=data1=]].
 
-*Required* if [[=leven=]] is false, or if [[=iftype=]] is spectral/XY/XYZ.
+*Required* if [[=leven=][=leven=]] is false, or if [[=iftype=][=iftype=]] is spectral/XY/XYZ.
 
 * Notes
 ** Why C++20 and not C++23
