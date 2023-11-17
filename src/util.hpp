@@ -1,5 +1,7 @@
 /* Standard library */
 #include <random>
+// INT_MIN and INT_MAX
+#include <limits.h>
 /* Xoshiro Random Number generator */
 #include <XoshiroCpp.hpp>
 /* My stuff */

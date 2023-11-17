@@ -36,13 +36,27 @@ word_two double_to_binary(const double x) { return double_to_bits(x).bits; }
 
 double binary_to_double(const word_two& x) { return double_to_bits(x).value; }
 
+// To get rid of requirement on boost library
+void remove_leading_spaces(std::string& str) {
+    while ((static_cast<int>(str.front()) <= ascii_space) & (!str.empty())) {
+        str.erase(0, 1);
+    }
+}
+void remove_trailing_spaces(std::string& str) {
+    while ((static_cast<int>(str.back()) <= ascii_space) & (!str.empty())) {
+        str.pop_back();
+    }
+}
+
 // Remove leading/trailing white-space and control characters
 std::string string_cleaning(const std::string& str) {
     std::string result{str};
     size_t null_position{str.find('\0')};
     if (null_position != std::string::npos) { result.erase(null_position); }
     // Remove leading and trailing white spaces
-    boost::algorithm::trim(result);
+    //boost::algorithm::trim(result);
+    remove_leading_spaces(result);
+    remove_trailing_spaces(result);
     return result;
 }
 
@@ -86,9 +100,7 @@ word_four long_string_to_binary(std::string x) {
     constexpr size_t string_size{4 * word_length};
     constexpr size_t char_size{bits_per_byte};
     // Remove any spurious padding
-    //boost::algorithm::trim(x);
     x = string_cleaning(x);
-    //x = string_cleaning(x);
     // Truncate if needed
     if (x.length() > string_size) { x.resize(string_size); }
     // Pad if needed

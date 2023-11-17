@@ -18,7 +18,8 @@
 #include <unordered_map>
 #include <vector>
 /* Boost string algorithms */
-#include <boost/algorithm/string.hpp>
+// No longer using, keeping here in-case want to re-add in future
+//#include <boost/algorithm/string.hpp>
 
 namespace sacfmt {
 //--------------------------------------------------------------------------
@@ -42,6 +43,8 @@ const std::string unset_word{"-12345"};
 using word_one = std::bitset<binary_word_size>;
 using word_two = std::bitset<2 * binary_word_size>;
 using word_four = std::bitset<4 * binary_word_size>;
+// This character and below show up as whitespace
+constexpr int ascii_space{32};
 //--------------------------------------------------------------------------
 // Conversions
 //--------------------------------------------------------------------------
@@ -70,6 +73,9 @@ float binary_to_float(const word_one& x);
 // SAC uses 64 bit doubles (2 words, 8 bytes)
 word_two double_to_binary(const double x);
 double binary_to_double(const word_two& x);
+// To get rid of requirement on boost library
+void remove_leading_spaces(std::string& str);
+void remove_trailing_spaces(std::string& str);
 // Remove leading/trailing white-space and control characters
 std::string string_cleaning(const std::string& str);
 // Note the string conversion functions handle over-sized strings
@@ -381,6 +387,13 @@ public:
     void write(const std::filesystem::path& path);
     void legacy_write(const std::filesystem::path& path);
     bool operator==(const Trace& other) const;
+    // Convenience functions
+    // Not implemented yet
+    double frequency() const;
+    std::string date() const;
+    std::string time() const;
+    void calc_gcarc();
+    void calc_dist();
     // Getters
     // Floats
     float depmin() const;

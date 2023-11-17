@@ -55,3 +55,16 @@ class SacStream {
 ** DONE Namespace sacfmt
 ** DONE Make single-header!
 * Inbox
+** TODO Remove boost dependency
+The only reason I need boost is for boost::algorithm::trim(); to remove leading
+and trailing white spaces. I feel like that is not a great reason to require
+boost (which is a HUGE library)
+** TODO n-vector for distance calculations
+[[https://en.wikipedia.org/wiki/N-vector][Wikipedia]], it has no singularities (unlike standard latitude/longitude).
+
+[[file:~/my_git/sac-format/src/sac_format.hpp::void calc_gcarc();]]
+** TODO Great Circle Arc calculation
+Use [[https://en.wikipedia.org/wiki/Haversine_formula][Haversine]] formula to start. Later can move on to Lambert's formula for long
+lines ([[https://en.wikipedia.org/wiki/Geographical_distance#Lambert's_formula_for_long_lines][Wikipedia]])
+
+[[file:~/my_git/sac-format/src/sac_format.hpp::void calc_gcarc();]]

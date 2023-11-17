@@ -258,7 +258,7 @@ Maximum value of the dependent variable.
 
 Modified (/observational/) value of [[=delta=][=delta=]].
 
-**** =resp[0--9]=
+**** =resp(0--9)=
 
 Instrument response parameters (poles, zeros, and a constant).
 
@@ -731,7 +731,7 @@ Text for [[=iinst=][=iinst=]].
 
 32-bit (2 words, 8 bytes) in-file/64-bit (4 words, 16 bytes) in-memory
 
-These are stored a floating-point (32-bit) values in SAC-files, in memory they
+These are stored as floating-point (32-bit) values in SAC-files, in memory they
 are double-precision.
 
 **** =data1=
