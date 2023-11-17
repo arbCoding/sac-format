@@ -37,6 +37,7 @@
 #+latex_compiler: pdflatex
 --------------
 * Introduction
+
 sac-format is a single-header statically linked library designed to make working
 with binary [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]]-files as easy as possible. Written in C++20, it follows a modern
 and easy to read programming-style while providing the high performance brought
@@ -47,64 +48,88 @@ sac-format's actively developed on [[https://github.com/arbCoding/sac-format][Gi
 [[https://arbcoding.github.io/sac-format/sac-format_manual.pdf][Download]] an offline version of the documention (PDF).
 
 ** Why sac-format
+
 sac-format is Free and Open Source Software (FOSS) released under the MIT
 license. Anyone can use it, for any purpose (including proprietary software),
 anywhere in the world. sac-format's operating system agnostic and confirmed
 working on Windows, macOS, and Linux systems.
+
 *** High-Level Trace Class
+
 sac-format includes the =Trace= class for seismic traces, providing high-level
 object-oriented abstraction to seismic data. With the =Trace= class, you don't
 need to worry about manually reading SAC-files word-by-word. It is compatible
 with =v6= and =v7= SAC-files and can automatically detect the version upon reading.
 File output defaults to =v7= SAC-files and there is a /legacy-write/ function for =v6=
 output.
+
 *** Low-Level I/O
+
 If you want to roll your own SAC-file processing workflow you can use the
 low-level I/O functionality built into sac-format. All functions tested and
 confirmed working---they're used to build the =Trace= class!
+
 *** Safe
+
 sac-format's *safe*---testing is an important part of software development. The
 sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
 Everything from low-level binary conversions to high-level =Trace= reading/writing
 are tested and confirmed working. New tests added when they're imagined. Check
 and run the tests yourself---see =utests.cpp=.
+
 *** Fast
+
 sac-format's *fast*---it's written in C++ and extensively benchmarked. You can run
 the benchmarks yourself to find out how sac-format performs on your system.
+
 *** Easy
+
 sac-format's *easy*---single-header makes integration to any project simple. [[https://cmake.org/][CMake]]
 makes building on different platforms a breeze. Object-oriented design makes use
 easy and intuitive. See the [[Quickstart]] section to get up and running.
+
 *** Small
+
 sac-format's *small*---in total (header + implementation--excluding comments) adds
 to fewer than 1500 lines of code. Small size opens to door to using on any sort
 of hardware (old or new).
+
 *** Documented
+
 sac-format's extensively *documented*---both online and in the code. Nothing's
 hidden---nothing's obscured. Curious how something works? Check the
 documentation and in-code comments.
 
 * Quickstart
+
 ** Manual Instructions
+
 *** Build Instructions
+
 Building is as easy as cloning the repository, running CMake for your preferred
 build tool, and then building.
+
 **** Ninja
 #+begin_src bash :returns code :eval no
 git clone https://github.com/arbCoding/sac-format.git
 mkdir bin && cd bin/
 cmake -G Ninja .. && ninja
 #+end_src
+
 **** Make
 #+begin_src bash :returns code :eval no
 git clone https://github.com/arbCoding/sac-format.git
 mkdir bin && cd bin/
 cmake .. && make
 #+end_src
+
 *** Use
+
 To use, link to the compiled library (=libsac-format.a= on Linux/macOS,
 =libsac-format.lib= on Windows) and include =src/sac_format.hpp=.
+
 ** CMake Integration
+
 To integrate sac-format into your CMake project, add it to your =CMakeLists.txt=.
 #+begin_example
 include(FetchContent)
@@ -127,7 +152,9 @@ target_link_libraries_library(your_executable
 #+end_example
 
 ** Examples
+
 *** Reading and Writing
+
 #+name: empty_trace_example
 #+begin_src cpp :cache no :returns code :results verbatim :flags -std=c++20 -L../../bin/libsac-format.a -I../
 #include <filesystem>
@@ -154,77 +181,135 @@ int main() {
 #+end_src
 
 #+RESULTS: empty_trace_example
+
 * Documentation
+
 ** Dependencies
+
 *** Manual
+
 1) [[https://www.boost.org/users/history/version_1_83_0.html][boost v1.83.0]]
+
 *** Automatic (CMake)
+
 1) [[https://github.com/Reputeless/Xoshiro-cpp][Xoshiro-cpp v1.12.0]] (=utests.cpp= only)
 2) [[https://github.com/catchorg/Catch2][Catch2 v3.4.0]] (=utests.cpp= only)
+
+
 ** Trace class
+
 *** Structure
+
 **** 'floats' array
+
 **** 'doubles' array
+
 **** 'ints' array
+
 **** 'bools' array
+
 **** 'strings' array
+
 **** 'data' array
+
 *** Reading SAC
+
 *** Writing SAC
+
 *** Getters and Setters
+
 ** Low-Level I/O
+
 ** Debugging
+
 ** Unit-testing
+
 ** Benchmarking
+
 ** SAC-file format
+
 The official and up-to-date documentation is available from the EarthScope
 Consortium (formerly IRIS/UNAVCO) [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][here]]. The following subsections
 constitute my notes on the format. They are meant to act as a useful guide---all
 credit for the creation of, and documentation for, the SAC file-format belongs
 to its developers and maintainers (details [[https://ds.iris.edu/ds/nodes/dmc/software/downloads/sac/][here]]).
+
 *** Floating-point (39)
+
 32-bit (1 word, 4 bytes)
+
 **** =depmin=
+
 Minimum value of the dependent variable
 (displacement/velocity/acceleration/volts/counts).
+
 **** =depmen=
+
 Mean value of the dependent variable.
+
 **** =depmax=
+
 Maximum value of the dependent variable.
+
 **** =odelta=
+
 Modified (/observational/) value of [[=delta=][=delta=]].
+
 **** =resp[0--9]=
+
 Instrument response parameters (poles, zeros, and a constant).
 
 *Not used by SAC*---they are free for other purposes.
+
 **** =stel=
+
 Station elevation in meters above sea level (/m.a.s.l/).
 
 *Not used by SAC*---free for other purposes.
+
 **** =stdp=
+
 Station depth in meters below surface (borehole/buried vault).
 
 *Not used by SAC*---free for other purposes.
+
 **** =evel=
+
 Event elevation /m.a.s.l./
 
 *Not used by SAC*---free for other purposes.
+
 **** =evdp=
+
 Event depth in kilometers (/previously meters/) below surface.
+
 **** =mag=
+
 Event magnitude.
+
 **** =user(0--9)=
+
 Storage for user-defined values.
+
 **** =dist=
+
 Station--Event distance in kilometers.
+
 **** =az=
+
 Azimuth $\mathrm{\left(Event \to Station\right)}$, decimal degrees from North.
+
 **** =baz=
+
 Back-azimuth $\mathrm{\left(Station \to Event\right)}$, decimal degrees from
 North.
+
 **** =gcarc=
+
 Station--Event great circle arc-length, decimal degrees.
+
 **** =cmpaz=
+
 Instrument measurement azimuth, decimal degrees from North.
 
 |---------+-----------|
@@ -237,6 +322,7 @@ Instrument measurement azimuth, decimal degrees from North.
 | Other   | 1/2/3     |
 |---------+-----------|
 **** =cmpinc=
+
 Instrument measurement incident angle, decimal degrees from upward vertical
 (incident 0\deg = dip -90\deg).
 |---------+------------|
@@ -249,62 +335,114 @@ Instrument measurement incident angle, decimal degrees from upward vertical
 |---------+------------|
 *NOTE:* SEED/MINISEED use dip angle, decimal degrees down from horizontal (dip
  0\deg = incident 90\deg).
+
 **** =xminimum=
+
 Spectral-only equivalent of [[=depmin=][=depmin=]] ($f_{0}$ or $\omega_{0}$).
+
 **** =xmaximum=
+
 Spectral-only equivalent of [[=depmax=][=depmax=]] ($f_{max}$ or $\omega_{max}$).
+
 **** =yminimum=
+
 Spectral-only equivalent of [[=b=][=b=]].
+
 **** =ymaximum=
+
 Spectral-only equivalent of [[=e=][=e=]].
+
 *** Double (22)
+
 64-bit (2 words, 8 bytes)
 
 *NOTE:* in the header section these are floats---they are doubles in the footer
  section of =v7= SAC-files. In memory they are stored a doubles regardless of the
  SAC-file version.
+
 **** =delta=
+
 Increment between evenly spaced samples ($\Delta t$ for timeseries, $\Delta f$
 or $\Delta\omega$ for spectra).
+
 **** =b=
+
 First value (/begin/) of independent variable ($t_{0}$).
+
 **** =e=
+
 Final value (/end/) of independent variable ($t_{max}$).
+
 **** =o=
+
 Event origin time, in seconds relative to the reference time.
+
 **** =a=
+
 Event first arrival time, in seconds relative to the reference time.
+
 **** =t(0--9)=
+
 User defined time values, in seconds relative to the reference time.
+
 **** =f=
+
 Event end (/fini/) time, in seconds relative to the reference time.
+
 **** =stla=
+
 Station latitude in decimal degrees, N/S positive/negative.
+
 **** =stlo=
+
 Station longitude in decimal degrees, E/W positive/negative.
+
 **** =evla=
+
 Event latitude in decimal degrees, N/S positive/negative.
+
 **** =evlo=
+
 Event longitude in decimal degrees, E/W positive/negative.
+
 **** =sb=
+
 Original (/saved/) [[=b=][=b=]] value.
+
 **** =sdelta=
+
 Original (/saved/) [[=delta=][=delta=]] value.
+
 *** Integer (26)
+
 32-bit (1 word, 4 bytes)
+
 **** =nzyear=
+
 Reference time GMT year.
+
 **** =nzjday=
+
 Reference time GMT day-of-year (often called [[https://en.wikipedia.org/wiki/Julian_day][Julian Date]]) (1--366).
+
 **** =nzhour=
+
 Reference time GMT hour (00--23).
+
 **** =nzmin=
+
 Reference time GMT minute (0--59).
+
 **** =nzsec=
+
 Reference time GMT second (0--59).
+
 **** =nzmsec=
+
 Reference time GMT Millisecond (0--999).
+
 **** =nvhdr=
+
 SAC-file version.
 
 |---------+----------------------------------|
@@ -314,20 +452,35 @@ SAC-file version.
 | =v7=      | Footer (2020+, sac 101.6a-)      |
 |---------+----------------------------------|
 **** =norid=
+
 Origin ID.
+
 **** =nevid=
+
 Event ID.
+
 **** =npts=
+
 /Number of points/ in data.
+
 **** =nsnpts=
+
 Original (/saved/) [[=npts=][=npts=]].
+
 **** =nwfid=
+
 Waveform ID.
+
 **** =nxsize=
+
 Spectral-only equivalent of [[=npts=][=npts=]] (length of spectrum).
+
 **** =nysize=
+
 Spectral-only, width of spectrum.
+
 **** =iftype=
+
 Type of file.
 
 |-------+----------+----------------------------|
@@ -340,7 +493,9 @@ Type of file.
 |    ?? | IXYZ\ast | General XYZ file           |
 |-------+----------+----------------------------|
 \ast{}Value not listed in the standard.
+
 **** =idep=
+
 Type of dependent variable.
 |-------+--------+-------------------------------------------------------|
 | Value | Type   | Description                                           |
@@ -352,6 +507,7 @@ Type of dependent variable.
 |    50 | IVOLTS | Velocity (volts)                                      |
 |-------+--------+-------------------------------------------------------|
 **** =iztype=
+
 Reference time equivalent.
 |--------+----------+----------------------------|
 |  Value | Type     | Description                |
@@ -364,18 +520,25 @@ Reference time equivalent.
 | 13--22 | IT(0--9) | User defined time (t) pick |
 |--------+----------+----------------------------|
 **** =iinst=
+
 Type of recording instrument.
 
 *Not used by SAC*---free for other purposes.
+
 **** =istreg=
+
 Station geographic region.
 
 *Not used by SAC*---free for other purposes.
+
 **** =ievreg=
+
 Event geographic region.
 
 *Not used by SAC*---free for other purposes.
+
 **** =ievtyp=
+
 Type of event.
 |-------+--------+------------------------------------------------------|
 | Value | Type   | Description                                          |
@@ -408,6 +571,7 @@ Type of event.
 |    88 | IU     | Undetermined/conflicting information                 |
 |-------+--------+------------------------------------------------------|
 **** =iqual=
+
 Quality of data.
 |-------+--------+---------------------------|
 | Value | Type   | Description               |
@@ -419,7 +583,9 @@ Quality of data.
 |    48 | ILOWSN | Low signal-to-noise ratio |
 |-------+--------+---------------------------|
 *Not used by SAC*---free for other purposes.
+
 **** =isynth=
+
 Synthetic data flag.
 |-------+---------+-------------|
 | Value | Type    | Description |
@@ -428,7 +594,9 @@ Synthetic data flag.
 | XX    | \ast    | Synthetic   |
 |-------+---------+-------------|
 \ast{}Values and types not listed in the standard.
+
 **** =imagtyp=
+
 Magnitude type.
 
 |-------+------+----------------------------------|
@@ -442,6 +610,7 @@ Magnitude type.
 |    57 | IMX  | User-defined magnitude ($M_{x}$) |
 |-------+------+----------------------------------|
 **** =imagsrc=
+
 Source of magnitude information.
 
 |-------+----------+----------------------------------------|
@@ -461,6 +630,7 @@ Source of magnitude information.
 |    71 | IUNKNOWN | Unknown                                |
 |-------+----------+----------------------------------------|
 **** =ibody=
+
 Body/spheroid definition used to calculate distances.
 
 |--------+----------+------------------+-------------------------+------------------------|
@@ -475,65 +645,104 @@ Body/spheroid definition used to calculate distances.
 |    103 | IMARS    | Mars             |               3396190.0 |   0.005886007555525457 |
 |--------+----------+------------------+-------------------------+------------------------|
 *** Boolean (4)
+
 32-bit (1 word, 4 bytes) in-file/8-bit (1 byte) in-memory
+
 **** =leven=
+
 *REQUIRED*
 
 Evenly-spaced data flag.
 
 If true, then data is evenly spaced.
+
 **** =lpspol=
+
 Station polarity flag.
 
 If true, then station has positive-polarity---it follows the left-hand convention (e.g., North-East-Up [NEZ]).
+
 **** =lovrok=
+
 File overwrite flag.
 
 If true, then it is okay to overwrite the file.
+
 **** =lcalda=
+
 Calculate geometry flag.
 
 If true, then calculate [[=dist=][=dist=]], [[=az=][=az=]], [[=baz=][=baz=]], and [[=gcarc=][=gcarc=]] from [[=stla=][=stla=]], [[=stlo=][=stlo=]], [[=evla=][=evla=]], and [[=evlo=][=evlo=]].
+
 *** String (23)
+
 32/64-bit (2/4 words, 8/16 bytes, 8/16 characters)
+
 **** =kstnm=
+
 Station name.
+
 **** =kevnm=\ast
+
 Event name.
 
 \ast{}This is the only four word (16 character) string.
+
 **** =khole=
+
 Nuclear---hole identifier.
 
 Other---Location identifier (LOCID).
+
 **** =ko=
+
 Text for [[=o=][=o=]].
+
 **** =ka=
+
 Text for [[=a=][=a=]].
+
 **** =kt(0--9)=
+
 Text for [[=t(0--9)=][=t(0--9)=]].
+
 **** =kf=
+
 Text for [[=f=][=f=]].
+
 **** =kuser(0--2)=
+
 Text for the first three of [[=user(0--9)=][=user(0--9)=]].
+
 **** =kdatrd=
+
 Date the data was read onto a computer.
+
 **** =kinst=
+
 Text for [[=iinst=][=iinst]].
+
 *** Data (2)
+
 32-bit (2 words, 8 bytes) in-file/64-bit (4 words, 16 bytes) in-memory
 
 These are stored a floating-point (32-bit) values in SAC-files, in memory they
 are double-precision.
+
 **** =data1=
+
 The first data vector---*always* present in a SAC-file and begins at word 158.
+
 **** =data2=
+
 The second data vector---*conditionally* present and begins after [[=data1=][=data1=]].
 
 *Required* if [[=leven=][=leven=]] is false, or if [[=iftype=][=iftype=]] is spectral/XY/XYZ.
 
 * Notes
+
 ** Why C++20 and not C++23
+
 Compiler restrictions---C++23 support [[https://en.cppreference.com/w/cpp/compiler_support/23][requires]] GCC-13+ and Clang-16+. Many
 systems, still use GCC-12 and Clang-15---which has near complete support for
 [[https://en.cppreference.com/w/cpp/compiler_support/20][C++20]].
