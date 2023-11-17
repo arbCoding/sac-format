@@ -1,10 +1,8 @@
 #+options: ':t *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
-#+options: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:nil e:t
+#+options: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
 #+options: email:t expand-links:t f:t inline:t num:t p:nil pri:nil prop:nil
 #+options: stat:t tags:t tasks:t tex:t timestamp:nil title:t toc:t todo:t |:t
 #+title: sac-format
-#+date: \today
-# #+date: <2023-11-15 Wed>
 #+author: Alexander R. Blanchette
 #+email: arbCoding@gmail.com
 #+language: en
@@ -23,11 +21,12 @@
 #+latex_header: \usepackage{booktabs}
 #+latex_header: \usepackage[subtle]{savetrees}
 #+latex_header: \usepackage{lastpage}
+#+latex_header: \usepackage{datetime2}
 #+latex_header: \pagestyle{fancy}
 #+latex_header: \fancyhf{}
 #+latex_header: \fancyfoot[LE, RO]{Page \thepage \hspace{1pt} of \pageref{LastPage}}
 #+latex_header: \fancyhead{}
-#+latex_header: \fancyhead[C]{sac-format} \fancyhead[LO, RE]{\emph{User Manual}} \fancyhead[LE, RO]{\today}
+#+latex_header: \fancyhead[C]{sac-format} \fancyhead[LO, RE]{} \fancyhead[LE, RO]{\emph{User Manual}}
 #+latex_header: \hypersetup{colorlinks=true, linkcolor=black} \urlstyle{same}
 #+latex_header_extra:
 #+description:
@@ -79,14 +78,14 @@ and run the tests yourself---see =utests.cpp=.
 
 *** Fast
 
-sac-format is *fast*---it's written in C++ and extensively benchmarked. You can run
-the benchmarks yourself to find out how sac-format performs on your system.
+sac-format is *fast*---it's written in C++ and extensively benchmarked. You can
+run the benchmarks yourself to find out how sac-format performs on your system.
 
 *** Easy
 
-sac-format is *easy*---single-header makes integration to any project simple. [[https://cmake.org/][CMake]]
-makes building on different platforms a breeze. Object-oriented design makes use
-easy and intuitive. See the [[Quickstart][Quickstart]] section to get up and running.
+sac-format is *easy*---single-header makes integration to any project simple.
+[[https://cmake.org/][CMake]] makes building on different platforms a breeze. Object-oriented design
+makes use easy and intuitive. See the [[Quickstart][Quickstart]] section to get up and running.
 
 *** Small
 
@@ -637,11 +636,11 @@ Body/spheroid definition used to calculate distances.
 |--------+----------+------------------+-------------------------+------------------------|
 |  Value | Type     | Name             | Semi-major axis (a [m]) | Inverse Flattening (/f/) |
 |--------+----------+------------------+-------------------------+------------------------|
-| -12345 | UNDEF    | (/Historic/) Earth |               6378160.0 |             0.00335293 |
+| -12345 | UNDEF    | Earth (/Historic/) |               6378160.0 |             0.00335293 |
 |     98 | ISUN     | Sun              |             696000000.0 |               8.189e-6 |
 |     99 | IMERCURY | Mercury          |               2439700.0 |                    0.0 |
 |    100 | IVENUS   | Venus            |               6051800.0 |                    0.0 |
-|    101 | IEARTH   | (/WGS84/) Earth    |               6378137.0 |  0.0033528106647474805 |
+|    101 | IEARTH   | Earth (/WGS84/)    |               6378137.0 |  0.0033528106647474805 |
 |    102 | IMOON    | Moon             |               1737400.0 |                    0.0 |
 |    103 | IMARS    | Mars             |               3396190.0 |   0.005886007555525457 |
 |--------+----------+------------------+-------------------------+------------------------|
@@ -661,7 +660,8 @@ If true, then data is evenly spaced.
 
 Station polarity flag.
 
-If true, then station has positive-polarity---it follows the left-hand convention (e.g., North-East-Up [NEZ]).
+If true, then station has positive-polarity---it follows the left-hand
+convention (e.g., North-East-Up [NEZ]).
 
 **** =lovrok=
 
@@ -673,7 +673,8 @@ If true, then it is okay to overwrite the file.
 
 Calculate geometry flag.
 
-If true, then calculate [[=dist=][=dist=]], [[=az=][=az=]], [[=baz=][=baz=]], and [[=gcarc=][=gcarc=]] from [[=stla=][=stla=]], [[=stlo=][=stlo=]], [[=evla=][=evla=]], and [[=evlo=][=evlo=]].
+If true, then calculate [[=dist=][=dist=]], [[=az=][=az=]], [[=baz=][=baz=]], and [[=gcarc=][=gcarc=]] from [[=stla=][=stla=]], [[=stlo=][=stlo=]],
+[[=evla=][=evla=]], and [[=evlo=][=evlo=]].
 
 *** String (23)
 
