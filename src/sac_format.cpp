@@ -38,12 +38,12 @@ double binary_to_double(const word_two& x) { return double_to_bits(x).value; }
 
 // To get rid of requirement on boost library
 void remove_leading_spaces(std::string& str) {
-    while ((static_cast<int>(str.front()) <= ascii_space) & (!str.empty())) {
+    while ((static_cast<int>(str.front()) <= ascii_space) && (!str.empty())) {
         str.erase(0, 1);
     }
 }
 void remove_trailing_spaces(std::string& str) {
-    while ((static_cast<int>(str.back()) <= ascii_space) & (!str.empty())) {
+    while ((static_cast<int>(str.back()) <= ascii_space) && (!str.empty())) {
         str.pop_back();
     }
 }
