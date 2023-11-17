@@ -3,7 +3,8 @@
 #+options: email:t expand-links:t f:t inline:t num:nil p:nil pri:nil prop:nil
 #+options: stat:t tags:t tasks:t tex:t timestamp:nil title:t toc:t todo:t |:t
 #+title: sac-format
-#+date: <2023-11-15 Wed>
+#+date: \today
+# #+date: <2023-11-15 Wed>
 #+author: Alexander R. Blanchette
 #+email: arbCoding@gmail.com
 #+language: en
@@ -11,6 +12,15 @@
 #+exclude_tags: noexport
 #+creator: Emacs 29.1 (Org mode 9.7)
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+latex_class: article
+#+latex_class_options:
+#+latex_header: \usepackage[margin=1.0in]{geometry}
+#+latex_header_extra:
+#+description:
+#+keywords:
+#+subtitle:
+#+latex_engraved_theme:
+#+latex_compiler: pdflatex
 --------------
 * Introduction
 sac-format is a single-header statically linked library designed to make working
@@ -19,6 +29,8 @@ and easy to read programming-style while providing the high performance brought
 by C++.
 
 sac-format's actively developed on [[https://github.com/arbCoding/sac-format][GitHub]]!
+
+[[file:~/my_git/sac-format/docs/index.pdf][Download]] an offline version of the documention (PDF).
 
 ** Why sac-format
 sac-format is Free and Open Source Software (FOSS) released under the MIT

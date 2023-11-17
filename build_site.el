@@ -13,7 +13,12 @@
          :base-extension "org"
          :publishing-directory "./docs/"
          :publishing-function org-html-publish-to-html)
-        ("AlexanderB.xyz" :components ("pages"))))
+        ("docs"
+         :base-directory "./src/docs"
+         :base-extension "org"
+         :publishing-directory "./docs/"
+         :publishing-function org-latex-publish-to-pdf)
+        ("arbCoding.github.io/sac-format" :components ("pages", "docs"))))
 
 ;; Generate the site output
 (org-publish-all t)

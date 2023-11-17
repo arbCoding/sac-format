@@ -59,4 +59,10 @@ bin/*
 # VS-Code junk
 .vscode/*
 
+# LaTeX source
+*.tex
+
+# Wrong pdf
+src/docs/*.pdf
+
 .clangd
