@@ -12,8 +12,9 @@
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+latex_class: article
 #+latex_class_options:
+#+latex_header: \usepackage{times}
 #+latex_header: \usepackage{mathtools}
-#+latex_header: \usepackage[twoside, letterpaper, lmargin=1.0in, rmargin=0.75in, bmargin=0.60in, tmargin=0.75in]{geometry}
+#+latex_header: \usepackage[twoside, letterpaper, lmargin=1.0in, rmargin=0.75in, bmargin=0.75in, tmargin=1.0in]{geometry}
 #+latex_header: \usepackage{fancyhdr}
 #+latex_header: \usepackage{hyperref}
 #+latex_header: \usepackage[protrusion=true, activate={true,nocompatibility}, final, tracking=true, kerning = true, spacing=false, factor=1100]{microtype}
@@ -359,7 +360,7 @@ Spectral-only equivalent of [[=e=][=e=]].
 64-bit (2 words, 8 bytes)
 
 *NOTE:* in the header section these are floats---they are doubles in the footer
- section of =v7= SAC-files. In memory they are stored a doubles regardless of the
+ section of =v7= SAC-files. In memory they are stored as doubles regardless of the
  SAC-file version.
 
 **** =delta=
