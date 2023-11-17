@@ -125,7 +125,7 @@ cmake .. && make
 *** Use
 
 To use, link to the compiled library (=libsac-format.a= on Linux/macOS,
-=libsac-format.lib= on Windows), linked to your boost installation, and include
+=libsac-format.lib= on Windows), link to your boost installation, and include
 =src/sac_format.hpp=.
 
 ** CMake Integration
@@ -206,17 +206,19 @@ int main() {
 
 *** Internal Structure
 
-**** 'floats' array
+**** =floats= array
 
-**** 'doubles' array
+**** =doubles= array
 
-**** 'ints' array
+**** =ints= array
 
-**** 'bools' array
+**** =bools= array
 
-**** 'strings' array
+**** =strings= array
 
-**** 'data' array
+**** =data= array
+
+**** Lookup Table
 
 ** Low-Level I/O
 
