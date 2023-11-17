@@ -45,7 +45,7 @@ by C++.
 
 sac-format's actively developed on [[https://github.com/arbCoding/sac-format][GitHub]]!
 
-[[https://arbcoding.github.io/sac-format/sac-format_manual.pdf][Download]] an offline version of the documention (PDF).
+[[https://arbcoding.github.io/sac-format/sac-format_manual.pdf][Download]] an offline version of the documentation (PDF).
 
 ** Why sac-format
 
@@ -58,7 +58,7 @@ working on Windows, macOS, and Linux systems.
 
 sac-format includes the =Trace= class for seismic traces, providing high-level
 object-oriented abstraction to seismic data. With the =Trace= class, you don't
-need to worry about manually reading SAC-files word-by-word. It is compatible
+need to worry about manually reading SAC-files word-by-word. It's compatible
 with =v6= and =v7= SAC-files and can automatically detect the version upon reading.
 File output defaults to =v7= SAC-files and there is a /legacy-write/ function for =v6=
 output.
@@ -91,8 +91,9 @@ makes use easy and intuitive. See the [[Quickstart][Quickstart]] section to get 
 *** Small
 
 sac-format is *small*---in total (header + implementation--excluding comments)
-it's fewer than 1500 lines of code. Small size opens to door to using on any
-sort of hardware (old or new) and makes it easy to expand upon.
+it's fewer than 1500 lines of code (compiles to ~200 KB). Small size opens to
+door to using on any sort of hardware (old or new) and makes it easy to expand
+upon.
 
 *** Documented
 
@@ -125,9 +126,8 @@ cmake .. && make
 
 *** Use
 
-To use, link to the compiled library (=libsac-format.a= on Linux/macOS,
-=libsac-format.lib= on Windows), link to your boost installation, and include
-=src/sac_format.hpp=.
+To use link to the compiled library (=libsac-format.a= on Linux/macOS,
+=libsac-format.lib= on Windows) and include =src/sac_format.hpp=.
 
 ** CMake Integration
 
@@ -187,14 +187,10 @@ int main() {
 
 ** Dependencies
 
-*** Manual
-
-1) [[https://www.boost.org/users/history/version_1_83_0.html][boost v1.83.0]]
-
 *** Automatic (CMake)
 
-1) [[https://github.com/Reputeless/Xoshiro-cpp][Xoshiro-cpp v1.12.0]] (testing and benchmarking only)
-2) [[https://github.com/catchorg/Catch2][Catch2 v3.4.0]] (testing and benchmarking only)
+1) [[https://github.com/Reputeless/Xoshiro-cpp][Xoshiro-cpp v1.12.0]] (testing and benchmarking)
+2) [[https://github.com/catchorg/Catch2][Catch2 v3.4.0]] (testing and benchmarking)
 
 
 ** Trace class
@@ -233,9 +229,9 @@ int main() {
 
 The official and up-to-date documentation for the SAC-file format is available
 from the EarthScope Consortium (formerly IRIS/UNAVCO) [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][here]]. The following
-subsections constitute my notes on the format. They are meant to act as a useful
-guide---all credit for the creation of, and documentation for, the SAC
-file-format belongs to its developers and maintainers (details [[https://ds.iris.edu/ds/nodes/dmc/software/downloads/sac/][here]]).
+subsections constitute my notes on the format. Below is a quick guide---all
+credit for the creation of, and documentation for, the SAC file-format belongs
+to its developers and maintainers (details [[https://ds.iris.edu/ds/nodes/dmc/software/downloads/sac/][here]]).
 
 *** Floating-point (39)
 
@@ -262,7 +258,7 @@ Modified (/observational/) value of [[=delta=][=delta=]].
 
 Instrument response parameters (poles, zeros, and a constant).
 
-*Not used by SAC*---they are free for other purposes.
+*Not used by SAC*---they're free for other purposes.
 
 **** =stel=
 
@@ -359,8 +355,8 @@ Spectral-only equivalent of [[=e=][=e=]].
 
 64-bit (2 words, 8 bytes)
 
-*NOTE:* in the header section these are floats---they are doubles in the footer
- section of =v7= SAC-files. In memory they are stored as doubles regardless of the
+*NOTE:* in the header section these are floats---they're doubles in the footer
+ section of =v7= SAC-files. In memory they're stored as doubles regardless of the
  SAC-file version.
 
 **** =delta=
@@ -484,7 +480,7 @@ Spectral-only, width of spectrum.
 
 **** =iftype=
 
-Type of file.
+File type.
 
 |-------+----------+----------------------------|
 | Value | Type     | Description                |
@@ -499,7 +495,7 @@ Type of file.
 
 **** =idep=
 
-Type of dependent variable.
+Dependent variable type.
 |-------+--------+-------------------------------------------------------|
 | Value | Type   | Description                                           |
 |-------+--------+-------------------------------------------------------|
@@ -524,7 +520,7 @@ Reference time equivalent.
 |--------+----------+----------------------------|
 **** =iinst=
 
-Type of recording instrument.
+Recording instrument type.
 
 *Not used by SAC*---free for other purposes.
 
@@ -542,7 +538,7 @@ Event geographic region.
 
 **** =ievtyp=
 
-Type of event.
+Event type.
 |-------+--------+------------------------------------------------------|
 | Value | Type   | Description                                          |
 |-------+--------+------------------------------------------------------|
@@ -624,11 +620,11 @@ Source of magnitude information.
 |    62 | IISC     | Internation Seismological Centre       |
 |    63 | IREB     | Reviewed Event Bulletin                |
 |    64 | IUSGS    | U.S. Geological Survey                 |
-|    65 | IBRK     | UC Berkley                             |
+|    65 | IBRK     | UC Berkeley                            |
 |    66 | ICALTECH | California Institute of Technology     |
 |    67 | ILLNL    | Lawrence Livermore National Laboratory |
 |    68 | IEVLOC   | Event location (computer program)      |
-|    69 | IJSOP    | Joinst Seismic Observation Program     |
+|    69 | IJSOP    | Joint Seismic Observation Program      |
 |    70 | IUSER    | The user                               |
 |    71 | IUNKNOWN | Unknown                                |
 |-------+----------+----------------------------------------|
@@ -664,13 +660,13 @@ If true, then data is evenly spaced.
 Station polarity flag.
 
 If true, then station has positive-polarity---it follows the left-hand
-convention (e.g., North-East-Up [NEZ]).
+convention (for example, North-East-Up [NEZ]).
 
 **** =lovrok=
 
 File overwrite flag.
 
-If true, then it is okay to overwrite the file.
+If true, then it's okay to overwrite the file.
 
 **** =lcalda=
 
@@ -691,7 +687,7 @@ Station name.
 
 Event name.
 
-\ast{}This is the only four word (16 character) string.
+\ast{}This is the *only* four word (16 character) string.
 
 **** =khole=
 
@@ -731,8 +727,8 @@ Text for [[=iinst=][=iinst=]].
 
 32-bit (2 words, 8 bytes) in-file/64-bit (4 words, 16 bytes) in-memory
 
-These are stored as floating-point (32-bit) values in SAC-files, in memory they
-are double-precision.
+Stored as floating-point (32-bit) values in SAC-files; stored as
+double-precision in memory.
 
 **** =data1=
 
