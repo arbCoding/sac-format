@@ -122,7 +122,6 @@ int main() {
     Trace trace2 = Trace(file);
     // Confirm equality
     std::cout << (trace1 == trace2) << '\n';
-    std::cout << "Hello\n";
     fs::remove(file);
     return EXIT_SUCCESS;
 }
