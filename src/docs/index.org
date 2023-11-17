@@ -51,7 +51,7 @@ sac-format's actively developed on [[https://github.com/arbCoding/sac-format][Gi
 
 sac-format is Free and Open Source Software (FOSS) released under the MIT
 license. Anyone can use it, for any purpose (including proprietary software),
-anywhere in the world. sac-format's operating system agnostic and confirmed
+anywhere in the world. sac-format is operating system agnostic and confirmed
 working on Windows, macOS, and Linux systems.
 
 *** High-Level Trace Class
@@ -71,7 +71,7 @@ confirmed working---they're used to build the =Trace= class!
 
 *** Safe
 
-sac-format's *safe*---testing is an important part of software development. The
+sac-format is *safe*---testing is an important part of software development. The
 sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
 Everything from low-level binary conversions to high-level =Trace= reading/writing
 are tested and confirmed working. New tests added when they're imagined. Check
@@ -79,24 +79,24 @@ and run the tests yourself---see =utests.cpp=.
 
 *** Fast
 
-sac-format's *fast*---it's written in C++ and extensively benchmarked. You can run
+sac-format is *fast*---it's written in C++ and extensively benchmarked. You can run
 the benchmarks yourself to find out how sac-format performs on your system.
 
 *** Easy
 
-sac-format's *easy*---single-header makes integration to any project simple. [[https://cmake.org/][CMake]]
+sac-format is *easy*---single-header makes integration to any project simple. [[https://cmake.org/][CMake]]
 makes building on different platforms a breeze. Object-oriented design makes use
-easy and intuitive. See the [[Quickstart]] section to get up and running.
+easy and intuitive. See the [[Quickstart][Quickstart]] section to get up and running.
 
 *** Small
 
-sac-format's *small*---in total (header + implementation--excluding comments) adds
-to fewer than 1500 lines of code. Small size opens to door to using on any sort
-of hardware (old or new).
+sac-format is *small*---in total (header + implementation--excluding comments)
+it's fewer than 1500 lines of code. Small size opens to door to using on any
+sort of hardware (old or new) and makes it easy to expand upon.
 
 *** Documented
 
-sac-format's extensively *documented*---both online and in the code. Nothing's
+sac-format is extensively *documented*---both online and in the code. Nothing's
 hidden---nothing's obscured. Curious how something works? Check the
 documentation and in-code comments.
 
@@ -126,7 +126,8 @@ cmake .. && make
 *** Use
 
 To use, link to the compiled library (=libsac-format.a= on Linux/macOS,
-=libsac-format.lib= on Windows) and include =src/sac_format.hpp=.
+=libsac-format.lib= on Windows), linked to your boost installation, and include
+=src/sac_format.hpp=.
 
 ** CMake Integration
 
@@ -192,8 +193,8 @@ int main() {
 
 *** Automatic (CMake)
 
-1) [[https://github.com/Reputeless/Xoshiro-cpp][Xoshiro-cpp v1.12.0]] (=utests.cpp= only)
-2) [[https://github.com/catchorg/Catch2][Catch2 v3.4.0]] (=utests.cpp= only)
+1) [[https://github.com/Reputeless/Xoshiro-cpp][Xoshiro-cpp v1.12.0]] (testing and benchmarking only)
+2) [[https://github.com/catchorg/Catch2][Catch2 v3.4.0]] (testing and benchmarking only)
 
 
 ** Trace class
@@ -228,11 +229,11 @@ int main() {
 
 ** SAC-file format
 
-The official and up-to-date documentation is available from the EarthScope
-Consortium (formerly IRIS/UNAVCO) [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][here]]. The following subsections
-constitute my notes on the format. They are meant to act as a useful guide---all
-credit for the creation of, and documentation for, the SAC file-format belongs
-to its developers and maintainers (details [[https://ds.iris.edu/ds/nodes/dmc/software/downloads/sac/][here]]).
+The official and up-to-date documentation for the SAC-file format is available
+from the EarthScope Consortium (formerly IRIS/UNAVCO) [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][here]]. The following
+subsections constitute my notes on the format. They are meant to act as a useful
+guide---all credit for the creation of, and documentation for, the SAC
+file-format belongs to its developers and maintainers (details [[https://ds.iris.edu/ds/nodes/dmc/software/downloads/sac/][here]]).
 
 *** Floating-point (39)
 
@@ -375,15 +376,15 @@ Final value (/end/) of independent variable ($t_{max}$).
 
 **** =o=
 
-Event origin time, in seconds relative to the reference time.
+Event /origin/ time, in seconds relative to the reference time.
 
 **** =a=
 
-Event first arrival time, in seconds relative to the reference time.
+Event first /arrival/ time, in seconds relative to the reference time.
 
 **** =t(0--9)=
 
-User defined time values, in seconds relative to the reference time.
+User defined /time/ values, in seconds relative to the reference time.
 
 **** =f=
 
@@ -391,19 +392,19 @@ Event end (/fini/) time, in seconds relative to the reference time.
 
 **** =stla=
 
-Station latitude in decimal degrees, N/S positive/negative.
+Station latitude in decimal degrees, N/S--positive/negative.
 
 **** =stlo=
 
-Station longitude in decimal degrees, E/W positive/negative.
+Station longitude in decimal degrees, E/W--positive/negative.
 
 **** =evla=
 
-Event latitude in decimal degrees, N/S positive/negative.
+Event latitude in decimal degrees, N/S--positive/negative.
 
 **** =evlo=
 
-Event longitude in decimal degrees, E/W positive/negative.
+Event longitude in decimal degrees, E/W--positive/negative.
 
 **** =sb=
 
@@ -634,7 +635,7 @@ Source of magnitude information.
 Body/spheroid definition used to calculate distances.
 
 |--------+----------+------------------+-------------------------+------------------------|
-|  Value | Type     | Name             | Semi-major axis (a [m]) | Inverse Flattening (f) |
+|  Value | Type     | Name             | Semi-major axis (a [m]) | Inverse Flattening (/f/) |
 |--------+----------+------------------+-------------------------+------------------------|
 | -12345 | UNDEF    | (/Historic/) Earth |               6378160.0 |             0.00335293 |
 |     98 | ISUN     | Sun              |             696000000.0 |               8.189e-6 |
