@@ -62,7 +62,6 @@ add_library(sac-format STATIC
 
 set_target_properties(sac-format PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(sac-format PROPERTIES PUBLIC_HEADER src/sac_format.hpp)
-
 #===============================================================================
 # Example programs
 #===============================================================================
@@ -73,24 +72,25 @@ add_executable(list_sac
 target_link_libraries(list_sac
   sac-format)
 #===============================================================================
-# Unit tests
+# Benchmarks
 #===============================================================================
-# Catch2 stuff
-add_executable(utests
-  src/sac_format.hpp
-  src/util.hpp
-  src/utests.cpp)
-
-target_link_libraries(utests
-  PRIVATE Catch2::Catch2WithMain
-  sac-format)
-
 add_executable(benchmark
   src/sac_format.hpp
   src/util.hpp
   src/benchmark.cpp)
 
 target_link_libraries(benchmark
+  PRIVATE Catch2::Catch2WithMain
+  sac-format)
+#===============================================================================
+# Unit tests
+#===============================================================================
+add_executable(utests
+  src/sac_format.hpp
+  src/util.hpp
+  src/utests.cpp)
+
+target_link_libraries(utests
   PRIVATE Catch2::Catch2WithMain
   sac-format)
 

@@ -750,6 +750,7 @@ void Trace::write(const std::filesystem::path& path, const bool legacy) {
     std::ofstream file(path, std::ios::binary
                        | std::ios::out | std::ios::trunc);
     if (!file) { std::cerr << path.string() << "cannot be written.\n"; return; }
+    const int header_version{legacy ? 6 : 7};
     write_words(&file, convert_to_word(static_cast<float>(delta())));
     write_words(&file, convert_to_word(depmin()));
     write_words(&file, convert_to_word(depmax()));
@@ -823,7 +824,7 @@ void Trace::write(const std::filesystem::path& path, const bool legacy) {
     write_words(&file, convert_to_word(nzmin()));
     write_words(&file, convert_to_word(nzsec()));
     write_words(&file, convert_to_word(nzmsec()));
-    write_words(&file, convert_to_word(nvhdr()));
+    write_words(&file, convert_to_word(header_version));
     write_words(&file, convert_to_word(norid()));
     write_words(&file, convert_to_word(nevid()));
     write_words(&file, convert_to_word(npts()));
@@ -935,9 +936,8 @@ void Trace::write(const std::filesystem::path& path, const bool legacy) {
             write_words(&file, convert_to_word(static_cast<float>(x)));
         }
     }
-    if (legacy) { nvhdr(6); } else { nvhdr(7); }
-    // Footer
-    if (nvhdr() == 7) {
+    if (header_version == 7) {
+        // Write footer
         write_words(&file, convert_to_word(delta()));
         write_words(&file, convert_to_word(b()));
         write_words(&file, convert_to_word(e()));

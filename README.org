@@ -23,9 +23,6 @@ View the [[https://arbcoding.github.io/sac-format/][documentation]] for more det
 4) Tested and benchmarked
 5) Easy to use
 
-* Dependencies
-[[https://www.boost.org/users/history/version_1_83_0.html][boost 1.83.0]]
-
 * Download and build
 #+begin_src bash :returns code :eval no
 git clone https://github.com/arbCoding/sac-format.git
