@@ -36,7 +36,7 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Package
-      woring-direcotyr: ${{github.workspace}}/build
+      working-directory: ${{github.workspace}}/build
       run: |
         version=`cat CPackSourceConfig.cmake | grep sac-format | grep -i nsis_display | sed's/[^0-9.]*//g'`
         tar -czvf sac-format-v$version-ubuntu-22.04.tar.gz *sac* utests benchmark
