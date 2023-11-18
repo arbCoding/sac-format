@@ -44,13 +44,15 @@
 #+begin_export latex
 \begin{titlepage}
     \centering
-    \vspace*{2.5in}
+    \vspace*{2.25in}
     {\Huge \textsc{\textbf{sac-format}}}\\
     \vspace{2\baselineskip}
     {\Large C++20 SAC-file Library}\\
     \vspace{4\baselineskip}
     {\Huge User Manual}\\
-    \vspace{15\baselineskip}
+    \vspace{4\baselineskip}
+    {\Large Version: 0.9.0}\\
+    \vspace{10\baselineskip}
     {\Large\textsc{Alexander R. Blanchette}\par}
     \vspace{10\baselineskip}
     {\large Documentation Version: \DTMNow}
