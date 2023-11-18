@@ -1,0 +1,61 @@
+#+options: ':t *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
+#+options: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
+#+options: email:t expand-links:t f:t inline:t num:t p:nil pri:nil prop:nil
+#+options: stat:t tags:t tasks:t tex:t timestamp:nil title:t toc:t todo:t |:t
+#+title: sac-format
+#+author: Alexander R. Blanchette
+#+email: arbCoding@gmail.com
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 29.1 (Org mode 9.7)
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+latex_class: article
+#+latex_class_options:
+#+latex_header: \usepackage{times}
+#+latex_header: \usepackage{mathtools}
+#+latex_header: \usepackage[twoside, letterpaper, lmargin=1.0in, rmargin=0.75in, bmargin=0.75in, tmargin=1.0in]{geometry}
+#+latex_header: \usepackage{fancyhdr}
+#+latex_header: \usepackage{hyperref}
+#+latex_header: \usepackage[protrusion=true, activate={true,nocompatibility}, final, tracking=true, kerning = true, spacing=false, factor=1100]{microtype}
+#+latex_header: \usepackage{bookmark}
+#+latex_header: \usepackage{booktabs}
+#+latex_header: \usepackage[subtle]{savetrees}
+#+latex_header: \usepackage{lastpage}
+#+latex_header: \usepackage{datetime2}
+#+latex_header: \pagestyle{fancy}
+#+latex_header: \fancyhf{}
+#+latex_header: \fancyfoot[LE, RO]{Page \thepage \hspace{1pt} / \pageref{LastPage}}
+#+latex_header: \fancyhead{}
+#+latex_header: \fancyhead[C]{sac-format} \fancyhead[LO, RE]{} \fancyhead[LE, RO]{\emph{User Manual}}
+#+latex_header: \renewcommand{\footrulewidth}{0.4pt}
+#+latex_header: \hypersetup{colorlinks=true, linkcolor=black} \urlstyle{same}
+#+latex_header_extra:
+#+description:
+#+keywords:
+#+subtitle: C++20 SAC-file Library @@latex:\\@@ @@html:<br>@@ User Manual
+#+latex_engraved_theme:
+#+latex_compiler: pdflatex
+# Special options only for latex export
+#+MACRO: options_latex (eval (if (org-export-derived-backend-p org-export-current-backend 'latex) "#+OPTIONS: title:nil toc:nil"))
+
+{{{options_latex}}}
+
+#+begin_export latex
+\begin{titlepage}
+    \centering
+    \vspace*{2.5in}
+    {\Huge \textsc{\textbf{sac-format}}}\\
+    \vspace{2\baselineskip}
+    {\Large C++20 SAC-file Library}\\
+    \vspace{4\baselineskip}
+    {\Huge User Manual}\\
+    \vspace{15\baselineskip}
+    {\Large\textsc{Alexander R. Blanchette}\par}
+    \vspace{10\baselineskip}
+    {\large Documentation Version: \DTMNow}
+    \vfill
+\end{titlepage}
+\tableofcontents
+\clearpage
+#+end_export

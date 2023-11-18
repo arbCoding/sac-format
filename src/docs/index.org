@@ -1,41 +1,4 @@
-#+options: ':t *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
-#+options: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
-#+options: email:t expand-links:t f:t inline:t num:t p:nil pri:nil prop:nil
-#+options: stat:t tags:t tasks:t tex:t timestamp:nil title:t toc:t todo:t |:t
-#+title: sac-format
-#+author: Alexander R. Blanchette
-#+email: arbCoding@gmail.com
-#+language: en
-#+select_tags: export
-#+exclude_tags: noexport
-#+creator: Emacs 29.1 (Org mode 9.7)
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
-#+latex_class: article
-#+latex_class_options:
-#+latex_header: \usepackage{times}
-#+latex_header: \usepackage{mathtools}
-#+latex_header: \usepackage[twoside, letterpaper, lmargin=1.0in, rmargin=0.75in, bmargin=0.75in, tmargin=1.0in]{geometry}
-#+latex_header: \usepackage{fancyhdr}
-#+latex_header: \usepackage{hyperref}
-#+latex_header: \usepackage[protrusion=true, activate={true,nocompatibility}, final, tracking=true, kerning = true, spacing=false, factor=1100]{microtype}
-#+latex_header: \usepackage{bookmark}
-#+latex_header: \usepackage{booktabs}
-#+latex_header: \usepackage[subtle]{savetrees}
-#+latex_header: \usepackage{lastpage}
-#+latex_header: \usepackage{datetime2}
-#+latex_header: \pagestyle{fancy}
-#+latex_header: \fancyhf{}
-#+latex_header: \fancyfoot[LE, RO]{Page \thepage \hspace{1pt} of \pageref{LastPage}}
-#+latex_header: \fancyhead{}
-#+latex_header: \fancyhead[C]{sac-format} \fancyhead[LO, RE]{} \fancyhead[LE, RO]{\emph{User Manual}}
-#+latex_header: \hypersetup{colorlinks=true, linkcolor=black} \urlstyle{same}
-#+latex_header_extra:
-#+description:
-#+keywords:
-#+subtitle: C++20 SAC-file Library @@latex:\\@@ @@html:<br>@@ User Manual
-#+latex_engraved_theme:
-#+latex_compiler: pdflatex
---------------
+#+include: ./misc/settings.org
 * Introduction
 
 sac-format is a single-header statically linked library designed to make working
@@ -54,33 +17,19 @@ license. Anyone can use it, for any purpose (including proprietary software),
 anywhere in the world. sac-format is operating system agnostic and confirmed
 working on Windows, macOS, and Linux systems.
 
-*** High-Level Trace Class
-
-sac-format includes the =Trace= class for seismic traces, providing high-level
-object-oriented abstraction to seismic data. With the =Trace= class, you don't
-need to worry about manually reading SAC-files word-by-word. It's compatible
-with =v6= and =v7= SAC-files and can automatically detect the version upon reading.
-File output defaults to =v7= SAC-files and there is a =legacy_write= function for =v6=
-output.
-
-*** Low-Level I/O
-
-If you want to roll your own SAC-file processing workflow you can use the
-low-level I/O functionality built into sac-format. All functions tested and
-confirmed working---they're used to build the =Trace= class!
-
 *** Safe
 
 sac-format is *safe*---testing is an important part of software development. The
 sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
 Everything from low-level binary conversions to high-level =Trace= reading/writing
 are tested and confirmed working. New tests added when they're imagined. Check
-and run the tests yourself---see =utests.cpp=.
+and run the tests yourself. See the [[Testing][Testing]] section for more information.
 
 *** Fast
 
 sac-format is *fast*---it's written in C++ and extensively benchmarked. You can
 run the benchmarks yourself to find out how sac-format performs on your system.
+See the [[Benchmarking][Benchmarking]] section for more information.
 
 *** Easy
 
@@ -100,6 +49,21 @@ upon.
 sac-format is extensively *documented*---both online and in the code. Nothing's
 hidden---nothing's obscured. Curious how something works? Check the
 documentation and in-code comments.
+
+*** Trace Class
+
+sac-format includes the =Trace= class for seismic traces, providing high-level
+object-oriented abstraction to seismic data. With the =Trace= class, you don't
+need to worry about manually reading SAC-files word-by-word. It's compatible
+with =v6= and =v7= SAC-files and can automatically detect the version upon reading.
+File output defaults to =v7= SAC-files and there is a =legacy_write= function for =v6=
+output.
+
+*** Low-Level I/O
+
+If you want to roll your own SAC-file processing workflow you can use the
+low-level I/O functionality built into sac-format. All functions tested and
+confirmed working---they're used to build the =Trace= class!
 
 * Quickstart
 
@@ -160,12 +124,12 @@ target_link_libraries_library(your_executable
     PRIVATE sac-format)
 #+end_example
 
-** Examples
+** Example
 
 *** Reading and Writing
 
 #+name: empty_trace_example
-#+begin_src cpp :cache no :returns code :results verbatim :flags -std=c++20 -L../../bin/libsac-format.a -I../
+#+begin_src cpp :cache yes :returns code :results verbatim :flags -std=c++20 -L../../bin/libsac-format.a -I../ :eval no
 #include <filesystem>
 #include <iostream>
 #include <sac_format.hpp>
@@ -189,17 +153,7 @@ int main() {
 }
 #+end_src
 
-#+RESULTS: empty_trace_example
-
 * Documentation
-
-** Dependencies
-
-*** Automatic (CMake)
-
-1) [[https://github.com/Reputeless/Xoshiro-cpp][Xoshiro-cpp v1.12.0]] (testing and benchmarking)
-2) [[https://github.com/catchorg/Catch2][Catch2 v3.4.0]] (testing and benchmarking)
-
 
 ** Trace class
 
@@ -225,13 +179,32 @@ int main() {
 
 **** Lookup Table
 
+*** Convenience Methods
+
+
 ** Low-Level I/O
 
-** Debugging
-
-** Unit-testing
+** Testing
 
 ** Benchmarking
+
+** Source File List
+
+*** =sac_format.hpp=
+*** =sac_format.cpp=
+*** =util.hpp=
+*** =utests.cpp=
+*** =benchmark.cpp=
+*** =sac_list.cpp=
+
+
+** Dependencies
+
+*** Automatic (CMake)
+
+1) [[https://github.com/Reputeless/Xoshiro-cpp][Xoshiro-cpp v1.12.0]] (testing and benchmarking)
+2) [[https://github.com/catchorg/Catch2][Catch2 v3.4.0]] (testing and benchmarking)
+
 
 ** SAC-file format
 
