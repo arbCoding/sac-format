@@ -384,7 +384,7 @@ class Trace {
 public:
     explicit Trace();
     explicit Trace(const std::filesystem::path& path);
-    void write(const std::filesystem::path& path);
+    void write(const std::filesystem::path& path, const bool legacy = false);
     void legacy_write(const std::filesystem::path& path);
     bool operator==(const Trace& other) const;
     // Convenience functions

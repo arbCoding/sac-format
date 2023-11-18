@@ -741,12 +741,12 @@ Trace::Trace(const std::filesystem::path& path) {
         stla(binary_to_double(read_two_words(&file)));
         sb(binary_to_double(read_two_words(&file)));
         sdelta(binary_to_double(read_two_words(&file)));
-    } else { nvhdr(7); }
+    }
     file.close();
 }
 //------------------------------------------------------------------------------
 // Write
-void Trace::write(const std::filesystem::path& path) {
+void Trace::write(const std::filesystem::path& path, const bool legacy) {
     std::ofstream file(path, std::ios::binary
                        | std::ios::out | std::ios::trunc);
     if (!file) { std::cerr << path.string() << "cannot be written.\n"; return; }
@@ -935,6 +935,7 @@ void Trace::write(const std::filesystem::path& path) {
             write_words(&file, convert_to_word(static_cast<float>(x)));
         }
     }
+    if (legacy) { nvhdr(6); } else { nvhdr(7); }
     // Footer
     if (nvhdr() == 7) {
         write_words(&file, convert_to_word(delta()));
@@ -964,7 +965,6 @@ void Trace::write(const std::filesystem::path& path) {
 }
 
 void Trace::legacy_write(const std::filesystem::path& path) {
-    nvhdr(6);
-    write(path);
+    write(path, true);
 }
 };

@@ -111,7 +111,7 @@ int main(const int arg_count, const char* arg_array[]) {
   std::cout << "\tNzSec:\t\t" << trace.nzsec() << '\n';
   std::cout << "\tNzMSec:\t\t" << trace.nzmsec() << '\n';
   std::cout << "\033[1;32;40m=============================================\n";
-  std::cout << "\t\tRELATIVE TiME\n";
+  std::cout << "\t\tRELATIVE TIME\n";
   std::cout << "=============================================\033[0m\n";
   std::cout << "\tB:\t\t" << trace.b() << '\n';
   std::cout << "\tSB:\t\t" << trace.sb() << '\n';
