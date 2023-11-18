@@ -24,7 +24,7 @@ int main(const int arg_count, const char* arg_array[]) {
     std::cout << file << " is not a readable file.\n";
   }
   // Now we check the extension
-  std::string ext{file.extension()};
+  std::string ext = file.extension();
   // Issue a warning if the extension is not sac or SAC
   if (ext.empty() || ((ext != ".SAC") && (ext != ".sac"))) {
     std::cout << "WARNING: " << file << " does not have a SAC extension.\n";

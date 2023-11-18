@@ -3,6 +3,9 @@
 #include <limits>
 #include <sstream>
 
+#define CATCH_CONFIG_FAST_COMPILE
+#define CATCH_CONFIG_MAIN
+
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/benchmark/catch_benchmark.hpp>
 
@@ -88,7 +91,7 @@ TEST_CASE("Binary Conversion") {
       BENCHMARK("Double->Binary->Double std::numeric_limits<double>::lowest()") {
         return binary_to_double(double_to_binary(lowest));
       };
-      constexpr float neg_epsilon{-std::numeric_limits<double>::epsilon()};
+      constexpr double neg_epsilon{-std::numeric_limits<double>::epsilon()};
       std::ostringstream oss;
       oss << std::setprecision(std::numeric_limits<double>::max_digits10)
           << neg_epsilon;
@@ -103,7 +106,7 @@ TEST_CASE("Binary Conversion") {
       BENCHMARK("Double->Binary->Double std::numeric_limits<double>::max()") {
         return binary_to_double(double_to_binary(highest));
       };
-      constexpr float epsilon{std::numeric_limits<double>::epsilon()};
+      constexpr double epsilon{std::numeric_limits<double>::epsilon()};
       std::ostringstream oss;
       oss << std::setprecision(std::numeric_limits<double>::max_digits10)
           << epsilon;

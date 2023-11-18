@@ -5,7 +5,7 @@
 cmake_minimum_required (VERSION 3.12)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Build type
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -28,18 +28,25 @@ include_directories(${xoshiro_SOURCE_DIR})
 #===============================================================================
 # Flags
 #===============================================================================
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20 /W4")
+  # Default debug flags are OK
+  set(CMAKE_CXX_FLAGS_RELEASE "{CMAKE_CXX_FLAGS_RELEASE} /O2")
+else()
+  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+endif()
+
 # Should set presets later on, but this is good enough for now
 #set(CMAKE_CXX_FLAGS "")
 # Flags for debug
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror")
 # Flags for thread-sanitizer
-set(CMAKE_CXX_FLAGS_THREAD "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror -fsanitize=thread -pthread")
+#set(CMAKE_CXX_FLAGS_THREAD "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror -fsanitize=thread -pthread")
 # Flags for Address sanitizer
-set(CMAKE_CXX_FLAGS_ADDRESS "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror -fsanitize=address -fno-omit-frame-pointer")
+#set(CMAKE_CXX_FLAGS_ADDRESS "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror -fsanitize=address -fno-omit-frame-pointer")
 # Flags for Memory sanitizer
 #set(CMAKE_CXX_FLAGS_MEMORY "-O0 -ggdb -Wextra -Wshadow -Werror -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer")
 # Flags for release
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 #==============================================================================
 # sac-format
 #==============================================================================
