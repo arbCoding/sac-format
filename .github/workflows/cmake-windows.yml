@@ -38,7 +38,7 @@ jobs:
     - name: Package
       working-directory: ${{github.workspace}}/build
       run: |
-        tar -czvf sac-format.tar.gz *sac* *.exe
+        tar -czvf sac-format.tar.gz sac-format.lib utests.exe list_sac.exe benchmark.exe
         echo "artifactPath=${{github.workspace}}/build/sac-format.tar.gz" >> $GITHUB_ENV
 
     - name: Archive Build Artifacts
