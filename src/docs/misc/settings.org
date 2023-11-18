@@ -51,7 +51,7 @@
     \vspace{4\baselineskip}
     {\Huge User Manual}\\
     \vspace{4\baselineskip}
-    {\Large Version: 0.2.0}\\
+    {\Large Version: 0.3.0}\\
     \vspace{10\baselineskip}
     {\Large\textsc{Alexander R. Blanchette}\par}
     \vspace{10\baselineskip}

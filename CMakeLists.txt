@@ -47,7 +47,7 @@ project(sac-format
   LANGUAGES CXX
   DESCRIPTION "C++20 Single-Header SAC File library"
   HOMEPAGE_URL https://arbCoding.github.io/sac-format
-  VERSION 0.2.0)
+  VERSION 0.3.0)
 
 include_directories(${sac-format_SOURCE_DIR}/src)
 
