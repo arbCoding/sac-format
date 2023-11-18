@@ -29,7 +29,7 @@ int main(const int arg_count, const char* arg_array[]) {
   }
   // Now we check the extension
 #if defined(_MSC_VER) || defined(__MINGW32__)
-  std::string ext{convert.to_bytes(file.extension().wstring())};
+  std::string ext{converter.to_bytes(file.extension().wstring())};
 #else
   std::string ext{file.extension()};
 #endif
