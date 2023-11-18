@@ -3,6 +3,10 @@
 
 #include "sac_format.hpp"
 
+#if defined(_MSC_VER) || defined(__MINW32__)
+std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+#endif
+
 namespace fs = std::filesystem;
 using namespace sacfmt;
 
@@ -25,7 +29,7 @@ int main(const int arg_count, const char* arg_array[]) {
   }
   // Now we check the extension
 #if defined(_MSC_VER) || defined(__MINGW32__)
-  std::wstring ext{file.extension()};
+  std::string ext{convert.to_bytes(file.extension().wstring())};
 #else
   std::string ext{file.extension()};
 #endif
