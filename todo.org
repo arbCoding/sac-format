@@ -1,0 +1,69 @@
+* sac-format :sac_format:
+** DONE Rename SacStream
+It isn't a stream so it shouldn't be called one. I knew this even when I first
+wrote it, but I didn't know what else to call it and figured I'd change it
+later.
+
+Maybe call it =Seismogram=, or for less typing =Trace=. Then it'd be =SAC::Trace=
+which is nice.
+** DONE SacStream constructor should use std::filesystem::path not std::string
+** DONE Testing :testing:
+*** DONE Move Unit tests from PsSp :unit:
+*** DONE Benchmarks :benchmark:
+** DONE Refactor Trace :refactor:
+*** DONE Remove boost dependency
+The only reason I need boost is for boost::algorithm::trim(); to remove leading
+and trailing white spaces. I feel like that is not a great reason to require
+boost (which is a HUGE library)
+*** TODO Improved functionality :functionality:
+**** DONE Maintain only doubles of the header/footer pairs (e.g., stla/f_stla)
+The only time this matters is at read/write. On read, we can read it in as a
+float and immediately =static_cast<double>=. On writing, we just
+=static_cast<float>= prior to writing. This will get rid of the need to deal with
+simultaneously updating the double and float versions (hard to remember which is
+which).
+**** TODO Great Circle Arc calculation
+Use [[https://en.wikipedia.org/wiki/Haversine_formula][Haversine]] formula to start. Later can move on to Lambert's formula for long
+lines ([[https://en.wikipedia.org/wiki/Geographical_distance#Lambert's_formula_for_long_lines][Wikipedia]])
+
+[[file:~/my_git/sac-format/src/sac_format.hpp::void calc_gcarc();]]
+***** TODO n-vector for distance calculations
+[[https://en.wikipedia.org/wiki/N-vector][Wikipedia]], it has no singularities (unlike standard latitude/longitude).
+
+[[file:~/my_git/sac-format/src/sac_format.hpp::void calc_gcarc();]]
+***** TODO Link paired headers
+e.g., az and baz should be linked, if one is edited the other is updated
+Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.
+**** TODO Read-inspect function
+Like read, but it prints to std::cout for every header it readers (not data
+vectors!) in case you want to inspect a potentially corrupt SAC-file.
+*** DONE Getters and setters
+*** DONE Store data in single-type arrays
+**** DONE Use lookup table
+Lookup table to keep track of where data is stored.
+** DONE Use Enum class for lookup table, not string_view.
+** CI/CD GitHub workflow
+** Documentation :documentation:
+*** DONE Update README.org :readme:
+Short and succinct
+*** DONE GitHub.io website :website:
+**** DONE Use [[https://olmon.gitlab.io/org-themes/readtheorg_inline/readtheorg_inline.html][ReadTheOrg Inline]] ([[https://github.com/fniessen/org-html-themes][GitHub]])
+*** TODO Fill in documentation :details:
+**** DONE Sac format
+**** DONE Quickstart
+**** TODO Getters/Setters
+**** TODO Trace class
+**** TODO Low-level I/O
+**** TODO Testing
+**** TODO Benchmarking
+**** DONE Dependencies
+*** DONE PDF :pdf:
+This involves setting up the export settings for the website for LaTeX.
+** TODO Example programs
+*** DONE list_sac
+*** TODO convert_sac
+Take a sacfile and an input flag for version (6/7), write out as updated version.
+*** TODO inspect_sac
+** DONE Namespace sacfmt
+** DONE Make single-header!
+* Inbox

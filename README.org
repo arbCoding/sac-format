@@ -1,0 +1,34 @@
+#+options: ':t *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
+#+options: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:nil e:t
+#+options: email:nil expand-links:t f:t inline:t num:nil p:nil pri:nil prop:nil
+#+options: stat:t tags:t tasks:t tex:t timestamp:nil title:t toc:t todo:t |:t
+#+title: sac-format
+#+date: <2023-11-16 Thu>
+#+author: Alexander R. Blanchette
+#+email: arbCoding@gmail.com
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 29.1 (Org mode 9.7)
+
+sac-format is a single-header, statically linked library for reading binary
+[[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]]-files written in C++20.
+
+View the [[https://arbcoding.github.io/sac-format/][documentation]] for more details.
+
+* Key benefits
+1) Free and Open Source Software
+2) High-level Trace class
+3) Low-level I/O
+4) Tested and benchmarked
+5) Easy to use
+
+* Dependencies
+[[https://www.boost.org/users/history/version_1_83_0.html][boost 1.83.0]]
+
+* Download and build
+#+begin_src bash :returns code :eval no
+git clone https://github.com/arbCoding/sac-format.git
+mkdir bin && cd bin/
+cmake .. && make
+#+end_src
