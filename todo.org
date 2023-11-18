@@ -59,6 +59,11 @@ Short and succinct
 **** DONE Dependencies
 *** DONE PDF :pdf:
 This involves setting up the export settings for the website for LaTeX.
+** TODO Example programs
+*** DONE list_sac
+*** TODO convert_sac
+Take a sacfile and an input flag for version (6/7), write out as updated version.
+*** TODO inspect_sac
 ** DONE Namespace sacfmt
 ** DONE Make single-header!
 * Inbox

@@ -25,12 +25,6 @@ FetchContent_Declare(xoshiro
 FetchContent_MakeAvailable(Catch2 xoshiro)
 # Include Xoshiro since it doesn't have a CMakeLists.txt
 include_directories(${xoshiro_SOURCE_DIR})
-# HomeBew Boost on macOS
-#find_package(Boost 1.83 REQUIRED CONFIG HINTS /opt/homebrew/Cellar/boost/1.83.0/lib/cmake)
-#if (Boost_FOUND)
-#  message("-- Boost_INCLUDE_DIRS=${Boost_INCLUDE_DIRS}")
-#  include_directories(${Boost_INCLUDE_DIRS})
-#endif()
 #===============================================================================
 # Flags
 #===============================================================================
@@ -53,7 +47,10 @@ project(sac-format
   LANGUAGES CXX
   DESCRIPTION "C++20 Single-Header SAC File library"
   HOMEPAGE_URL https://arbCoding.github.io/sac-format
-  VERSION 0.9.0)
+  VERSION 0.2.0)
+
+include_directories(${sac-format_SOURCE_DIR}/src)
+
 # Use C++20
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -65,14 +62,15 @@ add_library(sac-format STATIC
 
 set_target_properties(sac-format PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(sac-format PROPERTIES PUBLIC_HEADER src/sac_format.hpp)
+
 #===============================================================================
 # Example programs
 #===============================================================================
-add_executable(sac_list
+add_executable(list_sac
   src/sac_format.hpp
-  src/sac_list.cpp)
+  src/examples/list_sac.cpp)
 
-target_link_libraries(sac_list
+target_link_libraries(list_sac
   sac-format)
 #===============================================================================
 # Unit tests

@@ -34,8 +34,9 @@ See the [[Benchmarking][Benchmarking]] section for more information.
 *** Easy
 
 sac-format is *easy*---single-header makes integration in any project simple.
-[[https://cmake.org/][CMake]] makes building on different platforms a breeze. Object-oriented design
-makes use easy and intuitive. See the [[Quickstart][Quickstart]] section to get up and running.
+Building is a breeze with [[https://cmake.org/][CMake]], even on different platforms. Object-oriented
+design makes use easy and intuitive. See the [[Quickstart][Quickstart]] section to get up and
+running.
 
 *** Small
 
@@ -95,9 +96,9 @@ To use link to the compiled library (=libsac-format.a= on Linux/macOS,
 
 ** Example Programs
 
-*** =sac_list=
+*** =list_sac=
 
-=sac_list= is a command line program that takes a single SAC-file as its input
+=list_sac= is a command line program that takes a single SAC-file as its input
 argument. It reads the SAC-file and outputs the header/footer information, as
 well as the true size of the [[=data1=][=data1=]] and [[=data2=][=data2=]] vectors.
 
@@ -190,12 +191,15 @@ int main() {
 
 ** Source File List
 
-*** =sac_format.hpp=
-*** =sac_format.cpp=
-*** =util.hpp=
-*** =utests.cpp=
-*** =benchmark.cpp=
-*** =sac_list.cpp=
+*** Core
+**** =sac_format.hpp=
+**** =sac_format.cpp=
+*** Testing and Benchmarking
+**** =util.hpp=
+**** =utests.cpp=
+**** =benchmark.cpp=
+*** Example programs
+**** =list_sac.cpp=
 
 
 ** Dependencies

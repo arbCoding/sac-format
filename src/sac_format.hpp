@@ -17,9 +17,6 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-/* Boost string algorithms */
-// No longer using, keeping here in-case want to re-add in future
-//#include <boost/algorithm/string.hpp>
 
 namespace sacfmt {
 //--------------------------------------------------------------------------
