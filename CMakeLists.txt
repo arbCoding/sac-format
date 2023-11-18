@@ -31,7 +31,7 @@ include_directories(${xoshiro_SOURCE_DIR})
 if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20 /W4")
   # Default debug flags are OK
-  set(CMAKE_CXX_FLAGS_RELEASE "{CMAKE_CXX_FLAGS_RELEASE} /O2")
+  set(CMAKE_CXX_FLAGS_RELEASE "/O2 /DNDEBUG")
 else()
   set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror")
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")

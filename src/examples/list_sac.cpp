@@ -24,7 +24,11 @@ int main(const int arg_count, const char* arg_array[]) {
     std::cout << file << " is not a readable file.\n";
   }
   // Now we check the extension
-  std::string ext = file.extension();
+#if defined(_MSC_VER) || defined(__MINGW32__)
+  std::wstring ext{file.extension()};
+#else
+  std::string ext{file.extension()};
+#endif
   // Issue a warning if the extension is not sac or SAC
   if (ext.empty() || ((ext != ".SAC") && (ext != ".sac"))) {
     std::cout << "WARNING: " << file << " does not have a SAC extension.\n";
