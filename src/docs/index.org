@@ -128,6 +128,11 @@ cmake .. && make
 
 To use link to the compiled library (=libsac-format.a= on Linux/macOS,
 =libsac-format.lib= on Windows) and include =src/sac_format.hpp=.
+** Example Programs
+*** sac_list
+sac_list is a command line program that takes a single SAC-file as its input
+argument. It reads the SAC-file and outputs the header/footer information, as
+well as the true size of the [[=data1=][=data1=]] and [[=data2=][=data2=]] vectors.
 
 ** CMake Integration
 

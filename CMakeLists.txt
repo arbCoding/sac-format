@@ -66,6 +66,15 @@ add_library(sac-format STATIC
 set_target_properties(sac-format PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(sac-format PROPERTIES PUBLIC_HEADER src/sac_format.hpp)
 #===============================================================================
+# Example programs
+#===============================================================================
+add_executable(sac_list
+  src/sac_format.hpp
+  src/sac_list.cpp)
+
+target_link_libraries(sac_list
+  sac-format)
+#===============================================================================
 # Unit tests
 #===============================================================================
 # Catch2 stuff
