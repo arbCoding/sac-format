@@ -56,6 +56,7 @@ Short and succinct
 **** TODO Low-level I/O
 **** TODO Testing
 **** TODO Benchmarking
+**** TODO Example programs
 **** DONE Dependencies
 *** DONE PDF :pdf:
 This involves setting up the export settings for the website for LaTeX.
@@ -66,4 +67,9 @@ Take a sacfile and an input flag for version (6/7), write out as updated version
 *** TODO inspect_sac
 ** DONE Namespace sacfmt
 ** DONE Make single-header!
+** TODO ASCII read/write support :ascii:
+*** TODO Fortran style text files.
+**** TODO Read in
+**** TODO Write out
+
 * Inbox

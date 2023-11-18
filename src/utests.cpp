@@ -1179,6 +1179,8 @@ TEST_CASE("Trace Read/Write") {
     fs::remove(tmp_file);
     SECTION("Convert header") {
       REQUIRE(in.nvhdr() == 7);
+      // Make sure we didn't change the original trace
+      REQUIRE(trace.nvhdr() == 6);
     }
     SECTION("Floats") {
       REQUIRE(trace.depmin() == in.depmin());

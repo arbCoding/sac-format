@@ -47,7 +47,7 @@ project(sac-format
   LANGUAGES CXX
   DESCRIPTION "C++20 Single-Header SAC File library"
   HOMEPAGE_URL https://arbCoding.github.io/sac-format
-  VERSION 0.2.0)
+  VERSION 0.3.0)
 
 include_directories(${sac-format_SOURCE_DIR}/src)
 
@@ -62,7 +62,6 @@ add_library(sac-format STATIC
 
 set_target_properties(sac-format PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(sac-format PROPERTIES PUBLIC_HEADER src/sac_format.hpp)
-
 #===============================================================================
 # Example programs
 #===============================================================================
@@ -73,24 +72,25 @@ add_executable(list_sac
 target_link_libraries(list_sac
   sac-format)
 #===============================================================================
-# Unit tests
+# Benchmarks
 #===============================================================================
-# Catch2 stuff
-add_executable(utests
-  src/sac_format.hpp
-  src/util.hpp
-  src/utests.cpp)
-
-target_link_libraries(utests
-  PRIVATE Catch2::Catch2WithMain
-  sac-format)
-
 add_executable(benchmark
   src/sac_format.hpp
   src/util.hpp
   src/benchmark.cpp)
 
 target_link_libraries(benchmark
+  PRIVATE Catch2::Catch2WithMain
+  sac-format)
+#===============================================================================
+# Unit tests
+#===============================================================================
+add_executable(utests
+  src/sac_format.hpp
+  src/util.hpp
+  src/utests.cpp)
+
+target_link_libraries(utests
   PRIVATE Catch2::Catch2WithMain
   sac-format)
 
