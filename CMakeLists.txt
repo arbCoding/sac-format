@@ -29,13 +29,13 @@ include_directories(${xoshiro_SOURCE_DIR})
 # Flags
 #===============================================================================
 # Should set presets later on, but this is good enough for now
-set(CMAKE_CXX_FLAGS "-Wall -pedantic-errors")
+#set(CMAKE_CXX_FLAGS "")
 # Flags for debug
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -Wextra -Wshadow -Werror")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror")
 # Flags for thread-sanitizer
-set(CMAKE_CXX_FLAGS_THREAD "-O0 -ggdb -Wextra -Wshadow -Werror -fsanitize=thread -pthread")
+set(CMAKE_CXX_FLAGS_THREAD "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror -fsanitize=thread -pthread")
 # Flags for Address sanitizer
-set(CMAKE_CXX_FLAGS_ADDRESS "-O0 -ggdb -Wextra -Wshadow -Werror -fsanitize=address -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS_ADDRESS "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror -fsanitize=address -fno-omit-frame-pointer")
 # Flags for Memory sanitizer
 #set(CMAKE_CXX_FLAGS_MEMORY "-O0 -ggdb -Wextra -Wshadow -Werror -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer")
 # Flags for release

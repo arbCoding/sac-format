@@ -253,7 +253,7 @@ enum class name {
     data2
 };
 // Lookup maps
-const std::unordered_map<name, int> sac_map = {
+const std::unordered_map<name, size_t> sac_map = {
     // Floats
     {name::depmin,    0},
     {name::depmax,    1},

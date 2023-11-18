@@ -77,9 +77,9 @@ jobs:
     - name: Package
       working-directory: ${{ steps.strings.outputs.build-output-dir}}
       run: |
-        version=`cat CPackSourceConfig.cmake | grep -i version | grep -iv 'major\|minor\|patch' | sed 's/[^0-9.]*//g'`
-        tar -czvf sac-format-v$version-${{ matrix.build_type }}.tar.gz *sac* utests benchmark
-        echo "artifactPath=${{ steps.strings.outputs.build-output-dir}}/sac-format-v$version-${{ matrix.build_type }}.tar.gz" >> $GITHUB_ENV
+        version=`cat CPackSourceConfig.cmake | grep sac-format | grep -i nsis_display | sed 's/[^0-9.]*//g'`
+        tar -czvf sac-format-v$version-${{ matrix.build_type }}.tar.gz *sac* utests benchmark *.exe
+        echo "artifactPath=${{ steps.strings.outputs.build-output-dir}}/sac-format-v$version-${{ matrix.workspace }}.tar.gz" >> $GITHUB_ENV
     - name: Archive Build Artifacts
       uses: actions/upload-artifact@v3
       with:
