@@ -60,7 +60,7 @@ sac-format includes the =Trace= class for seismic traces, providing high-level
 object-oriented abstraction to seismic data. With the =Trace= class, you don't
 need to worry about manually reading SAC-files word-by-word. It's compatible
 with =v6= and =v7= SAC-files and can automatically detect the version upon reading.
-File output defaults to =v7= SAC-files and there is a /legacy-write/ function for =v6=
+File output defaults to =v7= SAC-files and there is a =legacy_write= function for =v6=
 output.
 
 *** Low-Level I/O
@@ -84,14 +84,14 @@ run the benchmarks yourself to find out how sac-format performs on your system.
 
 *** Easy
 
-sac-format is *easy*---single-header makes integration to any project simple.
+sac-format is *easy*---single-header makes integration in any project simple.
 [[https://cmake.org/][CMake]] makes building on different platforms a breeze. Object-oriented design
 makes use easy and intuitive. See the [[Quickstart][Quickstart]] section to get up and running.
 
 *** Small
 
 sac-format is *small*---in total (header + implementation--excluding comments)
-it's fewer than 1500 lines of code (compiles to ~200 KB). Small size opens to
+it's fewer than 1500 lines of code and compiles to ~200 KB. Small size opens the
 door to using on any sort of hardware (old or new) and makes it easy to expand
 upon.
 
@@ -128,8 +128,11 @@ cmake .. && make
 
 To use link to the compiled library (=libsac-format.a= on Linux/macOS,
 =libsac-format.lib= on Windows) and include =src/sac_format.hpp=.
+
 ** Example Programs
+
 *** =sac_list=
+
 =sac_list= is a command line program that takes a single SAC-file as its input
 argument. It reads the SAC-file and outputs the header/footer information, as
 well as the true size of the [[=data1=][=data1=]] and [[=data2=][=data2=]] vectors.
