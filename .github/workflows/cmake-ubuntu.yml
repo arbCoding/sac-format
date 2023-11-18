@@ -38,9 +38,8 @@ jobs:
     - name: Package
       working-directory: ${{github.workspace}}/build
       run: |
-        version=`cat CPackSourceConfig.cmake | grep sac-format | grep -i nsis_display | sed 's/[^0-9.]*//g'`
-        tar -czvf sac-format-v$version.tar.gz *sac* utests benchmark
-        echo "artifactPath=${{github.workspace}}/build/sac-format-v$version.tar.gz" >> $GITHUB_ENV
+        tar -czvf sac-format.tar.gz *sac* utests benchmark
+        echo "artifactPath=${{github.workspace}}/build/sac-format.tar.gz" >> $GITHUB_ENV
 
     - name: Archive Build Artifacts
       uses: actions/upload-artifact@v3

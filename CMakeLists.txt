@@ -2,7 +2,7 @@
 # Basic Setup
 #===============================================================================
 # CMake version
-cmake_minimum_required (VERSION 3.12)
+cmake_minimum_required (VERSION 3.14)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Build type
 set(CMAKE_BUILD_TYPE Debug)
@@ -32,7 +32,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20 /W4")
   # Default debug flags are OK
   set(CMAKE_CXX_FLAGS_RELEASE "/O2 /DNDEBUG")
-else()
+elseif((CMAKE_SYSTEM_NAME STREQUAL "Linux") OR (CMAKE_CXX_SYSTEM_NAME STREQUAL "Darwin"))
   set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror")
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 endif()

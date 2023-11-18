@@ -4,6 +4,8 @@
 #include "sac_format.hpp"
 
 #if defined(_MSC_VER) || defined(__MINW32__)
+// I don't care if it was depracted in C++17, it still works!
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #include <codecvt>
 std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 #endif
