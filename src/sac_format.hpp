@@ -34,7 +34,7 @@ constexpr float unset_float{-12345.0f};
 constexpr double unset_double{-12345.0};
 constexpr bool unset_bool{false};
 // Accuracy precision expected from SAC floats
-constexpr float f_eps{2.75e-6};
+constexpr float f_eps{2.75e-6f};
 // This should work for two and four word string headers
 const std::string unset_word{"-12345"};
 using word_one = std::bitset<binary_word_size>;
@@ -118,7 +118,7 @@ std::vector<char> convert_to_word(const T x);
 std::vector<char> convert_to_word(const double x);
 // Template function to convert string to SAC word(s)
 template <size_t N>
-std::array<char, N> convert_to_words(const std::string& s, int n_words = 1);
+std::array<char, N> convert_to_words(const std::string& s, const int n_words);
 // Convert a bool value to a word
 std::vector<char> bool_to_word(const bool b);
 bool equal_within_tolerance(const std::vector<double>& vector1,

@@ -256,11 +256,11 @@ std::array<char, N> convert_to_words(const std::string& s, int n_words) {
 
 // Explicit instantiation
 template std::array<char, word_length> convert_to_words(const std::string& s,
-                                                        int n_words = 1);
+                                                        const int n_words);
 template std::array<char, 2 * word_length> convert_to_words(const std::string& s,
-                                                            int n_words = 2);
+                                                            const int n_words);
 template std::array<char, 4 * word_length> convert_to_words(const std::string& s,
-                                                            int n_words = 4);
+                                                            const int n_words);
 
 std::vector<char> bool_to_word(const bool b) {
     std::vector<char> result;
