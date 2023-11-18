@@ -4,6 +4,7 @@
 #include "sac_format.hpp"
 
 #if defined(_MSC_VER) || defined(__MINW32__)
+#include <codecvt>
 std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 #endif
 
