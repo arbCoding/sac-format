@@ -36,12 +36,10 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Package
-      working-directory: ${{github.workspace}}/build
+      working-directory: ${{github.workspace}}/build/Release
       shell: bash
       run: |
-        pwd
-        ls -a
-        tar -czvf sac-format.tar.gz *sac*.lib utests.exe list_sac.exe benchmark.exe
+        tar -czvf sac-format.tar.gz *sac* *.exe
         echo "artifactPath=${{github.workspace}}/build/sac-format.tar.gz" >> $GITHUB_ENV
 
     - name: Archive Build Artifacts
