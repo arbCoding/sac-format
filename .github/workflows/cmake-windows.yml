@@ -37,7 +37,6 @@ jobs:
 
     - name: Package
       working-directory: ${{github.workspace}}/build
-      uses: actions/download-artifact@v3
       shell: bash
       run: |
         tar -czvf sac-format.tar.gz *sac*.lib utests.exe list_sac.exe benchmark.exe
