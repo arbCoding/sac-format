@@ -40,7 +40,7 @@ jobs:
       shell: bash
       run: |
         tar -czvf sac-format.tar.gz *sac* *.exe
-        echo "artifactPath=${{github.workspace}}/build/sac-format.tar.gz" >> $GITHUB_ENV
+        echo "artifactPath=${{github.workspace}}/build/Release/sac-format.tar.gz" >> $GITHUB_ENV
 
     - name: Archive Build Artifacts
       uses: actions/upload-artifact@v3
