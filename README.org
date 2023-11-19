@@ -13,7 +13,7 @@
 
 [[https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml][https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml/badge.svg]]
 [[https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml][https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml/badge.svg]]
-[[https://github.com/arbCoding/sac-format/graphs/contributors][https://img.shields.io/github/commit-activity/m/arbCoding/sac-format]]
+[[https://img.shields.io/github/commit-activity/m/arbCoding/sac-format][Lines of Code]]
 
 sac-format is a single-header, statically linked library for reading binary
 [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]]-files written in C++20.
