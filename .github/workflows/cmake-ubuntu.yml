@@ -32,7 +32,7 @@ jobs:
       working-directory: ${{github.workspace}}/build/debug/gh-coverage
       run: |
         lcov -c -d ./CMakeFiles/sac-format.dir/ -o sac-format.lcov
-        lcov -r sac-format.lov "/usr*" -o sac-format.lcov
+        lcov -r sac-format.lcov "/usr*" -o sac-format.lcov
 
     - name: Upload Coverage Codecov
       uses: codecov/codecov-action@v3
