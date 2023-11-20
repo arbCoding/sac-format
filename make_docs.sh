@@ -6,7 +6,7 @@ rm -r ./docs/*
 
 # Build with emacs
 echo "\nBuilding with emacs!"
-emacs -Q --script ./build_docs.el
+emacs -Q --script ./make_docs.el
 
 # Time to shrink the files!
 echo "\nMinify-ing files!"

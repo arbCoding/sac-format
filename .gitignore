@@ -66,3 +66,6 @@ bin/*
 src/docs/*.pdf
 
 .clangd
+
+# Don't put genhtml coverage
+coverage/*

@@ -2,10 +2,8 @@
 # Basic Setup
 #===============================================================================
 # CMake version
-cmake_minimum_required (VERSION 3.14)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+cmake_minimum_required (VERSION 3.20)
 # Build type
-set(CMAKE_BUILD_TYPE Debug)
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -25,28 +23,6 @@ FetchContent_Declare(xoshiro
 FetchContent_MakeAvailable(Catch2 xoshiro)
 # Include Xoshiro since it doesn't have a CMakeLists.txt
 include_directories(${xoshiro_SOURCE_DIR})
-#===============================================================================
-# Flags
-#===============================================================================
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20 /W4")
-  # Default debug flags are OK
-  set(CMAKE_CXX_FLAGS_RELEASE "/O2 /DNDEBUG")
-elseif((CMAKE_SYSTEM_NAME STREQUAL "Linux") OR (CMAKE_CXX_SYSTEM_NAME STREQUAL "Darwin"))
-  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
-endif()
-
-# Should set presets later on, but this is good enough for now
-#set(CMAKE_CXX_FLAGS "")
-# Flags for debug
-# Flags for thread-sanitizer
-#set(CMAKE_CXX_FLAGS_THREAD "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror -fsanitize=thread -pthread")
-# Flags for Address sanitizer
-#set(CMAKE_CXX_FLAGS_ADDRESS "-O0 -ggdb -Wall -pedantic-errors -Wextra -Wshadow -Werror -fsanitize=address -fno-omit-frame-pointer")
-# Flags for Memory sanitizer
-#set(CMAKE_CXX_FLAGS_MEMORY "-O0 -ggdb -Wextra -Wshadow -Werror -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer")
-# Flags for release
 #==============================================================================
 # sac-format
 #==============================================================================
@@ -57,11 +33,6 @@ project(sac-format
   VERSION 0.3.0)
 
 include_directories(${sac-format_SOURCE_DIR}/src)
-
-# Use C++20
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(sac-format STATIC
   src/sac_format.hpp
