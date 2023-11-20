@@ -177,7 +177,7 @@
             "inherits": "gh-release",
             "binaryDir": "${sourceDir}/build/release/gh-windows",
             "cacheVariables": {
-                "CMAKE_CXX_FLAGS": "/02 /DNDEBUG"
+                "CMAKE_CXX_FLAGS": "/O2 /DNDEBUG"
             }
         },
         {
