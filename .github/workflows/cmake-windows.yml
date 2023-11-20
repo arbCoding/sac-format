@@ -12,6 +12,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Install Ninja
+      run: |
+        choco install ninja
+
     - name: Configure CMake
       run: cmake --preset msvc-release
 

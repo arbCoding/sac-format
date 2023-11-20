@@ -12,6 +12,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Install Ninja and lcov
+      run: |
+        sudo apt-get upgrade
+        sudo apt-get -y install ninja-build lcov
+
     - name: Configure CMake
       run: cmake --preset gcc-coverage
 
@@ -21,11 +27,6 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build/debug/gcc-coverage
       run: ctest
-
-    - name: Install lcov
-      run: |
-        sudo apt-get update
-        sudo apt-get -y install lcov
 
     - name: Get Coverage Report
       run: |
