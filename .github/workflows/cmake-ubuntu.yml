@@ -44,7 +44,7 @@ jobs:
         verbose: true
 
     - name: Uplaod Coverage Codacy
-      working_directory: ${{github.workspace}}/build/debug/gcc-coverage
+      working-directory: ${{github.workspace}}/build/debug/gcc-coverage
       run: |
         export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
         bash <(curl -Ls https://coverage.codacy.com/get.sh)
