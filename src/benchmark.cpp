@@ -1,7 +1,6 @@
 #include <bitset>
 #include <iomanip>
 #include <limits>
-#include <sstream>
 
 #define CATCH_CONFIG_FAST_COMPILE
 #define CATCH_CONFIG_MAIN
@@ -50,33 +49,21 @@ TEST_CASE("Binary Conversion") {
       };
     }
     SECTION("Negative") {
-      constexpr float lowest{std::numeric_limits<float>::lowest()};
       BENCHMARK("Float->Binary->Float std::numeric_limits<float>::lowest()") {
-        return binary_to_float(float_to_binary(lowest));
+        return binary_to_float(float_to_binary(lowest_f));
       };
-      constexpr float neg_epsilon{-std::numeric_limits<float>::epsilon()};
-      std::ostringstream oss{};
-      oss << std::setprecision(std::numeric_limits<float>::max_digits10)
-          << neg_epsilon;
-      std::string s_neg_epsilon{oss.str()};
-      CAPTURE(s_neg_epsilon);
+      CAPTURE(s_neg_epsilon_f);
       BENCHMARK("Float->Binary->Float negative std::numeric_limits<float>::epsilon()") {
-        return binary_to_float(float_to_binary(neg_epsilon));
+        return binary_to_float(float_to_binary(neg_epsilon_f));
       };
     }
     SECTION("Positive") {
-      constexpr float highest{std::numeric_limits<float>::max()};
       BENCHMARK("Float->Binary->Float std::numeric_limits<float>::max()") {
-        return binary_to_float(float_to_binary(highest));
+        return binary_to_float(float_to_binary(highest_f));
       };
-      constexpr float epsilon{std::numeric_limits<float>::epsilon()};
-      std::ostringstream oss;
-      oss << std::setprecision(std::numeric_limits<float>::max_digits10)
-          << epsilon;
-      std::string s_epsilon{oss.str()};
-      CAPTURE(s_epsilon);
+      CAPTURE(s_epsilon_f);
       BENCHMARK("Float->Binary->Float std::numeric_limits<float>::epsilon()") {
-        return binary_to_float(float_to_binary(epsilon));
+        return binary_to_float(float_to_binary(epsilon_f));
       };
     }
   }
@@ -87,30 +74,18 @@ TEST_CASE("Binary Conversion") {
       };
     }
     SECTION("Negative") {
-      constexpr double lowest{std::numeric_limits<double>::lowest()};
       BENCHMARK("Double->Binary->Double std::numeric_limits<double>::lowest()") {
         return binary_to_double(double_to_binary(lowest));
       };
-      constexpr double neg_epsilon{-std::numeric_limits<double>::epsilon()};
-      std::ostringstream oss;
-      oss << std::setprecision(std::numeric_limits<double>::max_digits10)
-          << neg_epsilon;
-      std::string s_neg_epsilon{oss.str()};
       CAPTURE(s_neg_epsilon);
       BENCHMARK("Double->Binary->Double negative std::numeric_limits<double>::epsilon()") {
         return binary_to_double(double_to_binary(neg_epsilon));
       };
     }
     SECTION("Positive") {
-      constexpr double highest{std::numeric_limits<double>::max()};
       BENCHMARK("Double->Binary->Double std::numeric_limits<double>::max()") {
         return binary_to_double(double_to_binary(highest));
       };
-      constexpr double epsilon{std::numeric_limits<double>::epsilon()};
-      std::ostringstream oss;
-      oss << std::setprecision(std::numeric_limits<double>::max_digits10)
-          << epsilon;
-      std::string s_epsilon{oss.str()};
       CAPTURE(s_epsilon);
       BENCHMARK("Double->Binary->Double std::numeric_limits<double>::epsilon()") {
         return binary_to_double(double_to_binary(epsilon));
@@ -150,26 +125,26 @@ TEST_CASE("Binary Conversion") {
       SECTION("Perfect") {
         const std::string test_str{"0123456789ABCDEF"};
         BENCHMARK("String->Binary->String Exact") {
-          return binary_to_string(string_to_binary(test_str));
+          return binary_to_long_string(long_string_to_binary(test_str));
         };
       }
       SECTION("Empty") {
         const std::string test_str{""};
         BENCHMARK("String->Binary->String Empty") {
-          return binary_to_string(string_to_binary(test_str));
+          return binary_to_long_string(long_string_to_binary(test_str));
         };
       }
       SECTION("Small") {
         const std::string test_str{"01234567"};
         BENCHMARK("String->Binary->String Half") {
-          return binary_to_string(string_to_binary(test_str));
+          return binary_to_long_string(long_string_to_binary(test_str));
         };
       }
       SECTION("Overflow") {
         const std::string test_str{"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
         CAPTURE(test_str);
         BENCHMARK("String->Binary->String Overfull") {
-          return binary_to_string(string_to_binary(test_str));
+          return binary_to_long_string(long_string_to_binary(test_str));
         };
       }
     }

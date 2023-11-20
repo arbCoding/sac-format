@@ -3,7 +3,6 @@
 #include <fstream>
 #include <iomanip>
 #include <limits>
-#include <sstream>
 /* Catch2 */
 #define CATCH_CONFIG_FAST_COMPILE
 #define CATCH_CONFIG_MAIN
@@ -70,33 +69,17 @@ TEST_CASE("Binary Conversion") {
       REQUIRE(binary_to_float(float_to_binary(-1.0f)) == -1.0f);
       REQUIRE(binary_to_float(float_to_binary(-0.1f)) == -0.1f);
       REQUIRE(binary_to_float(float_to_binary(-10.0f)) == -10.0f);
-      //cppcheck-suppress unreadVariable
-      constexpr float lowest{std::numeric_limits<float>::lowest()};
-      REQUIRE(binary_to_float(float_to_binary(lowest)) == lowest);
-      constexpr float neg_epsilon{-std::numeric_limits<float>::epsilon()};
-      std::ostringstream oss{};
-      oss << std::setprecision(std::numeric_limits<float>::max_digits10)
-        << neg_epsilon;
-      //cppcheck-suppress unreadVariable
-      std::string s_neg_epsilon{oss.str()};
-      CAPTURE(s_neg_epsilon);
-      REQUIRE(binary_to_float(float_to_binary(neg_epsilon)) == neg_epsilon);
+      REQUIRE(binary_to_float(float_to_binary(lowest_f)) == lowest_f);
+      CAPTURE(s_neg_epsilon_f);
+      REQUIRE(binary_to_float(float_to_binary(neg_epsilon_f)) == neg_epsilon_f);
     }
     SECTION("Positive") {
       REQUIRE(binary_to_float(float_to_binary(1.0f)) == 1.0f);
       REQUIRE(binary_to_float(float_to_binary(0.1f)) == 0.1f);
       REQUIRE(binary_to_float(float_to_binary(10.0f)) == 10.0f);
-      //cppcheck-suppress unreadVariable
-      constexpr float highest{std::numeric_limits<float>::max()};
-      REQUIRE(binary_to_float(float_to_binary(highest)) == highest);
-      constexpr float epsilon{std::numeric_limits<float>::epsilon()};
-      std::ostringstream oss{};
-      oss << std::setprecision(std::numeric_limits<float>::max_digits10)
-        << epsilon;
-      //cppcheck-suppress unreadVariable
-      std::string s_epsilon{oss.str()};
-      CAPTURE(s_epsilon);
-      REQUIRE(binary_to_float(float_to_binary(epsilon)) == epsilon);
+      REQUIRE(binary_to_float(float_to_binary(highest_f)) == highest_f);
+      CAPTURE(s_epsilon_f);
+      REQUIRE(binary_to_float(float_to_binary(epsilon_f)) == epsilon_f);
     }
   }
   SECTION("Doubles") {
@@ -108,15 +91,7 @@ TEST_CASE("Binary Conversion") {
       REQUIRE(binary_to_double(double_to_binary(-1.0)) == -1.0);
       REQUIRE(binary_to_double(double_to_binary(-0.1)) == -0.1);
       REQUIRE(binary_to_double(double_to_binary(-10.0)) == -10.0f);
-      //cppcheck-suppress unreadVariable
-      constexpr double lowest{std::numeric_limits<double>::lowest()};
       REQUIRE(binary_to_double(double_to_binary(lowest)) == lowest);
-      constexpr double neg_epsilon{-std::numeric_limits<double>::epsilon()};
-      std::ostringstream oss{};
-      oss << std::setprecision(std::numeric_limits<double>::max_digits10)
-        << neg_epsilon;
-      //cppcheck-suppress unreadVariable
-      std::string s_neg_epsilon{oss.str()};
       CAPTURE(s_neg_epsilon);
       REQUIRE(binary_to_double(double_to_binary(neg_epsilon)) == neg_epsilon);
     }
@@ -124,15 +99,7 @@ TEST_CASE("Binary Conversion") {
       REQUIRE(binary_to_double(double_to_binary(1.0)) == 1.0);
       REQUIRE(binary_to_double(double_to_binary(0.1)) == 0.1);
       REQUIRE(binary_to_double(double_to_binary(10.0)) == 10.0);
-      //cppcheck-suppress unreadVariable
-      constexpr double highest{std::numeric_limits<double>::max()};
       REQUIRE(binary_to_double(double_to_binary(highest)) == highest);
-      constexpr double epsilon{std::numeric_limits<double>::epsilon()};
-      std::ostringstream oss{};
-      oss << std::setprecision(std::numeric_limits<double>::max_digits10)
-        << epsilon;
-      //cppcheck-suppress unreadVariable
-      std::string s_epsilon{oss.str()};
       CAPTURE(s_epsilon);
       REQUIRE(binary_to_double(double_to_binary(epsilon)) == epsilon);
     }

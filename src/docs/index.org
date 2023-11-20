@@ -1,6 +1,5 @@
 #+include: ./misc/settings.org
 
-# #+begin_html
 #+begin_export html
 <!--
 <a href="https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml">
@@ -12,13 +11,18 @@
 <img alt="Ubuntu 22.04 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml/badge.svg" />
 </a>
 
-<a href="https://codecov.io/gh/arbCoding/sac-format/tree/devel" >
-<img src="https://codecov.io/gh/arbCoding/sac-format/branch/devel/graph/badge.svg" />
+<a href="https://codecov.io/gh/arbCoding/sac-format/" >
+<img alt="Code Coverage" src="https://codecov.io/gh/arbCoding/sac-format/graph/badge.svg" />
 </a>
 
-<img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/arbCoding/sac-format" />
+<img src="https://tokei.rs/b1/github/arbCoding/sac-format?category=code" />
+
+<img src="https://img.shields.io/github/languages/code-size/arbCoding/sac-format" />
+
+<a href="https://app.codacy.com/gh/arbCoding/sac-format/dashboard">
+<img alt="Codacy grade" src="https://img.shields.io/codacy/grade/870db5c2793a48df9ed98e942a08fc9e" />
+</a>
 #+end_export
-# #+end_html
 
 * Introduction
 
@@ -62,15 +66,19 @@ running.
 *** Small
 
 sac-format is *small*---in total (header + implementation--excluding comments)
-it's fewer than 1500 lines of code and compiles to ~200 KB. Small size opens the
-door to using on any sort of hardware (old or new) and makes it easy to expand
-upon.
+it's fewer than 1500 lines of code. Small size opens the door to using on any
+sort of hardware (old or new) and makes it easy to expand upon.
 
 *** Documented
 
 sac-format is extensively *documented*---both online and in the code. Nothing's
 hidden---nothing's obscured. Curious how something works? Check the
 documentation and in-code comments.
+
+*** Transparent
+
+sac-format is *transparent*---all [[https://app.codacy.com/gh/arbCoding/sac-format/dashboard][analysis]] and [[https://app.codecov.io/gh/arbCoding/sac-format][coverage]] information is publicly
+available online.
 
 *** Trace Class
 
@@ -96,18 +104,20 @@ confirmed working---they're used to build the =Trace= class!
 Building is as easy as cloning the repository, running CMake for your preferred
 build tool, and then building.
 
-**** Ninja
+**** GCC
+
 #+begin_src bash :returns code :eval no
 git clone https://github.com/arbCoding/sac-format.git
-mkdir bin && cd bin/
-cmake -G Ninja .. && ninja
+cmake --preset gcc-release
+cmake --build ./build/release/gcc
 #+end_src
 
-**** Make
+**** Clang
+
 #+begin_src bash :returns code :eval no
 git clone https://github.com/arbCoding/sac-format.git
-mkdir bin && cd bin/
-cmake .. && make
+cmake --preset clang-release
+cmaek --build ./build/release/clang
 #+end_src
 
 *** Use

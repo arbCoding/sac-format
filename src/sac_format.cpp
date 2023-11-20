@@ -60,73 +60,61 @@ std::string string_cleaning(const std::string& str) {
     return result;
 }
 
-word_two string_to_binary(std::string x) {
-    constexpr size_t string_size{2 * word_length};
-    // 1 byte per character
+void prep_string(std::string& str, const size_t str_size) {
+    str = string_cleaning(str);
+    if (str.length() > str_size) { str.resize(str_size); }
+    else if (str.length() < str_size) { str = str.append(str_size - str.length(), ' '); }
+}
+
+template <typename T>
+void string_bits(T& bits, const std::string& str, const size_t str_size) {
     constexpr size_t char_size{bits_per_byte};
-    // String must be of specific length
-    // Remove any spurious padding
-    x = string_cleaning(x);
-    // Truncate if needed
-    if (x.length() > string_size) { x.resize(string_size); }
-    // Pad if needed
-    else if (x.length() < string_size) { x = x.append(string_size - x.length(), ' '); }
-    // Two words (8 characters)
-    word_two bits{};
-    // 1 character
     std::bitset<char_size> byte{};
-    for (size_t i{0}; i < string_size; ++i) {
-        size_t character{static_cast<size_t>(x[i])};
+    for (size_t i{0}; i < str_size; ++i) {
+        size_t character{static_cast<size_t>(str[i])};
         byte = std::bitset<char_size>(character);
         for (size_t j{0}; j < char_size; ++j) { bits[(i * char_size) + j] = byte[j]; }
     }
+}
+
+template <typename T>
+std::string bits_string(const T& bits, const size_t num_words) {
+    std::string result{};
+    constexpr size_t char_size{bits_per_byte};
+    std::bitset<char_size> byte{};
+    for (size_t i{0}; i < num_words * binary_word_size; i += char_size) {
+        for (size_t j{0}; j < char_size; ++j) { byte[j] = bits[i + j]; }
+        result += static_cast<char>(byte.to_ulong());
+    }
+    return result;
+}
+
+word_two string_to_binary(std::string x) {
+    constexpr size_t string_size{2 * word_length};
+    // 1 byte per character
+    prep_string(x, string_size);
+    // Two words (8 characters)
+    word_two bits{};
+    string_bits(bits, x, string_size);
     return bits;
 }
 
 std::string binary_to_string(const word_two& x) {
-    std::string result{};
-    constexpr size_t char_size{bits_per_byte};
-    std::bitset<char_size> byte{};
-    // Read character by character
-    for (size_t i{0}; i < 2 * binary_word_size; i += char_size) {
-        // Build the character
-        for (size_t j{0}; j < char_size; ++j) { byte[j] = x[i + j]; }
-        result += static_cast<char>(byte.to_ulong());
-    }
+    std::string result{bits_string(x, 2)};
     return string_cleaning(result);
 }
 
 word_four long_string_to_binary(std::string x) {
     constexpr size_t string_size{4 * word_length};
-    constexpr size_t char_size{bits_per_byte};
-    // Remove any spurious padding
-    x = string_cleaning(x);
-    // Truncate if needed
-    if (x.length() > string_size) { x.resize(string_size); }
-    // Pad if needed
-    else if (x.length() < string_size) { x = x.append(string_size - x.length(), ' '); }
+    prep_string(x, string_size);
     // Four words (16 characters)
     word_four bits{};
-    // One character
-    std::bitset<char_size> byte{};
-    for (size_t i{0}; i < string_size; ++i) {
-        size_t character{static_cast<size_t>(x[i])};
-        byte = std::bitset<char_size>(character);
-        for (size_t j{0}; j < char_size; ++j) { bits[(i * char_size) + j] = byte[j]; }
-    }
+    string_bits(bits, x, string_size);
     return bits;
 }
 
 std::string binary_to_long_string(const word_four& x) {
-    std::string result{};
-    constexpr size_t char_size{bits_per_byte};
-    std::bitset<char_size> byte{};
-    // Read character by character
-    for (size_t i{0}; i < 4 * binary_word_size; i += char_size) {
-        // It builds character!
-        for (size_t j{0}; j < char_size; ++j) { byte[j] = x[i + j]; }
-        result += static_cast<char>(byte.to_ulong());
-    }
+    std::string result{bits_string(x, 4)};
     return string_cleaning(result);
 }
 
@@ -746,7 +734,7 @@ Trace::Trace(const std::filesystem::path& path) {
 }
 //------------------------------------------------------------------------------
 // Write
-void Trace::write(const std::filesystem::path& path, const bool legacy) {
+void Trace::write(const std::filesystem::path& path, const bool legacy) const {
     std::ofstream file(path, std::ios::binary
                        | std::ios::out | std::ios::trunc);
     if (!file) { std::cerr << path.string() << "cannot be written.\n"; return; }
@@ -964,7 +952,7 @@ void Trace::write(const std::filesystem::path& path, const bool legacy) {
     file.close();
 }
 
-void Trace::legacy_write(const std::filesystem::path& path) {
+void Trace::legacy_write(const std::filesystem::path& path) const {
     write(path, true);
 }
 };
