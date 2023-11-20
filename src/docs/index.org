@@ -1,4 +1,23 @@
 #+include: ./misc/settings.org
+
+# #+begin_html
+#+begin_export html
+<a href="https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml">
+<img alt="Windows 2022 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml/badge.svg" />
+</a>
+
+<a href="https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml">
+<img alt="Ubuntu 22.04 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml/badge.svg" />
+</a>
+
+<a href="https://codecov.io/gh/arbCoding/sac-format/tree/devel" >
+<img src="https://codecov.io/gh/arbCoding/sac-format/branch/devel/graph/badge.svg" />
+</a>
+
+<img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/arbCoding/sac-format" />
+#+end_export
+# #+end_html
+
 * Introduction
 
 sac-format is a single-header statically linked library designed to make working

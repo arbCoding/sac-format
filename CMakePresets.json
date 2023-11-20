@@ -185,7 +185,9 @@
             "displayName": "GitHub Windows Debug",
             "description": "GitHub Windows debug options.",
             "inherits": "gh-debug",
-            "binaryDir": "${sourceDir}/build/debug/gh-windows"
+            "binaryDir": "${sourceDir}/build/debug/gh-windows",
+                "CMAKE_CXX_FLAGS": "/O0 /W4"
+            }
         }
     ]
 }
