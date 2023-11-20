@@ -1,0 +1,33 @@
+name: Ubuntu 22.04
+
+on:
+  push:
+    branches: ["devel"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake
+      run: cmake --preset gh-ubuntu-release
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build/release/gh-ubuntu
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+      run: ctest
+
+    - name: Upload Coverage Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        directory: ${{github.workspace}}/
+        files: ./sac-format.txt
+        name: sac-format-coverage
+        verbose: true

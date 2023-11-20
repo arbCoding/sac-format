@@ -5,6 +5,8 @@
 #include <limits>
 #include <sstream>
 /* Catch2 */
+#define CATCH_CONFIG_FAST_COMPILE
+#define CATCH_CONFIG_MAIN
 // testing macros
 #include <catch2/catch_test_macros.hpp>
 // Floating-point matcher
@@ -28,7 +30,7 @@ TEST_CASE("Basic constants") {
     REQUIRE(unset_int == -12345);
     REQUIRE(unset_float == -12345.0f);
     REQUIRE(unset_double == -12345.0);
-    REQUIRE(unset_bool == 0);
+    REQUIRE(unset_bool == false);
     REQUIRE(unset_word == "-12345");
   }
   SECTION("Derived constants") {

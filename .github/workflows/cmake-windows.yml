@@ -1,0 +1,24 @@
+name: Windows 2022
+
+on:
+  push:
+    branches: ["devel"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake
+      run: cmake --preset gh-windows-release
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build/release/gh-windows
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build/release/gh-windows
+      run: ctest

@@ -11,6 +11,13 @@
 #+exclude_tags: noexport
 #+creator: Emacs 29.1 (Org mode 9.7)
 
+# [[https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml][https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml/badge.svg]]
+[[https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml][https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml/badge.svg]]
+[[https://app.codecov.io/gh/arbCoding/sac-format/tree/devel][https://codecov.io/gh/arbCoding/sac-format/branch/devel/graph/badge.svg]]
+#+begin_html
+<img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/arbCoding/sac-format">
+#+end_html
+
 sac-format is a single-header, statically linked library for reading binary
 [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]]-files written in C++20.
 

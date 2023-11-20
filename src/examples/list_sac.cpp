@@ -3,6 +3,13 @@
 
 #include "sac_format.hpp"
 
+#if defined(_MSC_VER) || defined(__MINW32__)
+// I don't care if it was depracted in C++17, it still works!
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+#include <codecvt>
+std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+#endif
+
 namespace fs = std::filesystem;
 using namespace sacfmt;
 
@@ -24,7 +31,11 @@ int main(const int arg_count, const char* arg_array[]) {
     std::cout << file << " is not a readable file.\n";
   }
   // Now we check the extension
+#if defined(_MSC_VER) || defined(__MINGW32__)
+  std::string ext{converter.to_bytes(file.extension().wstring())};
+#else
   std::string ext{file.extension()};
+#endif
   // Issue a warning if the extension is not sac or SAC
   if (ext.empty() || ((ext != ".SAC") && (ext != ".sac"))) {
     std::cout << "WARNING: " << file << " does not have a SAC extension.\n";
