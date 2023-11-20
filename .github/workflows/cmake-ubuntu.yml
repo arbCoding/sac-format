@@ -37,7 +37,7 @@ jobs:
     - name: Upload Coverage Codecov
       uses: codecov/codecov-action@v3
       with:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        token: ${{ secrets.CODECOV_TOKEN }}
         directory: ${{github.workspace}}/build/debug/gh-coverage
         files: ./sac-format.lcov
         name: sac-format-coverage
