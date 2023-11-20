@@ -13,16 +13,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install Ninja
-      run: |
-        choco install ninja
-
     - name: Configure CMake
-      run: cmake --preset msvc-release
+      run: cmake --preset gh-windows-release
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build/release/msvc
+      run: cmake --build ${{github.workspace}}/build/release/gh-windows
 
     - name: Test
-      working-directory: ${{github.workspace}}/build/release/msvc
+      working-directory: ${{github.workspace}}/build/release/gh-windows
       run: ctest

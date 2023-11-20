@@ -13,32 +13,21 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install Ninja and lcov
-      run: |
-        sudo apt-get upgrade
-        sudo apt-get -y install ninja-build lcov
-
     - name: Configure CMake
-      run: cmake --preset gcc-coverage
+      run: cmake --preset gh-ubuntu-release
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build/debug/gcc-coverage
+      run: cmake --build ${{github.workspace}}/build/release/gh-ubuntu
 
     - name: Test
-      working-directory: ${{github.workspace}}/build/debug/gcc-coverage
+      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
       run: ctest
-
-    - name: Get Coverage Report
-      run: |
-        cd ${{github.workspace}}/build/debug/gcc-coverage/CMakeFiles/sac-format.dir/
-        lcov -c -d . -o sac-format.txt
-        lcov -r sac-format.txt "/usr*" -o sac-format.txt
 
     - name: Upload Coverage Codecov
       uses: codecov/codecov-action@v3
       with:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        directory: ${{github.workspace}}/build/debug/gcc-coverage/CMakeFiles/sac-format.dir/
+        directory: ${{github.workspace}}/
         files: ./sac-format.txt
         name: sac-format-coverage
         verbose: true

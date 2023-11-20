@@ -8,7 +8,7 @@
     "configurePresets": [
         {
             "hidden": false,
-            "name": "default",
+            "name": "ninja",
             "displayName": "Default config",
             "description": "Default build using Ninja generator.",
             "generator": "Ninja",
@@ -22,10 +22,21 @@
         },
         {
             "hidden": true,
+            "name": "github",
+            "displayName": "GitHub config",
+            "description": "Default build for GitHub.",
+            "cacheVariables": {
+                "CMAKE_CXX_STANDARD": "20",
+                "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+                "CMAKE_CXX_EXTENSIONS": "OFF"
+            }
+        },
+        {
+            "hidden": true,
             "name": "release",
             "displayName": "Release",
             "description": "Default Release build options.",
-            "inherits": "default",
+            "inherits": "ninja",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
@@ -35,7 +46,7 @@
             "name": "debug",
             "displayName": "Debug",
             "description": "Default Debug build options.",
-            "inherits": "default",
+            "inherits": "ninja",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
@@ -65,6 +76,13 @@
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "-O3 -DNDEBUG"
             }
+        },
+        {
+            "name": "gh-ubuntu-release",
+            "displayName": "GitHub Ubuntu Release",
+            "description": "GitHub Ubuntu release options.",
+            "inherits": ["github", "gcc-clang-release"],
+            "binaryDir": "${sourceDir}/build/release/gh-ubuntu"
         },
         {
             "name": "gcc-release",
@@ -135,21 +153,21 @@
             }
         },
         {
-            "name": "msvc-release",
-            "displayName": "MSVC Release",
-            "description": "MSVC release options.",
+            "name": "gh-windows-release",
+            "displayName": "GitHub Windows Release",
+            "description": "GitHub Windows release options.",
             "inherits": "release",
-            "binaryDir": "${sourceDir}/build/release/msvc",
+            "binaryDir": "${sourceDir}/build/release/gh-windows",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "/02 /DNDEBUG"
             }
         },
         {
-            "name": "msvc-debug",
-            "displayName": "MSVC Debug",
-            "description": "MSVC debug options.",
+            "name": "gh-windows-debug",
+            "displayName": "GitHub Windows Debug",
+            "description": "GitHub Windows debug options.",
             "inherits": "debug",
-            "binaryDir": "${sourceDir}/build/debug/msvc",
+            "binaryDir": "${sourceDir}/build/debug/gh-windows",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "/O0 /W4"
             }
