@@ -24,6 +24,9 @@ sac-format is a single-header, statically linked library for reading binary
 View the [[https://arbcoding.github.io/sac-format/][documentation]] for more details.
 
 * Key benefits
+
+  #+ATTR_HTML: title="Codacy Badge"
+  [[https://app.codacy.com/gh/arbCoding/sac-format?utm_source=github.com&utm_medium=referral&utm_content=arbCoding/sac-format&utm_campaign=Badge_Grade][file:https://api.codacy.com/project/badge/Grade/870db5c2793a48df9ed98e942a08fc9e]]
 1) Free and Open Source Software
 2) High-level Trace class
 3) Low-level I/O
