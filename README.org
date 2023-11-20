@@ -11,21 +11,10 @@
 #+exclude_tags: noexport
 #+creator: Emacs 29.1 (Org mode 9.7)
 
+# [[https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml][https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml/badge.svg]]
+[[https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml][https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml/badge.svg]]
+[[https://app.codecov.io/gh/arbCoding/sac-format/tree/devel][https://codecov.io/gh/arbCoding/sac-format/graph/badge.svg]]
 #+begin_html
-<!--
-<a href="https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml">
-<img alt="Windows 2022 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml/badge.svg" />
-</a>
--->
-
-<a href="https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml">
-<img alt="Ubuntu 22.04 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml/badge.svg" />
-</a>
-
-<a href="https://codecov.io/gh/arbCoding/sac-format/tree/devel" >
-<img src="https://codecov.io/gh/arbCoding/sac-format/graph/badge.svg" />
-</a>
-
 <img alt="Lines of code" src="https://tokei.rs/b1/github/arbCoding/sac-format?category=code">
 #+end_html
 
