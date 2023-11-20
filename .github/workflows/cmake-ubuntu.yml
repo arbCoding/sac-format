@@ -19,17 +19,17 @@ jobs:
         sudo apt-get install -y lcov
 
     - name: Configure CMake
-      run: cmake --preset gcc-coverage
+      run: cmake --preset gh-coverage
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build/debug/gcc-coverage
+      run: cmake --build ${{github.workspace}}/build/debug/gh-coverage
 
     - name: Test
-      working-directory: ${{github.workspace}}/build/debug/gcc-coverage
+      working-directory: ${{github.workspace}}/build/debug/gh-coverage
       run: ctest
 
     - name: Generate Coverage
-      working-directory: ${{github.workspace}}/build/debug/gcc-coverage
+      working-directory: ${{github.workspace}}/build/debug/gh-coverage
       run: |
         lcov -c -d ./CMakeFiles/sac-format.dir/ -o sac-format.lcov
         lcov -r sac-format.lov "/usr*" -o sac-format.lcov
@@ -38,13 +38,13 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        directory: ${{github.workspace}}/build/debug/gcc-coverage
+        directory: ${{github.workspace}}/build/debug/gh-coverage
         files: ./sac-format.lcov
         name: sac-format-coverage
         verbose: true
 
     - name: Uplaod Coverage Codacy
-      working-directory: ${{github.workspace}}/build/debug/gcc-coverage
+      working-directory: ${{github.workspace}}/build/debug/gh-coverage
       run: |
         export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
         bash <(curl -Ls https://coverage.codacy.com/get.sh)

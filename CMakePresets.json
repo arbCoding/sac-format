@@ -151,6 +151,16 @@
             }
         },
         {
+            "name": "gh-coverage",
+            "displayName": "GitHub Coverage",
+            "description": "GitHub coverage options.",
+            "inherits": ["gcc", "github"],
+            "binaryDir": "${sourceDir}/build/debug/gh-coverage",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-O0 -g -coverage"
+            }
+        },
+        {
             "name": "gcc-thread",
             "displayName": "Thread Sanitizer",
             "description": "GCC thread sanitizer debug options.",
