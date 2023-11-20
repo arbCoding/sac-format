@@ -29,11 +29,11 @@ rm index.pdf
 new_size=$(ls -l | grep manual | grep pdf | awk '{print $5}')
 
 percent=$(echo 'scale=4; ('"$new_size"'/'"$orig_size"') * 100' | bc)
-percent=$(echo $percent | python -c "print(round(float(input()), 1))")
+percent=$(echo "$percent" | python -c "print(round(float(input()), 1))")
 orig_size=$(echo 'scale=4; '"$orig_size"' / 1000.0' | bc)
-orig_size=$(echo $orig_size | python -c "print(round(float(input()), 2))")
+orig_size=$(echo "$orig_size" | python -c "print(round(float(input()), 2))")
 new_size=$(echo 'scale=4; '"$new_size"' / 1000.0' | bc)
-new_size=$(echo $new_size | python -c "print(round(float(input()), 2))")
+new_size=$(echo "$new_size" | python -c "print(round(float(input()), 2))")
 
 echo "($orig_size kB, $new_size kB, $percent%)\n"
-cd $base
+cd "$base"

@@ -17,12 +17,11 @@ ctest
 # Locate the gcov output
 cd ./CMakeFiles/sac-format.dir/
 # Run lcov to generate coverage report
-lcov -c -d . -o sac-format.lcov
+lcov -c -d . -o ./sac-format.lcov
 # Remove standard library references (linux)
-lcov -r sac-format.lcov "/usr*" -o sac-format.lcov
+lcov -r ./sac-format.lcov "/usr*" -o ./sac-format.lcov
 # Convert to html
 genhtml --demangle-cpp sac-format.lcov -o coverage --num-spaces 4
-cp sac-format.lcov $base/sac-format.lcov
 # Move the coverage files
 mv ./coverage "$base/coverage"
 cd "$base"
