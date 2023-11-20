@@ -76,6 +76,14 @@ void remove_leading_spaces(std::string& str);
 void remove_trailing_spaces(std::string& str);
 // Remove leading/trailing white-space and control characters
 std::string string_cleaning(const std::string& str);
+//
+void prep_string(std::string& str, const size_t str_size);
+//
+template <typename T>
+void string_bits(T& bits, const std::string& str, const size_t str_size);
+//
+template <typename T>
+std::string bits_string(const T& bits, const size_t num_words);
 // Note the string conversion functions handle over-sized strings
 // by truncating them, and undersized strings by padding them with spaces
 // SAC uses either 64 bit strings (2 words, 8 bytes, 8 characters)
@@ -128,7 +136,6 @@ bool equal_within_tolerance(const std::vector<double>& vector1,
                                 f_eps);
 bool equal_within_tolerance(const double x1, const double x2,
                             const double tolerance = f_eps);
-// This is the replacement Trace class
 enum class name {
     // Floats
     depmin,
@@ -382,8 +389,8 @@ class Trace {
 public:
     explicit Trace();
     explicit Trace(const std::filesystem::path& path);
-    void write(const std::filesystem::path& path, const bool legacy = false);
-    void legacy_write(const std::filesystem::path& path);
+    void write(const std::filesystem::path& path, const bool legacy = false) const;
+    void legacy_write(const std::filesystem::path& path) const;
     bool operator==(const Trace& other) const;
     // Convenience functions
     // Not implemented yet
