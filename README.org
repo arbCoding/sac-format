@@ -15,7 +15,7 @@
 [[https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml][https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml/badge.svg]]
 [[https://app.codecov.io/gh/arbCoding/sac-format/tree/devel][https://codecov.io/gh/arbCoding/sac-format/branch/devel/graph/badge.svg]]
 #+begin_html
-<img alt="Lines of code" src="https://tokei.rs/b1/github/arbCoding/sac-format?category=lines">
+<img alt="Lines of code" src="https://tokei.rs/b1/github/arbCoding/sac-format?category=code">
 #+end_html
 
 sac-format is a single-header, statically linked library for reading binary
