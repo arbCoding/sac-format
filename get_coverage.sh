@@ -1,8 +1,12 @@
 #!/bin/dash
-base=`pwd`
+base=$(pwd)
 # Cleanup
-if [ -e $base/coverage ]; then
-    rm -r $base/coverage
+if [ -e "$base/coverage" ]; then
+    rm -r "$base/coverage"
+fi
+
+if [ -e "$base/build/debug/gcc-coverage" ]; then
+    rm -rf "$base/build/debug/gcc-coverage"
 fi
 ## Build the preset
 cmake --preset gcc-coverage
@@ -13,12 +17,12 @@ ctest
 # Locate the gcov output
 cd ./CMakeFiles/sac-format.dir/
 # Run lcov to generate coverage report
-lcov -c -d . -o sac-format.txt
+lcov -c -d . -o sac-format.lcov
 # Remove standard library references (linux)
-lcov -r sac-format.txt "/usr*" -o sac-format.txt
+lcov -r sac-format.lcov "/usr*" -o sac-format.lcov
 # Convert to html
-genhtml --demangle-cpp sac-format.txt -o coverage --num-spaces 4
-cp sac-format.txt $base/sac-format.txt
+genhtml --demangle-cpp sac-format.lcov -o coverage --num-spaces 4
+cp sac-format.lcov $base/sac-format.lcov
 # Move the coverage files
-mv ./coverage $base/coverage
-cd $base
+mv ./coverage "$base/coverage"
+cd "$base"

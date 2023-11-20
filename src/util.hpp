@@ -2,12 +2,41 @@
 #include <random>
 // INT_MIN and INT_MAX
 #include <limits.h>
+// ostringstream
+#include <sstream>
 /* Xoshiro Random Number generator */
 #include <XoshiroCpp.hpp>
 /* My stuff */
 #include "sac_format.hpp"
 
 namespace sacfmt {
+
+// Testing Constants
+template <typename T>
+std::string eps_string(const T f) {
+  std::ostringstream oss{};
+  oss << std::setprecision(std::numeric_limits<T>::max_digits10) << f;
+  return oss.str();
+}
+// Floats
+// Negative
+constexpr float lowest_f{std::numeric_limits<float>::lowest()};
+constexpr float neg_epsilon_f{-std::numeric_limits<float>::epsilon()};
+const std::string s_neg_epsilon_f{eps_string(neg_epsilon_f)};
+// Positive
+constexpr float highest_f{std::numeric_limits<float>::max()};
+constexpr float epsilon_f{std::numeric_limits<float>::epsilon()};
+const std::string s_epsilon_f{eps_string(epsilon_f)};
+// Doubles
+// Negative
+constexpr double lowest{std::numeric_limits<double>::lowest()};
+constexpr double neg_epsilon{-std::numeric_limits<double>::epsilon()};
+const std::string s_neg_epsilon{eps_string(neg_epsilon)};
+// Positive
+constexpr double highest{std::numeric_limits<double>::max()};
+constexpr double epsilon{std::numeric_limits<double>::epsilon()};
+const std::string s_epsilon{eps_string(epsilon)};
+
 // Self-seed the random number generator
 XoshiroCpp::Xoshiro256Plus init() {
   // Random device for seeding
@@ -40,17 +69,6 @@ void random_vector(std::vector<double>& data, const double minimum = -1.0,
                    const double maximum = 1.0) {
   std::uniform_real_distribution<> die{minimum, maximum};
   for (std::size_t i{0}; i < data.size(); ++i) { data[i] = die(xos); }
-}
-//==============================================================================
-// Debugging print
-void print_control_characters(const std::string& str)
-{
-    for (char c : str)
-    {
-        if (std::iscntrl(static_cast<unsigned char>(c))) { std::cout << "\\x" << std::hex << static_cast<int>(c); }
-        else { std::cout << c; }
-    }
-    std::cout << '\n';
 }
 
 Trace gen_fake_trace() {
