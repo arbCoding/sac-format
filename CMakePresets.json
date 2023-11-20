@@ -33,6 +33,26 @@
         },
         {
             "hidden": true,
+            "name": "gh-release",
+            "displayName": "GitHub Release",
+            "description": "Default GitHub Release build options.",
+            "inherits": "github",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "hidden": true,
+            "name": "gh-debug",
+            "displayName": "GitHub Debug",
+            "description": "Default GitHub Debug build options.",
+            "inherits": "github",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "hidden": true,
             "name": "release",
             "displayName": "Release",
             "description": "Default Release build options.",
@@ -72,7 +92,6 @@
             "name": "gcc-clang-release",
             "displayName": "GCC-Clang Release",
             "description": "GCC-Clang release options.",
-            "inherits": "release",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "-O3 -DNDEBUG"
             }
@@ -81,21 +100,21 @@
             "name": "gh-ubuntu-release",
             "displayName": "GitHub Ubuntu Release",
             "description": "GitHub Ubuntu release options.",
-            "inherits": ["github", "gcc-clang-release"],
+            "inherits": ["gh-release", "gcc-clang-release"],
             "binaryDir": "${sourceDir}/build/release/gh-ubuntu"
         },
         {
             "name": "gcc-release",
             "displayName": "GCC Release",
             "description": "GCC release options.",
-            "inherits": ["gcc", "gcc-clang-release"],
+            "inherits": ["gcc", "release", "gcc-clang-release"],
             "binaryDir": "${sourceDir}/build/release/gcc"
         },
         {
             "name": "clang-release",
             "displayName": "Clang Release",
             "description": "Clang release options.",
-            "inherits" : ["clang", "gcc-clang-release"],
+            "inherits" : ["clang", "release", "gcc-clang-release"],
             "binaryDir": "${sourceDir}/build/release/clang"
         },
         {
@@ -103,7 +122,6 @@
             "name": "gcc-clang-debug",
             "displayName": "GCC-Clang Debug",
             "description": "GCC-Clang Debug options",
-            "inherits": "debug",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "-O0 -ggdb -Werror -Wshadow -Wextra -Wall -pedantic-errors"
             }
@@ -112,14 +130,14 @@
             "name": "gcc-debug",
             "displayName": "GCC Debug",
             "description": "GCC debug options.",
-            "inherits": ["gcc", "gcc-clang-debug"],
+            "inherits": ["gcc", "debug", "gcc-clang-debug"],
             "binaryDir": "${sourceDir}/build/debug/gcc"
         },
         {
             "name": "clang-debug",
             "displayName": "Clang Debug",
             "description": "Clang debug options.",
-            "inherits": ["clang", "gcc-clang-debug"],
+            "inherits": ["clang", "debug", "gcc-clang-debug"],
             "binaryDir": "${sourceDir}/build/debug/clang"
         },
         {
@@ -156,7 +174,7 @@
             "name": "gh-windows-release",
             "displayName": "GitHub Windows Release",
             "description": "GitHub Windows release options.",
-            "inherits": "release",
+            "inherits": "gh-release",
             "binaryDir": "${sourceDir}/build/release/gh-windows",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "/02 /DNDEBUG"
@@ -166,7 +184,7 @@
             "name": "gh-windows-debug",
             "displayName": "GitHub Windows Debug",
             "description": "GitHub Windows debug options.",
-            "inherits": "debug",
+            "inherits": "gh-debug",
             "binaryDir": "${sourceDir}/build/debug/gh-windows",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "/O0 /W4"
