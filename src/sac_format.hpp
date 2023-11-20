@@ -2,7 +2,7 @@
 #define SAC_FORMAT_HPP_20231115_0945
 #pragma once
 /* Standard library
-  https://en.cppreference.com/w/cpp/standard_library */
+   https://en.cppreference.com/w/cpp/standard_library */
 #include <algorithm>
 #include <array>
 // std::endian
@@ -50,18 +50,18 @@ constexpr int ascii_space{32};
 int word_position(const int word_number);
 // Floats to binary and back
 union float_to_bits {
-        float value;
-        word_one bits;
-        explicit float_to_bits(float x) : value(x){}
-        explicit float_to_bits(const word_one& binary) : bits(binary){}
-    };
+    float value;
+    word_one bits;
+    explicit float_to_bits(float x) : value(x){}
+    explicit float_to_bits(const word_one& binary) : bits(binary){}
+};
 // Doubles to binary and back
 union double_to_bits {
-        double value;
-        word_two bits;
-        explicit double_to_bits(double x) : value(x){}
-        explicit double_to_bits(const word_two& binary) : bits(binary){}
-    };
+    double value;
+    word_two bits;
+    explicit double_to_bits(double x) : value(x){}
+    explicit double_to_bits(const word_two& binary) : bits(binary){}
+};
 // SAC uses 32 bit ints
 word_one int_to_binary(const int x);
 int binary_to_int(word_one x);
@@ -131,9 +131,8 @@ std::array<char, N> convert_to_words(const std::string& s, const int n_words);
 // Convert a bool value to a word
 std::vector<char> bool_to_word(const bool b);
 bool equal_within_tolerance(const std::vector<double>& vector1,
-                                const std::vector<double>& vector2,
-                                const double tolerance =
-                                f_eps);
+                            const std::vector<double>& vector2,
+                            const double tolerance = f_eps);
 bool equal_within_tolerance(const double x1, const double x2,
                             const double tolerance = f_eps);
 enum class name {
