@@ -24,6 +24,6 @@ jobs:
           files-changed-only: false
           tidy-checks:  "bugprone-a*,bugprone-b*,bugprone-c*,bugprone-d*,bugprone-em*,bugprone-ex*,bugprone-f*,bugprone-i*,bugprone-l*,bugprone-m*,bugprone-n*,bugprone-o*,bugprone-p*,bugprone-r*,bugprone-s*,bugprone-t*,bugprone-u*,bugprone-v*,performance-*,readability-a*,readability-b*,readability-c*,readability-d*,readability-e*,readability-f*,readability-i*,readability-m*,readability-n*,readability-o*,readability-q*,readability-r*,readability-si*,readability-st*,readability-u*,portability-*,clang-analyzer-*,cppcoreguidelines-avoid-ca*,cpp-coreguidelines-avoid-co*,cpp-coreguidelines-avoid-d*,cpp-coreguidelines-avoid-g*,cpp-coreguidelines-avoid-n*,cpp-coreguidelines-avoid-r*,cpp-coreguidelines-i*,cpp-coreguidelines-m*,cpp-coreguidelines-n*,cpp-coreguidelines-o*,cpp-coreguidelines-pr*,cpp-coreguidelines-pro-bounds-p*,cpp-coreguidelines-pro-t*,cpp-coreguidelines-r*,cpp-coreguidelines-s*,cpp-coreguidelines-v*"
           database: "build/debug/gh-coverage/compile_commands.json"
-          ignore: "build/debug/gh-coverage/_deps | build/debug/gh-coverage/CMakeFiles | src/utests.cpp | src/benchmark.cpp | src/util.cpp | .github"
+          ignore: "build/debug/gh-coverage/_deps | build/debug/gh-coverage/CMakeFiles | src/utests.cpp | src/benchmark.cpp | src/util.hpp | .github"
           extra-args: "-std=c++20"
           thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
