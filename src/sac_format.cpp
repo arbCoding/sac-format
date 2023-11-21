@@ -119,7 +119,7 @@ std::string bits_string(const T &bits, const size_t num_words) {
 }
 
 word_two string_to_binary(std::string str) {
-  constexpr size_t string_size{2 * word_length};
+  constexpr size_t string_size{static_cast<const size_t>(2 * word_length)};
   // 1 byte per character
   prep_string(&str, string_size);
   // Two words (8 characters)
@@ -134,7 +134,7 @@ std::string binary_to_string(const word_two &str) {
 }
 
 word_four long_string_to_binary(std::string str) {
-  constexpr size_t string_size{4 * word_length};
+  constexpr size_t string_size{static_cast<const size_t>(4 * word_length)};
   prep_string(&str, string_size);
   // Four words (16 characters)
   word_four bits{};
@@ -166,7 +166,7 @@ word_two concat_words(const word_one &word1, const word_one &word2) {
 
 word_four concat_words(const word_two &word12, const word_two &word34) {
   word_four result{};
-  for (size_t i{0}; i < 2 * binary_word_size; ++i) {
+  for (int i{0}; i < 2 * binary_word_size; ++i) {
     result[i] = word12[i];
     result[i + (2 * binary_word_size)] = word34[i];
   }
@@ -233,8 +233,8 @@ std::vector<double> read_data(std::ifstream *sac, const size_t n_words,
 void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
   std::ofstream &sac = *sac_file;
   if (sac.is_open()) {
-    for (char c : input) {
-      sac.write(&c, sizeof(char));
+    for (char character : input) {
+      sac.write(&character, sizeof(char));
     }
   }
 }
@@ -254,7 +254,7 @@ template <typename T> std::vector<char> convert_to_word(const T input) {
   return word;
 }
 
-// Einputplicit instantiation
+// Explicit instantiation
 template std::vector<char> convert_to_word(const float input);
 template std::vector<char> convert_to_word(const int x);
 
@@ -263,9 +263,9 @@ std::vector<char> convert_to_word(const double input) {
   char tmp[2 * word_length];
   // Copy bytes from input into the tmp array
   // flawfinder: ignore
-  std::memcpy(tmp, &input, 2 * word_length);
+  std::memcpy(tmp, &input, static_cast<size_t>(2) * word_length);
   std::vector<char> word{};
-  word.resize(2 * word_length);
+  word.resize(static_cast<size_t>(2) * word_length);
   for (int i{0}; i < 2 * word_length; ++i) {
     word[static_cast<size_t>(i)] = tmp[i];
   }
@@ -275,7 +275,7 @@ std::vector<char> convert_to_word(const double input) {
 // Variable sized words for the 'K' headers
 template <size_t N>
 std::array<char, N> convert_to_words(const std::string &str, int n_words) {
-  std::array<char, N> all_words;
+  std::array<char, N> all_words{};
   // String to null-terminated character array
   const char *c_str = str.c_str();
   for (int i{0}; i < (n_words * word_length); ++i) {
@@ -295,7 +295,7 @@ convert_to_words(const std::string &str, const int n_words);
 std::vector<char> bool_to_word(const bool flag) {
   std::vector<char> result;
   result.resize(word_length);
-  result[0] = flag;
+  result[0] = static_cast<char>(flag ? 1 : 0);
   for (int i{1}; i < word_length; ++i) {
     result[i] = 0;
   }
@@ -321,10 +321,7 @@ bool equal_within_tolerance(const std::vector<double> &vector1,
 }
 bool equal_within_tolerance(const double val1, const double val2,
                             const double tolerance) {
-  if (std::abs(val1 - val2) > tolerance) {
-    return false;
-  }
-  return true;
+  return (std::abs(val1 - val2) < tolerance);
 }
 //------------------------------------------------------------------------------
 // Trace
@@ -487,150 +484,260 @@ std::vector<double> Trace::data2() const {
 }
 // Setters
 // Floats
-void Trace::depmin(const float x) { floats[sac_map.at(name::depmin)] = x; }
-void Trace::depmax(const float x) { floats[sac_map.at(name::depmax)] = x; }
-void Trace::odelta(const float x) { floats[sac_map.at(name::odelta)] = x; }
-void Trace::resp0(const float x) { floats[sac_map.at(name::resp0)] = x; }
-void Trace::resp1(const float x) { floats[sac_map.at(name::resp1)] = x; }
-void Trace::resp2(const float x) { floats[sac_map.at(name::resp2)] = x; }
-void Trace::resp3(const float x) { floats[sac_map.at(name::resp3)] = x; }
-void Trace::resp4(const float x) { floats[sac_map.at(name::resp4)] = x; }
-void Trace::resp5(const float x) { floats[sac_map.at(name::resp5)] = x; }
-void Trace::resp6(const float x) { floats[sac_map.at(name::resp6)] = x; }
-void Trace::resp7(const float x) { floats[sac_map.at(name::resp7)] = x; }
-void Trace::resp8(const float x) { floats[sac_map.at(name::resp8)] = x; }
-void Trace::resp9(const float x) { floats[sac_map.at(name::resp9)] = x; }
-void Trace::stel(const float x) { floats[sac_map.at(name::stel)] = x; }
-void Trace::stdp(const float x) { floats[sac_map.at(name::stdp)] = x; }
-void Trace::evel(const float x) { floats[sac_map.at(name::evel)] = x; }
-void Trace::evdp(const float x) { floats[sac_map.at(name::evdp)] = x; }
-void Trace::mag(const float x) { floats[sac_map.at(name::mag)] = x; }
-void Trace::user0(const float x) { floats[sac_map.at(name::user0)] = x; }
-void Trace::user1(const float x) { floats[sac_map.at(name::user1)] = x; }
-void Trace::user2(const float x) { floats[sac_map.at(name::user2)] = x; }
-void Trace::user3(const float x) { floats[sac_map.at(name::user3)] = x; }
-void Trace::user4(const float x) { floats[sac_map.at(name::user4)] = x; }
-void Trace::user5(const float x) { floats[sac_map.at(name::user5)] = x; }
-void Trace::user6(const float x) { floats[sac_map.at(name::user6)] = x; }
-void Trace::user7(const float x) { floats[sac_map.at(name::user7)] = x; }
-void Trace::user8(const float x) { floats[sac_map.at(name::user8)] = x; }
-void Trace::user9(const float x) { floats[sac_map.at(name::user9)] = x; }
-void Trace::dist(const float x) { floats[sac_map.at(name::dist)] = x; }
-void Trace::az(const float x) { floats[sac_map.at(name::az)] = x; }
-void Trace::baz(const float x) { floats[sac_map.at(name::baz)] = x; }
-void Trace::gcarc(const float x) { floats[sac_map.at(name::gcarc)] = x; }
-void Trace::depmen(const float x) { floats[sac_map.at(name::depmen)] = x; }
-void Trace::cmpaz(const float x) { floats[sac_map.at(name::cmpaz)] = x; }
-void Trace::cmpinc(const float x) { floats[sac_map.at(name::cmpinc)] = x; }
-void Trace::xminimum(const float x) { floats[sac_map.at(name::xminimum)] = x; }
-void Trace::xmaximum(const float x) { floats[sac_map.at(name::xmaximum)] = x; }
-void Trace::yminimum(const float x) { floats[sac_map.at(name::yminimum)] = x; }
-void Trace::ymaximum(const float x) { floats[sac_map.at(name::ymaximum)] = x; }
+void Trace::depmin(const float input) {
+  floats[sac_map.at(name::depmin)] = input;
+}
+void Trace::depmax(const float input) {
+  floats[sac_map.at(name::depmax)] = input;
+}
+void Trace::odelta(const float input) {
+  floats[sac_map.at(name::odelta)] = input;
+}
+void Trace::resp0(const float input) {
+  floats[sac_map.at(name::resp0)] = input;
+}
+void Trace::resp1(const float input) {
+  floats[sac_map.at(name::resp1)] = input;
+}
+void Trace::resp2(const float input) {
+  floats[sac_map.at(name::resp2)] = input;
+}
+void Trace::resp3(const float input) {
+  floats[sac_map.at(name::resp3)] = input;
+}
+void Trace::resp4(const float input) {
+  floats[sac_map.at(name::resp4)] = input;
+}
+void Trace::resp5(const float input) {
+  floats[sac_map.at(name::resp5)] = input;
+}
+void Trace::resp6(const float input) {
+  floats[sac_map.at(name::resp6)] = input;
+}
+void Trace::resp7(const float input) {
+  floats[sac_map.at(name::resp7)] = input;
+}
+void Trace::resp8(const float input) {
+  floats[sac_map.at(name::resp8)] = input;
+}
+void Trace::resp9(const float input) {
+  floats[sac_map.at(name::resp9)] = input;
+}
+void Trace::stel(const float input) { floats[sac_map.at(name::stel)] = input; }
+void Trace::stdp(const float input) { floats[sac_map.at(name::stdp)] = input; }
+void Trace::evel(const float input) { floats[sac_map.at(name::evel)] = input; }
+void Trace::evdp(const float input) { floats[sac_map.at(name::evdp)] = input; }
+void Trace::mag(const float input) { floats[sac_map.at(name::mag)] = input; }
+void Trace::user0(const float input) {
+  floats[sac_map.at(name::user0)] = input;
+}
+void Trace::user1(const float input) {
+  floats[sac_map.at(name::user1)] = input;
+}
+void Trace::user2(const float input) {
+  floats[sac_map.at(name::user2)] = input;
+}
+void Trace::user3(const float input) {
+  floats[sac_map.at(name::user3)] = input;
+}
+void Trace::user4(const float input) {
+  floats[sac_map.at(name::user4)] = input;
+}
+void Trace::user5(const float input) {
+  floats[sac_map.at(name::user5)] = input;
+}
+void Trace::user6(const float input) {
+  floats[sac_map.at(name::user6)] = input;
+}
+void Trace::user7(const float input) {
+  floats[sac_map.at(name::user7)] = input;
+}
+void Trace::user8(const float input) {
+  floats[sac_map.at(name::user8)] = input;
+}
+void Trace::user9(const float input) {
+  floats[sac_map.at(name::user9)] = input;
+}
+void Trace::dist(const float input) { floats[sac_map.at(name::dist)] = input; }
+void Trace::az(const float input) { floats[sac_map.at(name::az)] = input; }
+void Trace::baz(const float input) { floats[sac_map.at(name::baz)] = input; }
+void Trace::gcarc(const float input) {
+  floats[sac_map.at(name::gcarc)] = input;
+}
+void Trace::depmen(const float input) {
+  floats[sac_map.at(name::depmen)] = input;
+}
+void Trace::cmpaz(const float input) {
+  floats[sac_map.at(name::cmpaz)] = input;
+}
+void Trace::cmpinc(const float input) {
+  floats[sac_map.at(name::cmpinc)] = input;
+}
+void Trace::xminimum(const float input) {
+  floats[sac_map.at(name::xminimum)] = input;
+}
+void Trace::xmaximum(const float input) {
+  floats[sac_map.at(name::xmaximum)] = input;
+}
+void Trace::yminimum(const float input) {
+  floats[sac_map.at(name::yminimum)] = input;
+}
+void Trace::ymaximum(const float input) {
+  floats[sac_map.at(name::ymaximum)] = input;
+}
 // Doubles
-void Trace::delta(const double x) { doubles[sac_map.at(name::delta)] = x; }
-void Trace::b(const double x) { doubles[sac_map.at(name::b)] = x; }
-void Trace::e(const double x) { doubles[sac_map.at(name::e)] = x; }
-void Trace::o(const double x) { doubles[sac_map.at(name::o)] = x; }
-void Trace::a(const double x) { doubles[sac_map.at(name::a)] = x; }
-void Trace::t0(const double x) { doubles[sac_map.at(name::t0)] = x; }
-void Trace::t1(const double x) { doubles[sac_map.at(name::t1)] = x; }
-void Trace::t2(const double x) { doubles[sac_map.at(name::t2)] = x; }
-void Trace::t3(const double x) { doubles[sac_map.at(name::t3)] = x; }
-void Trace::t4(const double x) { doubles[sac_map.at(name::t4)] = x; }
-void Trace::t5(const double x) { doubles[sac_map.at(name::t5)] = x; }
-void Trace::t6(const double x) { doubles[sac_map.at(name::t6)] = x; }
-void Trace::t7(const double x) { doubles[sac_map.at(name::t7)] = x; }
-void Trace::t8(const double x) { doubles[sac_map.at(name::t8)] = x; }
-void Trace::t9(const double x) { doubles[sac_map.at(name::t9)] = x; }
-void Trace::f(const double x) { doubles[sac_map.at(name::f)] = x; }
-void Trace::stla(const double x) { doubles[sac_map.at(name::stla)] = x; }
-void Trace::stlo(const double x) { doubles[sac_map.at(name::stlo)] = x; }
-void Trace::evla(const double x) { doubles[sac_map.at(name::evla)] = x; }
-void Trace::evlo(const double x) { doubles[sac_map.at(name::evlo)] = x; }
-void Trace::sb(const double x) { doubles[sac_map.at(name::sb)] = x; }
-void Trace::sdelta(const double x) { doubles[sac_map.at(name::sdelta)] = x; }
+void Trace::delta(const double input) {
+  doubles[sac_map.at(name::delta)] = input;
+}
+void Trace::b(const double input) { doubles[sac_map.at(name::b)] = input; }
+void Trace::e(const double input) { doubles[sac_map.at(name::e)] = input; }
+void Trace::o(const double input) { doubles[sac_map.at(name::o)] = input; }
+void Trace::a(const double input) { doubles[sac_map.at(name::a)] = input; }
+void Trace::t0(const double input) { doubles[sac_map.at(name::t0)] = input; }
+void Trace::t1(const double input) { doubles[sac_map.at(name::t1)] = input; }
+void Trace::t2(const double input) { doubles[sac_map.at(name::t2)] = input; }
+void Trace::t3(const double input) { doubles[sac_map.at(name::t3)] = input; }
+void Trace::t4(const double input) { doubles[sac_map.at(name::t4)] = input; }
+void Trace::t5(const double input) { doubles[sac_map.at(name::t5)] = input; }
+void Trace::t6(const double input) { doubles[sac_map.at(name::t6)] = input; }
+void Trace::t7(const double input) { doubles[sac_map.at(name::t7)] = input; }
+void Trace::t8(const double input) { doubles[sac_map.at(name::t8)] = input; }
+void Trace::t9(const double input) { doubles[sac_map.at(name::t9)] = input; }
+void Trace::f(const double input) { doubles[sac_map.at(name::f)] = input; }
+void Trace::stla(const double input) {
+  doubles[sac_map.at(name::stla)] = input;
+}
+void Trace::stlo(const double input) {
+  doubles[sac_map.at(name::stlo)] = input;
+}
+void Trace::evla(const double input) {
+  doubles[sac_map.at(name::evla)] = input;
+}
+void Trace::evlo(const double input) {
+  doubles[sac_map.at(name::evlo)] = input;
+}
+void Trace::sb(const double input) { doubles[sac_map.at(name::sb)] = input; }
+void Trace::sdelta(const double input) {
+  doubles[sac_map.at(name::sdelta)] = input;
+}
 // Ints
-void Trace::nzyear(const int x) { ints[sac_map.at(name::nzyear)] = x; }
-void Trace::nzjday(const int x) { ints[sac_map.at(name::nzjday)] = x; }
-void Trace::nzhour(const int x) { ints[sac_map.at(name::nzhour)] = x; }
-void Trace::nzmin(const int x) { ints[sac_map.at(name::nzmin)] = x; }
-void Trace::nzsec(const int x) { ints[sac_map.at(name::nzsec)] = x; }
-void Trace::nzmsec(const int x) { ints[sac_map.at(name::nzmsec)] = x; }
-void Trace::nvhdr(const int x) { ints[sac_map.at(name::nvhdr)] = x; }
-void Trace::norid(const int x) { ints[sac_map.at(name::norid)] = x; }
-void Trace::nevid(const int x) { ints[sac_map.at(name::nevid)] = x; }
-void Trace::npts(const int x) { ints[sac_map.at(name::npts)] = x; }
-void Trace::nsnpts(const int x) { ints[sac_map.at(name::nsnpts)] = x; }
-void Trace::nwfid(const int x) { ints[sac_map.at(name::nwfid)] = x; }
-void Trace::nxsize(const int x) { ints[sac_map.at(name::nxsize)] = x; }
-void Trace::nysize(const int x) { ints[sac_map.at(name::nysize)] = x; }
-void Trace::iftype(const int x) { ints[sac_map.at(name::iftype)] = x; }
-void Trace::idep(const int x) { ints[sac_map.at(name::idep)] = x; }
-void Trace::iztype(const int x) { ints[sac_map.at(name::iztype)] = x; }
-void Trace::iinst(const int x) { ints[sac_map.at(name::iinst)] = x; }
-void Trace::istreg(const int x) { ints[sac_map.at(name::istreg)] = x; }
-void Trace::ievreg(const int x) { ints[sac_map.at(name::ievreg)] = x; }
-void Trace::ievtyp(const int x) { ints[sac_map.at(name::ievtyp)] = x; }
-void Trace::iqual(const int x) { ints[sac_map.at(name::iqual)] = x; }
-void Trace::isynth(const int x) { ints[sac_map.at(name::isynth)] = x; }
-void Trace::imagtyp(const int x) { ints[sac_map.at(name::imagtyp)] = x; }
-void Trace::imagsrc(const int x) { ints[sac_map.at(name::imagsrc)] = x; }
-void Trace::ibody(const int x) { ints[sac_map.at(name::ibody)] = x; }
+void Trace::nzyear(const int input) { ints[sac_map.at(name::nzyear)] = input; }
+void Trace::nzjday(const int input) { ints[sac_map.at(name::nzjday)] = input; }
+void Trace::nzhour(const int input) { ints[sac_map.at(name::nzhour)] = input; }
+void Trace::nzmin(const int input) { ints[sac_map.at(name::nzmin)] = input; }
+void Trace::nzsec(const int input) { ints[sac_map.at(name::nzsec)] = input; }
+void Trace::nzmsec(const int input) { ints[sac_map.at(name::nzmsec)] = input; }
+void Trace::nvhdr(const int input) { ints[sac_map.at(name::nvhdr)] = input; }
+void Trace::norid(const int input) { ints[sac_map.at(name::norid)] = input; }
+void Trace::nevid(const int input) { ints[sac_map.at(name::nevid)] = input; }
+void Trace::npts(const int input) { ints[sac_map.at(name::npts)] = input; }
+void Trace::nsnpts(const int input) { ints[sac_map.at(name::nsnpts)] = input; }
+void Trace::nwfid(const int input) { ints[sac_map.at(name::nwfid)] = input; }
+void Trace::nxsize(const int input) { ints[sac_map.at(name::nxsize)] = input; }
+void Trace::nysize(const int input) { ints[sac_map.at(name::nysize)] = input; }
+void Trace::iftype(const int input) { ints[sac_map.at(name::iftype)] = input; }
+void Trace::idep(const int input) { ints[sac_map.at(name::idep)] = input; }
+void Trace::iztype(const int input) { ints[sac_map.at(name::iztype)] = input; }
+void Trace::iinst(const int input) { ints[sac_map.at(name::iinst)] = input; }
+void Trace::istreg(const int input) { ints[sac_map.at(name::istreg)] = input; }
+void Trace::ievreg(const int input) { ints[sac_map.at(name::ievreg)] = input; }
+void Trace::ievtyp(const int input) { ints[sac_map.at(name::ievtyp)] = input; }
+void Trace::iqual(const int input) { ints[sac_map.at(name::iqual)] = input; }
+void Trace::isynth(const int input) { ints[sac_map.at(name::isynth)] = input; }
+void Trace::imagtyp(const int input) {
+  ints[sac_map.at(name::imagtyp)] = input;
+}
+void Trace::imagsrc(const int input) {
+  ints[sac_map.at(name::imagsrc)] = input;
+}
+void Trace::ibody(const int input) { ints[sac_map.at(name::ibody)] = input; }
 // Bools
-void Trace::leven(const bool x) { bools[sac_map.at(name::leven)] = x; }
-void Trace::lpspol(const bool x) { bools[sac_map.at(name::lpspol)] = x; }
-void Trace::lovrok(const bool x) { bools[sac_map.at(name::lovrok)] = x; }
-void Trace::lcalda(const bool x) { bools[sac_map.at(name::lcalda)] = x; }
+void Trace::leven(const bool input) { bools[sac_map.at(name::leven)] = input; }
+void Trace::lpspol(const bool input) {
+  bools[sac_map.at(name::lpspol)] = input;
+}
+void Trace::lovrok(const bool input) {
+  bools[sac_map.at(name::lovrok)] = input;
+}
+void Trace::lcalda(const bool input) {
+  bools[sac_map.at(name::lcalda)] = input;
+}
 // Strings
-void Trace::kstnm(const std::string &x) {
-  strings[sac_map.at(name::kstnm)] = x;
+void Trace::kstnm(const std::string &input) {
+  strings[sac_map.at(name::kstnm)] = input;
 }
-void Trace::kevnm(const std::string &x) {
-  strings[sac_map.at(name::kevnm)] = x;
+void Trace::kevnm(const std::string &input) {
+  strings[sac_map.at(name::kevnm)] = input;
 }
-void Trace::khole(const std::string &x) {
-  strings[sac_map.at(name::khole)] = x;
+void Trace::khole(const std::string &input) {
+  strings[sac_map.at(name::khole)] = input;
 }
-void Trace::ko(const std::string &x) { strings[sac_map.at(name::ko)] = x; }
-void Trace::ka(const std::string &x) { strings[sac_map.at(name::ka)] = x; }
-void Trace::kt0(const std::string &x) { strings[sac_map.at(name::kt0)] = x; }
-void Trace::kt1(const std::string &x) { strings[sac_map.at(name::kt1)] = x; }
-void Trace::kt2(const std::string &x) { strings[sac_map.at(name::kt2)] = x; }
-void Trace::kt3(const std::string &x) { strings[sac_map.at(name::kt3)] = x; }
-void Trace::kt4(const std::string &x) { strings[sac_map.at(name::kt4)] = x; }
-void Trace::kt5(const std::string &x) { strings[sac_map.at(name::kt5)] = x; }
-void Trace::kt6(const std::string &x) { strings[sac_map.at(name::kt6)] = x; }
-void Trace::kt7(const std::string &x) { strings[sac_map.at(name::kt7)] = x; }
-void Trace::kt8(const std::string &x) { strings[sac_map.at(name::kt8)] = x; }
-void Trace::kt9(const std::string &x) { strings[sac_map.at(name::kt9)] = x; }
-void Trace::kf(const std::string &x) { strings[sac_map.at(name::kf)] = x; }
-void Trace::kuser0(const std::string &x) {
-  strings[sac_map.at(name::kuser0)] = x;
+void Trace::ko(const std::string &input) {
+  strings[sac_map.at(name::ko)] = input;
 }
-void Trace::kuser1(const std::string &x) {
-  strings[sac_map.at(name::kuser1)] = x;
+void Trace::ka(const std::string &input) {
+  strings[sac_map.at(name::ka)] = input;
 }
-void Trace::kuser2(const std::string &x) {
-  strings[sac_map.at(name::kuser2)] = x;
+void Trace::kt0(const std::string &input) {
+  strings[sac_map.at(name::kt0)] = input;
 }
-void Trace::kcmpnm(const std::string &x) {
-  strings[sac_map.at(name::kcmpnm)] = x;
+void Trace::kt1(const std::string &input) {
+  strings[sac_map.at(name::kt1)] = input;
 }
-void Trace::knetwk(const std::string &x) {
-  strings[sac_map.at(name::knetwk)] = x;
+void Trace::kt2(const std::string &input) {
+  strings[sac_map.at(name::kt2)] = input;
 }
-void Trace::kdatrd(const std::string &x) {
-  strings[sac_map.at(name::kdatrd)] = x;
+void Trace::kt3(const std::string &input) {
+  strings[sac_map.at(name::kt3)] = input;
 }
-void Trace::kinst(const std::string &x) {
-  strings[sac_map.at(name::kinst)] = x;
+void Trace::kt4(const std::string &input) {
+  strings[sac_map.at(name::kt4)] = input;
+}
+void Trace::kt5(const std::string &input) {
+  strings[sac_map.at(name::kt5)] = input;
+}
+void Trace::kt6(const std::string &input) {
+  strings[sac_map.at(name::kt6)] = input;
+}
+void Trace::kt7(const std::string &input) {
+  strings[sac_map.at(name::kt7)] = input;
+}
+void Trace::kt8(const std::string &input) {
+  strings[sac_map.at(name::kt8)] = input;
+}
+void Trace::kt9(const std::string &input) {
+  strings[sac_map.at(name::kt9)] = input;
+}
+void Trace::kf(const std::string &input) {
+  strings[sac_map.at(name::kf)] = input;
+}
+void Trace::kuser0(const std::string &input) {
+  strings[sac_map.at(name::kuser0)] = input;
+}
+void Trace::kuser1(const std::string &input) {
+  strings[sac_map.at(name::kuser1)] = input;
+}
+void Trace::kuser2(const std::string &input) {
+  strings[sac_map.at(name::kuser2)] = input;
+}
+void Trace::kcmpnm(const std::string &input) {
+  strings[sac_map.at(name::kcmpnm)] = input;
+}
+void Trace::knetwk(const std::string &input) {
+  strings[sac_map.at(name::knetwk)] = input;
+}
+void Trace::kdatrd(const std::string &input) {
+  strings[sac_map.at(name::kdatrd)] = input;
+}
+void Trace::kinst(const std::string &input) {
+  strings[sac_map.at(name::kinst)] = input;
 }
 // Data
-void Trace::data1(const std::vector<double> &x) {
-  data[sac_map.at(name::data1)] = x;
+void Trace::data1(const std::vector<double> &input) {
+  data[sac_map.at(name::data1)] = input;
 }
-void Trace::data2(const std::vector<double> &x) {
-  data[sac_map.at(name::data2)] = x;
+void Trace::data2(const std::vector<double> &input) {
+  data[sac_map.at(name::data2)] = input;
 }
 //------------------------------------------------------------------------------
 // Read
@@ -715,8 +822,8 @@ Trace::Trace(const std::filesystem::path &path) {
   xmaximum(binary_to_float(read_word(&file)));
   yminimum(binary_to_float(read_word(&file)));
   ymaximum(binary_to_float(read_word(&file)));
-  // Skip 'unused' (x7)
-  for (int i{0}; i < 7; ++i) {
+  // Skip 'unused' (xcommon_skip_num)
+  for (int i{0}; i < common_skip_num; ++i) {
     read_word(&file);
   }
   // Date/time headers
@@ -751,8 +858,8 @@ Trace::Trace(const std::filesystem::path &path) {
   imagtyp(binary_to_int(read_word(&file)));
   imagsrc(binary_to_int(read_word(&file)));
   ibody(binary_to_int(read_word(&file)));
-  // Skip 'unused' (x7)
-  for (int i{0}; i < 7; ++i) {
+  // Skip 'unused' (xcommon_skip_num)
+  for (int i{0}; i < common_skip_num; ++i) {
     read_word(&file);
   }
   // Logical headers
@@ -794,13 +901,13 @@ Trace::Trace(const std::filesystem::path &path) {
     // Originally floats, read as doubles
     data1(read_data(&file, static_cast<size_t>(npts()), data_word));
     // Uneven or spectral data
-    if ((leven() == false) || (iftype() > 1)) {
+    if (!leven() || (iftype() > 1)) {
       data2(read_data(&file, static_cast<size_t>(npts()), data_word + npts()));
     }
   }
   //--------------------------------------------------------------------------
   // Footer
-  if (nvhdr() == 7) {
+  if (nvhdr() == modern_hdr_version) {
     delta(binary_to_double(read_two_words(&file)));
     b(binary_to_double(read_two_words(&file)));
     e(binary_to_double(read_two_words(&file)));
@@ -834,7 +941,7 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
     std::cerr << path.string() << "cannot be written.\n";
     return;
   }
-  const int header_version{legacy ? 6 : 7};
+  const int header_version{legacy ? old_hdr_version : modern_hdr_version};
   write_words(&file, convert_to_word(static_cast<float>(delta())));
   write_words(&file, convert_to_word(depmin()));
   write_words(&file, convert_to_word(depmax()));
@@ -900,8 +1007,8 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   write_words(&file, convert_to_word(xmaximum()));
   write_words(&file, convert_to_word(yminimum()));
   write_words(&file, convert_to_word(ymaximum()));
-  // Fill 'unused' (x7)
-  for (int i{0}; i < 7; ++i) {
+  // Fill 'unused' (xcommon_skip_num)
+  for (int i{0}; i < common_skip_num; ++i) {
     write_words(&file, convert_to_word(az()));
   }
   write_words(&file, convert_to_word(nzyear()));
@@ -934,8 +1041,8 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   write_words(&file, convert_to_word(imagtyp()));
   write_words(&file, convert_to_word(imagsrc()));
   write_words(&file, convert_to_word(ibody()));
-  // Fill 'unused' (x7)
-  for (int i{0}; i < 7; ++i) {
+  // Fill 'unused' (xcommon_skip_num)
+  for (int i{0}; i < common_skip_num; ++i) {
     write_words(&file, convert_to_word(ibody()));
   }
   write_words(&file, bool_to_word(leven()));
@@ -945,11 +1052,11 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   // Fill 'unused'
   write_words(&file, bool_to_word(lcalda()));
   // Strings are special
-  std::array<char, 2 * word_length> two_words{
+  std::array<char, static_cast<size_t>(2) * word_length> two_words{
       convert_to_words<sizeof(two_words)>(kstnm(), 2)};
   write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-  std::array<char, 4 * word_length> four_words{
+  std::array<char, static_cast<size_t>(4) * word_length> four_words{
       convert_to_words<sizeof(four_words)>(kevnm(), 4)};
   write_words(&file, std::vector<char>(four_words.begin(), four_words.end()));
 
@@ -1016,15 +1123,15 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   two_words = convert_to_words<sizeof(two_words)>(kinst(), 2);
   write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
   // Data
-  for (double x : data1()) {
-    write_words(&file, convert_to_word(static_cast<float>(x)));
+  for (double dub : data1()) {
+    write_words(&file, convert_to_word(static_cast<float>(dub)));
   }
-  if ((leven() == false) || (iftype() > 1)) {
-    for (double x : data2()) {
-      write_words(&file, convert_to_word(static_cast<float>(x)));
+  if (!leven() || (iftype() > 1)) {
+    for (double dub : data2()) {
+      write_words(&file, convert_to_word(static_cast<float>(dub)));
     }
   }
-  if (header_version == 7) {
+  if (header_version == modern_hdr_version) {
     // Write footer
     write_words(&file, convert_to_word(delta()));
     write_words(&file, convert_to_word(b()));

@@ -22,9 +22,9 @@
 namespace sacfmt {
 
 // Testing Constants
-template <typename T> std::string eps_string(const T f) {
+template <typename T> std::string eps_string(const T value) {
   std::ostringstream oss{};
-  oss << std::setprecision(std::numeric_limits<T>::max_digits10) << f;
+  oss << std::setprecision(std::numeric_limits<T>::max_digits10) << value;
   return oss.str();
 }
 // Floats
@@ -49,16 +49,16 @@ const std::string s_epsilon{eps_string(epsilon)};
 // Self-seed the random number generator
 XoshiroCpp::Xoshiro256Plus init() {
   // Random device for seeding
-  std::random_device rd{};
+  std::random_device rand_dev{};
   // Two random runtime constants
-  const uint64_t t1{static_cast<uint64_t>(
+  const uint64_t time1{static_cast<uint64_t>(
       std::chrono::steady_clock::now().time_since_epoch().count())};
-  const uint64_t t2{static_cast<uint64_t>(
+  const uint64_t time2{static_cast<uint64_t>(
       std::chrono::steady_clock::now().time_since_epoch().count())};
   // Seed the initial state
   const XoshiroCpp::Xoshiro256Plus::state_type initial_state = {
-      XoshiroCpp::SplitMix64{t1}(), XoshiroCpp::SplitMix64{rd()}(),
-      XoshiroCpp::SplitMix64{t2}(), XoshiroCpp::SplitMix64{rd()}()};
+      XoshiroCpp::SplitMix64{time1}(), XoshiroCpp::SplitMix64{rand_dev()}(),
+      XoshiroCpp::SplitMix64{time2}(), XoshiroCpp::SplitMix64{rand_dev()}()};
   return XoshiroCpp::Xoshiro256Plus{initial_state};
 }
 
@@ -82,9 +82,9 @@ void random_vector(std::vector<double> *data, const double minimum = -1.0,
 Trace gen_fake_trace() {
   Trace sac{};
   sac.delta(0.025);
-  sac.depmin(-1.11f);
-  sac.depmax(1.23f);
-  sac.odelta(0.026f);
+  sac.depmin(-1.11F);
+  sac.depmax(1.23F);
+  sac.odelta(0.026F);
   sac.b(0.1);
   sac.e(0.0);
   sac.a(5.78);
@@ -100,48 +100,48 @@ Trace gen_fake_trace() {
   sac.t8(5.678);
   sac.t9(-5.678);
   sac.f(12345.0);
-  sac.resp0(0.1f);
-  sac.resp1(-0.1f);
-  sac.resp2(1.0f);
-  sac.resp3(-1.0f);
-  sac.resp4(10.0f);
-  sac.resp5(-10.0f);
-  sac.resp6(100.0f);
-  sac.resp7(-100.0f);
-  sac.resp8(1000.0f);
-  sac.resp9(-1000.0f);
+  sac.resp0(0.1F);
+  sac.resp1(-0.1F);
+  sac.resp2(1.0F);
+  sac.resp3(-1.0F);
+  sac.resp4(10.0F);
+  sac.resp5(-10.0F);
+  sac.resp6(100.0F);
+  sac.resp7(-100.0F);
+  sac.resp8(1000.0F);
+  sac.resp9(-1000.0F);
   sac.stla(32.21);
   sac.stlo(121.38);
-  sac.stel(100.0f);
-  sac.stdp(50.0f);
+  sac.stel(100.0F);
+  sac.stdp(50.0F);
   sac.evla(-81.35);
   sac.evlo(85.37);
-  sac.evel(0.5f);
-  sac.evdp(30.25f);
-  sac.mag(1.83f);
-  sac.user0(9.0f);
-  sac.user1(-9.0f);
-  sac.user2(8.0f);
-  sac.user3(-8.0f);
-  sac.user4(7.0f);
-  sac.user5(-7.0f);
-  sac.user6(6.0f);
-  sac.user7(-6.0f);
-  sac.user8(5.0f);
-  sac.user9(-5.0f);
-  sac.dist(1300.0f);
-  sac.az(35.0f);
-  sac.baz(-275.0f);
-  sac.gcarc(13.135f);
+  sac.evel(0.5F);
+  sac.evdp(30.25F);
+  sac.mag(1.83F);
+  sac.user0(9.0F);
+  sac.user1(-9.0F);
+  sac.user2(8.0F);
+  sac.user3(-8.0F);
+  sac.user4(7.0F);
+  sac.user5(-7.0F);
+  sac.user6(6.0F);
+  sac.user7(-6.0F);
+  sac.user8(5.0F);
+  sac.user9(-5.0F);
+  sac.dist(1300.0F);
+  sac.az(35.0F);
+  sac.baz(-275.0F);
+  sac.gcarc(13.135F);
   sac.sb(-35.0);
   sac.sdelta(0.125);
-  sac.depmen(0.1f);
-  sac.cmpaz(97.3f);
-  sac.cmpinc(273.0f);
-  sac.xminimum(-5.0f);
-  sac.xmaximum(5.0f);
-  sac.yminimum(-10.0f);
-  sac.ymaximum(10.0f);
+  sac.depmen(0.1F);
+  sac.cmpaz(97.3F);
+  sac.cmpinc(273.0F);
+  sac.xminimum(-5.0F);
+  sac.xmaximum(5.0F);
+  sac.yminimum(-10.0F);
+  sac.ymaximum(10.0F);
   sac.nzyear(2023);
   sac.nzjday(123);
   sac.nzhour(13);
@@ -199,7 +199,7 @@ Trace gen_fake_trace() {
     std::vector<double> data{};
     data.resize(sac.npts(), 0.0);
     sac.data1(data);
-    if (sac.leven() == false || sac.iftype() > 1) {
+    if (!sac.leven() || sac.iftype() > 1) {
       data.resize(sac.npts(), 0.0);
       sac.data2(data);
     }
