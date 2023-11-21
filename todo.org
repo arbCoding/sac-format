@@ -65,16 +65,8 @@ Setup this up locally on HP Elitebook to troubleshoot. Once working, test on git
 **** DONE Code Analysis :code:
 **** TODO ReviewDog :misc:
 ***** TODO Vale (spelling and grammar) :spelling:gammar:
-**** TODO Style :style:
-***** TODO Setup Uncrustify beautifier (need to tweak rules)
+**** DONE Style :style:
 ***** DONE CPPLint workflow
-***** TODO Infer static analysis
-#+begin_src bash :eval no
-cmake --preset clang-release
-# Make sure to skip everything in the '_deps' folder!
-cp .inferconfig ./build/release/clang/.inferconfig && cd./build/release/clang
-infer run --compilation-database compile_commands.json
-#+end_src
 *** TODO Package for download
 I think ReviewDog has a yml that could work as an example for this action
 ** DONE Documentation :documentation:

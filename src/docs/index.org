@@ -11,6 +11,10 @@
 <img alt="Ubuntu 22.04 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml/badge.svg" />
 </a>
 
+<a href="https://github.com/arbCoding/sac-format/actions/workflows/cmake-macos.yml">
+<img alt="macOS 12 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-macos.yml/badge.svg" />
+</a>
+
 <a href="https://codecov.io/gh/arbCoding/sac-format/" >
 <img alt="Code Coverage" src="https://codecov.io/gh/arbCoding/sac-format/graph/badge.svg" />
 </a>
@@ -72,7 +76,7 @@ running.
 *** Small
 
 sac-format is *small*---in total (header + implementation--excluding comments)
-it's fewer than 1500 lines of code. Small size opens the door to using on any
+it's fewer than 2000 lines of code. Small size opens the door to using on any
 sort of hardware (old or new) and makes it easy to expand upon.
 
 *** Documented
