@@ -12,7 +12,7 @@
 </a>
 
 <a href="https://github.com/arbCoding/sac-format/actions/workflows/cmake-macos.yml">
-<img alt="macOS 12 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-macos.yml/badge.svg" />
+<img alt="macOS 13 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-macos.yml/badge.svg" />
 </a>
 
 <a href="https://codecov.io/gh/arbCoding/sac-format/" >
