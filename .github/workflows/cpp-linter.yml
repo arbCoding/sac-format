@@ -22,6 +22,6 @@ jobs:
           style: file
           version: 15
           files-changed-only: false
-          ignore: "build/debug/gh-coverage/_deps | .github"
+          ignore: "build/debug/gh-coverage/_deps | build/debug/gh-coverage/CMakeFiles | .github"
           extra-args: "-std=c++20 -p ./build/debug/gh-coverage/compile_commands.json"
           thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
