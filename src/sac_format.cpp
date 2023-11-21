@@ -10,214 +10,232 @@ namespace sacfmt {
 int word_position(const int word_number) { return (word_number * word_length); }
 
 word_one int_to_binary(const int x) {
-    word_one bits{};
-    if (x >= 0) { bits = word_one(static_cast<size_t>(x)); }
-    else { bits = word_one(static_cast<size_t>(std::pow(2,
-        binary_word_size) + x)); }
-    return bits;
+  word_one bits{};
+  if (x >= 0) {
+    bits = word_one(static_cast<size_t>(x));
+  } else {
+    bits = word_one(static_cast<size_t>(std::pow(2, binary_word_size) + x));
+  }
+  return bits;
 }
 
 int binary_to_int(word_one x) {
-    int result{};
-    if (x.test(binary_word_size - 1)) {
-      x = ~x;
-      result = static_cast<int>(x.to_ulong());
-      result += 1;
-      // Change sign to make it as negative
-      result *= -1;
-    } else { result = static_cast<int>(x.to_ulong()); }
-    return result;
+  int result{};
+  if (x.test(binary_word_size - 1)) {
+    x = ~x;
+    result = static_cast<int>(x.to_ulong());
+    result += 1;
+    // Change sign to make it as negative
+    result *= -1;
+  } else {
+    result = static_cast<int>(x.to_ulong());
+  }
+  return result;
 }
 
 // Union makes this so easy
 word_one float_to_binary(const float x) { return float_to_bits(x).bits; }
 
-float binary_to_float(const word_one& x) { return float_to_bits(x).value; }
+float binary_to_float(const word_one &x) { return float_to_bits(x).value; }
 
 // Once again, union to the rescue!
 word_two double_to_binary(const double x) { return double_to_bits(x).bits; }
 
-double binary_to_double(const word_two& x) { return double_to_bits(x).value; }
+double binary_to_double(const word_two &x) { return double_to_bits(x).value; }
 
-void remove_leading_spaces(std::string* str) {
-    while ((static_cast<int>(str->front()) <= ascii_space) && (!str->empty())) {
-        str->erase(0, 1);
-    }
+void remove_leading_spaces(std::string *str) {
+  while ((static_cast<int>(str->front()) <= ascii_space) && (!str->empty())) {
+    str->erase(0, 1);
+  }
 }
-void remove_trailing_spaces(std::string* str) {
-    while ((static_cast<int>(str->back()) <= ascii_space) && (!str->empty())) {
-        str->pop_back();
-    }
+void remove_trailing_spaces(std::string *str) {
+  while ((static_cast<int>(str->back()) <= ascii_space) && (!str->empty())) {
+    str->pop_back();
+  }
 }
 
 // Remove leading/trailing white-space and control characters
-std::string string_cleaning(const std::string& str) {
-    std::string result{str};
-    size_t null_position{str.find('\0')};
-    if (null_position != std::string::npos) { result.erase(null_position); }
-    remove_leading_spaces(&result);
-    remove_trailing_spaces(&result);
-    return result;
+std::string string_cleaning(const std::string &str) {
+  std::string result{str};
+  size_t null_position{str.find('\0')};
+  if (null_position != std::string::npos) {
+    result.erase(null_position);
+  }
+  remove_leading_spaces(&result);
+  remove_trailing_spaces(&result);
+  return result;
 }
 
-void prep_string(std::string* str, const size_t str_size) {
-    *str = string_cleaning(*str);
-    if (str->length() > str_size) { str->resize(str_size); }
-    else if (str->length() < str_size) {
-        *str = str->append(str_size - str->length(), ' ');
-    }
-}
-
-template <typename T>
-void string_bits(T* bits, const std::string& str, const size_t str_size) {
-    constexpr size_t char_size{bits_per_byte};
-    std::bitset<char_size> byte{};
-    for (size_t i{0}; i < str_size; ++i) {
-        size_t character{static_cast<size_t>(str[i])};
-        byte = std::bitset<char_size>(character);
-        for (size_t j{0}; j < char_size; ++j) {
-            (*bits)[(i * char_size) + j] = byte[j];
-        }
-    }
+void prep_string(std::string *str, const size_t str_size) {
+  *str = string_cleaning(*str);
+  if (str->length() > str_size) {
+    str->resize(str_size);
+  } else if (str->length() < str_size) {
+    *str = str->append(str_size - str->length(), ' ');
+  }
 }
 
 template <typename T>
-std::string bits_string(const T& bits, const size_t num_words) {
-    std::string result{};
-    constexpr size_t char_size{bits_per_byte};
-    std::bitset<char_size> byte{};
-    for (size_t i{0}; i < num_words * binary_word_size; i += char_size) {
-        for (size_t j{0}; j < char_size; ++j) { byte[j] = bits[i + j]; }
-        result += static_cast<char>(byte.to_ulong());
+void string_bits(T *bits, const std::string &str, const size_t str_size) {
+  constexpr size_t char_size{bits_per_byte};
+  std::bitset<char_size> byte{};
+  for (size_t i{0}; i < str_size; ++i) {
+    size_t character{static_cast<size_t>(str[i])};
+    byte = std::bitset<char_size>(character);
+    for (size_t j{0}; j < char_size; ++j) {
+      (*bits)[(i * char_size) + j] = byte[j];
     }
-    return result;
+  }
+}
+
+template <typename T>
+std::string bits_string(const T &bits, const size_t num_words) {
+  std::string result{};
+  constexpr size_t char_size{bits_per_byte};
+  std::bitset<char_size> byte{};
+  for (size_t i{0}; i < num_words * binary_word_size; i += char_size) {
+    for (size_t j{0}; j < char_size; ++j) {
+      byte[j] = bits[i + j];
+    }
+    result += static_cast<char>(byte.to_ulong());
+  }
+  return result;
 }
 
 word_two string_to_binary(std::string x) {
-    constexpr size_t string_size{2 * word_length};
-    // 1 byte per character
-    prep_string(&x, string_size);
-    // Two words (8 characters)
-    word_two bits{};
-    string_bits(&bits, x, string_size);
-    return bits;
+  constexpr size_t string_size{2 * word_length};
+  // 1 byte per character
+  prep_string(&x, string_size);
+  // Two words (8 characters)
+  word_two bits{};
+  string_bits(&bits, x, string_size);
+  return bits;
 }
 
-std::string binary_to_string(const word_two& x) {
-    std::string result{bits_string(x, 2)};
-    return string_cleaning(result);
+std::string binary_to_string(const word_two &x) {
+  std::string result{bits_string(x, 2)};
+  return string_cleaning(result);
 }
 
 word_four long_string_to_binary(std::string x) {
-    constexpr size_t string_size{4 * word_length};
-    prep_string(&x, string_size);
-    // Four words (16 characters)
-    word_four bits{};
-    string_bits(&bits, x, string_size);
-    return bits;
+  constexpr size_t string_size{4 * word_length};
+  prep_string(&x, string_size);
+  // Four words (16 characters)
+  word_four bits{};
+  string_bits(&bits, x, string_size);
+  return bits;
 }
 
-std::string binary_to_long_string(const word_four& x) {
-    std::string result{bits_string(x, 4)};
-    return string_cleaning(result);
+std::string binary_to_long_string(const word_four &x) {
+  std::string result{bits_string(x, 4)};
+  return string_cleaning(result);
 }
 
 word_one bool_to_binary(const bool x) {
-    word_one result{};
-    result[0] = x;
-    return result;
+  word_one result{};
+  result[0] = x;
+  return result;
 }
 
-bool binary_to_bool(const word_one& x) { return x[0]; }
+bool binary_to_bool(const word_one &x) { return x[0]; }
 
-word_two concat_words(const word_one& x, const word_one& y) {
-    word_two result{};
-    for (size_t i{0}; i < binary_word_size; ++i) {
-        result[i] = x[i]; result[i + binary_word_size] = y[i];
-    }
-    return result;
+word_two concat_words(const word_one &x, const word_one &y) {
+  word_two result{};
+  for (size_t i{0}; i < binary_word_size; ++i) {
+    result[i] = x[i];
+    result[i + binary_word_size] = y[i];
+  }
+  return result;
 }
 
-word_four concat_words(const word_two& x, const word_two& y) {
-    word_four result{};
-    for (size_t i{0}; i < 2 * binary_word_size; ++i) {
-        result[i] = x[i]; result[i + (2 * binary_word_size)] = y[i];
-    }
-    return result;
+word_four concat_words(const word_two &x, const word_two &y) {
+  word_four result{};
+  for (size_t i{0}; i < 2 * binary_word_size; ++i) {
+    result[i] = x[i];
+    result[i + (2 * binary_word_size)] = y[i];
+  }
+  return result;
 }
 //-----------------------------------------------------------------------------
 // Reading
 //-----------------------------------------------------------------------------
-word_one read_word(std::ifstream* sac) {
-    word_one bits{};
-    constexpr size_t char_size{bits_per_byte};
-    // Where we will store the characters
-    // flawfinder: ignore
-    char word[word_length];
-    // Read to our character array
-    // flawfinder: ignore
-    sac->read(word, word_length);
-    // Take each character
-    std::bitset<char_size> byte{};
-    for (size_t i{0}; i < word_length; ++i) {
-        size_t character{static_cast<size_t>(word[i])};
-        byte = std::bitset<char_size>(character);
-        // bit-by-bit
-        for (size_t j{0}; j < char_size; ++j) {
-            bits[(i * char_size) + j] = byte[j];
-        }
+word_one read_word(std::ifstream *sac) {
+  word_one bits{};
+  constexpr size_t char_size{bits_per_byte};
+  // Where we will store the characters
+  // flawfinder: ignore
+  char word[word_length];
+  // Read to our character array
+  // flawfinder: ignore
+  sac->read(word, word_length);
+  // Take each character
+  std::bitset<char_size> byte{};
+  for (size_t i{0}; i < word_length; ++i) {
+    size_t character{static_cast<size_t>(word[i])};
+    byte = std::bitset<char_size>(character);
+    // bit-by-bit
+    for (size_t j{0}; j < char_size; ++j) {
+      bits[(i * char_size) + j] = byte[j];
     }
-    return bits;
+  }
+  return bits;
 }
 
-word_two read_two_words(std::ifstream* sac) {
-    word_one word1{read_word(sac)};
-    word_one word2{read_word(sac)};
-    if constexpr (std::endian::native == std::endian::little) {
-        return concat_words(word1, word2);
-    } else { return concat_words(word2, word1); }
+word_two read_two_words(std::ifstream *sac) {
+  word_one word1{read_word(sac)};
+  word_one word2{read_word(sac)};
+  if constexpr (std::endian::native == std::endian::little) {
+    return concat_words(word1, word2);
+  } else {
+    return concat_words(word2, word1);
+  }
 }
 
-word_four read_four_words(std::ifstream* sac) {
-    word_two word12{read_two_words(sac)};
-    word_two word34{read_two_words(sac)};
-    if constexpr (std::endian::native == std::endian::little) {
-        return concat_words(word12, word34);
-    } else { return concat_words(word34, word12); }
+word_four read_four_words(std::ifstream *sac) {
+  word_two word12{read_two_words(sac)};
+  word_two word34{read_two_words(sac)};
+  if constexpr (std::endian::native == std::endian::little) {
+    return concat_words(word12, word34);
+  } else {
+    return concat_words(word34, word12);
+  }
 }
 
-std::vector<double> read_data(std::ifstream* sac, const size_t n_words,
+std::vector<double> read_data(std::ifstream *sac, const size_t n_words,
                               const int start) {
-    sac->seekg(word_position(start));
-    std::vector<double> result{};
-    result.resize(n_words);
-    for (size_t i{0}; i < n_words; ++i) {
-        result[i] = static_cast<double>(binary_to_float(read_word(sac)));
-    }
-    return result;
+  sac->seekg(word_position(start));
+  std::vector<double> result{};
+  result.resize(n_words);
+  for (size_t i{0}; i < n_words; ++i) {
+    result[i] = static_cast<double>(binary_to_float(read_word(sac)));
+  }
+  return result;
 }
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
-void write_words(std::ofstream* sac_file, const std::vector<char>& input) {
-    std::ofstream& sac = *sac_file;
-    if (sac.is_open()) { for (char c : input) { sac.write(&c, sizeof(char)); } }
+void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
+  std::ofstream &sac = *sac_file;
+  if (sac.is_open()) {
+    for (char c : input) {
+      sac.write(&c, sizeof(char));
+    }
+  }
 }
 
 // Template on the typename to make possible to handle float or int
-template <typename T>
-std::vector<char> convert_to_word(const T x) {
-    // flawfinder: ignore
-    char tmp[word_length];
-    // Copy bytes from x into the tmp array
-    // flawfinder: ignore
-    std::memcpy(tmp, &x, word_length);
-    std::vector<char> word{};
-    word.resize(word_length);
-    for (int i{0}; i < word_length; ++i) {
-        word[static_cast<size_t>(i)] = tmp[i];
-    }
-    return word;
+template <typename T> std::vector<char> convert_to_word(const T x) {
+  // flawfinder: ignore
+  char tmp[word_length];
+  // Copy bytes from x into the tmp array
+  // flawfinder: ignore
+  std::memcpy(tmp, &x, word_length);
+  std::vector<char> word{};
+  word.resize(word_length);
+  for (int i{0}; i < word_length; ++i) {
+    word[static_cast<size_t>(i)] = tmp[i];
+  }
+  return word;
 }
 
 // Explicit instantiation
@@ -225,86 +243,104 @@ template std::vector<char> convert_to_word(const float x);
 template std::vector<char> convert_to_word(const int x);
 
 std::vector<char> convert_to_word(const double x) {
-    // flawfinder: ignore
-    char tmp[2 * word_length];
-    // Copy bytes from x into the tmp array
-    // flawfinder: ignore
-    std::memcpy(tmp, &x, 2 * word_length);
-    std::vector<char> word{};
-    word.resize(2 * word_length);
-    for (int i{0}; i < 2 * word_length; ++i) {
-        word[static_cast<size_t>(i)] = tmp[i];
-    }
-    return word;
+  // flawfinder: ignore
+  char tmp[2 * word_length];
+  // Copy bytes from x into the tmp array
+  // flawfinder: ignore
+  std::memcpy(tmp, &x, 2 * word_length);
+  std::vector<char> word{};
+  word.resize(2 * word_length);
+  for (int i{0}; i < 2 * word_length; ++i) {
+    word[static_cast<size_t>(i)] = tmp[i];
+  }
+  return word;
 }
 
 // Variable sized words for the 'K' headers
 template <size_t N>
-std::array<char, N> convert_to_words(const std::string& s, int n_words) {
-    std::array<char, N> all_words;
-    // String to null-terminated character array
-    const char* c_str = s.c_str();
-    for (int i{0}; i < (n_words * word_length); ++i) {
-        all_words[static_cast<size_t>(i)] = c_str[i];
-    }
-    return all_words;
+std::array<char, N> convert_to_words(const std::string &s, int n_words) {
+  std::array<char, N> all_words;
+  // String to null-terminated character array
+  const char *c_str = s.c_str();
+  for (int i{0}; i < (n_words * word_length); ++i) {
+    all_words[static_cast<size_t>(i)] = c_str[i];
+  }
+  return all_words;
 }
 
 // Explicit instantiation
-template std::array<char, word_length> convert_to_words(const std::string& s,
+template std::array<char, word_length> convert_to_words(const std::string &s,
                                                         const int n_words);
-template std::array<char, 2 * word_length> convert_to_words(const std::string& s,
-                                                            const int n_words);
-template std::array<char, 4 * word_length> convert_to_words(const std::string& s,
-                                                            const int n_words);
+template std::array<char, 2 * word_length>
+convert_to_words(const std::string &s, const int n_words);
+template std::array<char, 4 * word_length>
+convert_to_words(const std::string &s, const int n_words);
 
 std::vector<char> bool_to_word(const bool b) {
-    std::vector<char> result;
-    result.resize(word_length);
-    result[0] = b;
-    for (int i{1}; i < word_length; ++i) { result[i] = 0; }
-    return result;
+  std::vector<char> result;
+  result.resize(word_length);
+  result[0] = b;
+  for (int i{1}; i < word_length; ++i) {
+    result[i] = 0;
+  }
+  return result;
 }
 //-----------------------------------------------------------------------------
 // Convenience methods
 // -----------------------------------------------------------------------------
 // Does not assume equal length, if not equal length then they're not equal
 // within tolerance
-bool equal_within_tolerance(const std::vector<double>& vector1,
-                            const std::vector<double>& vector2,
+bool equal_within_tolerance(const std::vector<double> &vector1,
+                            const std::vector<double> &vector2,
                             const double tolerance) {
-    if (vector1.size() != vector2.size()) { return false; }
-    for (size_t i{0}; i < vector1.size(); ++i) {
-        if (!equal_within_tolerance(vector1[i], vector2[i], tolerance)) {
-            return false;
-        }
+  if (vector1.size() != vector2.size()) {
+    return false;
+  }
+  for (size_t i{0}; i < vector1.size(); ++i) {
+    if (!equal_within_tolerance(vector1[i], vector2[i], tolerance)) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
 bool equal_within_tolerance(const double x1, const double x2,
                             const double tolerance) {
-    if (std::abs(x1 - x2) > tolerance) { return false; }
-    return true;
+  if (std::abs(x1 - x2) > tolerance) {
+    return false;
+  }
+  return true;
 }
 //------------------------------------------------------------------------------
 // Trace
 //------------------------------------------------------------------------------
 Trace::Trace() {
-    std::ranges::fill(floats.begin(), floats.end(), unset_float);
-    std::ranges::fill(doubles.begin(), doubles.end(), unset_double);
-    std::ranges::fill(ints.begin(), ints.end(), unset_int);
-    std::ranges::fill(bools.begin(), bools.end(), unset_bool);
-    std::ranges::fill(strings.begin(), strings.end(), unset_word);
+  std::ranges::fill(floats.begin(), floats.end(), unset_float);
+  std::ranges::fill(doubles.begin(), doubles.end(), unset_double);
+  std::ranges::fill(ints.begin(), ints.end(), unset_int);
+  std::ranges::fill(bools.begin(), bools.end(), unset_bool);
+  std::ranges::fill(strings.begin(), strings.end(), unset_word);
 }
 
-bool Trace::operator==(const Trace& other) const {
-    if (floats != other.floats) { return false; }
-    if (doubles != other.doubles) { return false; }
-    if (ints != other.ints) { return false; }
-    if (strings != other.strings) { return false; }
-    if (!equal_within_tolerance(data[0], other.data[0])) { return false; }
-    if (!equal_within_tolerance(data[1], other.data[1])) { return false; }
-    return true;
+bool Trace::operator==(const Trace &other) const {
+  if (floats != other.floats) {
+    return false;
+  }
+  if (doubles != other.doubles) {
+    return false;
+  }
+  if (ints != other.ints) {
+    return false;
+  }
+  if (strings != other.strings) {
+    return false;
+  }
+  if (!equal_within_tolerance(data[0], other.data[0])) {
+    return false;
+  }
+  if (!equal_within_tolerance(data[1], other.data[1])) {
+    return false;
+  }
+  return true;
 }
 // Getters
 // Floats
@@ -427,8 +463,12 @@ std::string Trace::knetwk() const { return strings[sac_map.at(name::knetwk)]; }
 std::string Trace::kdatrd() const { return strings[sac_map.at(name::kdatrd)]; }
 std::string Trace::kinst() const { return strings[sac_map.at(name::kinst)]; }
 // Data
-std::vector<double> Trace::data1() const { return data[sac_map.at(name::data1)]; }
-std::vector<double> Trace::data2() const { return data[sac_map.at(name::data2)]; }
+std::vector<double> Trace::data1() const {
+  return data[sac_map.at(name::data1)];
+}
+std::vector<double> Trace::data2() const {
+  return data[sac_map.at(name::data2)];
+}
 // Setters
 // Floats
 void Trace::depmin(const float x) { floats[sac_map.at(name::depmin)] = x; }
@@ -526,441 +566,477 @@ void Trace::lpspol(const bool x) { bools[sac_map.at(name::lpspol)] = x; }
 void Trace::lovrok(const bool x) { bools[sac_map.at(name::lovrok)] = x; }
 void Trace::lcalda(const bool x) { bools[sac_map.at(name::lcalda)] = x; }
 // Strings
-void Trace::kstnm(const std::string& x) { strings[sac_map.at(name::kstnm)] = x; }
-void Trace::kevnm(const std::string& x) { strings[sac_map.at(name::kevnm)] = x; }
-void Trace::khole(const std::string& x) { strings[sac_map.at(name::khole)] = x; }
-void Trace::ko(const std::string& x) { strings[sac_map.at(name::ko)] = x; }
-void Trace::ka(const std::string& x) { strings[sac_map.at(name::ka)] = x; }
-void Trace::kt0(const std::string& x) { strings[sac_map.at(name::kt0)] = x; }
-void Trace::kt1(const std::string& x) { strings[sac_map.at(name::kt1)] = x; }
-void Trace::kt2(const std::string& x) { strings[sac_map.at(name::kt2)] = x; }
-void Trace::kt3(const std::string& x) { strings[sac_map.at(name::kt3)] = x; }
-void Trace::kt4(const std::string& x) { strings[sac_map.at(name::kt4)] = x; }
-void Trace::kt5(const std::string& x) { strings[sac_map.at(name::kt5)] = x; }
-void Trace::kt6(const std::string& x) { strings[sac_map.at(name::kt6)] = x; }
-void Trace::kt7(const std::string& x) { strings[sac_map.at(name::kt7)] = x; }
-void Trace::kt8(const std::string& x) { strings[sac_map.at(name::kt8)] = x; }
-void Trace::kt9(const std::string& x) { strings[sac_map.at(name::kt9)] = x; }
-void Trace::kf(const std::string& x) { strings[sac_map.at(name::kf)] = x; }
-void Trace::kuser0(const std::string& x) { strings[sac_map.at(name::kuser0)] = x; }
-void Trace::kuser1(const std::string& x) { strings[sac_map.at(name::kuser1)] = x; }
-void Trace::kuser2(const std::string& x) { strings[sac_map.at(name::kuser2)] = x; }
-void Trace::kcmpnm(const std::string& x) { strings[sac_map.at(name::kcmpnm)] = x; }
-void Trace::knetwk(const std::string& x) { strings[sac_map.at(name::knetwk)] = x; }
-void Trace::kdatrd(const std::string& x) { strings[sac_map.at(name::kdatrd)] = x; }
-void Trace::kinst(const std::string& x) { strings[sac_map.at(name::kinst)] = x; }
+void Trace::kstnm(const std::string &x) {
+  strings[sac_map.at(name::kstnm)] = x;
+}
+void Trace::kevnm(const std::string &x) {
+  strings[sac_map.at(name::kevnm)] = x;
+}
+void Trace::khole(const std::string &x) {
+  strings[sac_map.at(name::khole)] = x;
+}
+void Trace::ko(const std::string &x) { strings[sac_map.at(name::ko)] = x; }
+void Trace::ka(const std::string &x) { strings[sac_map.at(name::ka)] = x; }
+void Trace::kt0(const std::string &x) { strings[sac_map.at(name::kt0)] = x; }
+void Trace::kt1(const std::string &x) { strings[sac_map.at(name::kt1)] = x; }
+void Trace::kt2(const std::string &x) { strings[sac_map.at(name::kt2)] = x; }
+void Trace::kt3(const std::string &x) { strings[sac_map.at(name::kt3)] = x; }
+void Trace::kt4(const std::string &x) { strings[sac_map.at(name::kt4)] = x; }
+void Trace::kt5(const std::string &x) { strings[sac_map.at(name::kt5)] = x; }
+void Trace::kt6(const std::string &x) { strings[sac_map.at(name::kt6)] = x; }
+void Trace::kt7(const std::string &x) { strings[sac_map.at(name::kt7)] = x; }
+void Trace::kt8(const std::string &x) { strings[sac_map.at(name::kt8)] = x; }
+void Trace::kt9(const std::string &x) { strings[sac_map.at(name::kt9)] = x; }
+void Trace::kf(const std::string &x) { strings[sac_map.at(name::kf)] = x; }
+void Trace::kuser0(const std::string &x) {
+  strings[sac_map.at(name::kuser0)] = x;
+}
+void Trace::kuser1(const std::string &x) {
+  strings[sac_map.at(name::kuser1)] = x;
+}
+void Trace::kuser2(const std::string &x) {
+  strings[sac_map.at(name::kuser2)] = x;
+}
+void Trace::kcmpnm(const std::string &x) {
+  strings[sac_map.at(name::kcmpnm)] = x;
+}
+void Trace::knetwk(const std::string &x) {
+  strings[sac_map.at(name::knetwk)] = x;
+}
+void Trace::kdatrd(const std::string &x) {
+  strings[sac_map.at(name::kdatrd)] = x;
+}
+void Trace::kinst(const std::string &x) {
+  strings[sac_map.at(name::kinst)] = x;
+}
 // Data
-void Trace::data1(const std::vector<double>& x) { data[sac_map.at(name::data1)] = x; }
-void Trace::data2(const std::vector<double>& x) { data[sac_map.at(name::data2)] = x; }
+void Trace::data1(const std::vector<double> &x) {
+  data[sac_map.at(name::data1)] = x;
+}
+void Trace::data2(const std::vector<double> &x) {
+  data[sac_map.at(name::data2)] = x;
+}
 //------------------------------------------------------------------------------
 // Read
-Trace::Trace(const std::filesystem::path& path) {
-    std::ifstream file(path, std::ifstream::binary);
-    if (!file) { std::cerr << path.string() << " could not be read.\n"; return; }
-    file.seekg(0);
-    //--------------------------------------------------------------------------
-    // Header
-    delta(binary_to_float(read_word(&file)));
-    depmin(binary_to_float(read_word(&file)));
-    depmax(binary_to_float(read_word(&file)));
-    // Skip 'unused'
+Trace::Trace(const std::filesystem::path &path) {
+  std::ifstream file(path, std::ifstream::binary);
+  if (!file) {
+    std::cerr << path.string() << " could not be read.\n";
+    return;
+  }
+  file.seekg(0);
+  //--------------------------------------------------------------------------
+  // Header
+  delta(binary_to_float(read_word(&file)));
+  depmin(binary_to_float(read_word(&file)));
+  depmax(binary_to_float(read_word(&file)));
+  // Skip 'unused'
+  read_word(&file);
+  odelta(binary_to_float(read_word(&file)));
+  b(binary_to_float(read_word(&file)));
+  e(binary_to_float(read_word(&file)));
+  o(binary_to_float(read_word(&file)));
+  a(binary_to_float(read_word(&file)));
+  // Skip 'internal'
+  read_word(&file);
+  // T# pick headers
+  t0(binary_to_float(read_word(&file)));
+  t1(binary_to_float(read_word(&file)));
+  t2(binary_to_float(read_word(&file)));
+  t3(binary_to_float(read_word(&file)));
+  t4(binary_to_float(read_word(&file)));
+  t5(binary_to_float(read_word(&file)));
+  t6(binary_to_float(read_word(&file)));
+  t7(binary_to_float(read_word(&file)));
+  t8(binary_to_float(read_word(&file)));
+  t9(binary_to_float(read_word(&file)));
+  f(binary_to_float(read_word(&file)));
+  // Response headers
+  resp0(binary_to_float(read_word(&file)));
+  resp1(binary_to_float(read_word(&file)));
+  resp2(binary_to_float(read_word(&file)));
+  resp3(binary_to_float(read_word(&file)));
+  resp4(binary_to_float(read_word(&file)));
+  resp5(binary_to_float(read_word(&file)));
+  resp6(binary_to_float(read_word(&file)));
+  resp7(binary_to_float(read_word(&file)));
+  resp8(binary_to_float(read_word(&file)));
+  resp9(binary_to_float(read_word(&file)));
+  // Station headers
+  stla(binary_to_float(read_word(&file)));
+  stlo(binary_to_float(read_word(&file)));
+  stel(binary_to_float(read_word(&file)));
+  stdp(binary_to_float(read_word(&file)));
+  // Event headers
+  evla(binary_to_float(read_word(&file)));
+  evlo(binary_to_float(read_word(&file)));
+  evel(binary_to_float(read_word(&file)));
+  evdp(binary_to_float(read_word(&file)));
+  mag(binary_to_float(read_word(&file)));
+  // User misc headers
+  user0(binary_to_float(read_word(&file)));
+  user1(binary_to_float(read_word(&file)));
+  user2(binary_to_float(read_word(&file)));
+  user3(binary_to_float(read_word(&file)));
+  user4(binary_to_float(read_word(&file)));
+  user5(binary_to_float(read_word(&file)));
+  user6(binary_to_float(read_word(&file)));
+  user7(binary_to_float(read_word(&file)));
+  user8(binary_to_float(read_word(&file)));
+  user9(binary_to_float(read_word(&file)));
+  // Geometry headers
+  dist(binary_to_float(read_word(&file)));
+  az(binary_to_float(read_word(&file)));
+  baz(binary_to_float(read_word(&file)));
+  gcarc(binary_to_float(read_word(&file)));
+  // Metadata headers
+  sb(binary_to_float(read_word(&file)));
+  sdelta(binary_to_float(read_word(&file)));
+  depmen(binary_to_float(read_word(&file)));
+  cmpaz(binary_to_float(read_word(&file)));
+  cmpinc(binary_to_float(read_word(&file)));
+  xminimum(binary_to_float(read_word(&file)));
+  xmaximum(binary_to_float(read_word(&file)));
+  yminimum(binary_to_float(read_word(&file)));
+  ymaximum(binary_to_float(read_word(&file)));
+  // Skip 'unused' (x7)
+  for (int i{0}; i < 7; ++i) {
     read_word(&file);
-    odelta(binary_to_float(read_word(&file)));
-    b(binary_to_float(read_word(&file)));
-    e(binary_to_float(read_word(&file)));
-    o(binary_to_float(read_word(&file)));
-    a(binary_to_float(read_word(&file)));
-    // Skip 'internal'
+  }
+  // Date/time headers
+  nzyear(binary_to_int(read_word(&file)));
+  nzjday(binary_to_int(read_word(&file)));
+  nzhour(binary_to_int(read_word(&file)));
+  nzmin(binary_to_int(read_word(&file)));
+  nzsec(binary_to_int(read_word(&file)));
+  nzmsec(binary_to_int(read_word(&file)));
+  // More metadata headers
+  nvhdr(binary_to_int(read_word(&file)));
+  norid(binary_to_int(read_word(&file)));
+  nevid(binary_to_int(read_word(&file)));
+  npts(binary_to_int(read_word(&file)));
+  nsnpts(binary_to_int(read_word(&file)));
+  nwfid(binary_to_int(read_word(&file)));
+  nxsize(binary_to_int(read_word(&file)));
+  nysize(binary_to_int(read_word(&file)));
+  // Skip 'unused'
+  read_word(&file);
+  iftype(binary_to_int(read_word(&file)));
+  idep(binary_to_int(read_word(&file)));
+  iztype(binary_to_int(read_word(&file)));
+  // Skip 'unused'
+  read_word(&file);
+  iinst(binary_to_int(read_word(&file)));
+  istreg(binary_to_int(read_word(&file)));
+  ievreg(binary_to_int(read_word(&file)));
+  ievtyp(binary_to_int(read_word(&file)));
+  iqual(binary_to_int(read_word(&file)));
+  isynth(binary_to_int(read_word(&file)));
+  imagtyp(binary_to_int(read_word(&file)));
+  imagsrc(binary_to_int(read_word(&file)));
+  ibody(binary_to_int(read_word(&file)));
+  // Skip 'unused' (x7)
+  for (int i{0}; i < 7; ++i) {
     read_word(&file);
-    // T# pick headers
-    t0(binary_to_float(read_word(&file)));
-    t1(binary_to_float(read_word(&file)));
-    t2(binary_to_float(read_word(&file)));
-    t3(binary_to_float(read_word(&file)));
-    t4(binary_to_float(read_word(&file)));
-    t5(binary_to_float(read_word(&file)));
-    t6(binary_to_float(read_word(&file)));
-    t7(binary_to_float(read_word(&file)));
-    t8(binary_to_float(read_word(&file)));
-    t9(binary_to_float(read_word(&file)));
-    f(binary_to_float(read_word(&file)));
-    // Response headers
-    resp0(binary_to_float(read_word(&file)));
-    resp1(binary_to_float(read_word(&file)));
-    resp2(binary_to_float(read_word(&file)));
-    resp3(binary_to_float(read_word(&file)));
-    resp4(binary_to_float(read_word(&file)));
-    resp5(binary_to_float(read_word(&file)));
-    resp6(binary_to_float(read_word(&file)));
-    resp7(binary_to_float(read_word(&file)));
-    resp8(binary_to_float(read_word(&file)));
-    resp9(binary_to_float(read_word(&file)));
-    // Station headers
-    stla(binary_to_float(read_word(&file)));
-    stlo(binary_to_float(read_word(&file)));
-    stel(binary_to_float(read_word(&file)));
-    stdp(binary_to_float(read_word(&file)));
-    // Event headers
-    evla(binary_to_float(read_word(&file)));
-    evlo(binary_to_float(read_word(&file)));
-    evel(binary_to_float(read_word(&file)));
-    evdp(binary_to_float(read_word(&file)));
-    mag(binary_to_float(read_word(&file)));
-    // User misc headers
-    user0(binary_to_float(read_word(&file)));
-    user1(binary_to_float(read_word(&file)));
-    user2(binary_to_float(read_word(&file)));
-    user3(binary_to_float(read_word(&file)));
-    user4(binary_to_float(read_word(&file)));
-    user5(binary_to_float(read_word(&file)));
-    user6(binary_to_float(read_word(&file)));
-    user7(binary_to_float(read_word(&file)));
-    user8(binary_to_float(read_word(&file)));
-    user9(binary_to_float(read_word(&file)));
-    // Geometry headers
-    dist(binary_to_float(read_word(&file)));
-    az(binary_to_float(read_word(&file)));
-    baz(binary_to_float(read_word(&file)));
-    gcarc(binary_to_float(read_word(&file)));
-    // Metadata headers
-    sb(binary_to_float(read_word(&file)));
-    sdelta(binary_to_float(read_word(&file)));
-    depmen(binary_to_float(read_word(&file)));
-    cmpaz(binary_to_float(read_word(&file)));
-    cmpinc(binary_to_float(read_word(&file)));
-    xminimum(binary_to_float(read_word(&file)));
-    xmaximum(binary_to_float(read_word(&file)));
-    yminimum(binary_to_float(read_word(&file)));
-    ymaximum(binary_to_float(read_word(&file)));
-    // Skip 'unused' (x7)
-    for (int i{0}; i < 7; ++i ) { read_word(&file); }
-    // Date/time headers
-    nzyear(binary_to_int(read_word(&file)));
-    nzjday(binary_to_int(read_word(&file)));
-    nzhour(binary_to_int(read_word(&file)));
-    nzmin(binary_to_int(read_word(&file)));
-    nzsec(binary_to_int(read_word(&file)));
-    nzmsec(binary_to_int(read_word(&file)));
-    // More metadata headers
-    nvhdr(binary_to_int(read_word(&file)));
-    norid(binary_to_int(read_word(&file)));
-    nevid(binary_to_int(read_word(&file)));
-    npts(binary_to_int(read_word(&file)));
-    nsnpts(binary_to_int(read_word(&file)));
-    nwfid(binary_to_int(read_word(&file)));
-    nxsize(binary_to_int(read_word(&file)));
-    nysize(binary_to_int(read_word(&file)));
-    // Skip 'unused'
-    read_word(&file);
-    iftype(binary_to_int(read_word(&file)));
-    idep(binary_to_int(read_word(&file)));
-    iztype(binary_to_int(read_word(&file)));
-    // Skip 'unused'
-    read_word(&file);
-    iinst(binary_to_int(read_word(&file)));
-    istreg(binary_to_int(read_word(&file)));
-    ievreg(binary_to_int(read_word(&file)));
-    ievtyp(binary_to_int(read_word(&file)));
-    iqual(binary_to_int(read_word(&file)));
-    isynth(binary_to_int(read_word(&file)));
-    imagtyp(binary_to_int(read_word(&file)));
-    imagsrc(binary_to_int(read_word(&file)));
-    ibody(binary_to_int(read_word(&file)));
-    // Skip 'unused' (x7)
-    for (int i{0}; i < 7; ++i) { read_word(&file); }
-    // Logical headers
-    leven(binary_to_bool(read_word(&file)));
-    lpspol(binary_to_bool(read_word(&file)));
-    lovrok(binary_to_bool(read_word(&file)));
-    lcalda(binary_to_bool(read_word(&file)));
-    // Skip 'unused'
-    read_word(&file);
-    // KSTNM is 2 words (normal)
-    kstnm(binary_to_string(read_two_words(&file)));
-    // KEVNM is 4 words long (unique!)
-    kevnm(binary_to_long_string(read_four_words(&file)));
-    // All other 'K' headers are 2 words
-    khole(binary_to_string(read_two_words(&file)));
-    ko(binary_to_string(read_two_words(&file)));
-    ka(binary_to_string(read_two_words(&file)));
-    kt0(binary_to_string(read_two_words(&file)));
-    kt1(binary_to_string(read_two_words(&file)));
-    kt2(binary_to_string(read_two_words(&file)));
-    kt3(binary_to_string(read_two_words(&file)));
-    kt4(binary_to_string(read_two_words(&file)));
-    kt5(binary_to_string(read_two_words(&file)));
-    kt6(binary_to_string(read_two_words(&file)));
-    kt7(binary_to_string(read_two_words(&file)));
-    kt8(binary_to_string(read_two_words(&file)));
-    kt9(binary_to_string(read_two_words(&file)));
-    kf(binary_to_string(read_two_words(&file)));
-    kuser0(binary_to_string(read_two_words(&file)));
-    kuser1(binary_to_string(read_two_words(&file)));
-    kuser2(binary_to_string(read_two_words(&file)));
-    kcmpnm(binary_to_string(read_two_words(&file)));
-    knetwk(binary_to_string(read_two_words(&file)));
-    kdatrd(binary_to_string(read_two_words(&file)));
-    kinst(binary_to_string(read_two_words(&file)));
-    //--------------------------------------------------------------------------
-    // DATA
-    if (npts() != unset_int) {
-        // Originally floats, read as doubles
-        data1(read_data(&file, static_cast<size_t>(npts()), data_word));
-        // Uneven or spectral data
-        if ((leven() == false) || (iftype() > 1)) {
-            data2(read_data(&file, static_cast<size_t>(npts()),
-                            data_word + npts()));
-        }
+  }
+  // Logical headers
+  leven(binary_to_bool(read_word(&file)));
+  lpspol(binary_to_bool(read_word(&file)));
+  lovrok(binary_to_bool(read_word(&file)));
+  lcalda(binary_to_bool(read_word(&file)));
+  // Skip 'unused'
+  read_word(&file);
+  // KSTNM is 2 words (normal)
+  kstnm(binary_to_string(read_two_words(&file)));
+  // KEVNM is 4 words long (unique!)
+  kevnm(binary_to_long_string(read_four_words(&file)));
+  // All other 'K' headers are 2 words
+  khole(binary_to_string(read_two_words(&file)));
+  ko(binary_to_string(read_two_words(&file)));
+  ka(binary_to_string(read_two_words(&file)));
+  kt0(binary_to_string(read_two_words(&file)));
+  kt1(binary_to_string(read_two_words(&file)));
+  kt2(binary_to_string(read_two_words(&file)));
+  kt3(binary_to_string(read_two_words(&file)));
+  kt4(binary_to_string(read_two_words(&file)));
+  kt5(binary_to_string(read_two_words(&file)));
+  kt6(binary_to_string(read_two_words(&file)));
+  kt7(binary_to_string(read_two_words(&file)));
+  kt8(binary_to_string(read_two_words(&file)));
+  kt9(binary_to_string(read_two_words(&file)));
+  kf(binary_to_string(read_two_words(&file)));
+  kuser0(binary_to_string(read_two_words(&file)));
+  kuser1(binary_to_string(read_two_words(&file)));
+  kuser2(binary_to_string(read_two_words(&file)));
+  kcmpnm(binary_to_string(read_two_words(&file)));
+  knetwk(binary_to_string(read_two_words(&file)));
+  kdatrd(binary_to_string(read_two_words(&file)));
+  kinst(binary_to_string(read_two_words(&file)));
+  //--------------------------------------------------------------------------
+  // DATA
+  if (npts() != unset_int) {
+    // Originally floats, read as doubles
+    data1(read_data(&file, static_cast<size_t>(npts()), data_word));
+    // Uneven or spectral data
+    if ((leven() == false) || (iftype() > 1)) {
+      data2(read_data(&file, static_cast<size_t>(npts()), data_word + npts()));
     }
-    //--------------------------------------------------------------------------
-    // Footer
-    if (nvhdr() == 7) {
-        delta(binary_to_double(read_two_words(&file)));
-        b(binary_to_double(read_two_words(&file)));
-        e(binary_to_double(read_two_words(&file)));
-        o(binary_to_double(read_two_words(&file)));
-        a(binary_to_double(read_two_words(&file)));
-        t0(binary_to_double(read_two_words(&file)));
-        t1(binary_to_double(read_two_words(&file)));
-        t2(binary_to_double(read_two_words(&file)));
-        t3(binary_to_double(read_two_words(&file)));
-        t4(binary_to_double(read_two_words(&file)));
-        t5(binary_to_double(read_two_words(&file)));
-        t6(binary_to_double(read_two_words(&file)));
-        t7(binary_to_double(read_two_words(&file)));
-        t8(binary_to_double(read_two_words(&file)));
-        t9(binary_to_double(read_two_words(&file)));
-        f(binary_to_double(read_two_words(&file)));
-        evlo(binary_to_double(read_two_words(&file)));
-        evla(binary_to_double(read_two_words(&file)));
-        stlo(binary_to_double(read_two_words(&file)));
-        stla(binary_to_double(read_two_words(&file)));
-        sb(binary_to_double(read_two_words(&file)));
-        sdelta(binary_to_double(read_two_words(&file)));
-    }
-    file.close();
+  }
+  //--------------------------------------------------------------------------
+  // Footer
+  if (nvhdr() == 7) {
+    delta(binary_to_double(read_two_words(&file)));
+    b(binary_to_double(read_two_words(&file)));
+    e(binary_to_double(read_two_words(&file)));
+    o(binary_to_double(read_two_words(&file)));
+    a(binary_to_double(read_two_words(&file)));
+    t0(binary_to_double(read_two_words(&file)));
+    t1(binary_to_double(read_two_words(&file)));
+    t2(binary_to_double(read_two_words(&file)));
+    t3(binary_to_double(read_two_words(&file)));
+    t4(binary_to_double(read_two_words(&file)));
+    t5(binary_to_double(read_two_words(&file)));
+    t6(binary_to_double(read_two_words(&file)));
+    t7(binary_to_double(read_two_words(&file)));
+    t8(binary_to_double(read_two_words(&file)));
+    t9(binary_to_double(read_two_words(&file)));
+    f(binary_to_double(read_two_words(&file)));
+    evlo(binary_to_double(read_two_words(&file)));
+    evla(binary_to_double(read_two_words(&file)));
+    stlo(binary_to_double(read_two_words(&file)));
+    stla(binary_to_double(read_two_words(&file)));
+    sb(binary_to_double(read_two_words(&file)));
+    sdelta(binary_to_double(read_two_words(&file)));
+  }
+  file.close();
 }
 //------------------------------------------------------------------------------
 // Write
-void Trace::write(const std::filesystem::path& path, const bool legacy) const {
-    std::ofstream file(path, std::ios::binary
-                       | std::ios::out | std::ios::trunc);
-    if (!file) { std::cerr << path.string() << "cannot be written.\n"; return; }
-    const int header_version{legacy ? 6 : 7};
-    write_words(&file, convert_to_word(static_cast<float>(delta())));
-    write_words(&file, convert_to_word(depmin()));
-    write_words(&file, convert_to_word(depmax()));
-    // Fill 'unused'
-    write_words(&file, convert_to_word(depmax()));
-    write_words(&file, convert_to_word(odelta()));
-    write_words(&file, convert_to_word(static_cast<float>(b())));
-    write_words(&file, convert_to_word(static_cast<float>(e())));
-    write_words(&file, convert_to_word(static_cast<float>(o())));
-    write_words(&file, convert_to_word(static_cast<float>(a())));
-    // Fill 'internal'
-    write_words(&file, convert_to_word(depmin()));
-    write_words(&file, convert_to_word(static_cast<float>(t0())));
-    write_words(&file, convert_to_word(static_cast<float>(t1())));
-    write_words(&file, convert_to_word(static_cast<float>(t2())));
-    write_words(&file, convert_to_word(static_cast<float>(t3())));
-    write_words(&file, convert_to_word(static_cast<float>(t4())));
-    write_words(&file, convert_to_word(static_cast<float>(t5())));
-    write_words(&file, convert_to_word(static_cast<float>(t6())));
-    write_words(&file, convert_to_word(static_cast<float>(t7())));
-    write_words(&file, convert_to_word(static_cast<float>(t8())));
-    write_words(&file, convert_to_word(static_cast<float>(t9())));
-    write_words(&file, convert_to_word(static_cast<float>(f())));
-    write_words(&file, convert_to_word(resp0()));
-    write_words(&file, convert_to_word(resp1()));
-    write_words(&file, convert_to_word(resp2()));
-    write_words(&file, convert_to_word(resp3()));
-    write_words(&file, convert_to_word(resp4()));
-    write_words(&file, convert_to_word(resp5()));
-    write_words(&file, convert_to_word(resp6()));
-    write_words(&file, convert_to_word(resp7()));
-    write_words(&file, convert_to_word(resp8()));
-    write_words(&file, convert_to_word(resp9()));
-    write_words(&file, convert_to_word(static_cast<float>(stla())));
-    write_words(&file, convert_to_word(static_cast<float>(stlo())));
-    write_words(&file, convert_to_word(stel()));
-    write_words(&file, convert_to_word(stdp()));
-    write_words(&file, convert_to_word(static_cast<float>(evla())));
-    write_words(&file, convert_to_word(static_cast<float>(evlo())));
-    write_words(&file, convert_to_word(evel()));
-    write_words(&file, convert_to_word(evdp()));
-    write_words(&file, convert_to_word(mag()));
-    write_words(&file, convert_to_word(user0()));
-    write_words(&file, convert_to_word(user1()));
-    write_words(&file, convert_to_word(user2()));
-    write_words(&file, convert_to_word(user3()));
-    write_words(&file, convert_to_word(user4()));
-    write_words(&file, convert_to_word(user5()));
-    write_words(&file, convert_to_word(user6()));
-    write_words(&file, convert_to_word(user7()));
-    write_words(&file, convert_to_word(user8()));
-    write_words(&file, convert_to_word(user9()));
-    write_words(&file, convert_to_word(dist()));
+void Trace::write(const std::filesystem::path &path, const bool legacy) const {
+  std::ofstream file(path, std::ios::binary | std::ios::out | std::ios::trunc);
+  if (!file) {
+    std::cerr << path.string() << "cannot be written.\n";
+    return;
+  }
+  const int header_version{legacy ? 6 : 7};
+  write_words(&file, convert_to_word(static_cast<float>(delta())));
+  write_words(&file, convert_to_word(depmin()));
+  write_words(&file, convert_to_word(depmax()));
+  // Fill 'unused'
+  write_words(&file, convert_to_word(depmax()));
+  write_words(&file, convert_to_word(odelta()));
+  write_words(&file, convert_to_word(static_cast<float>(b())));
+  write_words(&file, convert_to_word(static_cast<float>(e())));
+  write_words(&file, convert_to_word(static_cast<float>(o())));
+  write_words(&file, convert_to_word(static_cast<float>(a())));
+  // Fill 'internal'
+  write_words(&file, convert_to_word(depmin()));
+  write_words(&file, convert_to_word(static_cast<float>(t0())));
+  write_words(&file, convert_to_word(static_cast<float>(t1())));
+  write_words(&file, convert_to_word(static_cast<float>(t2())));
+  write_words(&file, convert_to_word(static_cast<float>(t3())));
+  write_words(&file, convert_to_word(static_cast<float>(t4())));
+  write_words(&file, convert_to_word(static_cast<float>(t5())));
+  write_words(&file, convert_to_word(static_cast<float>(t6())));
+  write_words(&file, convert_to_word(static_cast<float>(t7())));
+  write_words(&file, convert_to_word(static_cast<float>(t8())));
+  write_words(&file, convert_to_word(static_cast<float>(t9())));
+  write_words(&file, convert_to_word(static_cast<float>(f())));
+  write_words(&file, convert_to_word(resp0()));
+  write_words(&file, convert_to_word(resp1()));
+  write_words(&file, convert_to_word(resp2()));
+  write_words(&file, convert_to_word(resp3()));
+  write_words(&file, convert_to_word(resp4()));
+  write_words(&file, convert_to_word(resp5()));
+  write_words(&file, convert_to_word(resp6()));
+  write_words(&file, convert_to_word(resp7()));
+  write_words(&file, convert_to_word(resp8()));
+  write_words(&file, convert_to_word(resp9()));
+  write_words(&file, convert_to_word(static_cast<float>(stla())));
+  write_words(&file, convert_to_word(static_cast<float>(stlo())));
+  write_words(&file, convert_to_word(stel()));
+  write_words(&file, convert_to_word(stdp()));
+  write_words(&file, convert_to_word(static_cast<float>(evla())));
+  write_words(&file, convert_to_word(static_cast<float>(evlo())));
+  write_words(&file, convert_to_word(evel()));
+  write_words(&file, convert_to_word(evdp()));
+  write_words(&file, convert_to_word(mag()));
+  write_words(&file, convert_to_word(user0()));
+  write_words(&file, convert_to_word(user1()));
+  write_words(&file, convert_to_word(user2()));
+  write_words(&file, convert_to_word(user3()));
+  write_words(&file, convert_to_word(user4()));
+  write_words(&file, convert_to_word(user5()));
+  write_words(&file, convert_to_word(user6()));
+  write_words(&file, convert_to_word(user7()));
+  write_words(&file, convert_to_word(user8()));
+  write_words(&file, convert_to_word(user9()));
+  write_words(&file, convert_to_word(dist()));
+  write_words(&file, convert_to_word(az()));
+  write_words(&file, convert_to_word(baz()));
+  write_words(&file, convert_to_word(gcarc()));
+  write_words(&file, convert_to_word(static_cast<float>(sb())));
+  write_words(&file, convert_to_word(static_cast<float>(sdelta())));
+  write_words(&file, convert_to_word(depmen()));
+  write_words(&file, convert_to_word(cmpaz()));
+  write_words(&file, convert_to_word(cmpinc()));
+  write_words(&file, convert_to_word(xminimum()));
+  write_words(&file, convert_to_word(xmaximum()));
+  write_words(&file, convert_to_word(yminimum()));
+  write_words(&file, convert_to_word(ymaximum()));
+  // Fill 'unused' (x7)
+  for (int i{0}; i < 7; ++i) {
     write_words(&file, convert_to_word(az()));
-    write_words(&file, convert_to_word(baz()));
-    write_words(&file, convert_to_word(gcarc()));
-    write_words(&file, convert_to_word(static_cast<float>(sb())));
-    write_words(&file, convert_to_word(static_cast<float>(sdelta())));
-    write_words(&file, convert_to_word(depmen()));
-    write_words(&file, convert_to_word(cmpaz()));
-    write_words(&file, convert_to_word(cmpinc()));
-    write_words(&file, convert_to_word(xminimum()));
-    write_words(&file, convert_to_word(xmaximum()));
-    write_words(&file, convert_to_word(yminimum()));
-    write_words(&file, convert_to_word(ymaximum()));
-    // Fill 'unused' (x7)
-    for (int i{0}; i < 7; ++i) { write_words(&file, convert_to_word(az())); }
-    write_words(&file, convert_to_word(nzyear()));
-    write_words(&file, convert_to_word(nzjday()));
-    write_words(&file, convert_to_word(nzhour()));
-    write_words(&file, convert_to_word(nzmin()));
-    write_words(&file, convert_to_word(nzsec()));
-    write_words(&file, convert_to_word(nzmsec()));
-    write_words(&file, convert_to_word(header_version));
-    write_words(&file, convert_to_word(norid()));
-    write_words(&file, convert_to_word(nevid()));
-    write_words(&file, convert_to_word(npts()));
-    write_words(&file, convert_to_word(nsnpts()));
-    write_words(&file, convert_to_word(nwfid()));
-    write_words(&file, convert_to_word(nxsize()));
-    write_words(&file, convert_to_word(nysize()));
-    // Fill 'unused'
-    write_words(&file, convert_to_word(nysize()));
-    write_words(&file, convert_to_word(iftype()));
-    write_words(&file, convert_to_word(idep()));
-    write_words(&file, convert_to_word(iztype()));
-    // Fill 'unused'
-    write_words(&file, convert_to_word(iztype()));
-    write_words(&file, convert_to_word(iinst()));
-    write_words(&file, convert_to_word(istreg()));
-    write_words(&file, convert_to_word(ievreg()));
-    write_words(&file, convert_to_word(ievtyp()));
-    write_words(&file, convert_to_word(iqual()));
-    write_words(&file, convert_to_word(isynth()));
-    write_words(&file, convert_to_word(imagtyp()));
-    write_words(&file, convert_to_word(imagsrc()));
+  }
+  write_words(&file, convert_to_word(nzyear()));
+  write_words(&file, convert_to_word(nzjday()));
+  write_words(&file, convert_to_word(nzhour()));
+  write_words(&file, convert_to_word(nzmin()));
+  write_words(&file, convert_to_word(nzsec()));
+  write_words(&file, convert_to_word(nzmsec()));
+  write_words(&file, convert_to_word(header_version));
+  write_words(&file, convert_to_word(norid()));
+  write_words(&file, convert_to_word(nevid()));
+  write_words(&file, convert_to_word(npts()));
+  write_words(&file, convert_to_word(nsnpts()));
+  write_words(&file, convert_to_word(nwfid()));
+  write_words(&file, convert_to_word(nxsize()));
+  write_words(&file, convert_to_word(nysize()));
+  // Fill 'unused'
+  write_words(&file, convert_to_word(nysize()));
+  write_words(&file, convert_to_word(iftype()));
+  write_words(&file, convert_to_word(idep()));
+  write_words(&file, convert_to_word(iztype()));
+  // Fill 'unused'
+  write_words(&file, convert_to_word(iztype()));
+  write_words(&file, convert_to_word(iinst()));
+  write_words(&file, convert_to_word(istreg()));
+  write_words(&file, convert_to_word(ievreg()));
+  write_words(&file, convert_to_word(ievtyp()));
+  write_words(&file, convert_to_word(iqual()));
+  write_words(&file, convert_to_word(isynth()));
+  write_words(&file, convert_to_word(imagtyp()));
+  write_words(&file, convert_to_word(imagsrc()));
+  write_words(&file, convert_to_word(ibody()));
+  // Fill 'unused' (x7)
+  for (int i{0}; i < 7; ++i) {
     write_words(&file, convert_to_word(ibody()));
-    // Fill 'unused' (x7)
-    for (int i{0}; i < 7; ++i) { write_words(&file, convert_to_word(ibody())); }
-    write_words(&file, bool_to_word(leven()));
-    write_words(&file, bool_to_word(lpspol()));
-    write_words(&file, bool_to_word(lovrok()));
-    write_words(&file, bool_to_word(lcalda()));
-    // Fill 'unused'
-    write_words(&file, bool_to_word(lcalda()));
-    // Strings are special
-    std::array<char, 2 * word_length> two_words{
-        convert_to_words<sizeof(two_words)>(kstnm(), 2)};
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  }
+  write_words(&file, bool_to_word(leven()));
+  write_words(&file, bool_to_word(lpspol()));
+  write_words(&file, bool_to_word(lovrok()));
+  write_words(&file, bool_to_word(lcalda()));
+  // Fill 'unused'
+  write_words(&file, bool_to_word(lcalda()));
+  // Strings are special
+  std::array<char, 2 * word_length> two_words{
+      convert_to_words<sizeof(two_words)>(kstnm(), 2)};
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    std::array<char, 4 * word_length> four_words{
-        convert_to_words<sizeof(four_words)>(kevnm(), 4)};
-    write_words(&file, std::vector<char>(four_words.begin(), four_words.end()));
+  std::array<char, 4 * word_length> four_words{
+      convert_to_words<sizeof(four_words)>(kevnm(), 4)};
+  write_words(&file, std::vector<char>(four_words.begin(), four_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(khole(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(khole(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(ko(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(ko(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(ka(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(ka(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt0(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kt0(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt1(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kt1(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt2(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kt2(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt3(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kt3(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt4(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kt4(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt5(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kt5(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt6(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kt6(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt7(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kt7(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt8(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kt8(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kt9(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kt9(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kf(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kf(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kuser0(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kuser0(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kuser1(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kuser1(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kuser2(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kuser2(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kcmpnm(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kcmpnm(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(knetwk(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(knetwk(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kdatrd(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  two_words = convert_to_words<sizeof(two_words)>(kdatrd(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
 
-    two_words = convert_to_words<sizeof(two_words)>(kinst(), 2);
-    write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-    // Data
-    for (double x : data1()) {
-        write_words(&file, convert_to_word(static_cast<float>(x)));
+  two_words = convert_to_words<sizeof(two_words)>(kinst(), 2);
+  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  // Data
+  for (double x : data1()) {
+    write_words(&file, convert_to_word(static_cast<float>(x)));
+  }
+  if ((leven() == false) || (iftype() > 1)) {
+    for (double x : data2()) {
+      write_words(&file, convert_to_word(static_cast<float>(x)));
     }
-    if ((leven() == false) || (iftype() > 1)) {
-        for (double x : data2()) {
-            write_words(&file, convert_to_word(static_cast<float>(x)));
-        }
-    }
-    if (header_version == 7) {
-        // Write footer
-        write_words(&file, convert_to_word(delta()));
-        write_words(&file, convert_to_word(b()));
-        write_words(&file, convert_to_word(e()));
-        write_words(&file, convert_to_word(o()));
-        write_words(&file, convert_to_word(a()));
-        write_words(&file, convert_to_word(t0()));
-        write_words(&file, convert_to_word(t1()));
-        write_words(&file, convert_to_word(t2()));
-        write_words(&file, convert_to_word(t3()));
-        write_words(&file, convert_to_word(t4()));
-        write_words(&file, convert_to_word(t5()));
-        write_words(&file, convert_to_word(t6()));
-        write_words(&file, convert_to_word(t7()));
-        write_words(&file, convert_to_word(t8()));
-        write_words(&file, convert_to_word(t9()));
-        write_words(&file, convert_to_word(f()));
-        write_words(&file, convert_to_word(evlo()));
-        write_words(&file, convert_to_word(evla()));
-        write_words(&file, convert_to_word(stlo()));
-        write_words(&file, convert_to_word(stla()));
-        write_words(&file, convert_to_word(sb()));
-        write_words(&file, convert_to_word(sdelta()));
-    }
-    file.close();
+  }
+  if (header_version == 7) {
+    // Write footer
+    write_words(&file, convert_to_word(delta()));
+    write_words(&file, convert_to_word(b()));
+    write_words(&file, convert_to_word(e()));
+    write_words(&file, convert_to_word(o()));
+    write_words(&file, convert_to_word(a()));
+    write_words(&file, convert_to_word(t0()));
+    write_words(&file, convert_to_word(t1()));
+    write_words(&file, convert_to_word(t2()));
+    write_words(&file, convert_to_word(t3()));
+    write_words(&file, convert_to_word(t4()));
+    write_words(&file, convert_to_word(t5()));
+    write_words(&file, convert_to_word(t6()));
+    write_words(&file, convert_to_word(t7()));
+    write_words(&file, convert_to_word(t8()));
+    write_words(&file, convert_to_word(t9()));
+    write_words(&file, convert_to_word(f()));
+    write_words(&file, convert_to_word(evlo()));
+    write_words(&file, convert_to_word(evla()));
+    write_words(&file, convert_to_word(stlo()));
+    write_words(&file, convert_to_word(stla()));
+    write_words(&file, convert_to_word(sb()));
+    write_words(&file, convert_to_word(sdelta()));
+  }
+  file.close();
 }
 
-void Trace::legacy_write(const std::filesystem::path& path) const {
-    write(path, true);
+void Trace::legacy_write(const std::filesystem::path &path) const {
+  write(path, true);
 }
-};  // namespace sacfmt
+}; // namespace sacfmt

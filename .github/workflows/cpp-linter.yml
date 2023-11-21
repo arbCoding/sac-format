@@ -14,5 +14,6 @@ jobs:
       - uses: cpp-linter/cpp-linter-action@v2
         id: linter
         with:
+          style: file
           files-changed-only: false
           thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}

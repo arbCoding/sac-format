@@ -7,8 +7,8 @@
 #define CATCH_CONFIG_FAST_COMPILE
 #define CATCH_CONFIG_MAIN
 
-#include <catch2/catch_test_macros.hpp>
 #include <catch2/benchmark/catch_benchmark.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include <sac_format.hpp>
 #include <util.hpp>
@@ -18,7 +18,7 @@ namespace fs = std::filesystem;
 
 TEST_CASE("Binary Conversion") {
   SECTION("Booleans") {
-    BENCHMARK("Bool->Binary False")  { return bool_to_binary(unset_bool); };
+    BENCHMARK("Bool->Binary False") { return bool_to_binary(unset_bool); };
     BENCHMARK("Bool->Binary->Bool False") {
       return binary_to_bool(bool_to_binary(unset_bool));
     };
@@ -172,17 +172,13 @@ TEST_CASE("Input/Output") {
     }
     SECTION("In") {
       test_sac.write(tmp_file);
-      BENCHMARK("Reading") {
-        Trace in_sac = Trace(tmp_file);
-      };
+      BENCHMARK("Reading") { Trace in_sac = Trace(tmp_file); };
       fs::remove(tmp_file);
     }
     SECTION("Comparison Between Out and In") {
       test_sac.write(tmp_file);
       Trace in_sac = Trace(tmp_file);
-      BENCHMARK("Out vs In") {
-        (void) (in_sac == test_sac);
-      };
+      BENCHMARK("Out vs In") { (void)(in_sac == test_sac); };
       fs::remove(tmp_file);
     }
   }
@@ -210,9 +206,7 @@ TEST_CASE("Input/Output") {
     SECTION("Comparison Between Out and In Zeros") {
       test_sac.write(tmp_file);
       Trace in_sac = Trace(tmp_file);
-      BENCHMARK("Trace Comparison") {
-        (void) (test_sac == in_sac);
-      };
+      BENCHMARK("Trace Comparison") { (void)(test_sac == in_sac); };
       fs::remove(tmp_file);
     }
     SECTION("Randomizing data") {
@@ -238,9 +232,7 @@ TEST_CASE("Input/Output") {
       // Note that this equality tests to equality within tolerance of what can
       // be handled via a float this is because binary SAC files use floats for
       // the data values, not doubles
-      BENCHMARK("Trace Comparison") {
-        (void) (test_sac == in_sac);
-      };
+      BENCHMARK("Trace Comparison") { (void)(test_sac == in_sac); };
       fs::remove(tmp_file);
     }
   }

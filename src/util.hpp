@@ -8,8 +8,8 @@
 /* Standard library */
 #include <random>
 // INT_MIN and INT_MAX
-#include <limits>
 #include <limits.h>
+#include <limits>
 #include <string>
 // ostringstream
 #include <sstream>
@@ -22,8 +22,7 @@
 namespace sacfmt {
 
 // Testing Constants
-template <typename T>
-std::string eps_string(const T f) {
+template <typename T> std::string eps_string(const T f) {
   std::ostringstream oss{};
   oss << std::setprecision(std::numeric_limits<T>::max_digits10) << f;
   return oss.str();
@@ -53,16 +52,13 @@ XoshiroCpp::Xoshiro256Plus init() {
   std::random_device rd{};
   // Two random runtime constants
   const uint64_t t1{static_cast<uint64_t>(
-    std::chrono::steady_clock::now().time_since_epoch().count())};
+      std::chrono::steady_clock::now().time_since_epoch().count())};
   const uint64_t t2{static_cast<uint64_t>(
-    std::chrono::steady_clock::now().time_since_epoch().count())};
+      std::chrono::steady_clock::now().time_since_epoch().count())};
   // Seed the initial state
   const XoshiroCpp::Xoshiro256Plus::state_type initial_state = {
-    XoshiroCpp::SplitMix64 {t1}(),
-    XoshiroCpp::SplitMix64 {rd()}(),
-    XoshiroCpp::SplitMix64 {t2}(),
-    XoshiroCpp::SplitMix64 {rd()}()
-  };
+      XoshiroCpp::SplitMix64{t1}(), XoshiroCpp::SplitMix64{rd()}(),
+      XoshiroCpp::SplitMix64{t2}(), XoshiroCpp::SplitMix64{rd()}()};
   return XoshiroCpp::Xoshiro256Plus{initial_state};
 }
 
@@ -75,10 +71,12 @@ inline double get(double min, double max) {
   return die(xos);
 }
 
-void random_vector(std::vector<double>* data, const double minimum = -1.0,
+void random_vector(std::vector<double> *data, const double minimum = -1.0,
                    const double maximum = 1.0) {
   std::uniform_real_distribution<> die{minimum, maximum};
-  for (std::size_t i{0}; i < data->size(); ++i) { (*data)[i] = die(xos); }
+  for (std::size_t i{0}; i < data->size(); ++i) {
+    (*data)[i] = die(xos);
+  }
 }
 
 Trace gen_fake_trace() {
@@ -208,6 +206,6 @@ Trace gen_fake_trace() {
   }
   return sac;
 }
-}  // namespace sacfmt
+} // namespace sacfmt
 
 #endif

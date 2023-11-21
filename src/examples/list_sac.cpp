@@ -15,7 +15,7 @@ std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 namespace fs = std::filesystem;
 using namespace sacfmt;
 
-int main(const int arg_count, const char* arg_array[]) {
+int main(const int arg_count, const char *arg_array[]) {
   // Correct number of arguments
   if (arg_count != 2) {
     std::printf("Usage: `%s <sac-file>`\n", arg_array[0]);
