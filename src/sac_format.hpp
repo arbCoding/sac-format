@@ -50,29 +50,15 @@ constexpr int ascii_space{32};
 //--------------------------------------------------------------------------
 // Calculate position of word in SAC-file
 int word_position(const int word_number);
-// Floats to binary and back
-union float_to_bits {
-  float value;
-  word_one bits;
-  explicit float_to_bits(float x) : value(x) {}
-  explicit float_to_bits(const word_one &binary) : bits(binary) {}
-};
-// Doubles to binary and back
-union double_to_bits {
-  double value;
-  word_two bits;
-  explicit double_to_bits(double x) : value(x) {}
-  explicit double_to_bits(const word_two &binary) : bits(binary) {}
-};
 // SAC uses 32 bit ints
 word_one int_to_binary(const int num);
 int binary_to_int(word_one bits);
 // SAC uses 32 bit floats
-word_one float_to_binary(const float x);
-float binary_to_float(const word_one &x);
+word_one float_to_binary(const float num);
+float binary_to_float(const word_one &bin);
 // SAC uses 64 bit doubles (2 words, 8 bytes)
-word_two double_to_binary(const double x);
-double binary_to_double(const word_two &x);
+word_two double_to_binary(const double num);
+double binary_to_double(const word_two &bin);
 // To get rid of requirement on boost library
 void remove_leading_spaces(std::string *str);
 void remove_trailing_spaces(std::string *str);
@@ -89,18 +75,18 @@ std::string bits_string(const T &bits, const size_t num_words);
 // Note the string conversion functions handle over-sized strings
 // by truncating them, and undersized strings by padding them with spaces
 // SAC uses either 64 bit strings (2 words, 8 bytes, 8 characters)
-word_two string_to_binary(std::string x);
-std::string binary_to_string(const word_two &x);
+word_two string_to_binary(std::string str);
+std::string binary_to_string(const word_two &str);
 // 128 bit string (4 words, 16 bytes, only KEVNM header, 16 characters)
-word_four long_string_to_binary(std::string x);
-std::string binary_to_long_string(const word_four &x);
+word_four long_string_to_binary(std::string str);
+std::string binary_to_long_string(const word_four &str);
 // Booleans
-word_one bool_to_binary(const bool x);
-bool binary_to_bool(const word_one &x);
+word_one bool_to_binary(const bool flag);
+bool binary_to_bool(const word_one &flag);
 // Concat words
 // For some reason, template functions didn't want to work for these...
-word_two concat_words(const word_one &x, const word_one &y);
-word_four concat_words(const word_two &x, const word_two &y);
+word_two concat_words(const word_one &word1, const word_one &word2);
+word_four concat_words(const word_two &word12, const word_two &word34);
 //--------------------------------------------------------------------------
 // Reading
 //--------------------------------------------------------------------------
@@ -123,18 +109,18 @@ void write_words(std::ofstream *sac_file, const std::vector<char> &input);
 // Template function to convert to a SAC word
 // handles float and int (not string or double)
 // Only single word
-template <typename T> std::vector<char> convert_to_word(const T x);
+template <typename T> std::vector<char> convert_to_word(const T input);
 // Special for double-precision numbers (2 words, not 1)
-std::vector<char> convert_to_word(const double x);
+std::vector<char> convert_to_word(const double input);
 // Template function to convert string to SAC word(s)
 template <size_t N>
-std::array<char, N> convert_to_words(const std::string &s, const int n_words);
+std::array<char, N> convert_to_words(const std::string &str, const int n_words);
 // Convert a bool value to a word
-std::vector<char> bool_to_word(const bool b);
+std::vector<char> bool_to_word(const bool flag);
 bool equal_within_tolerance(const std::vector<double> &vector1,
                             const std::vector<double> &vector2,
                             const double tolerance = f_eps);
-bool equal_within_tolerance(const double x1, const double x2,
+bool equal_within_tolerance(const double val1, const double val2,
                             const double tolerance = f_eps);
 enum class name {
   // Floats

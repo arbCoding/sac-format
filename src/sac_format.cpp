@@ -19,29 +19,45 @@ word_one int_to_binary(const int num) {
   return bits;
 }
 
-int binary_to_int(word_one bits) {
+int binary_to_int(word_one bin) {
   int result{};
-  if (bits.test(binary_word_size - 1)) {
-    bits = ~bits;
-    result = static_cast<int>(bits.to_ulong());
+  if (bin.test(binary_word_size - 1)) {
+    bin = ~bin;
+    result = static_cast<int>(bin.to_ulong());
     result += 1;
     // Change sign to make it as negative
     result *= -1;
   } else {
-    result = static_cast<int>(bits.to_ulong());
+    result = static_cast<int>(bin.to_ulong());
   }
   return result;
 }
 
-// Union makes this so easy
-word_one float_to_binary(const float num) { return float_to_bits(num).bits; }
+word_one float_to_binary(const float num) {
+  word_one result{};
+  memcpy(&result, &num, sizeof(float));
+  return result;
+}
 
-float binary_to_float(const word_one &bin) { return float_to_bits(bin).value; }
+float binary_to_float(const word_one &bin) {
+  const auto val = bin.to_ulong();
+  float result{};
+  memcpy(&result, &val, sizeof(float));
+  return result;
+}
 
-// Once again, union to the rescue!
-word_two double_to_binary(const double num) { return double_to_bits(num).bits; }
+word_two double_to_binary(const double num) {
+  word_two result{};
+  memcpy(&result, &num, sizeof(double));
+  return result;
+}
 
-double binary_to_double(const word_two &bin) { return double_to_bits(bin).value; }
+double binary_to_double(const word_two &bin) {
+  const auto val = bin.to_ullong();
+  double result{};
+  memcpy(&result, &val, sizeof(double));
+  return result;
+}
 
 void remove_leading_spaces(std::string *str) {
   while ((static_cast<int>(str->front()) <= ascii_space) && (!str->empty())) {
@@ -102,57 +118,57 @@ std::string bits_string(const T &bits, const size_t num_words) {
   return result;
 }
 
-word_two string_to_binary(std::string x) {
+word_two string_to_binary(std::string str) {
   constexpr size_t string_size{2 * word_length};
   // 1 byte per character
-  prep_string(&x, string_size);
+  prep_string(&str, string_size);
   // Two words (8 characters)
   word_two bits{};
-  string_bits(&bits, x, string_size);
+  string_bits(&bits, str, string_size);
   return bits;
 }
 
-std::string binary_to_string(const word_two &x) {
-  std::string result{bits_string(x, 2)};
+std::string binary_to_string(const word_two &str) {
+  std::string result{bits_string(str, 2)};
   return string_cleaning(result);
 }
 
-word_four long_string_to_binary(std::string x) {
+word_four long_string_to_binary(std::string str) {
   constexpr size_t string_size{4 * word_length};
-  prep_string(&x, string_size);
+  prep_string(&str, string_size);
   // Four words (16 characters)
   word_four bits{};
-  string_bits(&bits, x, string_size);
+  string_bits(&bits, str, string_size);
   return bits;
 }
 
-std::string binary_to_long_string(const word_four &x) {
-  std::string result{bits_string(x, 4)};
+std::string binary_to_long_string(const word_four &str) {
+  std::string result{bits_string(str, 4)};
   return string_cleaning(result);
 }
 
-word_one bool_to_binary(const bool x) {
+word_one bool_to_binary(const bool flag) {
   word_one result{};
-  result[0] = x;
+  result[0] = flag;
   return result;
 }
 
-bool binary_to_bool(const word_one &x) { return x[0]; }
+bool binary_to_bool(const word_one &flag) { return flag[0]; }
 
-word_two concat_words(const word_one &x, const word_one &y) {
+word_two concat_words(const word_one &word1, const word_one &word2) {
   word_two result{};
   for (size_t i{0}; i < binary_word_size; ++i) {
-    result[i] = x[i];
-    result[i + binary_word_size] = y[i];
+    result[i] = word1[i];
+    result[i + binary_word_size] = word2[i];
   }
   return result;
 }
 
-word_four concat_words(const word_two &x, const word_two &y) {
+word_four concat_words(const word_two &word12, const word_two &word34) {
   word_four result{};
   for (size_t i{0}; i < 2 * binary_word_size; ++i) {
-    result[i] = x[i];
-    result[i + (2 * binary_word_size)] = y[i];
+    result[i] = word12[i];
+    result[i + (2 * binary_word_size)] = word34[i];
   }
   return result;
 }
@@ -224,12 +240,12 @@ void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
 }
 
 // Template on the typename to make possible to handle float or int
-template <typename T> std::vector<char> convert_to_word(const T x) {
+template <typename T> std::vector<char> convert_to_word(const T input) {
   // flawfinder: ignore
   char tmp[word_length];
-  // Copy bytes from x into the tmp array
+  // Copy bytes from input into the tmp array
   // flawfinder: ignore
-  std::memcpy(tmp, &x, word_length);
+  std::memcpy(tmp, &input, word_length);
   std::vector<char> word{};
   word.resize(word_length);
   for (int i{0}; i < word_length; ++i) {
@@ -238,16 +254,16 @@ template <typename T> std::vector<char> convert_to_word(const T x) {
   return word;
 }
 
-// Explicit instantiation
-template std::vector<char> convert_to_word(const float x);
+// Einputplicit instantiation
+template std::vector<char> convert_to_word(const float input);
 template std::vector<char> convert_to_word(const int x);
 
-std::vector<char> convert_to_word(const double x) {
+std::vector<char> convert_to_word(const double input) {
   // flawfinder: ignore
   char tmp[2 * word_length];
-  // Copy bytes from x into the tmp array
+  // Copy bytes from input into the tmp array
   // flawfinder: ignore
-  std::memcpy(tmp, &x, 2 * word_length);
+  std::memcpy(tmp, &input, 2 * word_length);
   std::vector<char> word{};
   word.resize(2 * word_length);
   for (int i{0}; i < 2 * word_length; ++i) {
@@ -258,10 +274,10 @@ std::vector<char> convert_to_word(const double x) {
 
 // Variable sized words for the 'K' headers
 template <size_t N>
-std::array<char, N> convert_to_words(const std::string &s, int n_words) {
+std::array<char, N> convert_to_words(const std::string &str, int n_words) {
   std::array<char, N> all_words;
   // String to null-terminated character array
-  const char *c_str = s.c_str();
+  const char *c_str = str.c_str();
   for (int i{0}; i < (n_words * word_length); ++i) {
     all_words[static_cast<size_t>(i)] = c_str[i];
   }
@@ -269,17 +285,17 @@ std::array<char, N> convert_to_words(const std::string &s, int n_words) {
 }
 
 // Explicit instantiation
-template std::array<char, word_length> convert_to_words(const std::string &s,
+template std::array<char, word_length> convert_to_words(const std::string &str,
                                                         const int n_words);
 template std::array<char, 2 * word_length>
-convert_to_words(const std::string &s, const int n_words);
+convert_to_words(const std::string &str, const int n_words);
 template std::array<char, 4 * word_length>
-convert_to_words(const std::string &s, const int n_words);
+convert_to_words(const std::string &str, const int n_words);
 
-std::vector<char> bool_to_word(const bool b) {
+std::vector<char> bool_to_word(const bool flag) {
   std::vector<char> result;
   result.resize(word_length);
-  result[0] = b;
+  result[0] = flag;
   for (int i{1}; i < word_length; ++i) {
     result[i] = 0;
   }
@@ -303,9 +319,9 @@ bool equal_within_tolerance(const std::vector<double> &vector1,
   }
   return true;
 }
-bool equal_within_tolerance(const double x1, const double x2,
+bool equal_within_tolerance(const double val1, const double val2,
                             const double tolerance) {
-  if (std::abs(x1 - x2) > tolerance) {
+  if (std::abs(val1 - val2) > tolerance) {
     return false;
   }
   return true;
