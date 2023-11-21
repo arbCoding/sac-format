@@ -42,7 +42,7 @@ jobs:
         name: sac-format-coverage
         verbose: true
 
-    - name: Uplaod Coverage Codacy
+    - name: Upload Coverage Codacy
       working-directory: ${{github.workspace}}/build/debug/gh-coverage
       run: |
         export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}

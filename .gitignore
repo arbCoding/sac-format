@@ -69,3 +69,6 @@ src/docs/*.pdf
 
 # Don't put genhtml coverage
 coverage/*
+
+# Infer
+infer-out/*

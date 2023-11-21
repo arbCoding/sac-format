@@ -1,3 +1,5 @@
+// Copyright 2023 Alexander R. Blanchette
+
 /* Standard Library */
 #include <filesystem>
 #include <fstream>
@@ -11,8 +13,8 @@
 // Floating-point matcher
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 /* My stuff */
-#include "sac_format.hpp"
-#include "util.hpp"
+#include <sac_format.hpp>
+#include <util.hpp>
 
 using namespace sacfmt;
 namespace fs = std::filesystem;
@@ -32,9 +34,7 @@ TEST_CASE("Basic constants") {
     REQUIRE(unset_bool == false);
     REQUIRE(unset_word == "-12345");
   }
-  SECTION("Derived constants") {
-    REQUIRE(word_position(data_word) == 632);
-  }
+  SECTION("Derived constants") { REQUIRE(word_position(data_word) == 632); }
 }
 
 TEST_CASE("Binary Conversion") {
@@ -107,49 +107,49 @@ TEST_CASE("Binary Conversion") {
   SECTION("Strings") {
     SECTION("Regular - Two Words") {
       SECTION("Perfect") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"01234567"};
         CAPTURE(test_str);
         REQUIRE(binary_to_string(string_to_binary(test_str)) == test_str);
       }
       SECTION("Empty") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{""};
         CAPTURE(test_str);
         REQUIRE(binary_to_string(string_to_binary(test_str)) == test_str);
       }
       SECTION("One Word") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"0123"};
         CAPTURE(test_str);
         REQUIRE(binary_to_string(string_to_binary(test_str)) == test_str);
       }
       SECTION("Half Word") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"012"};
         CAPTURE(test_str);
         REQUIRE(binary_to_string(string_to_binary(test_str)) == test_str);
       }
       SECTION("Overflow") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"0123456789ABCDEFG"};
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string result_str{"01234567"};
         CAPTURE(test_str);
         REQUIRE(binary_to_string(string_to_binary(test_str)) == result_str);
-        REQUIRE(binary_to_string(string_to_binary(test_str))
-                == test_str.substr(0, 8));
+        REQUIRE(binary_to_string(string_to_binary(test_str)) ==
+                test_str.substr(0, 8));
       }
       SECTION("Multiple Spaces") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"Hi  Bye"};
         CAPTURE(test_str);
         REQUIRE(binary_to_string(string_to_binary(test_str)) == test_str);
       }
       SECTION("Leading/Trailing Spaces") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"  Time  "};
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string result_str{"Time"};
         CAPTURE(test_str);
         REQUIRE(binary_to_string(string_to_binary(test_str)) == result_str);
@@ -157,71 +157,71 @@ TEST_CASE("Binary Conversion") {
     }
     SECTION("Long - Four Words") {
       SECTION("Perfect") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"0123456789ABCDEF"};
         CAPTURE(test_str);
-        REQUIRE(binary_to_long_string(long_string_to_binary(test_str))
-                == test_str);
+        REQUIRE(binary_to_long_string(long_string_to_binary(test_str)) ==
+                test_str);
       }
       SECTION("Empty") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{""};
         CAPTURE(test_str);
-        REQUIRE(binary_to_long_string(long_string_to_binary(test_str))
-                == test_str);
+        REQUIRE(binary_to_long_string(long_string_to_binary(test_str)) ==
+                test_str);
       }
       SECTION("One Word") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"0123"};
         CAPTURE(test_str);
-        REQUIRE(binary_to_long_string(long_string_to_binary(test_str))
-                == test_str);
+        REQUIRE(binary_to_long_string(long_string_to_binary(test_str)) ==
+                test_str);
       }
       SECTION("Half Word") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"01"};
         CAPTURE(test_str);
-        REQUIRE(binary_to_long_string(long_string_to_binary(test_str))
-                == test_str);
+        REQUIRE(binary_to_long_string(long_string_to_binary(test_str)) ==
+                test_str);
       }
       SECTION("Three Words") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"0123456789AB"};
         CAPTURE(test_str);
-        REQUIRE(binary_to_long_string(long_string_to_binary(test_str))
-                == test_str);
+        REQUIRE(binary_to_long_string(long_string_to_binary(test_str)) ==
+                test_str);
       }
       SECTION("Three and a Half Words") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"0123456789ABCD"};
         CAPTURE(test_str);
-        REQUIRE(binary_to_long_string(long_string_to_binary(test_str))
-                == test_str);
+        REQUIRE(binary_to_long_string(long_string_to_binary(test_str)) ==
+                test_str);
       }
       SECTION("Overflow") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string result_str{"0123456789ABCDEF"};
         CAPTURE(test_str);
-        REQUIRE(binary_to_long_string(long_string_to_binary(test_str))
-                == result_str);
-        REQUIRE(binary_to_long_string(long_string_to_binary(test_str))
-                == test_str.substr(0, 16));
+        REQUIRE(binary_to_long_string(long_string_to_binary(test_str)) ==
+                result_str);
+        REQUIRE(binary_to_long_string(long_string_to_binary(test_str)) ==
+                test_str.substr(0, 16));
       }
       SECTION("Multiple Spaces") {
-        //cppcheck-suppress unreadVariable
+        // cppcheck-suppress unreadVariable
         const std::string test_str{"Hi         Bye"};
         CAPTURE(test_str);
-        REQUIRE(binary_to_long_string(long_string_to_binary(test_str))
-                == test_str);
+        REQUIRE(binary_to_long_string(long_string_to_binary(test_str)) ==
+                test_str);
       }
       SECTION("Leading/Trailing Spaces") {
         const std::string test_str{"  Time  to be "};
         const std::string result_str{"Time  to be"};
         CAPTURE(test_str);
-        REQUIRE(binary_to_long_string(long_string_to_binary(test_str))
-                == result_str);
+        REQUIRE(binary_to_long_string(long_string_to_binary(test_str)) ==
+                result_str);
       }
     }
   }
@@ -706,7 +706,7 @@ TEST_CASE("Trace Setters") {
     value = 23;
     trace.imagtyp(value);
     REQUIRE(trace.imagtyp() == value);
-    
+
     value = 24;
     trace.imagsrc(value);
     REQUIRE(trace.imagsrc() == value);
@@ -836,11 +836,11 @@ TEST_CASE("Trace Setters") {
   SECTION("Data") {
     std::vector<double> value{};
     value.resize(20);
-    random_vector(value);
+    random_vector(&value);
     trace.data1(value);
     REQUIRE(trace.data1() == value);
 
-    random_vector(value);
+    random_vector(&value);
     trace.data2(value);
     REQUIRE(trace.data2() == value);
   }
@@ -996,16 +996,17 @@ TEST_CASE("Trace Read/Write") {
       REQUIRE(equal_within_tolerance(trace.data1(), in.data1()));
       REQUIRE(equal_within_tolerance(trace.data2(), in.data2()));
     }
-    SECTION("Everthing") {
-      REQUIRE(trace == in);
-    }
+    SECTION("Everthing") { REQUIRE(trace == in); }
   }
   SECTION("Random I/O") {
     std::vector data{trace.data1()};
-    random_vector(data);
+    random_vector(&data);
     trace.data1(data);
     data = trace.data2();
-    if (!data.empty()) { random_vector(data); trace.data2(data); }
+    if (!data.empty()) {
+      random_vector(&data);
+      trace.data2(data);
+    }
     trace.write(tmp_file);
     Trace in = Trace(tmp_file);
     fs::remove(tmp_file);
@@ -1137,9 +1138,7 @@ TEST_CASE("Trace Read/Write") {
       REQUIRE(equal_within_tolerance(trace.data1(), in.data1()));
       REQUIRE(equal_within_tolerance(trace.data2(), in.data2()));
     }
-    SECTION("Everything") {
-      REQUIRE(trace == in);
-    }
+    SECTION("Everything") { REQUIRE(trace == in); }
   }
   SECTION("Legacy Read/Write") {
     trace.nvhdr(6);
@@ -1279,7 +1278,46 @@ TEST_CASE("Trace Read/Write") {
       REQUIRE(equal_within_tolerance(trace.data1(), in.data1()));
       REQUIRE(equal_within_tolerance(trace.data2(), in.data2()));
     }
-    SECTION("Everything") {
+    SECTION("Everything") { REQUIRE(trace != in); }
+    SECTION("Not equal within tolerance") {
+      std::vector<double> data{trace.data1()};
+      data[0] += 1.0;
+      trace.data1(data);
+      REQUIRE(!equal_within_tolerance(trace.data1(), in.data1()));
+      REQUIRE(trace != in);
+    }
+  }
+  SECTION("v6") {
+    trace.nvhdr(7);
+    trace.legacy_write(tmp_file);
+    Trace in = Trace(tmp_file);
+    fs::remove(tmp_file);
+    SECTION("Convert header") {
+      REQUIRE(in.nvhdr() == 6);
+      // Make sure we didn't change the original trace
+      REQUIRE(trace.nvhdr() == 7);
+      REQUIRE(trace != in);
+    }
+  }
+  SECTION("Data2") {
+    // XY
+    trace.iftype(4);
+    trace.data2(trace.data1());
+    SECTION("Equal") {
+      trace.write(tmp_file);
+      Trace in = Trace(tmp_file);
+      fs::remove(tmp_file);
+      REQUIRE(equal_within_tolerance(trace.data2(), in.data2()));
+      REQUIRE(trace == in);
+    }
+    SECTION("Not Equal") {
+      std::vector<double> data{trace.data2()};
+      trace.write(tmp_file);
+      Trace in = Trace(tmp_file);
+      fs::remove(tmp_file);
+      data[data.size() - 1] -= 1.0;
+      trace.data2(data);
+      REQUIRE(!equal_within_tolerance(trace.data2(), in.data2()));
       REQUIRE(trace != in);
     }
   }

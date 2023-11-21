@@ -1,0 +1,8 @@
+* Inbox
+** [2023-11-21 Tue 12:16]
+Running clang-tidy locally prior to GitHub
+~clang-tidy --checks="bugprone-a*,bugprone-b*,bugprone-c*,bugprone-d*,bugprone-em*,bugprone-ex*,bugprone-f*,bugprone-i*,bugprone-l*,bugprone-m*,bugprone-n*,bugprone-o*,bugprone-p*,bugprone-r*,bugprone-s*,bugprone-t*,bugprone-u*,bugprone-v*,performance-*,readability-a*,readability-b*,readability-c*,readability-d*,readability-e*,readability-f*,readability-i*,readability-m*,readability-n*,readability-o*,readability-q*,readability-r*,readability-si*,readability-st*,readability-u*,portability-*,clang-analyzer-*,cppcoreguidelines-avoid-ca*,cpp-coreguidelines-avoid-co*,cpp-coreguidelines-avoid-d*,cpp-coreguidelines-avoid-g*,cpp-coreguidelines-avoid-n*,cpp-coreguidelines-avoid-r*,cpp-coreguidelines-i*,cpp-coreguidelines-m*,cpp-coreguidelines-n*,cpp-coreguidelines-o*,cpp-coreguidelines-pr*,cpp-coreguidelines-pro-bounds-p*,cpp-coreguidelines-pro-t*,cpp-coreguidelines-r*,cpp-coreguidelines-s*,cpp-coreguidelines-v*" --extra-arg="-O0 -Wall -Werror -Wshadow -Wextra -pedantic-errors -std=c++20" -p ./compile_commands.json src/sac_format.cpp~
+** [2023-11-21 Tue 10:16]
+Prior to =git add -A= be sure to run =clang-format= on all *.cpp and *.hpp files!
+
+~clang-format -style=file -i src/sac_format.cpp~

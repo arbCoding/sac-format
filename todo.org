@@ -10,19 +10,11 @@ which is nice.
 ** DONE Testing :testing:
 *** DONE Move Unit tests from PsSp :unit:
 *** DONE Benchmarks :benchmark:
-** DONE Refactor Trace :refactor:
-*** DONE Remove boost dependency
-The only reason I need boost is for boost::algorithm::trim(); to remove leading
-and trailing white spaces. I feel like that is not a great reason to require
-boost (which is a HUGE library)
-*** TODO Improved functionality :functionality:
-**** DONE Maintain only doubles of the header/footer pairs (e.g., stla/f_stla)
-The only time this matters is at read/write. On read, we can read it in as a
-float and immediately =static_cast<double>=. On writing, we just
-=static_cast<float>= prior to writing. This will get rid of the need to deal with
-simultaneously updating the double and float versions (hard to remember which is
-which).
-**** TODO Great Circle Arc calculation
+*** DONE data2 read/write :unit:
+*** DONE not =equal_within_tolerance= :unit:
+*** DONE =legacy_write= read/write :unit:
+** TODO Improved functionality :functionality:
+*** TODO Great Circle Arc calculation
 Use [[https://en.wikipedia.org/wiki/Haversine_formula][Haversine]] formula to start. Later can move on to Lambert's formula for long
 lines ([[https://en.wikipedia.org/wiki/Geographical_distance#Lambert's_formula_for_long_lines][Wikipedia]])
 
@@ -34,42 +26,80 @@ lines ([[https://en.wikipedia.org/wiki/Geographical_distance#Lambert's_formula_f
 ***** TODO Link paired headers
 e.g., az and baz should be linked, if one is edited the other is updated
 Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.
-**** TODO Read-inspect function
+*** TODO Read-inspect function
 Like read, but it prints to std::cout for every header it readers (not data
 vectors!) in case you want to inspect a potentially corrupt SAC-file.
+*** TODO ASCII read/write support :ascii:
+**** TODO Fortran style text files.
+***** TODO Read in
+***** TODO Write out
+
+** DONE Refactor Trace :refactor:
+*** DONE Remove boost dependency
+The only reason I need boost is for boost::algorithm::trim(); to remove leading
+and trailing white spaces. I feel like that is not a great reason to require
+boost (which is a HUGE library)
 *** DONE Getters and setters
 *** DONE Store data in single-type arrays
 **** DONE Use lookup table
 Lookup table to keep track of where data is stored.
+**** DONE Maintain only doubles of the header/footer pairs (e.g., stla/f_stla)
+The only time this matters is at read/write. On read, we can read it in as a
+float and immediately =static_cast<double>=. On writing, we just
+=static_cast<float>= prior to writing. This will get rid of the need to deal with
+simultaneously updating the double and float versions (hard to remember which is
+which).
 ** DONE Use Enum class for lookup table, not string_view.
-** CI/CD GitHub workflow
-** Documentation :documentation:
+** TODO CI/CD GitHub workflow
+*** TODO Testing
+**** DONE Ubuntu :linux:
+**** TODO Windows :windows:
+***** TODO Windows MSVC compilation
+Setup this up locally on HP Elitebook to troubleshoot. Once working, test on github.
+****** TODO Install MSVC (I think needs vs code?)
+***** TODO Windows MINGW compilation
+***** TODO CMake presets
+**** TODO macOS :macos:
+*** DONE Code Coverage
+*** TODO Analysis :analysis:
+**** DONE Code Analysis :code:
+**** TODO ReviewDog :misc:
+***** TODO Vale (spelling and grammar) :spelling:gammar:
+**** TODO Style :style:
+***** TODO Setup Uncrustify beautifier (need to tweak rules)
+***** DONE CPPLint workflow
+***** TODO Infer static analysis
+#+begin_src bash :eval no
+cmake --preset clang-release
+# Make sure to skip everything in the '_deps' folder!
+cp .inferconfig ./build/release/clang/.inferconfig && cd./build/release/clang
+infer run --compilation-database compile_commands.json
+#+end_src
+*** TODO Package for download
+I think ReviewDog has a yml that could work as an example for this action
+** DONE Documentation :documentation:
 *** DONE Update README.org :readme:
 Short and succinct
 *** DONE GitHub.io website :website:
 **** DONE Use [[https://olmon.gitlab.io/org-themes/readtheorg_inline/readtheorg_inline.html][ReadTheOrg Inline]] ([[https://github.com/fniessen/org-html-themes][GitHub]])
-*** TODO Fill in documentation :details:
+*** DONE Fill in documentation :details:
 **** DONE Sac format
 **** DONE Quickstart
-**** TODO Getters/Setters
-**** TODO Trace class
-**** TODO Low-level I/O
-**** TODO Testing
-**** TODO Benchmarking
-**** TODO Example programs
+**** DONE Getters/Setters
+**** DONE Trace class
+**** DONE Low-level I/O
+**** DONE Testing
+**** DONE Benchmarking
+**** DONE Example programs
 **** DONE Dependencies
 *** DONE PDF :pdf:
 This involves setting up the export settings for the website for LaTeX.
 ** TODO Example programs
 *** DONE list_sac
 *** TODO convert_sac
-Take a sacfile and an input flag for version (6/7), write out as updated version.
+1) convert between v6 and v7
+2) convert between binary and ascii
 *** TODO inspect_sac
 ** DONE Namespace sacfmt
 ** DONE Make single-header!
-** TODO ASCII read/write support :ascii:
-*** TODO Fortran style text files.
-**** TODO Read in
-**** TODO Write out
-
 * Inbox

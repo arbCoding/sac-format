@@ -22,6 +22,12 @@
 <a href="https://app.codacy.com/gh/arbCoding/sac-format/dashboard">
 <img alt="Codacy grade" src="https://img.shields.io/codacy/grade/870db5c2793a48df9ed98e942a08fc9e" />
 </a>
+
+<a href="https://github.com/arbCoding/sac-format/actions/workflows/cpp-linter.yml">
+<img alt="CPP-Linter Results" src="https://github.com/arbCoding/sac-format/actions/workflows/cpp-linter.yml/badge.svg" />
+</a>
+
+</a>
 #+end_export
 
 * Introduction
@@ -47,8 +53,8 @@ working on Windows, macOS, and Linux systems.
 sac-format is *safe*---testing is an important part of software development. The
 sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
 Everything from low-level binary conversions to high-level =Trace= reading/writing
-are tested and confirmed working. New tests added when they're imagined. Check
-and run the tests yourself. See the [[Testing][Testing]] section for more information.
+are tested and confirmed working. Check and run the tests yourself. See the
+[[Testing][Testing]] section for more information.
 
 *** Fast
 
@@ -189,13 +195,58 @@ int main() {
 
 ** Trace class
 
+The =Trace= class provides easy access to SAC-files in C++. Each SAC-file is a
+=Trace=; therefore, each =Trace= object is a seismic trace (seismogram).
+
 *** Reading SAC
+
+SAC-files can be read in by using the parameterized constructor with a [[https://en.cppreference.com/w/cpp/filesystem/path][=std::filesystem::path=]] ([[https://en.cppreference.com/w/cpp/header/filesystem][=<filesystem>=]]) or a [[https://en.cppreference.com/w/cpp/string/basic_string][=std::string=]] ([[https://en.cppreference.com/w/cpp/header/string][=<string>=]]) variable that corresponds to the location of the SAC-file.
+
+For example:
+#+begin_src C++ :eval no
+#include <filesystem>
+#include <sac_foramt.hpp>
+
+int main() {
+  std::filesystem::path my_file{"/home/user/data/ANMO.SAC"};
+  sacfmt::Trace anmo = Trace(my_file);
+  return EXIT_SUCCESS;
+}
+#+end_src
 
 *** Writing SAC
 
+Writing SAC files can be done using one of two write functions.
+
+**** =v7= files
+
+Use =write= (for example =trace.write(filename)=).
+**** =v6= files
+
+Use =legacy_write= (for example =trace.legacy_write(filename)=).
+
 *** Getters and Setters
 
+Every [[SAC-file format][SAC variable]] is accessed via getters and setters of the same name.
+
+**** Example Getters
+
+- =trace.npts()=
+- =trace.data1()=
+- =trace.kstnm()=
+**** Example Setters
+
+- =trace.kevnm("Event 1")=
+- =trace.evla(32.89)=
+- =trace.mag(3.21)=
+
 *** Internal Structure
+
+The SAC-trace stores the data internally in a series of pre-allocated
+[[https://en.cppreference.com/w/cpp/container/array][=std::array=]] ([[https://en.cppreference.com/w/cpp/header/array][=<array>=]]) container objects. [[Getters and Setters][Getters and setters]] access these via
+a [[Lookup Table][lookup table]]. The internal components are below:
+
+**** Lookup Table
 
 **** =floats= array
 
@@ -209,29 +260,147 @@ int main() {
 
 **** =data= array
 
-**** Lookup Table
-
 *** Convenience Methods
 
+None implemented yet.
 
 ** Low-Level I/O
 
+Low-level I/O functions are as follows:
+
+**** Binary conversion
+
+***** =int_to_binary= and =binary_to_int=
+
+Conversion pair for binary representation of integer values.
+
+***** =float_to_binary= and =binary_to_float=
+
+Conversion pair for binary representation of floating-point values.
+
+***** =double_to_binary= and =binary_to_double=
+
+Conversion pair for binary representation of double-precision values.
+
+***** =string_to_binary= and =binary_to_string=
+
+Conversion pair for binary representation of two-word (regular) string values.
+
+***** =long_string_to_binary= and =binary_to_long_string=
+
+Conversion pair for binary representation of four-word (only [[=kstnm=]]) string
+values.
+
+**** Reading/Writing
+
+***** =read_word=, =read_two_words=, =read_four_words=, and =read_data=
+
+Functions to read one-, two-, and four-word variables (depending on the header)
+and an arbitrary amount of binary data (exclusive to =data1= and =data2=).
+
+***** =convert_to_word=, =convert_to_words=, and =bool_to_word=
+
+Takes objects and converts them into =std::vector<char>= (=convert_to_word= and
+=bool_to_word=) or =std::array<char, N>= (=convert_to_words=, N = # of words).
+
+***** =write_words=
+
+Writes input words (as =std::vector<char>=) to a binary SAC-file.
+
+**** Utility
+
+***** =concat_words=
+
+Concatenates words taking into account the system endianness.
+
+***** =bits_string= and =string_bits=
+
+Template function that performs conversion of binary strings of arbitrary length
+to an arbitrary number of words.
+
+***** =remove_leading_spaces= and =remove_trailing_spaces=
+
+Remove leading and trailing blank spaces from strings assuming ASCII convention
+(space character is integer 32, below that value are control characters that
+also appear as blank spaces).
+
+***** =string_cleaning=
+
+Ensures string does not contain an internal termination character (=\0=) and
+removes it if present, then removes blank spaces.
+
+***** =prep_string=
+
+Performs =string_cleaning= followed by string truncation/padding to the necessary
+length.
+
+***** =equal_within_tolerance=
+
+Floating-point/double-precision equality within a provided tolerance (default is
+=f_eps=, defined in [[=sac_format.hpp=]]).
+
 ** Testing
 
+=utests.cpp= contains the unit- and integration-tests, using Catch2. Test coverage
+details are visible on [[https://app.codecov.io/gh/arbCoding/sac-format][CodeCov.io]] and [[https://app.codacy.com/gh/arbCoding/sac-format/dashboard][Codacy.com]]. All tests can be locally-run
+to ensure full functionality and compliance.
+
+*** Errors only
+
+By default =utests= prints out a pass summary, without details unless an error is
+encountered.
+
+*** Full output
+
+By passing the =--success= flag (=utests --success=) you can see the full results of
+all tests.
+
+*** Compact output
+
+The [[Full output][full output]] is verbose, using the compact reporter will condense the test
+results (=utests --reporter=compact --success=).
+
+*** Additional options
+
+To see additional options, run =utests -?=.
+
 ** Benchmarking
+
+=benchmark.cpp= contains the benchmarks. Running it locally will provide
+information on how long each function takes; benchmarks start with the low-level
+I/O function and build up to Trace reading, writing, and equality comparison.
+
+To view available optional flags, run =becnhmark -?=.
 
 ** Source File List
 
 *** Core
-**** =sac_format.hpp=
-**** =sac_format.cpp=
-*** Testing and Benchmarking
-**** =util.hpp=
-**** =utests.cpp=
-**** =benchmark.cpp=
-*** Example programs
-**** =list_sac.cpp=
 
+The two core files are split in the standard interface (hpp)/implementation
+(cpp) format.
+
+**** =sac_format.hpp=
+
+Interface---function declarations and constants.
+
+**** =sac_format.cpp=
+
+Implementation---function details.
+
+*** Testing and Benchmarking
+
+**** =util.hpp=
+
+Utility functions and constants exclusive to testing and benchmarking. Is not
+split into interface/implementation.
+
+**** =utests.cpp=
+
+**** =benchmark.cpp=
+
+*** Example programs
+
+**** =list_sac.cpp=
 
 ** Dependencies
 
