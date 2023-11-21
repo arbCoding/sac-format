@@ -15,5 +15,7 @@ jobs:
         id: linter
         with:
           style: file
+          version: 15
           files-changed-only: false
+          extra-args: "-std=c++20"
           thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
