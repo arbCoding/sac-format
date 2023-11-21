@@ -1,3 +1,5 @@
+// Copyright 2023 Alexander R. Blanchette
+
 #include <bitset>
 #include <iomanip>
 #include <limits>
@@ -8,8 +10,8 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/benchmark/catch_benchmark.hpp>
 
-#include "sac_format.hpp"
-#include "util.hpp"
+#include <sac_format.hpp>
+#include <util.hpp>
 
 using namespace sacfmt;
 namespace fs = std::filesystem;
@@ -53,7 +55,8 @@ TEST_CASE("Binary Conversion") {
         return binary_to_float(float_to_binary(lowest_f));
       };
       CAPTURE(s_neg_epsilon_f);
-      BENCHMARK("Float->Binary->Float negative std::numeric_limits<float>::epsilon()") {
+      BENCHMARK("Float->Binary->Float negative"
+                " std::numeric_limits<float>::epsilon()") {
         return binary_to_float(float_to_binary(neg_epsilon_f));
       };
     }
@@ -74,11 +77,13 @@ TEST_CASE("Binary Conversion") {
       };
     }
     SECTION("Negative") {
-      BENCHMARK("Double->Binary->Double std::numeric_limits<double>::lowest()") {
+      BENCHMARK("Double->Binary->Double"
+                " std::numeric_limits<double>::lowest()") {
         return binary_to_double(double_to_binary(lowest));
       };
       CAPTURE(s_neg_epsilon);
-      BENCHMARK("Double->Binary->Double negative std::numeric_limits<double>::epsilon()") {
+      BENCHMARK("Double->Binary->Double negative"
+                " std::numeric_limits<double>::epsilon()") {
         return binary_to_double(double_to_binary(neg_epsilon));
       };
     }
@@ -87,7 +92,8 @@ TEST_CASE("Binary Conversion") {
         return binary_to_double(double_to_binary(highest));
       };
       CAPTURE(s_epsilon);
-      BENCHMARK("Double->Binary->Double std::numeric_limits<double>::epsilon()") {
+      BENCHMARK("Double->Binary->Double"
+                " std::numeric_limits<double>::epsilon()") {
         return binary_to_double(double_to_binary(epsilon));
       };
     }
@@ -213,24 +219,25 @@ TEST_CASE("Input/Output") {
       BENCHMARK("Random vector generation.") {
         std::vector<double> data{};
         data.resize(test_sac.npts());
-        random_vector(data);
+        random_vector(&data);
         return;
       };
     }
     SECTION("Comparison Between Out and In Random") {
       std::vector<double> data{};
       data.resize(test_sac.npts());
-      random_vector(data);
+      random_vector(&data);
       test_sac.data1(data);
       if (test_sac.leven() == false || test_sac.iftype() > 1) {
         data.resize(test_sac.data2().size());
-        random_vector(data);
+        random_vector(&data);
         test_sac.data2(data);
       }
       test_sac.write(tmp_file);
       Trace in_sac = Trace(tmp_file);
-      // Note that this equality tests to equality within tolerance of what can be handled via a float
-      // this is because binary SAC files use floats for the data values, not doubles
+      // Note that this equality tests to equality within tolerance of what can
+      // be handled via a float this is because binary SAC files use floats for
+      // the data values, not doubles
       BENCHMARK("Trace Comparison") {
         (void) (test_sac == in_sac);
       };

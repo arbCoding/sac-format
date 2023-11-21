@@ -1,4 +1,6 @@
-#include "sac_format.hpp"
+// Copyright 2023 Alexander R. Blanchette
+
+#include <sac_format.hpp>
 
 // Implementation of the interface in sac_format.hpp
 namespace sacfmt {
@@ -10,7 +12,8 @@ int word_position(const int word_number) { return (word_number * word_length); }
 word_one int_to_binary(const int x) {
     word_one bits{};
     if (x >= 0) { bits = word_one(static_cast<size_t>(x)); }
-    else { bits = word_one(static_cast<size_t>(std::pow(2, binary_word_size) + x)); }
+    else { bits = word_one(static_cast<size_t>(std::pow(2,
+        binary_word_size) + x)); }
     return bits;
 }
 
@@ -36,15 +39,14 @@ word_two double_to_binary(const double x) { return double_to_bits(x).bits; }
 
 double binary_to_double(const word_two& x) { return double_to_bits(x).value; }
 
-// To get rid of requirement on boost library
-void remove_leading_spaces(std::string& str) {
-    while ((static_cast<int>(str.front()) <= ascii_space) && (!str.empty())) {
-        str.erase(0, 1);
+void remove_leading_spaces(std::string* str) {
+    while ((static_cast<int>(str->front()) <= ascii_space) && (!str->empty())) {
+        str->erase(0, 1);
     }
 }
-void remove_trailing_spaces(std::string& str) {
-    while ((static_cast<int>(str.back()) <= ascii_space) && (!str.empty())) {
-        str.pop_back();
+void remove_trailing_spaces(std::string* str) {
+    while ((static_cast<int>(str->back()) <= ascii_space) && (!str->empty())) {
+        str->pop_back();
     }
 }
 
@@ -53,27 +55,29 @@ std::string string_cleaning(const std::string& str) {
     std::string result{str};
     size_t null_position{str.find('\0')};
     if (null_position != std::string::npos) { result.erase(null_position); }
-    // Remove leading and trailing white spaces
-    //boost::algorithm::trim(result);
-    remove_leading_spaces(result);
-    remove_trailing_spaces(result);
+    remove_leading_spaces(&result);
+    remove_trailing_spaces(&result);
     return result;
 }
 
-void prep_string(std::string& str, const size_t str_size) {
-    str = string_cleaning(str);
-    if (str.length() > str_size) { str.resize(str_size); }
-    else if (str.length() < str_size) { str = str.append(str_size - str.length(), ' '); }
+void prep_string(std::string* str, const size_t str_size) {
+    *str = string_cleaning(*str);
+    if (str->length() > str_size) { str->resize(str_size); }
+    else if (str->length() < str_size) {
+        *str = str->append(str_size - str->length(), ' ');
+    }
 }
 
 template <typename T>
-void string_bits(T& bits, const std::string& str, const size_t str_size) {
+void string_bits(T* bits, const std::string& str, const size_t str_size) {
     constexpr size_t char_size{bits_per_byte};
     std::bitset<char_size> byte{};
     for (size_t i{0}; i < str_size; ++i) {
         size_t character{static_cast<size_t>(str[i])};
         byte = std::bitset<char_size>(character);
-        for (size_t j{0}; j < char_size; ++j) { bits[(i * char_size) + j] = byte[j]; }
+        for (size_t j{0}; j < char_size; ++j) {
+            (*bits)[(i * char_size) + j] = byte[j];
+        }
     }
 }
 
@@ -92,10 +96,10 @@ std::string bits_string(const T& bits, const size_t num_words) {
 word_two string_to_binary(std::string x) {
     constexpr size_t string_size{2 * word_length};
     // 1 byte per character
-    prep_string(x, string_size);
+    prep_string(&x, string_size);
     // Two words (8 characters)
     word_two bits{};
-    string_bits(bits, x, string_size);
+    string_bits(&bits, x, string_size);
     return bits;
 }
 
@@ -106,10 +110,10 @@ std::string binary_to_string(const word_two& x) {
 
 word_four long_string_to_binary(std::string x) {
     constexpr size_t string_size{4 * word_length};
-    prep_string(x, string_size);
+    prep_string(&x, string_size);
     // Four words (16 characters)
     word_four bits{};
-    string_bits(bits, x, string_size);
+    string_bits(&bits, x, string_size);
     return bits;
 }
 
@@ -210,7 +214,9 @@ std::vector<char> convert_to_word(const T x) {
     std::memcpy(tmp, &x, word_length);
     std::vector<char> word{};
     word.resize(word_length);
-    for (int i{0}; i < word_length; ++i) { word[static_cast<size_t>(i)] = tmp[i]; }
+    for (int i{0}; i < word_length; ++i) {
+        word[static_cast<size_t>(i)] = tmp[i];
+    }
     return word;
 }
 
@@ -226,7 +232,9 @@ std::vector<char> convert_to_word(const double x) {
     std::memcpy(tmp, &x, 2 * word_length);
     std::vector<char> word{};
     word.resize(2 * word_length);
-    for (int i{0}; i < 2 * word_length; ++i) { word[static_cast<size_t>(i)] = tmp[i]; }
+    for (int i{0}; i < 2 * word_length; ++i) {
+        word[static_cast<size_t>(i)] = tmp[i];
+    }
     return word;
 }
 
@@ -955,4 +963,4 @@ void Trace::write(const std::filesystem::path& path, const bool legacy) const {
 void Trace::legacy_write(const std::filesystem::path& path) const {
     write(path, true);
 }
-};
+};  // namespace sacfmt

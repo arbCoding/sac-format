@@ -1,3 +1,5 @@
+// Copyright 2023 Alexander R. Blanchette
+
 #ifndef SAC_FORMAT_HPP_20231115_0945
 #define SAC_FORMAT_HPP_20231115_0945
 #pragma once
@@ -24,8 +26,8 @@ namespace sacfmt {
 // Constants
 //--------------------------------------------------------------------------
 // Size of data chunks in binary SAC files (called words)
-constexpr int word_length{4}; // bytes
-constexpr int bits_per_byte{8}; // binary character size
+constexpr int word_length{4};  // bytes
+constexpr int bits_per_byte{8};  // binary character size
 // Each word is 32-bits (4 bytes)
 constexpr int binary_word_size{word_length * bits_per_byte};
 // First word of (first) data-section
@@ -52,15 +54,15 @@ int word_position(const int word_number);
 union float_to_bits {
     float value;
     word_one bits;
-    explicit float_to_bits(float x) : value(x){}
-    explicit float_to_bits(const word_one& binary) : bits(binary){}
+    explicit float_to_bits(float x) : value(x) {}
+    explicit float_to_bits(const word_one& binary) : bits(binary) {}
 };
 // Doubles to binary and back
 union double_to_bits {
     double value;
     word_two bits;
-    explicit double_to_bits(double x) : value(x){}
-    explicit double_to_bits(const word_two& binary) : bits(binary){}
+    explicit double_to_bits(double x) : value(x) {}
+    explicit double_to_bits(const word_two& binary) : bits(binary) {}
 };
 // SAC uses 32 bit ints
 word_one int_to_binary(const int x);
@@ -72,15 +74,15 @@ float binary_to_float(const word_one& x);
 word_two double_to_binary(const double x);
 double binary_to_double(const word_two& x);
 // To get rid of requirement on boost library
-void remove_leading_spaces(std::string& str);
-void remove_trailing_spaces(std::string& str);
+void remove_leading_spaces(std::string* str);
+void remove_trailing_spaces(std::string* str);
 // Remove leading/trailing white-space and control characters
 std::string string_cleaning(const std::string& str);
 //
-void prep_string(std::string& str, const size_t str_size);
+void prep_string(std::string* str, const size_t str_size);
 //
 template <typename T>
-void string_bits(T& bits, const std::string& str, const size_t str_size);
+void string_bits(T* bits, const std::string& str, const size_t str_size);
 //
 template <typename T>
 std::string bits_string(const T& bits, const size_t num_words);
@@ -385,10 +387,11 @@ const std::unordered_map<name, size_t> sac_map = {
     {name::data2,     1}
 };
 class Trace {
-public:
-    explicit Trace();
+ public:
+    Trace();
     explicit Trace(const std::filesystem::path& path);
-    void write(const std::filesystem::path& path, const bool legacy = false) const;
+    void write(const std::filesystem::path& path,
+               const bool legacy = false) const;
     void legacy_write(const std::filesystem::path& path) const;
     bool operator==(const Trace& other) const;
     // Convenience functions
@@ -645,19 +648,20 @@ public:
     // Data
     void data1(const std::vector<double>& x);
     void data2(const std::vector<double>& x);
-private:
-    //cppcheck-suppress unusedStructMember
+
+ private:
+    // cppcheck-suppress unusedStructMember
     std::array<float, 39> floats{};
-    //cppcheck-suppress unusedStructMember
+    // cppcheck-suppress unusedStructMember
     std::array<double, 22> doubles{};
-    //cppcheck-suppress unusedStructMember
+    // cppcheck-suppress unusedStructMember
     std::array<int, 26> ints{};
-    //cppcheck-suppress unusedStructMember
+    // cppcheck-suppress unusedStructMember
     std::array<bool, 4> bools{};
-    //cppcheck-suppress unusedStructMember
+    // cppcheck-suppress unusedStructMember
     std::array<std::string, 23> strings{};
-    //cppcheck-suppress unusedStructMember
+    // cppcheck-suppress unusedStructMember
     std::array<std::vector<double>, 2> data{};
 };
-};
+};  // namespace sacfmt
 #endif

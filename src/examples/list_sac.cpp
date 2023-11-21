@@ -1,7 +1,9 @@
+// Copyright 2023 Alexander R. Blanchette
+
 #include <filesystem>
 #include <iostream>
 
-#include "sac_format.hpp"
+#include <sac_format.hpp>
 
 #if defined(_MSC_VER) || defined(__MINW32__)
 // I don't care if it was depracted in C++17, it still works!
@@ -43,9 +45,11 @@ int main(const int arg_count, const char* arg_array[]) {
   // Okay, now we assume it is a SAC-file, let's go.
   Trace trace = Trace(file);
   // Time to spit out the information
-  std::cout << "\033[1;36;40m=======================================================\n";
+  std::cout << "\033[1;36;40m=========================="
+            << "=============================\n";
   std::cout << "\t\tSAC List\n";
-  std::cout << "=======================================================\033[0m\n";
+  std::cout << "========================================"
+            << "===============\033[0m\n";
   std::cout << "\tFile: " << file << '\n';
   std::cout << "\033[1;32;40m=============================================\n";
   std::cout << "\t\tSTATION\n";
