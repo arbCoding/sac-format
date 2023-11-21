@@ -1282,5 +1282,44 @@ TEST_CASE("Trace Read/Write") {
     SECTION("Everything") {
       REQUIRE(trace != in);
     }
+    SECTION("Not equal within tolerance") {
+      std::vector<double> data{trace.data1()};
+      data[0] += 1.0;
+      trace.data1(data);
+      REQUIRE(!equal_within_tolerance(trace.data1(), in.data1()));
+      REQUIRE(trace != in);
+    }
+  }
+  SECTION("v6") {
+    trace.nvhdr(7);
+    trace.legacy_write(tmp_file);
+    Trace in = Trace(tmp_file);
+    fs::remove(tmp_file);
+    SECTION("Convert header") {
+      REQUIRE(in.nvhdr() == 6);
+      // Make sure we didn't change the original trace
+      REQUIRE(trace.nvhdr() == 7);
+      REQUIRE(trace != in);
+    }
+  }
+  SECTION("Data2") {
+    trace.iftype(4); // XY
+    trace.data2(trace.data1());
+    SECTION("Equal") {
+      trace.write(tmp_file);
+      Trace in = Trace(tmp_file);
+      fs::remove(tmp_file);
+      REQUIRE(equal_within_tolerance(trace.data2(), in.data2()));
+      REQUIRE(trace == in);
+    }
+    SECTION("Not Equal") {
+      std::vector<double> data{trace.data2()};
+      trace.write(tmp_file);
+      Trace in = Trace(tmp_file);
+      fs::remove(tmp_file);
+      data[data.size() - 1] -= 1.0;
+      REQUIRE(!equal_within_tolerance(trace.data2(), in.data2()));
+      REQUIRE(trace != in);
+    }
   }
 }
