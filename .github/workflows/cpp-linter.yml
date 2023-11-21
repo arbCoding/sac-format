@@ -18,6 +18,8 @@ jobs:
       - name: cpp-lint
         uses: cpp-linter/cpp-linter-action@v2
         id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           style: file
           version: 15
