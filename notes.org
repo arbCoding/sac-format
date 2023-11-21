@@ -1,0 +1,5 @@
+* Inbox
+** [2023-11-21 Tue 10:16]
+Prior to =git add -A= be sure to run =clang-format= on all *.cpp and *.hpp files!
+
+~clang-format -style=file -i src/sac_format.cpp~

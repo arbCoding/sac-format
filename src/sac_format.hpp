@@ -65,8 +65,8 @@ union double_to_bits {
   explicit double_to_bits(const word_two &binary) : bits(binary) {}
 };
 // SAC uses 32 bit ints
-word_one int_to_binary(const int x);
-int binary_to_int(word_one x);
+word_one int_to_binary(const int num);
+int binary_to_int(word_one bits);
 // SAC uses 32 bit floats
 word_one float_to_binary(const float x);
 float binary_to_float(const word_one &x);
@@ -84,7 +84,8 @@ void prep_string(std::string *str, const size_t str_size);
 template <typename T>
 void string_bits(T *bits, const std::string &str, const size_t str_size);
 //
-template <typename T> std::string bits_string(const T &bits, const size_t num_words);
+template <typename T>
+std::string bits_string(const T &bits, const size_t num_words);
 // Note the string conversion functions handle over-sized strings
 // by truncating them, and undersized strings by padding them with spaces
 // SAC uses either 64 bit strings (2 words, 8 bytes, 8 characters)
@@ -387,7 +388,8 @@ class Trace {
 public:
   Trace();
   explicit Trace(const std::filesystem::path &path);
-  void write(const std::filesystem::path &path, const bool legacy = false) const;
+  void write(const std::filesystem::path &path,
+             const bool legacy = false) const;
   void legacy_write(const std::filesystem::path &path) const;
   bool operator==(const Trace &other) const;
   // Convenience functions

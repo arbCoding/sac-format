@@ -9,39 +9,39 @@ namespace sacfmt {
 //-----------------------------------------------------------------------------
 int word_position(const int word_number) { return (word_number * word_length); }
 
-word_one int_to_binary(const int x) {
+word_one int_to_binary(const int num) {
   word_one bits{};
-  if (x >= 0) {
-    bits = word_one(static_cast<size_t>(x));
+  if (num >= 0) {
+    bits = word_one(static_cast<size_t>(num));
   } else {
-    bits = word_one(static_cast<size_t>(std::pow(2, binary_word_size) + x));
+    bits = word_one(static_cast<size_t>(std::pow(2, binary_word_size) + num));
   }
   return bits;
 }
 
-int binary_to_int(word_one x) {
+int binary_to_int(word_one bits) {
   int result{};
-  if (x.test(binary_word_size - 1)) {
-    x = ~x;
-    result = static_cast<int>(x.to_ulong());
+  if (bits.test(binary_word_size - 1)) {
+    bits = ~bits;
+    result = static_cast<int>(bits.to_ulong());
     result += 1;
     // Change sign to make it as negative
     result *= -1;
   } else {
-    result = static_cast<int>(x.to_ulong());
+    result = static_cast<int>(bits.to_ulong());
   }
   return result;
 }
 
 // Union makes this so easy
-word_one float_to_binary(const float x) { return float_to_bits(x).bits; }
+word_one float_to_binary(const float num) { return float_to_bits(num).bits; }
 
-float binary_to_float(const word_one &x) { return float_to_bits(x).value; }
+float binary_to_float(const word_one &bin) { return float_to_bits(bin).value; }
 
 // Once again, union to the rescue!
-word_two double_to_binary(const double x) { return double_to_bits(x).bits; }
+word_two double_to_binary(const double num) { return double_to_bits(num).bits; }
 
-double binary_to_double(const word_two &x) { return double_to_bits(x).value; }
+double binary_to_double(const word_two &bin) { return double_to_bits(bin).value; }
 
 void remove_leading_spaces(std::string *str) {
   while ((static_cast<int>(str->front()) <= ascii_space) && (!str->empty())) {

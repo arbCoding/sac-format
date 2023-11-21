@@ -11,11 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: cpp-linter/cpp-linter-action@v2
+      - name: Make compile_commands.json
+        run: |
+          cmake --preset gh-coverage
+
+      - name: cpp-lint
+        uses: cpp-linter/cpp-linter-action@v2
         id: linter
         with:
           style: file
           version: 15
           files-changed-only: false
-          extra-args: "-std=c++20"
+          extra-args: "-std=c++20 -p ./build/debug/gh-coverage/compile_commands.json"
           thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
