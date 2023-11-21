@@ -13,6 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Setup Clang 15.0.7
+      run: |
+        export CC=$(brew --prefix llvm@15)/bin/clang
+        export CXX=$(brew --prefix llvm@15)/bin/clang++
+
     - name: Configure CMake
       run: cmake --preset gh-coverage
 
