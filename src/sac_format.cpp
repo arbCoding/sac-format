@@ -371,6 +371,17 @@ double azimuth(const double latitude1, const double longitude1, const double lat
   const double lat2{degrees_to_radians(latitude2)};
   const double lon2{degrees_to_radians(longitude2)};
   const double dlon{lon2 - lon1};
+  // Further off than spherical Earth assumption
+  // Using reference ellipsoid
+  // 'Normal section azimuth', not geodesic azimuth
+  //const double ellip{wgs84_f * (2 - wgs84_f)};
+  //const double ellip_minus{1 - std::pow(ellip, 2)};
+  //const double lambda{(ellip_minus * (std::tan(lat2) / std::tan(lat1))) + (ellip * std::sqrt((1 + (ellip_minus * std::pow(std::tan(lat2), 2))) / (1 + (ellip_minus * std::pow(std::tan(lat1), 2)))))};
+  //const double numerator{std::sin(dlon)};
+  //const double denominator{(lambda - std::cos(dlon)) * std::sin(lat1)};
+  // Assuming spherical Earth
+  //const double numerator{std::sin(dlon)};
+  //const double denominator{(std::cos(lat1) * std::tan(lat2)) - (std::sin(lat1) * std::cos(dlon))};
   const double numerator{std::sin(dlon) * std::cos(lat2)};
   const double denominator{(std::cos(lat1) * std::sin(lat2)) - (std::sin(lat1) * std::cos(lat2) * std::cos(dlon))};
   double result{radians_to_degrees(std::atan2(numerator, denominator))};
