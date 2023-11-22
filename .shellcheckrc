@@ -1,0 +1,3 @@
+# Allow 'ls -1 | grep'
+# I'm looking for a specific file with an alphanumeric name
+disable=SC2010

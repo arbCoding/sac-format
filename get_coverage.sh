@@ -12,10 +12,10 @@ fi
 cmake --preset gcc-coverage
 cmake --build build/debug/gcc-coverage
 # Run my unit tests
-cd ./build/debug/gcc-coverage/
+cd ./build/debug/gcc-coverage/ || exit
 ctest
 # Locate the gcov output
-cd ./CMakeFiles/sac-format.dir/
+cd ./CMakeFiles/sac-format.dir/ || exit
 # Run lcov to generate coverage report
 lcov -c -d . -o ./sac-format.lcov
 # Remove standard library references (linux)
@@ -24,4 +24,4 @@ lcov -r ./sac-format.lcov "/usr*" -o ./sac-format.lcov
 genhtml --demangle-cpp sac-format.lcov -o coverage --num-spaces 4
 # Move the coverage files
 mv ./coverage "$base/coverage"
-cd "$base"
+cd "$base" || exit
