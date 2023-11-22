@@ -51,30 +51,17 @@ simultaneously updating the double and float versions (hard to remember which is
 which).
 ** DONE Use Enum class for lookup table, not string_view.
 ** TODO CI/CD GitHub workflow
-*** TODO Testing
+*** DONE Testing
 **** DONE Ubuntu :linux:
-**** TODO Windows :windows:
-***** TODO Windows MSVC compilation
-Setup this up locally on HP Elitebook to troubleshoot. Once working, test on github.
-****** TODO Install MSVC (I think needs vs code?)
-***** TODO Windows MINGW compilation
-***** TODO CMake presets
-**** TODO macOS :macos:
+**** DONE Windows :windows:
+**** DONE macOS :macos:
 *** DONE Code Coverage
 *** TODO Analysis :analysis:
 **** DONE Code Analysis :code:
 **** TODO ReviewDog :misc:
 ***** TODO Vale (spelling and grammar) :spelling:gammar:
-**** TODO Style :style:
-***** TODO Setup Uncrustify beautifier (need to tweak rules)
+**** DONE Style :style:
 ***** DONE CPPLint workflow
-***** TODO Infer static analysis
-#+begin_src bash :eval no
-cmake --preset clang-release
-# Make sure to skip everything in the '_deps' folder!
-cp .inferconfig ./build/release/clang/.inferconfig && cd./build/release/clang
-infer run --compilation-database compile_commands.json
-#+end_src
 *** TODO Package for download
 I think ReviewDog has a yml that could work as an example for this action
 ** DONE Documentation :documentation:
