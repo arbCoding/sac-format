@@ -14,17 +14,22 @@ which is nice.
 *** DONE not =equal_within_tolerance= :unit:
 *** DONE =legacy_write= read/write :unit:
 ** TODO New functionality :functionality:
+
 *** TODO Great Circle Arc calculation
+
 Use [[https://en.wikipedia.org/wiki/Haversine_formula][Haversine]] formula to start. Later can move on to Lambert's formula for long
 lines ([[https://en.wikipedia.org/wiki/Geographical_distance#Lambert's_formula_for_long_lines][Wikipedia]])
 
 [[file:~/my_git/sac-format/src/sac_format.hpp::void calc_gcarc();]]
+
 ***** TODO n-vector for distance calculations
+
 [[https://en.wikipedia.org/wiki/N-vector][Wikipedia]], it has no singularities (unlike standard latitude/longitude).
 
 [[file:~/my_git/sac-format/src/sac_format.hpp::void calc_gcarc();]]
 
 ****** Turns out it is really quite simple to use
+
 [[https://www.ffi.no/en/research/n-vector/n-vector-explained][Norwegian Defense Research Establishment]]
 [[https://github.com/FFI-no/n-vector][GitHub]]
 
@@ -32,6 +37,51 @@ They provide an explanation (including using the ellipticity of the Earth) and
 matlab codes. I can write up a C++ version.
 
 They also provide a reference paper: [[https://www.navlab.net/Publications/A_Nonsingular_Horizontal_Position_Representation.pdf][Gade (2010)]]
+
+******* n-vector (normal)
+
+$\mathbf{n}_{AB}^{C}$ is the normal vector, from $A \rightarrow B$ in reference
+frame $C$ ($C$ is often $E$ for Earth, $A$ is often $E$ for center of Earth).
+
+******** Calculate n-vector from lat/lon
+
+$\mathbf{n}_{EA}^{E} = \left[ sin(\lambda), sin(\mu)\cdot cos(\lambda),
+-cos(\mu)\cdot \cos(\lambda) \right]$
+
+where $\lambda \in \left[-\frac{\pi}{2},\frac{\pi}{2}\right]$
+is latitude and $\mu \in \left(-\pi,\pi\right]$
+
+******* p-vector (position)
+
+$\mathbf{p}_{EA}^{E}$ is the position vector, from the center of the Earth to
+position $A$.
+
+******** calculate p-vector from n-vector
+
+$\mathbf{p}_{EA}^{A} = \frac{b}{\sqrt{(n_{x}^{E})^{2} +
+\frac{a^{2}}{b^{2}}(n_{y}^{E})^{2} +
+\frac{a^{2}}{b^{2}}(n_{z}^{E})^{2}}}\left[n_{x}^{E},\frac{a^{2}}{b^{2}}n_{y}^{E},\frac{a^{2}}{b^{2}}n_{z}^{E}\right] +
+h\mathbf{n}_{EA}^{A}$
+
+where $a,b$ are the semi-major and semi-minor axes of the reference ellipsoid
+model being used.
+
+*NOTE* that usually for a reference ellipsoid we use $a,f$, where $a$ is the semi-major axis and $f$ is the inverse flattening and then to calculate $b$ use $b=a*(1-f)$.
+
+For *WGS84*: $a=6378137$ meters and $f=\frac{1}{298.257223563}$.
+
+******* Distances between two points on surface of Earth
+
+$\Delta\mathbf{p}_{AB}^{E} = \mathbf{p}_{EB}^{E} - \mathbf{p}_{EA}^{E}$ is the distance vector
+
+Then, distance is then $\lvert \Delta\mathbf{p}_{AB}^{E} \rvert =
+\sqrt{\Delta\mathbf{p}_{AB}^{E}\cdot\Delta\mathbf{p}_{AB}^{E}}$ and the
+horizontal distance is the same, without the vertical component.
+
+****** Simpler
+
+$\Delta\sigma = arctan\left(\frac{\lvert\mathbf{n}_{1}\times\mathbf{n}_{2}\rvert}{\mathbf{n}_{1}\cdot\mathbf{n}_{2}}\right)$ (assumes spherical Earth)
+
 ***** TODO Link paired headers
 e.g., az and baz should be linked, if one is edited the other is updated
 Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.

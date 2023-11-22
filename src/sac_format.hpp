@@ -17,6 +17,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <numbers>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -56,6 +57,11 @@ constexpr int num_data{2};
 constexpr int modern_hdr_version{7};
 constexpr int old_hdr_version{6};
 constexpr int common_skip_num{7};
+// Testing for gcarc and azimuth/back-azimuth calculation with WGS84
+constexpr double wgs84_maj{6378137};
+constexpr double wgs84_f{1.0/298.257223563};
+constexpr double rad_per_deg{std::numbers::pi_v<double> / 180.0};
+constexpr double deg_per_rad{1.0 / rad_per_deg};
 //--------------------------------------------------------------------------
 // Conversions
 //--------------------------------------------------------------------------
@@ -131,6 +137,16 @@ bool equal_within_tolerance(const std::vector<double> &vector1,
                             const std::vector<double> &vector2,
                             double tolerance = f_eps);
 bool equal_within_tolerance(double val1, double val2, double tolerance = f_eps);
+// Position methods
+double degrees_to_radians(double degrees);
+double radians_to_degrees(double radians);
+std::array<double, 3> calc_nvec(double latitude, double longitude);
+std::array<double, 3> nvec_to_pvec(std::array<double, 3> n_vec, double major = wgs84_maj, double flatten = wgs84_f);
+// gcarc
+double gcarc(const std::array<double, 3>& n_vec_1, const std::array<double, 3>& n_vec_2);
+// azimuth
+double azimuth(double latitude1, double longitude1, double latitude2, double longitude2);
+
 enum class name {
   // Floats
   depmin,
@@ -642,6 +658,7 @@ public:
   void data2(const std::vector<double> &input);
 
 private:
+  // Objects
   // cppcheck-suppress unusedStructMember
   std::array<float, num_float> floats{};
   // cppcheck-suppress unusedStructMember

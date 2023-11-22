@@ -1322,3 +1322,23 @@ TEST_CASE("Trace Read/Write") {
     }
   }
 }
+
+TEST_CASE("Geometric operations") {
+  SECTION("Great Circle Arc (gcarc)") {
+    constexpr double lat1{38.4328};
+    constexpr double lon1{-118.155};
+    constexpr double lat2{36.801};
+    constexpr double lon2{-121.323};
+    constexpr double expected_gcarc{2.99645};
+    constexpr double expected_az{56.1169};
+    constexpr double expected_baz{238.043};
+    const std::array<double, 3> n_vec_1 = calc_nvec(lat1, lon1);
+    const std::array<double, 3> n_vec_2 = calc_nvec(lat2, lon2);
+    const double test_gcarc{gcarc(n_vec_1, n_vec_2)};
+    REQUIRE_THAT(test_gcarc, WithinAbs(expected_gcarc, 5e-3));
+    const double test_az{azimuth(lat2, lon2, lat1, lon1)};
+    const double test_baz{azimuth(lat1, lon1, lat2, lon2)};
+    REQUIRE_THAT(test_az, WithinAbs(expected_az, 0.2));
+    REQUIRE_THAT(test_baz, WithinAbs(expected_baz, 0.2));
+  }
+}

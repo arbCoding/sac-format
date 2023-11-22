@@ -323,6 +323,61 @@ bool equal_within_tolerance(const double val1, const double val2,
                             const double tolerance) {
   return (std::abs(val1 - val2) < tolerance);
 }
+// Position methods
+double degrees_to_radians(const double degrees) {
+  return rad_per_deg * degrees;
+}
+
+double radians_to_degrees(const double radians) {
+  return deg_per_rad * radians;
+}
+
+std::array<double, 3> calc_nvec(const double latitude, const double longitude) {
+  std::array<double, 3> result{};
+  const double lat{degrees_to_radians(latitude)};
+  const double lon{degrees_to_radians(longitude)};
+  result[0] = std::sin(lat);
+  result[1] = std::sin(lon) * std::cos(lat);
+  result[2] = -std::cos(lon) * std::cos(lat);
+  return result;
+}
+
+// Excludes elevation above/below reference ellipsoid (h)
+std::array<double, 3> nvec_to_pvec(const std::array<double, 3> n_vec, double major, double flatten) {
+  std::array<double, 3> result{};
+  const double minor{major * (1.0 - flatten)};
+  const double ratio{std::pow(major, 2) / std::pow(minor, 2)};
+  const double denominator{std::sqrt(std::pow(n_vec[0], 2) + (ratio * (std::pow(n_vec[1], 2) + std::pow(n_vec[2], 2))))};
+  const double factor{minor / denominator};
+  result[0] = factor * n_vec[0];
+  result[1] = factor * ratio * n_vec[1];
+  result[2] = factor * ratio * n_vec[2];
+  return result;
+}
+
+double gcarc(const std::array<double, 3>& n_vec_1, const std::array<double, 3>& n_vec_2) {
+  std::array<double, 3> cross_product{};
+  cross_product[0] = (n_vec_1[1] * n_vec_2[2]) - (n_vec_1[2] * n_vec_2[1]);
+  cross_product[1] = (n_vec_1[2] * n_vec_2[0]) - (n_vec_1[0] * n_vec_2[2]);
+  cross_product[2] = (n_vec_1[0] * n_vec_2[1]) - (n_vec_1[1] * n_vec_2[0]);
+  const double mag{std::sqrt(std::pow(cross_product[0], 2) + std::pow(cross_product[1], 2) + std::pow(cross_product[2], 2))};
+  const double dot{(n_vec_1[0] * n_vec_2[0]) + (n_vec_1[1] * n_vec_2[1]) + (n_vec_1[2] * n_vec_2[2])};
+  return radians_to_degrees(std::atan(mag / dot));
+}
+// I wonder if there is a way to do this with n-vectors
+double azimuth(const double latitude1, const double longitude1, const double latitude2, const double longitude2) {
+  const double lat1{degrees_to_radians(latitude1)};
+  const double lon1{degrees_to_radians(longitude1)};
+  const double lat2{degrees_to_radians(latitude2)};
+  const double lon2{degrees_to_radians(longitude2)};
+  const double dlon{lon2 - lon1};
+  const double numerator{std::sin(dlon) * std::cos(lat2)};
+  const double denominator{(std::cos(lat1) * std::sin(lat2)) - (std::sin(lat1) * std::cos(lat2) * std::cos(dlon))};
+  double result{radians_to_degrees(std::atan2(numerator, denominator))};
+  if (result < 0.0) { result += 360.0; }
+  else if (result > 360.0) { result -= 360.0; }
+  return result;
+}
 //------------------------------------------------------------------------------
 // Trace
 //------------------------------------------------------------------------------

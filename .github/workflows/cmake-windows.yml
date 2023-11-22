@@ -1,8 +1,8 @@
-name: Windows 2022
+name: Windows
 
 on:
   push:
-    branches: ["devel"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
