@@ -18,6 +18,7 @@
 #include <iostream>
 #include <limits>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -39,7 +40,7 @@ constexpr bool unset_bool{false};
 // Accuracy precision expected from SAC floats
 constexpr float f_eps{2.75e-6F};
 // This should work for two and four word string headers
-const std::string unset_word{"-12345"};
+constexpr std::string_view unset_word{"-12345"};
 using word_one = std::bitset<binary_word_size>;
 using word_two = std::bitset<static_cast<size_t>(2) * binary_word_size>;
 using word_four = std::bitset<static_cast<size_t>(4) * binary_word_size>;

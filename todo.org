@@ -13,7 +13,7 @@ which is nice.
 *** DONE data2 read/write :unit:
 *** DONE not =equal_within_tolerance= :unit:
 *** DONE =legacy_write= read/write :unit:
-** TODO Improved functionality :functionality:
+** TODO New functionality :functionality:
 *** TODO Great Circle Arc calculation
 Use [[https://en.wikipedia.org/wiki/Haversine_formula][Haversine]] formula to start. Later can move on to Lambert's formula for long
 lines ([[https://en.wikipedia.org/wiki/Geographical_distance#Lambert's_formula_for_long_lines][Wikipedia]])
@@ -23,6 +23,15 @@ lines ([[https://en.wikipedia.org/wiki/Geographical_distance#Lambert's_formula_f
 [[https://en.wikipedia.org/wiki/N-vector][Wikipedia]], it has no singularities (unlike standard latitude/longitude).
 
 [[file:~/my_git/sac-format/src/sac_format.hpp::void calc_gcarc();]]
+
+****** Turns out it is really quite simple to use
+[[https://www.ffi.no/en/research/n-vector/n-vector-explained][Norwegian Defense Research Establishment]]
+[[https://github.com/FFI-no/n-vector][GitHub]]
+
+They provide an explanation (including using the ellipticity of the Earth) and
+matlab codes. I can write up a C++ version.
+
+They also provide a reference paper: [[https://www.navlab.net/Publications/A_Nonsingular_Horizontal_Position_Representation.pdf][Gade (2010)]]
 ***** TODO Link paired headers
 e.g., az and baz should be linked, if one is edited the other is updated
 Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.
@@ -33,6 +42,7 @@ vectors!) in case you want to inspect a potentially corrupt SAC-file.
 **** TODO Fortran style text files.
 ***** TODO Read in
 ***** TODO Write out
+*** TODO Support Big-Endian sac-files (currently only little-endian)
 
 ** DONE Refactor Trace :refactor:
 *** DONE Remove boost dependency
@@ -62,6 +72,8 @@ which).
 ***** TODO Vale (spelling and grammar) :spelling:gammar:
 **** DONE Style :style:
 ***** DONE CPPLint workflow
+Will fail if don't comply.
+*** TODO Automate release notes
 *** TODO Package for download
 I think ReviewDog has a yml that could work as an example for this action
 ** DONE Documentation :documentation:
