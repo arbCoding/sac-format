@@ -1,11 +1,9 @@
 #+include: ./misc/settings.org
 
 #+begin_export html
-<!--
 <a href="https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml">
 <img alt="Windows 2022 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-windows.yml/badge.svg" />
 </a>
--->
 
 <a href="https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml">
 <img alt="Ubuntu 22.04 Build Status", src="https://github.com/arbCoding/sac-format/actions/workflows/cmake-ubuntu.yml/badge.svg" />

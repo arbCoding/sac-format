@@ -51,15 +51,10 @@ simultaneously updating the double and float versions (hard to remember which is
 which).
 ** DONE Use Enum class for lookup table, not string_view.
 ** TODO CI/CD GitHub workflow
-*** TODO Testing
+*** DONE Testing
 **** DONE Ubuntu :linux:
-**** TODO Windows :windows:
-***** TODO Windows MSVC compilation
-Setup this up locally on HP Elitebook to troubleshoot. Once working, test on github.
-****** TODO Install MSVC (I think needs vs code?)
-***** TODO Windows MINGW compilation
-***** TODO CMake presets
-**** TODO macOS :macos:
+**** DONE Windows :windows:
+**** DONE macOS :macos:
 *** DONE Code Coverage
 *** TODO Analysis :analysis:
 **** DONE Code Analysis :code:
