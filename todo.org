@@ -22,7 +22,7 @@ lines ([[https://en.wikipedia.org/wiki/Geographical_distance#Lambert's_formula_f
 
 [[file:~/my_git/sac-format/src/sac_format.hpp::void calc_gcarc();]]
 
-***** TODO n-vector for distance calculations
+***** DONE n-vector for distance calculations
 
 [[https://en.wikipedia.org/wiki/N-vector][Wikipedia]], it has no singularities (unlike standard latitude/longitude).
 
@@ -56,7 +56,7 @@ is latitude and $\mu \in \left(-\pi,\pi\right]$
 $\mathbf{p}_{EA}^{E}$ is the position vector, from the center of the Earth to
 position $A$.
 
-******** calculate p-vector from n-vector
+********* calculate p-vector from n-vector
 
 $\mathbf{p}_{EA}^{A} = \frac{b}{\sqrt{(n_{x}^{E})^{2} +
 \frac{a^{2}}{b^{2}}(n_{y}^{E})^{2} +
@@ -85,6 +85,53 @@ $\Delta\sigma = arctan\left(\frac{\lvert\mathbf{n}_{1}\times\mathbf{n}_{2}\rvert
 ***** TODO Link paired headers
 e.g., az and baz should be linked, if one is edited the other is updated
 Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.
+
+***** TODO Azimuth
+function n_EA_E_and_EB_E2azimuth from
+
+[[https://github.com/pbrod/nvector/blob/v0.7.0/src/nvector/_core.py][GitHub]]
+
+****** Summary
+
+******** Step 1
+
+Rotation matrix
+$\mathbf{E} =
+\begin{pmatrix}
+0 & 0 & 1\\
+0 & 1 & 0\\
+-1 & 0 & 0
+\end{pmatrix}$
+
+defines coordinate system where the x-direction points toward (latitude,
+longitude) = (0, 0) and z-direction points to the north pole.
+
+Takes $a,f$ (semi-major and inverse flattening), plus $\mathbf{n}_{EA}^{E}$ and $\mathbf{n}_{EB}^{E}$.
+******** Step 2
+
+First calculate $\mathbf{p}_{AB}^{E}=\mathbf{p}_{EB}^{E}-\mathbf{p}_{EA}^{E}$. They use $\mathbf{E}\cdot\mathbf{n}_{EB}^{E}$ to calculate $\mathbf{p}_{EB}^{E}$, scale it using equation 22 from Gade to get $\mathbf{p}_{EL}^{E}$ (coordiante system L, with same n-vector as B), but lies at the center of the Earth).
+
+Then finish the rotation with
+$\mathbf{p}_{EB}^{E} = \mathbf{E}^{T}\cdot \mathbf{p}_{EL}^{E} - \mathbf{n}_{EB}^{E} * h)$ (depth is h in equation 22) (they use depth = 0 for each vector).
+
+******** Step 3
+
+Then Get $\mathbf{R}_{EN}$ (n_E2R_EN) (this function is the meat of the
+calculation it seems).
+
+******** Step 4
+
+Then it seems you do a modified (?) version of
+$\mathbf{R}_{EN}\cdot\mathbf{p}_{AB}^{E}$ to calculate $\mathbf{p}_{AB}^{N}$,
+but they do weird python stuff with mdot, rollaxis (looks like they swap axis 0
+and 1 [is axis a row or a column?]), and reshape. Their original version is
+$\mathbf{p}_{AB}^{N}=\mathbf{R}_{EM}^{T}\cdot\mathbf{p}_{AB}^{E}$ (T means
+transpose).
+
+******** Step 5
+
+Then the azimuth in radians is atan2$(\mathbf{p}_{AB}^{N}[1], \mathbf{p}_{AB}^{N}[0])$.
+
 *** TODO Read-inspect function
 Like read, but it prints to std::cout for every header it readers (not data
 vectors!) in case you want to inspect a potentially corrupt SAC-file.
