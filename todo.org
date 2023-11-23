@@ -106,18 +106,62 @@ $\mathbf{E} =
 defines coordinate system where the x-direction points toward (latitude,
 longitude) = (0, 0) and z-direction points to the north pole.
 
-Takes $a,f$ (semi-major and inverse flattening), plus $\mathbf{n}_{EA}^{E}$ and $\mathbf{n}_{EB}^{E}$.
+$det(\mathbf{E}) = 1$
+
 ******** Step 2
 
-First calculate $\mathbf{p}_{AB}^{E}=\mathbf{p}_{EB}^{E}-\mathbf{p}_{EA}^{E}$. They use $\mathbf{E}\cdot\mathbf{n}_{EB}^{E}$ to calculate $\mathbf{p}_{EB}^{E}$, scale it using equation 22 from Gade to get $\mathbf{p}_{EL}^{E}$ (coordiante system L, with same n-vector as B), but lies at the center of the Earth).
+ $\mathbf{n}_{EA}^{E}\rightarrow\mathbf{p}_{EA}^{E}$
 
-Then finish the rotation with
-$\mathbf{p}_{EB}^{E} = \mathbf{E}^{T}\cdot \mathbf{p}_{EL}^{E} - \mathbf{n}_{EB}^{E} * h)$ (depth is h in equation 22) (they use depth = 0 for each vector).
+  $\mathbf{n}_{EA}^{E}=\frac{1}{det(\mathbf{E})*\lvert\mathbf{n}_{EA}^{E}
+\rvert}\mathbf{E}\cdot\mathbf{n}_{EA}^{E}$
+
+Note that both $\mathbf{E}$ and $\mathbf{n}_{EA}^{E}$ *are* normalized, I suspect
+the renormalization is for the sake of numerical stability.
+
+$\mathbf{p}_{EL}^{E}=\frac{b}{\sqrt{(n_{x}^{E})^{2} +
+\frac{a^{2}}{b^{2}}(n_{y}^{E})^{2} +
+\frac{a^{2}}{b^{2}}(n_{z}^{E})^{2}}}\left[n_{x}^{E},\frac{a^{2}}{b^{2}}n_{y}^{E},\frac{a^{2}}{b^{2}}n_{z}^{E}\right]$
+
+$\mathbf{p}_{EA}^{E}=\mathbf{E}^{T}\cdot\left(\mathbf{p}_{EL}^{E} - h\mathbf{n}_{EA}^{E}\right)$ where $h$ is depth (below ellipsoid in meters).
+
+Calculate $\mathbf{p}_{EA}^{E}$ and $\mathbf{p}_{EB}^{E}$
 
 ******** Step 3
 
-Then Get $\mathbf{R}_{EN}$ (n_E2R_EN) (this function is the meat of the
-calculation it seems).
+$\mathbf{R}_{EN}$ from $\mathbf{n}_{EA}^{E}$ and $\mathbf{E}$:
+$\mathbf{n}_{EA}^{E}=\frac{1}{det(\mathbf{E})*\lvert\mathbf{n}_{EA}^{E}\rvert}\mathbf{E}\cdot\mathbf{n}_{EA}^{E}$ (result is a matrix)
+(renormalize for numerical stability)
+
+New coordinate frame $N$, where the z-axis is north (instead of E [east])
+
+$N_{z}^{E}=-\mathbf{n}_{EA}^{E}$ (points opposite direction of n-vector)
+
+$N_{y}^{E} = \begin{pmatrix}1\\0\\0\end{pmatrix}\times\mathbf{n}_{EA}^{E}$ (find
+y-direction, (I think that this is the cross product with each column vector that forms $\mathbf{n}_{EA}^{E}$) equation 9) (points perpendicular
+to plane formed by n-vector and Earth's spin axis)
+
+//
+Normalize (I can't tell if this is a vector of a matrix at the moment,
+everything /should/ be vectors, but their python code is very weird)
+//
+
+$N_{y}^{E}=\frac{N_{y}^{E}}{\lvert N_{y}^{E}\rvert}$ normalize again
+
+This doesn't make sense to me:
+$N_{y}^{E}[:, poles] = \begin{pmatrix}0\\1\\0\end{pmatrix}$ select y-axis direction
+
+Find x-axis direction of N
+$N_{x}^{E} = N_{y}^{E}\times N_{z}^{E}$ just the right-hand rule (that is simple)
+
+Then some more shenanigans
+$N_{xyz}^{E} = \left[N_{x}^{E}, N_{y}^{E}, N_{z}^{E}\right]$ where this is a full matrix (because each $N_{a}^{E}$ is a column vector)
+
+*Note*
+
+
+$\mathbf{E}^{T} = \begin{pmatrix}0 & 0 & -1\\0 & 1 & 0\\1 & 0 & 0\end{pmatrix}$
+
+$\mathbf{R}_{EN}=\mathbf{E}^{T}\cdot N_{x}^{E}\cdot N_{y}^{E}\cdot N_{z}^{E}$
 
 ******** Step 4
 
