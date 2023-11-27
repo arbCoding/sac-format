@@ -15,166 +15,19 @@ which is nice.
 *** DONE =legacy_write= read/write :unit:
 ** TODO New functionality :functionality:
 
-*** TODO Great Circle Arc calculation
+*** Incorporate Ellipticity in geometric calculations
+
+Tried the n-vector stuff, didn't work. Moving on for now.
+
+*** DONE Great Circle Arc calculation
+
+Assumes spherical earth
 
 Use [[https://en.wikipedia.org/wiki/Haversine_formula][Haversine]] formula to start. Later can move on to Lambert's formula for long
 lines ([[https://en.wikipedia.org/wiki/Geographical_distance#Lambert's_formula_for_long_lines][Wikipedia]])
 
-[[file:~/my_git/sac-format/src/sac_format.hpp::void calc_gcarc();]]
-
-***** DONE n-vector for distance calculations
-
-[[https://en.wikipedia.org/wiki/N-vector][Wikipedia]], it has no singularities (unlike standard latitude/longitude).
-
-[[file:~/my_git/sac-format/src/sac_format.hpp::void calc_gcarc();]]
-
-****** Turns out it is really quite simple to use
-
-[[https://www.ffi.no/en/research/n-vector/n-vector-explained][Norwegian Defense Research Establishment]]
-[[https://github.com/FFI-no/n-vector][GitHub]]
-
-They provide an explanation (including using the ellipticity of the Earth) and
-matlab codes. I can write up a C++ version.
-
-They also provide a reference paper: [[https://www.navlab.net/Publications/A_Nonsingular_Horizontal_Position_Representation.pdf][Gade (2010)]]
-
-******* n-vector (normal)
-
-$\mathbf{n}_{AB}^{C}$ is the normal vector, from $A \rightarrow B$ in reference
-frame $C$ ($C$ is often $E$ for Earth, $A$ is often $E$ for center of Earth).
-
-******** Calculate n-vector from lat/lon
-
-$\mathbf{n}_{EA}^{E} = \left[ sin(\lambda), sin(\mu)\cdot cos(\lambda),
--cos(\mu)\cdot \cos(\lambda) \right]$
-
-where $\lambda \in \left[-\frac{\pi}{2},\frac{\pi}{2}\right]$
-is latitude and $\mu \in \left(-\pi,\pi\right]$
-
-******* p-vector (position)
-
-$\mathbf{p}_{EA}^{E}$ is the position vector, from the center of the Earth to
-position $A$.
-
-********* calculate p-vector from n-vector
-
-$\mathbf{p}_{EA}^{A} = \frac{b}{\sqrt{(n_{x}^{E})^{2} +
-\frac{a^{2}}{b^{2}}(n_{y}^{E})^{2} +
-\frac{a^{2}}{b^{2}}(n_{z}^{E})^{2}}}\left[n_{x}^{E},\frac{a^{2}}{b^{2}}n_{y}^{E},\frac{a^{2}}{b^{2}}n_{z}^{E}\right] +
-h\mathbf{n}_{EA}^{A}$
-
-where $a,b$ are the semi-major and semi-minor axes of the reference ellipsoid
-model being used.
-
-*NOTE* that usually for a reference ellipsoid we use $a,f$, where $a$ is the semi-major axis and $f$ is the inverse flattening and then to calculate $b$ use $b=a*(1-f)$.
-
-For *WGS84*: $a=6378137$ meters and $f=\frac{1}{298.257223563}$.
-
-******* Distances between two points on surface of Earth
-
-$\Delta\mathbf{p}_{AB}^{E} = \mathbf{p}_{EB}^{E} - \mathbf{p}_{EA}^{E}$ is the distance vector
-
-Then, distance is then $\lvert \Delta\mathbf{p}_{AB}^{E} \rvert =
-\sqrt{\Delta\mathbf{p}_{AB}^{E}\cdot\Delta\mathbf{p}_{AB}^{E}}$ and the
-horizontal distance is the same, without the vertical component.
-
-****** Simpler
-
-$\Delta\sigma = arctan\left(\frac{\lvert\mathbf{n}_{1}\times\mathbf{n}_{2}\rvert}{\mathbf{n}_{1}\cdot\mathbf{n}_{2}}\right)$ (assumes spherical Earth)
-
-***** TODO Link paired headers
-e.g., az and baz should be linked, if one is edited the other is updated
-Location parameters (stla, stlo, evla, evlo) should be linked to dist and gcarc.
-
-***** TODO Azimuth
-function n_EA_E_and_EB_E2azimuth from
-
-[[https://github.com/pbrod/nvector/blob/v0.7.0/src/nvector/_core.py][GitHub]]
-
-****** Summary
-
-******** Step 1
-
-Rotation matrix
-$\mathbf{E} =
-\begin{pmatrix}
-0 & 0 & 1\\
-0 & 1 & 0\\
--1 & 0 & 0
-\end{pmatrix}$
-
-defines coordinate system where the x-direction points toward (latitude,
-longitude) = (0, 0) and z-direction points to the north pole.
-
-$det(\mathbf{E}) = 1$
-
-******** Step 2
-
- $\mathbf{n}_{EA}^{E}\rightarrow\mathbf{p}_{EA}^{E}$
-
-  $\mathbf{n}_{EA}^{E}=\frac{1}{det(\mathbf{E})*\lvert\mathbf{n}_{EA}^{E}
-\rvert}\mathbf{E}\cdot\mathbf{n}_{EA}^{E}$
-
-Note that both $\mathbf{E}$ and $\mathbf{n}_{EA}^{E}$ *are* normalized, I suspect
-the renormalization is for the sake of numerical stability.
-
-$\mathbf{p}_{EL}^{E}=\frac{b}{\sqrt{(n_{x}^{E})^{2} +
-\frac{a^{2}}{b^{2}}(n_{y}^{E})^{2} +
-\frac{a^{2}}{b^{2}}(n_{z}^{E})^{2}}}\left[n_{x}^{E},\frac{a^{2}}{b^{2}}n_{y}^{E},\frac{a^{2}}{b^{2}}n_{z}^{E}\right]$
-
-$\mathbf{p}_{EA}^{E}=\mathbf{E}^{T}\cdot\left(\mathbf{p}_{EL}^{E} - h\mathbf{n}_{EA}^{E}\right)$ where $h$ is depth (below ellipsoid in meters).
-
-Calculate $\mathbf{p}_{EA}^{E}$ and $\mathbf{p}_{EB}^{E}$
-
-******** Step 3
-
-$\mathbf{R}_{EN}$ from $\mathbf{n}_{EA}^{E}$ and $\mathbf{E}$:
-$\mathbf{n}_{EA}^{E}=\frac{1}{det(\mathbf{E})*\lvert\mathbf{n}_{EA}^{E}\rvert}\mathbf{E}\cdot\mathbf{n}_{EA}^{E}$ (result is a matrix)
-(renormalize for numerical stability)
-
-New coordinate frame $N$, where the z-axis is north (instead of E [east])
-
-$N_{z}^{E}=-\mathbf{n}_{EA}^{E}$ (points opposite direction of n-vector)
-
-$N_{y}^{E} = \begin{pmatrix}1\\0\\0\end{pmatrix}\times\mathbf{n}_{EA}^{E}$ (find
-y-direction, (I think that this is the cross product with each column vector that forms $\mathbf{n}_{EA}^{E}$) equation 9) (points perpendicular
-to plane formed by n-vector and Earth's spin axis)
-
-//
-Normalize (I can't tell if this is a vector of a matrix at the moment,
-everything /should/ be vectors, but their python code is very weird)
-//
-
-$N_{y}^{E}=\frac{N_{y}^{E}}{\lvert N_{y}^{E}\rvert}$ normalize again
-
-This doesn't make sense to me:
-$N_{y}^{E}[:, poles] = \begin{pmatrix}0\\1\\0\end{pmatrix}$ select y-axis direction
-
-Find x-axis direction of N
-$N_{x}^{E} = N_{y}^{E}\times N_{z}^{E}$ just the right-hand rule (that is simple)
-
-Then some more shenanigans
-$N_{xyz}^{E} = \left[N_{x}^{E}, N_{y}^{E}, N_{z}^{E}\right]$ where this is a full matrix (because each $N_{a}^{E}$ is a column vector)
-
-*Note*
-
-
-$\mathbf{E}^{T} = \begin{pmatrix}0 & 0 & -1\\0 & 1 & 0\\1 & 0 & 0\end{pmatrix}$
-
-$\mathbf{R}_{EN}=\mathbf{E}^{T}\cdot N_{x}^{E}\cdot N_{y}^{E}\cdot N_{z}^{E}$
-
-******** Step 4
-
-Then it seems you do a modified (?) version of
-$\mathbf{R}_{EN}\cdot\mathbf{p}_{AB}^{E}$ to calculate $\mathbf{p}_{AB}^{N}$,
-but they do weird python stuff with mdot, rollaxis (looks like they swap axis 0
-and 1 [is axis a row or a column?]), and reshape. Their original version is
-$\mathbf{p}_{AB}^{N}=\mathbf{R}_{EM}^{T}\cdot\mathbf{p}_{AB}^{E}$ (T means
-transpose).
-
-******** Step 5
-
-Then the azimuth in radians is atan2$(\mathbf{p}_{AB}^{N}[1], \mathbf{p}_{AB}^{N}[0])$.
+*** DONE Azimuth calculation
+Assumes spherical earth
 
 *** TODO Read-inspect function
 Like read, but it prints to std::cout for every header it readers (not data
