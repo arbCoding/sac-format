@@ -72,3 +72,6 @@ coverage/*
 
 # Infer
 infer-out/*
+
+# minted
+**/_minted-index/*

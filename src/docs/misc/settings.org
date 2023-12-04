@@ -13,6 +13,10 @@
 #+latex_class: article
 #+latex_class_options:
 #+latex_header: \usepackage{times}
+#+latex_header: \usepackage{minted}
+#+latex_header: \setminted{breaklines}
+#+latex_header: \usepackage{xcolor}
+#+latex_header: \usemintedstyle{emacs}
 #+latex_header: \usepackage{mathtools}
 #+latex_header: \usepackage[twoside, letterpaper, lmargin=1.0in, rmargin=0.75in, bmargin=0.75in, tmargin=1.0in]{geometry}
 #+latex_header: \usepackage{fancyhdr}
