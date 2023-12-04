@@ -18,6 +18,8 @@
 #include <iostream>
 #include <limits>
 #include <numbers>
+// std::domain_error
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <unordered_map>
