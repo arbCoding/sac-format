@@ -280,7 +280,15 @@ a [[Lookup Table][lookup table]]. The internal components are below:
 
 *** Convenience Methods
 
-None implemented yet.
+- =degrees_to_radians=
+- =radians_to_degrees=
+- =gcarc=
+- =azimuth=
+
+*** Exceptions
+
+sac-format throws exceptions of type =std::domain_exception= in the event of a
+failure to read/write a SAC-file.
 
 ** Low-Level I/O
 
@@ -306,7 +314,7 @@ Conversion pair for binary representation of two-word (regular) string values.
 
 ***** =long_string_to_binary= and =binary_to_long_string=
 
-Conversion pair for binary representation of four-word (only [[=kstnm=]]) string
+Conversion pair for binary representation of four-word (only [[=kstnm=][=kstnm=]]) string
 values.
 
 **** Reading/Writing

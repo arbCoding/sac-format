@@ -5,24 +5,34 @@
 #pragma once
 /* Standard library
    https://en.cppreference.com/w/cpp/standard_library */
+// std::ranges::fill
 #include <algorithm>
+// std::array
 #include <array>
 // std::endian
 #include <bit>
+// std::bitset
 #include <bitset>
-#include <cctype>
+// std::abs, std::acos, std::sin, std::cos, std::atan2, std::pow
 #include <cmath>
+// std::memcopy
 #include <cstring>
+// std::filesystem::path
 #include <filesystem>
+// std::ifstream, std::ifstream::binary, std::ofstream, std::ios::binary,
+// std::ios::out, std::ios::trunc
 #include <fstream>
-#include <iostream>
-#include <limits>
+// std::numbers::pi_v<double>
 #include <numbers>
 // std::domain_error
 #include <stdexcept>
+// std::string
 #include <string>
+// std::string_view (used only once...)
 #include <string_view>
+// std::unordered_map
 #include <unordered_map>
+// std::vector
 #include <vector>
 
 namespace sacfmt {
@@ -43,6 +53,7 @@ constexpr bool unset_bool{false};
 // Accuracy precision expected from SAC floats
 constexpr float f_eps{2.75e-6F};
 // This should work for two and four word string headers
+// This is the only instance of a string_view.
 constexpr std::string_view unset_word{"-12345"};
 using word_one = std::bitset<binary_word_size>;
 using word_two = std::bitset<static_cast<size_t>(2) * binary_word_size>;
@@ -61,6 +72,7 @@ constexpr int old_hdr_version{6};
 constexpr int common_skip_num{7};
 constexpr double rad_per_deg{std::numbers::pi_v<double> / 180.0};
 constexpr double deg_per_rad{1.0 / rad_per_deg};
+constexpr double circle_deg{360.0};
 //--------------------------------------------------------------------------
 // Conversions
 //--------------------------------------------------------------------------
@@ -140,9 +152,11 @@ bool equal_within_tolerance(double val1, double val2, double tolerance = f_eps);
 double degrees_to_radians(double degrees);
 double radians_to_degrees(double radians);
 // gcarc
-double gcarc(double latitude1, double longitude1, double latitude2, double longitude2);
+double gcarc(double latitude1, double longitude1, double latitude2,
+             double longitude2);
 // azimuth
-double azimuth(double latitude1, double longitude1, double latitude2, double longitude2);
+double azimuth(double latitude1, double longitude1, double latitude2,
+               double longitude2);
 
 enum class name {
   // Floats
@@ -395,6 +409,7 @@ const std::unordered_map<name, const int> sac_map = {
 class Trace {
 public:
   Trace();
+  // Parametric constructor (read file)
   explicit Trace(const std::filesystem::path &path);
   void write(const std::filesystem::path &path, bool legacy = false) const;
   void legacy_write(const std::filesystem::path &path) const;

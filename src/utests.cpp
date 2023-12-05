@@ -1,17 +1,20 @@
 // Copyright 2023 Alexander R. Blanchette
 
 /* Standard Library */
+// std::filesystem::path, std::filesystem::temp_directory_path()
 #include <filesystem>
-#include <fstream>
-#include <iomanip>
-#include <limits>
 /* Catch2 */
 #define CATCH_CONFIG_FAST_COMPILE
 #define CATCH_CONFIG_MAIN
 // testing macros
+// TEST_CASE, SECTION, REQUIRE, CAPTURE, REQUIRE_THROWS
 #include <catch2/catch_test_macros.hpp>
-// Floating-point matcher
+// from catch_matchers.hpp (any matcher includes it)
+// REQUIRE_THAT
+// Catch::Matchers::WithinAbs
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
+// Catch::Matchers::EndsWith
+#include <catch2/matchers/catch_matchers_string.hpp>
 /* My stuff */
 #include <sac_format.hpp>
 #include <util.hpp>
@@ -19,6 +22,7 @@
 using namespace sacfmt;
 namespace fs = std::filesystem;
 using Catch::Matchers::WithinAbs;
+using Catch::Matchers::EndsWith;
 
 //==============================================================================
 // Basic I/O tests (file writing/reading goes with Trace)
@@ -1139,6 +1143,28 @@ TEST_CASE("Trace Read/Write") {
       REQUIRE(equal_within_tolerance(trace.data2(), in.data2()));
     }
     SECTION("Everything") { REQUIRE(trace == in); }
+    SECTION("Resize data") {
+      Trace in2{};
+      in2 = in;
+      std::vector<double> tmp{in2.data1()};
+      tmp.resize(10);
+      in2.data1(tmp);
+      REQUIRE(!equal_within_tolerance(trace.data1(), in2.data1()));
+    }
+    SECTION("Change a float") {
+      Trace in2{};
+      in2 = in;
+      in2.evdp(in.evdp() - 1.0f);
+      REQUIRE(trace != in2);
+    }
+    SECTION("Change a vector value") {
+      Trace in2{};
+      in2 = in;
+      std::vector<double> tmp{in2.data1()};
+      tmp[0] -= 1.0;
+      in2.data1(tmp);
+      REQUIRE(trace != in2);
+    }
   }
   SECTION("Legacy Read/Write") {
     trace.nvhdr(6);
@@ -1320,6 +1346,16 @@ TEST_CASE("Trace Read/Write") {
       REQUIRE(!equal_within_tolerance(trace.data2(), in.data2()));
       REQUIRE(trace != in);
     }
+  }
+  SECTION("Read Throw") {
+    fs::path tmp_dir{fs::temp_directory_path() / "not_a_dir"};
+    fs::path tmp_file{tmp_dir / "not_real.sac"};
+    REQUIRE_THROWS_WITH(Trace(tmp_file), EndsWith("cannot be opened to read."));
+  }
+  SECTION("Write Throw") {
+    fs::path tmp_dir{fs::temp_directory_path() / "not_a_dir"};
+    fs::path tmp_file{tmp_dir / "not_real.sac"};
+    REQUIRE_THROWS_WITH(trace.write(tmp_file), EndsWith("cannot be opened to write."));
   }
 }
 

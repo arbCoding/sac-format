@@ -332,26 +332,34 @@ double radians_to_degrees(const double radians) {
   return deg_per_rad * radians;
 }
 
-double gcarc(const double latitude1, const double longitude1, const double latitude2, const double longitude2) {
+double gcarc(const double latitude1, const double longitude1,
+             const double latitude2, const double longitude2) {
   const double lat1{degrees_to_radians(latitude1)};
   const double lon1{degrees_to_radians(longitude1)};
   const double lat2{degrees_to_radians(latitude2)};
   const double lon2{degrees_to_radians(longitude2)};
-  return radians_to_degrees(std::acos(std::sin(lat1)*std::sin(lat2) + std::cos(lat1)*std::cos(lat2)*std::cos(lon2-lon1)));
+  return radians_to_degrees(
+      std::acos(std::sin(lat1) * std::sin(lat2) +
+                std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)));
 }
 
 // I wonder if there is a way to do this with n-vectors
-double azimuth(const double latitude1, const double longitude1, const double latitude2, const double longitude2) {
+double azimuth(const double latitude1, const double longitude1,
+               const double latitude2, const double longitude2) {
   const double lat1{degrees_to_radians(latitude1)};
   const double lon1{degrees_to_radians(longitude1)};
   const double lat2{degrees_to_radians(latitude2)};
   const double lon2{degrees_to_radians(longitude2)};
   const double dlon{lon2 - lon1};
   const double numerator{std::sin(dlon) * std::cos(lat2)};
-  const double denominator{(std::cos(lat1) * std::sin(lat2)) - (std::sin(lat1) * std::cos(lat2) * std::cos(dlon))};
+  const double denominator{(std::cos(lat1) * std::sin(lat2)) -
+                           (std::sin(lat1) * std::cos(lat2) * std::cos(dlon))};
   double result{radians_to_degrees(std::atan2(numerator, denominator))};
-  if (result < 0.0) { result += 360.0; }
-  else if (result > 360.0) { result -= 360.0; }
+  if (result < 0.0) {
+    result += circle_deg;
+  } else if (result > circle_deg) {
+    result -= circle_deg;
+  }
   return result;
 }
 //------------------------------------------------------------------------------
