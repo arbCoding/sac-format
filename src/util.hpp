@@ -32,7 +32,7 @@
 namespace sacfmt {
 
 // Testing Constants
-template <typename T> std::string eps_string(const T value) {
+template <typename T> std::string eps_string(const T value) noexcept {
   std::ostringstream oss{};
   oss << std::setprecision(std::numeric_limits<T>::max_digits10) << value;
   return oss.str();
@@ -57,7 +57,7 @@ constexpr double epsilon{std::numeric_limits<double>::epsilon()};
 const std::string s_epsilon{eps_string(epsilon)};
 
 // Self-seed the random number generator
-XoshiroCpp::Xoshiro256Plus init() {
+XoshiroCpp::Xoshiro256Plus init() noexcept {
   // Random device for seeding
   std::random_device rand_dev{};
   // Two random runtime constants
@@ -73,22 +73,22 @@ XoshiroCpp::Xoshiro256Plus init() {
 }
 
 // Build the PRNG
-inline XoshiroCpp::Xoshiro256Plus xos{init()};
+inline XoshiroCpp::Xoshiro256Plus xos { init() } noexcept;
 
 // Give a random double within the inclusive bounds [min, max]
-inline double get(double min, double max) {
+inline double get(double min, double max) noexcept {
   std::uniform_real_distribution<> die{min, max};
   return die(xos);
 }
 
 void random_vector(std::vector<double> *data, const double minimum = -1.0,
-                   const double maximum = 1.0) {
+                   const double maximum = 1.0) noexcept {
   for (std::size_t i{0}; i < data->size(); ++i) {
     (*data)[i] = get(minimum, maximum);
   }
 }
 
-Trace gen_fake_trace() {
+Trace gen_fake_trace() noexcept {
   Trace sac{};
   sac.delta(0.025);
   sac.depmin(-1.11F);
