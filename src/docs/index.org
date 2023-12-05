@@ -56,16 +56,16 @@ working on Windows, macOS, and Linux systems.
 
 *** Safe
 
-sac-format is *safe*---testing is an important part of software development.
-sac-format conforms to a strict set of C++ programming guidelines, chosen to
-ensure safe code-execution. The guideline conformance list is in
+sac-format is *safe*---it conforms to a strict set of C++ programming guidelines,
+chosen to ensure safe code-execution. The guideline conformance list is in
 [[https://github.com/arbCoding/sac-format/blob/main/.github/workflows/cpp-linter.yml][=cpp-linter.yml=]] and cross-reference against this [[https://clang.llvm.org/extra/clang-tidy/checks/list.html][master list]]. Results of
 conformance checking is [[https://github.com/arbCoding/sac-format/actions/workflows/cpp-linter.yml][here]].
 
-The sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
-Everything from low-level binary conversions to high-level =Trace= reading/writing
-are tested and confirmed working. Check and run the tests yourself. See the
-[[Testing][Testing]] section for more information.
+Testing is an important part of software development; the sac-format library is
+extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework. Everything from low-level
+binary conversions to high-level =Trace= reading/writing are tested and confirmed
+working. Check and run the tests yourself. See the [[Testing][Testing]] section for more
+information.
 
 *** Fast
 
