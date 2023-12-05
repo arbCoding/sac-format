@@ -97,6 +97,8 @@ documentation and in-code comments.
 sac-format is *transparent*---all [[https://app.codacy.com/gh/arbCoding/sac-format/dashboard][analysis]] and [[https://app.codecov.io/gh/arbCoding/sac-format][coverage]] information is publicly
 available online.
 
+[[https://www.codefactor.io/repository/github/arbcoding/sac-format][CodeFactor Analysis]]
+
 *** Trace Class
 
 sac-format includes the =Trace= class for seismic traces, providing high-level
