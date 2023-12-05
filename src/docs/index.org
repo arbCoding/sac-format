@@ -83,7 +83,7 @@ running.
 *** Small
 
 sac-format is *small*---in total (header + implementation--excluding comments)
-it's fewer than 2500 lines of code. Small size opens the door to using on any
+it's fewer than 2000 lines of code. Small size opens the door to using on any
 sort of hardware (old or new) and makes it easy to expand upon.
 
 *** Documented
@@ -272,6 +272,7 @@ The SAC-trace stores the data internally in a series of pre-allocated
 a [[Lookup Table][lookup table]]. The internal components are below:
 
 **** Lookup Table
+=sac_map=
 
 **** =floats= array
 
