@@ -6,13 +6,23 @@
 #pragma once
 
 /* Standard library */
-#include <random>
+// std::chrono::steady_clock::now()
+#include <chrono>
+// std::setprecision
+#include <iomanip>
+// std::cout
+#include <iostream>
+// std::numeric_limits
+#include <limits>
 // INT_MIN and INT_MAX
 #include <limits.h>
-#include <limits>
-#include <string>
+// std::random_device, std::uniform_real_distribution
+#include <random>
 // ostringstream
 #include <sstream>
+// std::string
+#include <string>
+// std::vector
 #include <vector>
 /* Xoshiro Random Number generator */
 #include <XoshiroCpp.hpp>
@@ -73,9 +83,8 @@ inline double get(double min, double max) {
 
 void random_vector(std::vector<double> *data, const double minimum = -1.0,
                    const double maximum = 1.0) {
-  std::uniform_real_distribution<> die{minimum, maximum};
   for (std::size_t i{0}; i < data->size(); ++i) {
-    (*data)[i] = die(xos);
+    (*data)[i] = get(minimum, maximum);
   }
 }
 

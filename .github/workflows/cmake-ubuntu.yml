@@ -1,8 +1,8 @@
-name: Ubuntu 22.04
+name: Ubuntu
 
 on:
   push:
-    branches: ["devel"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 

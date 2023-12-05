@@ -1,8 +1,8 @@
-name: macOS 13
+name: macOS
 
 on:
   push:
-    branches: ["devel"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 

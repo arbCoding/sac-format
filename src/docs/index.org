@@ -25,6 +25,10 @@
 <img alt="Codacy grade" src="https://img.shields.io/codacy/grade/870db5c2793a48df9ed98e942a08fc9e" />
 </a>
 
+<a href="https://www.codefactor.io/repository/github/arbcoding/sac-format">
+<img src="https://www.codefactor.io/repository/github/arbcoding/sac-format/badge" alt="CodeFactor" />
+</a>
+
 <a href="https://github.com/arbCoding/sac-format/actions/workflows/cpp-linter.yml">
 <img alt="CPP-Linter Results" src="https://github.com/arbCoding/sac-format/actions/workflows/cpp-linter.yml/badge.svg" />
 </a>
@@ -114,6 +118,7 @@ build tool, and then building.
 
 **** GCC
 
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize
 #+begin_src bash :returns code :eval no
 git clone https://github.com/arbCoding/sac-format.git
 cmake --preset gcc-release
@@ -122,10 +127,11 @@ cmake --build ./build/release/gcc
 
 **** Clang
 
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize
 #+begin_src bash :returns code :eval no
 git clone https://github.com/arbCoding/sac-format.git
 cmake --preset clang-release
-cmaek --build ./build/release/clang
+cmake --build ./build/release/clang
 #+end_src
 
 *** Use
@@ -144,7 +150,10 @@ well as the true size of the [[=data1=][=data1=]] and [[=data2=][=data2=]] vecto
 ** CMake Integration
 
 To integrate sac-format into your CMake project, add it to your =CMakeLists.txt=.
-#+begin_example
+
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos
+#+begin_src cmake :eval no
 include(FetchContent)
 set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 FetchContent_Declare(sac-format
@@ -162,13 +171,16 @@ add_executable(your_executable
 
 target_link_libraries_library(your_executable
     PRIVATE sac-format)
-#+end_example
+#+end_src
+#+latex: \end{minipage}\end{center}
 
 ** Example
 
 *** Reading and Writing
 
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
 #+name: empty_trace_example
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos
 #+begin_src cpp :cache yes :returns code :results verbatim :flags -std=c++20 -L../../bin/libsac-format.a -I../ :eval no
 #include <filesystem>
 #include <iostream>
@@ -192,6 +204,7 @@ int main() {
     return EXIT_SUCCESS;
 }
 #+end_src
+#+latex: \end{minipage}\end{center}
 
 * Documentation
 
@@ -205,6 +218,8 @@ The =Trace= class provides easy access to SAC-files in C++. Each SAC-file is a
 SAC-files can be read in by using the parameterized constructor with a [[https://en.cppreference.com/w/cpp/filesystem/path][=std::filesystem::path=]] ([[https://en.cppreference.com/w/cpp/header/filesystem][=<filesystem>=]]) or a [[https://en.cppreference.com/w/cpp/string/basic_string][=std::string=]] ([[https://en.cppreference.com/w/cpp/header/string][=<string>=]]) variable that corresponds to the location of the SAC-file.
 
 For example:
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos
 #+begin_src C++ :eval no
 #include <filesystem>
 #include <sac_foramt.hpp>
@@ -215,6 +230,7 @@ int main() {
   return EXIT_SUCCESS;
 }
 #+end_src
+#+latex: \end{minipage}\end{center}
 
 *** Writing SAC
 
@@ -264,7 +280,15 @@ a [[Lookup Table][lookup table]]. The internal components are below:
 
 *** Convenience Methods
 
-None implemented yet.
+- =degrees_to_radians=
+- =radians_to_degrees=
+- =gcarc=
+- =azimuth=
+
+*** Exceptions
+
+sac-format throws exceptions of type =std::domain_exception= in the event of a
+failure to read/write a SAC-file.
 
 ** Low-Level I/O
 
@@ -290,7 +314,7 @@ Conversion pair for binary representation of two-word (regular) string values.
 
 ***** =long_string_to_binary= and =binary_to_long_string=
 
-Conversion pair for binary representation of four-word (only [[=kstnm=]]) string
+Conversion pair for binary representation of four-word (only [[=kstnm=][=kstnm=]]) string
 values.
 
 **** Reading/Writing

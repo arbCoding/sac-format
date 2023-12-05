@@ -323,6 +323,45 @@ bool equal_within_tolerance(const double val1, const double val2,
                             const double tolerance) {
   return (std::abs(val1 - val2) < tolerance);
 }
+// Position methods
+double degrees_to_radians(const double degrees) {
+  return rad_per_deg * degrees;
+}
+
+double radians_to_degrees(const double radians) {
+  return deg_per_rad * radians;
+}
+
+double gcarc(const double latitude1, const double longitude1,
+             const double latitude2, const double longitude2) {
+  const double lat1{degrees_to_radians(latitude1)};
+  const double lon1{degrees_to_radians(longitude1)};
+  const double lat2{degrees_to_radians(latitude2)};
+  const double lon2{degrees_to_radians(longitude2)};
+  return radians_to_degrees(
+      std::acos(std::sin(lat1) * std::sin(lat2) +
+                std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)));
+}
+
+// I wonder if there is a way to do this with n-vectors
+double azimuth(const double latitude1, const double longitude1,
+               const double latitude2, const double longitude2) {
+  const double lat1{degrees_to_radians(latitude1)};
+  const double lon1{degrees_to_radians(longitude1)};
+  const double lat2{degrees_to_radians(latitude2)};
+  const double lon2{degrees_to_radians(longitude2)};
+  const double dlon{lon2 - lon1};
+  const double numerator{std::sin(dlon) * std::cos(lat2)};
+  const double denominator{(std::cos(lat1) * std::sin(lat2)) -
+                           (std::sin(lat1) * std::cos(lat2) * std::cos(dlon))};
+  double result{radians_to_degrees(std::atan2(numerator, denominator))};
+  if (result < 0.0) {
+    result += circle_deg;
+  } else if (result > circle_deg) {
+    result -= circle_deg;
+  }
+  return result;
+}
 //------------------------------------------------------------------------------
 // Trace
 //------------------------------------------------------------------------------
@@ -744,8 +783,7 @@ void Trace::data2(const std::vector<double> &input) {
 Trace::Trace(const std::filesystem::path &path) {
   std::ifstream file(path, std::ifstream::binary);
   if (!file) {
-    std::cerr << path.string() << " could not be read.\n";
-    return;
+    throw std::domain_error(path.string() + "cannot be opened to read.");
   }
   file.seekg(0);
   //--------------------------------------------------------------------------
@@ -938,8 +976,7 @@ Trace::Trace(const std::filesystem::path &path) {
 void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   std::ofstream file(path, std::ios::binary | std::ios::out | std::ios::trunc);
   if (!file) {
-    std::cerr << path.string() << "cannot be written.\n";
-    return;
+    throw std::domain_error(path.string() + "cannot be opened to write.");
   }
   const int header_version{legacy ? old_hdr_version : modern_hdr_version};
   write_words(&file, convert_to_word(static_cast<float>(delta())));
