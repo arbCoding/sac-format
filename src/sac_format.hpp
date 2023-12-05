@@ -77,43 +77,65 @@ constexpr double circle_deg{360.0};
 // Conversions
 //--------------------------------------------------------------------------
 // Calculate position of word in SAC-file
-int word_position(int word_number);
+int word_position(int word_number) noexcept;
 // SAC uses 32 bit ints
-word_one int_to_binary(int num);
-int binary_to_int(word_one bin);
+word_one int_to_binary(int num) noexcept;
+int binary_to_int(word_one bin) noexcept;
+// Ensure type-safety for conversions between floats/doubles
+// and bitsets
+namespace bitset_type {
+template <unsigned nbits> struct uint {};
+template <> struct uint<bits_per_byte> {
+  using type = uint8_t;
+};
+template <> struct uint<2 * bits_per_byte> {
+  using type = uint16_t;
+};
+template <> struct uint<4 * bits_per_byte> {
+  using type = uint32_t;
+};
+constexpr int bytes{8};
+template <> struct uint<bytes * bits_per_byte> {
+  using type = uint64_t;
+};
+} // namespace bitset_type
+template <class T>
+using unsigned_int =
+    typename bitset_type::uint<sizeof(T) * bits_per_byte>::type;
+// Convert floats/doubles to bitsets and back
 // SAC uses 32 bit floats
-word_one float_to_binary(float num);
-float binary_to_float(const word_one &bin);
+word_one float_to_binary(float num) noexcept;
+float binary_to_float(const word_one &bin) noexcept;
 // SAC uses 64 bit doubles (2 words, 8 bytes)
-word_two double_to_binary(double num);
-double binary_to_double(const word_two &bin);
-// To get rid of requirement on boost library
-void remove_leading_spaces(std::string *str);
-void remove_trailing_spaces(std::string *str);
+word_two double_to_binary(double num) noexcept;
+double binary_to_double(const word_two &bin) noexcept;
+void remove_leading_spaces(std::string *str) noexcept;
+void remove_trailing_spaces(std::string *str) noexcept;
 // Remove leading/trailing white-space and control characters
-std::string string_cleaning(const std::string &str);
+std::string string_cleaning(const std::string &str) noexcept;
 //
-void prep_string(std::string *str, size_t str_size);
+void prep_string(std::string *str, size_t str_size) noexcept;
 //
 template <typename T>
-void string_bits(T *bits, const std::string &str, size_t str_size);
+void string_bits(T *bits, const std::string &str, size_t str_size) noexcept;
 //
-template <typename T> std::string bits_string(const T &bits, size_t num_words);
+template <typename T>
+std::string bits_string(const T &bits, size_t num_words) noexcept;
 // Note the string conversion functions handle over-sized strings
 // by truncating them, and undersized strings by padding them with spaces
 // SAC uses either 64 bit strings (2 words, 8 bytes, 8 characters)
-word_two string_to_binary(std::string str);
-std::string binary_to_string(const word_two &str);
+word_two string_to_binary(std::string str) noexcept;
+std::string binary_to_string(const word_two &str) noexcept;
 // 128 bit string (4 words, 16 bytes, only KEVNM header, 16 characters)
-word_four long_string_to_binary(std::string str);
-std::string binary_to_long_string(const word_four &str);
+word_four long_string_to_binary(std::string str) noexcept;
+std::string binary_to_long_string(const word_four &str) noexcept;
 // Booleans
-word_one bool_to_binary(bool flag);
-bool binary_to_bool(const word_one &flag);
+word_one bool_to_binary(bool flag) noexcept;
+bool binary_to_bool(const word_one &flag) noexcept;
 // Concat words
 // For some reason, template functions didn't want to work for these...
-word_two concat_words(const word_one &word1, const word_one &word2);
-word_four concat_words(const word_two &word12, const word_two &word34);
+word_two concat_words(const word_one &word1, const word_one &word2) noexcept;
+word_four concat_words(const word_two &word12, const word_two &word34) noexcept;
 //--------------------------------------------------------------------------
 // Reading
 //--------------------------------------------------------------------------
@@ -136,21 +158,23 @@ void write_words(std::ofstream *sac_file, const std::vector<char> &input);
 // Template function to convert to a SAC word
 // handles float and int (not string or double)
 // Only single word
-template <typename T> std::vector<char> convert_to_word(T input);
+template <typename T> std::vector<char> convert_to_word(T input) noexcept;
 // Special for double-precision numbers (2 words, not 1)
-std::vector<char> convert_to_word(double input);
+std::vector<char> convert_to_word(double input) noexcept;
 // Template function to convert string to SAC word(s)
 template <size_t N>
-std::array<char, N> convert_to_words(const std::string &str, int n_words);
+std::array<char, N> convert_to_words(const std::string &str,
+                                     int n_words) noexcept;
 // Convert a bool value to a word
-std::vector<char> bool_to_word(bool flag);
+std::vector<char> bool_to_word(bool flag) noexcept;
 bool equal_within_tolerance(const std::vector<double> &vector1,
                             const std::vector<double> &vector2,
-                            double tolerance = f_eps);
-bool equal_within_tolerance(double val1, double val2, double tolerance = f_eps);
+                            double tolerance = f_eps) noexcept;
+bool equal_within_tolerance(double val1, double val2,
+                            double tolerance = f_eps) noexcept;
 // Position methods
-double degrees_to_radians(double degrees);
-double radians_to_degrees(double radians);
+double degrees_to_radians(double degrees) noexcept;
+double radians_to_degrees(double radians) noexcept;
 // gcarc
 double gcarc(double latitude1, double longitude1, double latitude2,
              double longitude2);
@@ -408,12 +432,12 @@ const std::unordered_map<name, const int> sac_map = {
     {name::data2, 1}};
 class Trace {
 public:
-  Trace();
+  Trace() noexcept;
   // Parametric constructor (read file)
   explicit Trace(const std::filesystem::path &path);
   void write(const std::filesystem::path &path, bool legacy = false) const;
   void legacy_write(const std::filesystem::path &path) const;
-  bool operator==(const Trace &other) const;
+  bool operator==(const Trace &other) const noexcept;
   // Convenience functions
   // Not implemented yet
   double frequency() const;
@@ -423,251 +447,251 @@ public:
   void calc_dist();
   // Getters
   // Floats
-  float depmin() const;
-  float depmax() const;
-  float odelta() const;
-  float resp0() const;
-  float resp1() const;
-  float resp2() const;
-  float resp3() const;
-  float resp4() const;
-  float resp5() const;
-  float resp6() const;
-  float resp7() const;
-  float resp8() const;
-  float resp9() const;
-  float stel() const;
-  float stdp() const;
-  float evel() const;
-  float evdp() const;
-  float mag() const;
-  float user0() const;
-  float user1() const;
-  float user2() const;
-  float user3() const;
-  float user4() const;
-  float user5() const;
-  float user6() const;
-  float user7() const;
-  float user8() const;
-  float user9() const;
-  float dist() const;
-  float az() const;
-  float baz() const;
-  float gcarc() const;
-  float depmen() const;
-  float cmpaz() const;
-  float cmpinc() const;
-  float xminimum() const;
-  float xmaximum() const;
-  float yminimum() const;
-  float ymaximum() const;
+  float depmin() const noexcept;
+  float depmax() const noexcept;
+  float odelta() const noexcept;
+  float resp0() const noexcept;
+  float resp1() const noexcept;
+  float resp2() const noexcept;
+  float resp3() const noexcept;
+  float resp4() const noexcept;
+  float resp5() const noexcept;
+  float resp6() const noexcept;
+  float resp7() const noexcept;
+  float resp8() const noexcept;
+  float resp9() const noexcept;
+  float stel() const noexcept;
+  float stdp() const noexcept;
+  float evel() const noexcept;
+  float evdp() const noexcept;
+  float mag() const noexcept;
+  float user0() const noexcept;
+  float user1() const noexcept;
+  float user2() const noexcept;
+  float user3() const noexcept;
+  float user4() const noexcept;
+  float user5() const noexcept;
+  float user6() const noexcept;
+  float user7() const noexcept;
+  float user8() const noexcept;
+  float user9() const noexcept;
+  float dist() const noexcept;
+  float az() const noexcept;
+  float baz() const noexcept;
+  float gcarc() const noexcept;
+  float depmen() const noexcept;
+  float cmpaz() const noexcept;
+  float cmpinc() const noexcept;
+  float xminimum() const noexcept;
+  float xmaximum() const noexcept;
+  float yminimum() const noexcept;
+  float ymaximum() const noexcept;
   // Doubles
-  double delta() const;
-  double b() const;
-  double e() const;
-  double o() const;
-  double a() const;
-  double t0() const;
-  double t1() const;
-  double t2() const;
-  double t3() const;
-  double t4() const;
-  double t5() const;
-  double t6() const;
-  double t7() const;
-  double t8() const;
-  double t9() const;
-  double f() const;
-  double stla() const;
-  double stlo() const;
-  double evla() const;
-  double evlo() const;
-  double sb() const;
-  double sdelta() const;
+  double delta() const noexcept;
+  double b() const noexcept;
+  double e() const noexcept;
+  double o() const noexcept;
+  double a() const noexcept;
+  double t0() const noexcept;
+  double t1() const noexcept;
+  double t2() const noexcept;
+  double t3() const noexcept;
+  double t4() const noexcept;
+  double t5() const noexcept;
+  double t6() const noexcept;
+  double t7() const noexcept;
+  double t8() const noexcept;
+  double t9() const noexcept;
+  double f() const noexcept;
+  double stla() const noexcept;
+  double stlo() const noexcept;
+  double evla() const noexcept;
+  double evlo() const noexcept;
+  double sb() const noexcept;
+  double sdelta() const noexcept;
   // Ints
-  int nzyear() const;
-  int nzjday() const;
-  int nzhour() const;
-  int nzmin() const;
-  int nzsec() const;
-  int nzmsec() const;
-  int nvhdr() const;
-  int norid() const;
-  int nevid() const;
-  int npts() const;
-  int nsnpts() const;
-  int nwfid() const;
-  int nxsize() const;
-  int nysize() const;
-  int iftype() const;
-  int idep() const;
-  int iztype() const;
-  int iinst() const;
-  int istreg() const;
-  int ievreg() const;
-  int ievtyp() const;
-  int iqual() const;
-  int isynth() const;
-  int imagtyp() const;
-  int imagsrc() const;
-  int ibody() const;
+  int nzyear() const noexcept;
+  int nzjday() const noexcept;
+  int nzhour() const noexcept;
+  int nzmin() const noexcept;
+  int nzsec() const noexcept;
+  int nzmsec() const noexcept;
+  int nvhdr() const noexcept;
+  int norid() const noexcept;
+  int nevid() const noexcept;
+  int npts() const noexcept;
+  int nsnpts() const noexcept;
+  int nwfid() const noexcept;
+  int nxsize() const noexcept;
+  int nysize() const noexcept;
+  int iftype() const noexcept;
+  int idep() const noexcept;
+  int iztype() const noexcept;
+  int iinst() const noexcept;
+  int istreg() const noexcept;
+  int ievreg() const noexcept;
+  int ievtyp() const noexcept;
+  int iqual() const noexcept;
+  int isynth() const noexcept;
+  int imagtyp() const noexcept;
+  int imagsrc() const noexcept;
+  int ibody() const noexcept;
   // Bools
-  bool leven() const;
-  bool lpspol() const;
-  bool lovrok() const;
-  bool lcalda() const;
+  bool leven() const noexcept;
+  bool lpspol() const noexcept;
+  bool lovrok() const noexcept;
+  bool lcalda() const noexcept;
   // Strings
-  std::string kstnm() const;
-  std::string kevnm() const;
-  std::string khole() const;
-  std::string ko() const;
-  std::string ka() const;
-  std::string kt0() const;
-  std::string kt1() const;
-  std::string kt2() const;
-  std::string kt3() const;
-  std::string kt4() const;
-  std::string kt5() const;
-  std::string kt6() const;
-  std::string kt7() const;
-  std::string kt8() const;
-  std::string kt9() const;
-  std::string kf() const;
-  std::string kuser0() const;
-  std::string kuser1() const;
-  std::string kuser2() const;
-  std::string kcmpnm() const;
-  std::string knetwk() const;
-  std::string kdatrd() const;
-  std::string kinst() const;
+  std::string kstnm() const noexcept;
+  std::string kevnm() const noexcept;
+  std::string khole() const noexcept;
+  std::string ko() const noexcept;
+  std::string ka() const noexcept;
+  std::string kt0() const noexcept;
+  std::string kt1() const noexcept;
+  std::string kt2() const noexcept;
+  std::string kt3() const noexcept;
+  std::string kt4() const noexcept;
+  std::string kt5() const noexcept;
+  std::string kt6() const noexcept;
+  std::string kt7() const noexcept;
+  std::string kt8() const noexcept;
+  std::string kt9() const noexcept;
+  std::string kf() const noexcept;
+  std::string kuser0() const noexcept;
+  std::string kuser1() const noexcept;
+  std::string kuser2() const noexcept;
+  std::string kcmpnm() const noexcept;
+  std::string knetwk() const noexcept;
+  std::string kdatrd() const noexcept;
+  std::string kinst() const noexcept;
   // Data
-  std::vector<double> data1() const;
-  std::vector<double> data2() const;
+  std::vector<double> data1() const noexcept;
+  std::vector<double> data2() const noexcept;
   // Setters
   // Floats
-  void depmin(float input);
-  void depmax(float input);
-  void odelta(float input);
-  void resp0(float input);
-  void resp1(float input);
-  void resp2(float input);
-  void resp3(float input);
-  void resp4(float input);
-  void resp5(float input);
-  void resp6(float input);
-  void resp7(float input);
-  void resp8(float input);
-  void resp9(float input);
-  void stel(float input);
-  void stdp(float input);
-  void evel(float input);
-  void evdp(float input);
-  void mag(float input);
-  void user0(float input);
-  void user1(float input);
-  void user2(float input);
-  void user3(float input);
-  void user4(float input);
-  void user5(float input);
-  void user6(float input);
-  void user7(float input);
-  void user8(float input);
-  void user9(float input);
-  void dist(float input);
-  void az(float input);
-  void baz(float input);
-  void gcarc(float input);
-  void depmen(float input);
-  void cmpaz(float input);
-  void cmpinc(float input);
-  void xminimum(float input);
-  void xmaximum(float input);
-  void yminimum(float input);
-  void ymaximum(float input);
+  void depmin(float input) noexcept;
+  void depmax(float input) noexcept;
+  void odelta(float input) noexcept;
+  void resp0(float input) noexcept;
+  void resp1(float input) noexcept;
+  void resp2(float input) noexcept;
+  void resp3(float input) noexcept;
+  void resp4(float input) noexcept;
+  void resp5(float input) noexcept;
+  void resp6(float input) noexcept;
+  void resp7(float input) noexcept;
+  void resp8(float input) noexcept;
+  void resp9(float input) noexcept;
+  void stel(float input) noexcept;
+  void stdp(float input) noexcept;
+  void evel(float input) noexcept;
+  void evdp(float input) noexcept;
+  void mag(float input) noexcept;
+  void user0(float input) noexcept;
+  void user1(float input) noexcept;
+  void user2(float input) noexcept;
+  void user3(float input) noexcept;
+  void user4(float input) noexcept;
+  void user5(float input) noexcept;
+  void user6(float input) noexcept;
+  void user7(float input) noexcept;
+  void user8(float input) noexcept;
+  void user9(float input) noexcept;
+  void dist(float input) noexcept;
+  void az(float input) noexcept;
+  void baz(float input) noexcept;
+  void gcarc(float input) noexcept;
+  void depmen(float input) noexcept;
+  void cmpaz(float input) noexcept;
+  void cmpinc(float input) noexcept;
+  void xminimum(float input) noexcept;
+  void xmaximum(float input) noexcept;
+  void yminimum(float input) noexcept;
+  void ymaximum(float input) noexcept;
   // Doubles
   // Doubles
-  void delta(double input);
-  void b(double input);
-  void e(double input);
-  void o(double input);
-  void a(double input);
-  void t0(double input);
-  void t1(double input);
-  void t2(double input);
-  void t3(double input);
-  void t4(double input);
-  void t5(double input);
-  void t6(double input);
-  void t7(double input);
-  void t8(double input);
-  void t9(double input);
-  void f(double input);
-  void stla(double input);
-  void stlo(double input);
-  void evla(double input);
-  void evlo(double input);
-  void sb(double input);
-  void sdelta(double input);
+  void delta(double input) noexcept;
+  void b(double input) noexcept;
+  void e(double input) noexcept;
+  void o(double input) noexcept;
+  void a(double input) noexcept;
+  void t0(double input) noexcept;
+  void t1(double input) noexcept;
+  void t2(double input) noexcept;
+  void t3(double input) noexcept;
+  void t4(double input) noexcept;
+  void t5(double input) noexcept;
+  void t6(double input) noexcept;
+  void t7(double input) noexcept;
+  void t8(double input) noexcept;
+  void t9(double input) noexcept;
+  void f(double input) noexcept;
+  void stla(double input) noexcept;
+  void stlo(double input) noexcept;
+  void evla(double input) noexcept;
+  void evlo(double input) noexcept;
+  void sb(double input) noexcept;
+  void sdelta(double input) noexcept;
   // Ints
-  void nzyear(int input);
-  void nzjday(int input);
-  void nzhour(int input);
-  void nzmin(int input);
-  void nzsec(int input);
-  void nzmsec(int input);
-  void nvhdr(int input);
-  void norid(int input);
-  void nevid(int input);
-  void npts(int input);
-  void nsnpts(int input);
-  void nwfid(int input);
-  void nxsize(int input);
-  void nysize(int input);
-  void iftype(int input);
-  void idep(int input);
-  void iztype(int input);
-  void iinst(int input);
-  void istreg(int input);
-  void ievreg(int input);
-  void ievtyp(int input);
-  void iqual(int input);
-  void isynth(int input);
-  void imagtyp(int input);
-  void imagsrc(int input);
-  void ibody(int input);
+  void nzyear(int input) noexcept;
+  void nzjday(int input) noexcept;
+  void nzhour(int input) noexcept;
+  void nzmin(int input) noexcept;
+  void nzsec(int input) noexcept;
+  void nzmsec(int input) noexcept;
+  void nvhdr(int input) noexcept;
+  void norid(int input) noexcept;
+  void nevid(int input) noexcept;
+  void npts(int input) noexcept;
+  void nsnpts(int input) noexcept;
+  void nwfid(int input) noexcept;
+  void nxsize(int input) noexcept;
+  void nysize(int input) noexcept;
+  void iftype(int input) noexcept;
+  void idep(int input) noexcept;
+  void iztype(int input) noexcept;
+  void iinst(int input) noexcept;
+  void istreg(int input) noexcept;
+  void ievreg(int input) noexcept;
+  void ievtyp(int input) noexcept;
+  void iqual(int input) noexcept;
+  void isynth(int input) noexcept;
+  void imagtyp(int input) noexcept;
+  void imagsrc(int input) noexcept;
+  void ibody(int input) noexcept;
   // Bools
-  void leven(bool input);
-  void lpspol(bool input);
-  void lovrok(bool input);
-  void lcalda(bool input);
+  void leven(bool input) noexcept;
+  void lpspol(bool input) noexcept;
+  void lovrok(bool input) noexcept;
+  void lcalda(bool input) noexcept;
   // Strings
-  void kstnm(const std::string &input);
-  void kevnm(const std::string &input);
-  void khole(const std::string &input);
-  void ko(const std::string &input);
-  void ka(const std::string &input);
-  void kt0(const std::string &input);
-  void kt1(const std::string &input);
-  void kt2(const std::string &input);
-  void kt3(const std::string &input);
-  void kt4(const std::string &input);
-  void kt5(const std::string &input);
-  void kt6(const std::string &input);
-  void kt7(const std::string &input);
-  void kt8(const std::string &input);
-  void kt9(const std::string &input);
-  void kf(const std::string &input);
-  void kuser0(const std::string &input);
-  void kuser1(const std::string &input);
-  void kuser2(const std::string &input);
-  void kcmpnm(const std::string &input);
-  void knetwk(const std::string &input);
-  void kdatrd(const std::string &input);
-  void kinst(const std::string &input);
+  void kstnm(const std::string &input) noexcept;
+  void kevnm(const std::string &input) noexcept;
+  void khole(const std::string &input) noexcept;
+  void ko(const std::string &input) noexcept;
+  void ka(const std::string &input) noexcept;
+  void kt0(const std::string &input) noexcept;
+  void kt1(const std::string &input) noexcept;
+  void kt2(const std::string &input) noexcept;
+  void kt3(const std::string &input) noexcept;
+  void kt4(const std::string &input) noexcept;
+  void kt5(const std::string &input) noexcept;
+  void kt6(const std::string &input) noexcept;
+  void kt7(const std::string &input) noexcept;
+  void kt8(const std::string &input) noexcept;
+  void kt9(const std::string &input) noexcept;
+  void kf(const std::string &input) noexcept;
+  void kuser0(const std::string &input) noexcept;
+  void kuser1(const std::string &input) noexcept;
+  void kuser2(const std::string &input) noexcept;
+  void kcmpnm(const std::string &input) noexcept;
+  void knetwk(const std::string &input) noexcept;
+  void kdatrd(const std::string &input) noexcept;
+  void kinst(const std::string &input) noexcept;
   // Data
-  void data1(const std::vector<double> &input);
-  void data2(const std::vector<double> &input);
+  void data1(const std::vector<double> &input) noexcept;
+  void data2(const std::vector<double> &input) noexcept;
 
 private:
   // Objects
@@ -686,11 +710,11 @@ private:
 };
 
 class io_error : public std::exception {
-  private:
+private:
   const std::string message{};
-  public:
-  explicit io_error(const std::string msg) : message(msg) {}
-  std::string what() { return message; }
+
+public:
+  explicit io_error(const std::string &msg) : message(msg) {}
 };
 }; // namespace sacfmt
 #endif

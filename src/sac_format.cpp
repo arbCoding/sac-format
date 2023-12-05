@@ -7,9 +7,11 @@ namespace sacfmt {
 //-----------------------------------------------------------------------------
 // Conversions
 //-----------------------------------------------------------------------------
-int word_position(const int word_number) { return (word_number * word_length); }
+int word_position(const int word_number) noexcept {
+  return (word_number * word_length);
+}
 
-word_one int_to_binary(const int num) {
+word_one int_to_binary(const int num) noexcept {
   word_one bits{};
   if (num >= 0) {
     bits = word_one(static_cast<size_t>(num));
@@ -19,7 +21,7 @@ word_one int_to_binary(const int num) {
   return bits;
 }
 
-int binary_to_int(word_one bin) {
+int binary_to_int(word_one bin) noexcept {
   int result{};
   if (bin.test(binary_word_size - 1)) {
     bin = ~bin;
@@ -33,45 +35,47 @@ int binary_to_int(word_one bin) {
   return result;
 }
 
-word_one float_to_binary(const float num) {
-  word_one result{};
-  memcpy(&result, &num, sizeof(float));
+word_one float_to_binary(const float num) noexcept {
+  unsigned_int<float> num_as_uint{0};
+  std::memcpy(&num_as_uint, &num, sizeof(float));
+  word_one result{num_as_uint};
   return result;
 }
 
-float binary_to_float(const word_one &bin) {
+float binary_to_float(const word_one &bin) noexcept {
   const auto val = bin.to_ulong();
   float result{};
   memcpy(&result, &val, sizeof(float));
   return result;
 }
 
-word_two double_to_binary(const double num) {
-  word_two result{};
-  memcpy(&result, &num, sizeof(double));
+word_two double_to_binary(const double num) noexcept {
+  unsigned_int<double> num_as_uint{0};
+  std::memcpy(&num_as_uint, &num, sizeof(double));
+  word_two result{num_as_uint};
   return result;
 }
 
-double binary_to_double(const word_two &bin) {
+double binary_to_double(const word_two &bin) noexcept {
   const auto val = bin.to_ullong();
   double result{};
   memcpy(&result, &val, sizeof(double));
   return result;
 }
 
-void remove_leading_spaces(std::string *str) {
+void remove_leading_spaces(std::string *str) noexcept {
   while ((static_cast<int>(str->front()) <= ascii_space) && (!str->empty())) {
     str->erase(0, 1);
   }
 }
-void remove_trailing_spaces(std::string *str) {
+void remove_trailing_spaces(std::string *str) noexcept {
   while ((static_cast<int>(str->back()) <= ascii_space) && (!str->empty())) {
     str->pop_back();
   }
 }
 
 // Remove leading/trailing white-space and control characters
-std::string string_cleaning(const std::string &str) {
+std::string string_cleaning(const std::string &str) noexcept {
   std::string result{str};
   size_t null_position{str.find('\0')};
   if (null_position != std::string::npos) {
@@ -82,7 +86,7 @@ std::string string_cleaning(const std::string &str) {
   return result;
 }
 
-void prep_string(std::string *str, const size_t str_size) {
+void prep_string(std::string *str, const size_t str_size) noexcept {
   *str = string_cleaning(*str);
   if (str->length() > str_size) {
     str->resize(str_size);
@@ -92,7 +96,8 @@ void prep_string(std::string *str, const size_t str_size) {
 }
 
 template <typename T>
-void string_bits(T *bits, const std::string &str, const size_t str_size) {
+void string_bits(T *bits, const std::string &str,
+                 const size_t str_size) noexcept {
   constexpr size_t char_size{bits_per_byte};
   std::bitset<char_size> byte{};
   for (size_t i{0}; i < str_size; ++i) {
@@ -105,21 +110,22 @@ void string_bits(T *bits, const std::string &str, const size_t str_size) {
 }
 
 template <typename T>
-std::string bits_string(const T &bits, const size_t num_words) {
+std::string bits_string(const T &bits, const size_t num_words) noexcept {
   std::string result{};
+  result.reserve(num_words * word_length);
   constexpr size_t char_size{bits_per_byte};
   std::bitset<char_size> byte{};
   for (size_t i{0}; i < num_words * binary_word_size; i += char_size) {
     for (size_t j{0}; j < char_size; ++j) {
       byte[j] = bits[i + j];
     }
-    result += static_cast<char>(byte.to_ulong());
+    result.push_back(static_cast<char>(byte.to_ulong()));
   }
   return result;
 }
 
-word_two string_to_binary(std::string str) {
-  constexpr size_t string_size{static_cast<const size_t>(2 * word_length)};
+word_two string_to_binary(std::string str) noexcept {
+  constexpr size_t string_size{static_cast<size_t>(2 * word_length)};
   // 1 byte per character
   prep_string(&str, string_size);
   // Two words (8 characters)
@@ -128,13 +134,13 @@ word_two string_to_binary(std::string str) {
   return bits;
 }
 
-std::string binary_to_string(const word_two &str) {
+std::string binary_to_string(const word_two &str) noexcept {
   std::string result{bits_string(str, 2)};
   return string_cleaning(result);
 }
 
-word_four long_string_to_binary(std::string str) {
-  constexpr size_t string_size{static_cast<const size_t>(4 * word_length)};
+word_four long_string_to_binary(std::string str) noexcept {
+  constexpr size_t string_size{static_cast<size_t>(4 * word_length)};
   prep_string(&str, string_size);
   // Four words (16 characters)
   word_four bits{};
@@ -142,20 +148,20 @@ word_four long_string_to_binary(std::string str) {
   return bits;
 }
 
-std::string binary_to_long_string(const word_four &str) {
+std::string binary_to_long_string(const word_four &str) noexcept {
   std::string result{bits_string(str, 4)};
   return string_cleaning(result);
 }
 
-word_one bool_to_binary(const bool flag) {
+word_one bool_to_binary(const bool flag) noexcept {
   word_one result{};
   result[0] = flag;
   return result;
 }
 
-bool binary_to_bool(const word_one &flag) { return flag[0]; }
+bool binary_to_bool(const word_one &flag) noexcept { return flag[0]; }
 
-word_two concat_words(const word_one &word1, const word_one &word2) {
+word_two concat_words(const word_one &word1, const word_one &word2) noexcept {
   word_two result{};
   for (size_t i{0}; i < binary_word_size; ++i) {
     result[i] = word1[i];
@@ -164,7 +170,8 @@ word_two concat_words(const word_one &word1, const word_one &word2) {
   return result;
 }
 
-word_four concat_words(const word_two &word12, const word_two &word34) {
+word_four concat_words(const word_two &word12,
+                       const word_two &word34) noexcept {
   word_four result{};
   for (int i{0}; i < 2 * binary_word_size; ++i) {
     result[i] = word12[i];
@@ -240,7 +247,8 @@ void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
 }
 
 // Template on the typename to make possible to handle float or int
-template <typename T> std::vector<char> convert_to_word(const T input) {
+template <typename T>
+std::vector<char> convert_to_word(const T input) noexcept {
   // flawfinder: ignore
   char tmp[word_length];
   // Copy bytes from input into the tmp array
@@ -255,10 +263,10 @@ template <typename T> std::vector<char> convert_to_word(const T input) {
 }
 
 // Explicit instantiation
-template std::vector<char> convert_to_word(const float input);
-template std::vector<char> convert_to_word(const int x);
+template std::vector<char> convert_to_word(const float input) noexcept;
+template std::vector<char> convert_to_word(const int x) noexcept;
 
-std::vector<char> convert_to_word(const double input) {
+std::vector<char> convert_to_word(const double input) noexcept {
   // flawfinder: ignore
   char tmp[2 * word_length];
   // Copy bytes from input into the tmp array
@@ -274,7 +282,8 @@ std::vector<char> convert_to_word(const double input) {
 
 // Variable sized words for the 'K' headers
 template <size_t N>
-std::array<char, N> convert_to_words(const std::string &str, int n_words) {
+std::array<char, N> convert_to_words(const std::string &str,
+                                     int n_words) noexcept {
   std::array<char, N> all_words{};
   // String to null-terminated character array
   const char *c_str = str.c_str();
@@ -285,14 +294,14 @@ std::array<char, N> convert_to_words(const std::string &str, int n_words) {
 }
 
 // Explicit instantiation
-template std::array<char, word_length> convert_to_words(const std::string &str,
-                                                        const int n_words);
+template std::array<char, word_length>
+convert_to_words(const std::string &str, const int n_words) noexcept;
 template std::array<char, 2 * word_length>
-convert_to_words(const std::string &str, const int n_words);
+convert_to_words(const std::string &str, const int n_words) noexcept;
 template std::array<char, 4 * word_length>
-convert_to_words(const std::string &str, const int n_words);
+convert_to_words(const std::string &str, const int n_words) noexcept;
 
-std::vector<char> bool_to_word(const bool flag) {
+std::vector<char> bool_to_word(const bool flag) noexcept {
   std::vector<char> result;
   result.resize(word_length);
   result[0] = static_cast<char>(flag ? 1 : 0);
@@ -308,7 +317,7 @@ std::vector<char> bool_to_word(const bool flag) {
 // within tolerance
 bool equal_within_tolerance(const std::vector<double> &vector1,
                             const std::vector<double> &vector2,
-                            const double tolerance) {
+                            const double tolerance) noexcept {
   if (vector1.size() != vector2.size()) {
     return false;
   }
@@ -320,15 +329,15 @@ bool equal_within_tolerance(const std::vector<double> &vector1,
   return true;
 }
 bool equal_within_tolerance(const double val1, const double val2,
-                            const double tolerance) {
+                            const double tolerance) noexcept {
   return (std::abs(val1 - val2) < tolerance);
 }
 // Position methods
-double degrees_to_radians(const double degrees) {
+double degrees_to_radians(const double degrees) noexcept {
   return rad_per_deg * degrees;
 }
 
-double radians_to_degrees(const double radians) {
+double radians_to_degrees(const double radians) noexcept {
   return deg_per_rad * radians;
 }
 
@@ -365,7 +374,7 @@ double azimuth(const double latitude1, const double longitude1,
 //------------------------------------------------------------------------------
 // Trace
 //------------------------------------------------------------------------------
-Trace::Trace() {
+Trace::Trace() noexcept {
   std::ranges::fill(floats.begin(), floats.end(), unset_float);
   std::ranges::fill(doubles.begin(), doubles.end(), unset_double);
   std::ranges::fill(ints.begin(), ints.end(), unset_int);
@@ -373,7 +382,7 @@ Trace::Trace() {
   std::ranges::fill(strings.begin(), strings.end(), unset_word);
 }
 
-bool Trace::operator==(const Trace &other) const {
+bool Trace::operator==(const Trace &other) const noexcept {
   if (floats != other.floats) {
     return false;
   }
@@ -396,386 +405,546 @@ bool Trace::operator==(const Trace &other) const {
 }
 // Getters
 // Floats
-float Trace::depmin() const { return floats[sac_map.at(name::depmin)]; }
-float Trace::depmax() const { return floats[sac_map.at(name::depmax)]; }
-float Trace::odelta() const { return floats[sac_map.at(name::odelta)]; }
-float Trace::resp0() const { return floats[sac_map.at(name::resp0)]; }
-float Trace::resp1() const { return floats[sac_map.at(name::resp1)]; }
-float Trace::resp2() const { return floats[sac_map.at(name::resp2)]; }
-float Trace::resp3() const { return floats[sac_map.at(name::resp3)]; }
-float Trace::resp4() const { return floats[sac_map.at(name::resp4)]; }
-float Trace::resp5() const { return floats[sac_map.at(name::resp5)]; }
-float Trace::resp6() const { return floats[sac_map.at(name::resp6)]; }
-float Trace::resp7() const { return floats[sac_map.at(name::resp7)]; }
-float Trace::resp8() const { return floats[sac_map.at(name::resp8)]; }
-float Trace::resp9() const { return floats[sac_map.at(name::resp9)]; }
-float Trace::stel() const { return floats[sac_map.at(name::stel)]; }
-float Trace::stdp() const { return floats[sac_map.at(name::stdp)]; }
-float Trace::evel() const { return floats[sac_map.at(name::evel)]; }
-float Trace::evdp() const { return floats[sac_map.at(name::evdp)]; }
-float Trace::mag() const { return floats[sac_map.at(name::mag)]; }
-float Trace::user0() const { return floats[sac_map.at(name::user0)]; }
-float Trace::user1() const { return floats[sac_map.at(name::user1)]; }
-float Trace::user2() const { return floats[sac_map.at(name::user2)]; }
-float Trace::user3() const { return floats[sac_map.at(name::user3)]; }
-float Trace::user4() const { return floats[sac_map.at(name::user4)]; }
-float Trace::user5() const { return floats[sac_map.at(name::user5)]; }
-float Trace::user6() const { return floats[sac_map.at(name::user6)]; }
-float Trace::user7() const { return floats[sac_map.at(name::user7)]; }
-float Trace::user8() const { return floats[sac_map.at(name::user8)]; }
-float Trace::user9() const { return floats[sac_map.at(name::user9)]; }
-float Trace::dist() const { return floats[sac_map.at(name::dist)]; }
-float Trace::az() const { return floats[sac_map.at(name::az)]; }
-float Trace::baz() const { return floats[sac_map.at(name::baz)]; }
-float Trace::gcarc() const { return floats[sac_map.at(name::gcarc)]; }
-float Trace::depmen() const { return floats[sac_map.at(name::depmen)]; }
-float Trace::cmpaz() const { return floats[sac_map.at(name::cmpaz)]; }
-float Trace::cmpinc() const { return floats[sac_map.at(name::cmpinc)]; }
-float Trace::xminimum() const { return floats[sac_map.at(name::xminimum)]; }
-float Trace::xmaximum() const { return floats[sac_map.at(name::xmaximum)]; }
-float Trace::yminimum() const { return floats[sac_map.at(name::yminimum)]; }
-float Trace::ymaximum() const { return floats[sac_map.at(name::ymaximum)]; }
+float Trace::depmin() const noexcept {
+  return floats[sac_map.at(name::depmin)];
+}
+float Trace::depmax() const noexcept {
+  return floats[sac_map.at(name::depmax)];
+}
+float Trace::odelta() const noexcept {
+  return floats[sac_map.at(name::odelta)];
+}
+float Trace::resp0() const noexcept { return floats[sac_map.at(name::resp0)]; }
+float Trace::resp1() const noexcept { return floats[sac_map.at(name::resp1)]; }
+float Trace::resp2() const noexcept { return floats[sac_map.at(name::resp2)]; }
+float Trace::resp3() const noexcept { return floats[sac_map.at(name::resp3)]; }
+float Trace::resp4() const noexcept { return floats[sac_map.at(name::resp4)]; }
+float Trace::resp5() const noexcept { return floats[sac_map.at(name::resp5)]; }
+float Trace::resp6() const noexcept { return floats[sac_map.at(name::resp6)]; }
+float Trace::resp7() const noexcept { return floats[sac_map.at(name::resp7)]; }
+float Trace::resp8() const noexcept { return floats[sac_map.at(name::resp8)]; }
+float Trace::resp9() const noexcept { return floats[sac_map.at(name::resp9)]; }
+float Trace::stel() const noexcept { return floats[sac_map.at(name::stel)]; }
+float Trace::stdp() const noexcept { return floats[sac_map.at(name::stdp)]; }
+float Trace::evel() const noexcept { return floats[sac_map.at(name::evel)]; }
+float Trace::evdp() const noexcept { return floats[sac_map.at(name::evdp)]; }
+float Trace::mag() const noexcept { return floats[sac_map.at(name::mag)]; }
+float Trace::user0() const noexcept { return floats[sac_map.at(name::user0)]; }
+float Trace::user1() const noexcept { return floats[sac_map.at(name::user1)]; }
+float Trace::user2() const noexcept { return floats[sac_map.at(name::user2)]; }
+float Trace::user3() const noexcept { return floats[sac_map.at(name::user3)]; }
+float Trace::user4() const noexcept { return floats[sac_map.at(name::user4)]; }
+float Trace::user5() const noexcept { return floats[sac_map.at(name::user5)]; }
+float Trace::user6() const noexcept { return floats[sac_map.at(name::user6)]; }
+float Trace::user7() const noexcept { return floats[sac_map.at(name::user7)]; }
+float Trace::user8() const noexcept { return floats[sac_map.at(name::user8)]; }
+float Trace::user9() const noexcept { return floats[sac_map.at(name::user9)]; }
+float Trace::dist() const noexcept { return floats[sac_map.at(name::dist)]; }
+float Trace::az() const noexcept { return floats[sac_map.at(name::az)]; }
+float Trace::baz() const noexcept { return floats[sac_map.at(name::baz)]; }
+float Trace::gcarc() const noexcept { return floats[sac_map.at(name::gcarc)]; }
+float Trace::depmen() const noexcept {
+  return floats[sac_map.at(name::depmen)];
+}
+float Trace::cmpaz() const noexcept { return floats[sac_map.at(name::cmpaz)]; }
+float Trace::cmpinc() const noexcept {
+  return floats[sac_map.at(name::cmpinc)];
+}
+float Trace::xminimum() const noexcept {
+  return floats[sac_map.at(name::xminimum)];
+}
+float Trace::xmaximum() const noexcept {
+  return floats[sac_map.at(name::xmaximum)];
+}
+float Trace::yminimum() const noexcept {
+  return floats[sac_map.at(name::yminimum)];
+}
+float Trace::ymaximum() const noexcept {
+  return floats[sac_map.at(name::ymaximum)];
+}
 // Doubles
-double Trace::delta() const { return doubles[sac_map.at(name::delta)]; }
-double Trace::b() const { return doubles[sac_map.at(name::b)]; }
-double Trace::e() const { return doubles[sac_map.at(name::e)]; }
-double Trace::o() const { return doubles[sac_map.at(name::o)]; }
-double Trace::a() const { return doubles[sac_map.at(name::a)]; }
-double Trace::t0() const { return doubles[sac_map.at(name::t0)]; }
-double Trace::t1() const { return doubles[sac_map.at(name::t1)]; }
-double Trace::t2() const { return doubles[sac_map.at(name::t2)]; }
-double Trace::t3() const { return doubles[sac_map.at(name::t3)]; }
-double Trace::t4() const { return doubles[sac_map.at(name::t4)]; }
-double Trace::t5() const { return doubles[sac_map.at(name::t5)]; }
-double Trace::t6() const { return doubles[sac_map.at(name::t6)]; }
-double Trace::t7() const { return doubles[sac_map.at(name::t7)]; }
-double Trace::t8() const { return doubles[sac_map.at(name::t8)]; }
-double Trace::t9() const { return doubles[sac_map.at(name::t9)]; }
-double Trace::f() const { return doubles[sac_map.at(name::f)]; }
-double Trace::stla() const { return doubles[sac_map.at(name::stla)]; }
-double Trace::stlo() const { return doubles[sac_map.at(name::stlo)]; }
-double Trace::evla() const { return doubles[sac_map.at(name::evla)]; }
-double Trace::evlo() const { return doubles[sac_map.at(name::evlo)]; }
-double Trace::sb() const { return doubles[sac_map.at(name::sb)]; }
-double Trace::sdelta() const { return doubles[sac_map.at(name::sdelta)]; }
+double Trace::delta() const noexcept {
+  return doubles[sac_map.at(name::delta)];
+}
+double Trace::b() const noexcept { return doubles[sac_map.at(name::b)]; }
+double Trace::e() const noexcept { return doubles[sac_map.at(name::e)]; }
+double Trace::o() const noexcept { return doubles[sac_map.at(name::o)]; }
+double Trace::a() const noexcept { return doubles[sac_map.at(name::a)]; }
+double Trace::t0() const noexcept { return doubles[sac_map.at(name::t0)]; }
+double Trace::t1() const noexcept { return doubles[sac_map.at(name::t1)]; }
+double Trace::t2() const noexcept { return doubles[sac_map.at(name::t2)]; }
+double Trace::t3() const noexcept { return doubles[sac_map.at(name::t3)]; }
+double Trace::t4() const noexcept { return doubles[sac_map.at(name::t4)]; }
+double Trace::t5() const noexcept { return doubles[sac_map.at(name::t5)]; }
+double Trace::t6() const noexcept { return doubles[sac_map.at(name::t6)]; }
+double Trace::t7() const noexcept { return doubles[sac_map.at(name::t7)]; }
+double Trace::t8() const noexcept { return doubles[sac_map.at(name::t8)]; }
+double Trace::t9() const noexcept { return doubles[sac_map.at(name::t9)]; }
+double Trace::f() const noexcept { return doubles[sac_map.at(name::f)]; }
+double Trace::stla() const noexcept { return doubles[sac_map.at(name::stla)]; }
+double Trace::stlo() const noexcept { return doubles[sac_map.at(name::stlo)]; }
+double Trace::evla() const noexcept { return doubles[sac_map.at(name::evla)]; }
+double Trace::evlo() const noexcept { return doubles[sac_map.at(name::evlo)]; }
+double Trace::sb() const noexcept { return doubles[sac_map.at(name::sb)]; }
+double Trace::sdelta() const noexcept {
+  return doubles[sac_map.at(name::sdelta)];
+}
 // Ints
-int Trace::nzyear() const { return ints[sac_map.at(name::nzyear)]; }
-int Trace::nzjday() const { return ints[sac_map.at(name::nzjday)]; }
-int Trace::nzhour() const { return ints[sac_map.at(name::nzhour)]; }
-int Trace::nzmin() const { return ints[sac_map.at(name::nzmin)]; }
-int Trace::nzsec() const { return ints[sac_map.at(name::nzsec)]; }
-int Trace::nzmsec() const { return ints[sac_map.at(name::nzmsec)]; }
-int Trace::nvhdr() const { return ints[sac_map.at(name::nvhdr)]; }
-int Trace::norid() const { return ints[sac_map.at(name::norid)]; }
-int Trace::nevid() const { return ints[sac_map.at(name::nevid)]; }
-int Trace::npts() const { return ints[sac_map.at(name::npts)]; }
-int Trace::nsnpts() const { return ints[sac_map.at(name::nsnpts)]; }
-int Trace::nwfid() const { return ints[sac_map.at(name::nwfid)]; }
-int Trace::nxsize() const { return ints[sac_map.at(name::nxsize)]; }
-int Trace::nysize() const { return ints[sac_map.at(name::nysize)]; }
-int Trace::iftype() const { return ints[sac_map.at(name::iftype)]; }
-int Trace::idep() const { return ints[sac_map.at(name::idep)]; }
-int Trace::iztype() const { return ints[sac_map.at(name::iztype)]; }
-int Trace::iinst() const { return ints[sac_map.at(name::iinst)]; }
-int Trace::istreg() const { return ints[sac_map.at(name::istreg)]; }
-int Trace::ievreg() const { return ints[sac_map.at(name::ievreg)]; }
-int Trace::ievtyp() const { return ints[sac_map.at(name::ievtyp)]; }
-int Trace::iqual() const { return ints[sac_map.at(name::iqual)]; }
-int Trace::isynth() const { return ints[sac_map.at(name::isynth)]; }
-int Trace::imagtyp() const { return ints[sac_map.at(name::imagtyp)]; }
-int Trace::imagsrc() const { return ints[sac_map.at(name::imagsrc)]; }
-int Trace::ibody() const { return ints[sac_map.at(name::ibody)]; }
+int Trace::nzyear() const noexcept { return ints[sac_map.at(name::nzyear)]; }
+int Trace::nzjday() const noexcept { return ints[sac_map.at(name::nzjday)]; }
+int Trace::nzhour() const noexcept { return ints[sac_map.at(name::nzhour)]; }
+int Trace::nzmin() const noexcept { return ints[sac_map.at(name::nzmin)]; }
+int Trace::nzsec() const noexcept { return ints[sac_map.at(name::nzsec)]; }
+int Trace::nzmsec() const noexcept { return ints[sac_map.at(name::nzmsec)]; }
+int Trace::nvhdr() const noexcept { return ints[sac_map.at(name::nvhdr)]; }
+int Trace::norid() const noexcept { return ints[sac_map.at(name::norid)]; }
+int Trace::nevid() const noexcept { return ints[sac_map.at(name::nevid)]; }
+int Trace::npts() const noexcept { return ints[sac_map.at(name::npts)]; }
+int Trace::nsnpts() const noexcept { return ints[sac_map.at(name::nsnpts)]; }
+int Trace::nwfid() const noexcept { return ints[sac_map.at(name::nwfid)]; }
+int Trace::nxsize() const noexcept { return ints[sac_map.at(name::nxsize)]; }
+int Trace::nysize() const noexcept { return ints[sac_map.at(name::nysize)]; }
+int Trace::iftype() const noexcept { return ints[sac_map.at(name::iftype)]; }
+int Trace::idep() const noexcept { return ints[sac_map.at(name::idep)]; }
+int Trace::iztype() const noexcept { return ints[sac_map.at(name::iztype)]; }
+int Trace::iinst() const noexcept { return ints[sac_map.at(name::iinst)]; }
+int Trace::istreg() const noexcept { return ints[sac_map.at(name::istreg)]; }
+int Trace::ievreg() const noexcept { return ints[sac_map.at(name::ievreg)]; }
+int Trace::ievtyp() const noexcept { return ints[sac_map.at(name::ievtyp)]; }
+int Trace::iqual() const noexcept { return ints[sac_map.at(name::iqual)]; }
+int Trace::isynth() const noexcept { return ints[sac_map.at(name::isynth)]; }
+int Trace::imagtyp() const noexcept { return ints[sac_map.at(name::imagtyp)]; }
+int Trace::imagsrc() const noexcept { return ints[sac_map.at(name::imagsrc)]; }
+int Trace::ibody() const noexcept { return ints[sac_map.at(name::ibody)]; }
 // Bools
-bool Trace::leven() const { return bools[sac_map.at(name::leven)]; }
-bool Trace::lpspol() const { return bools[sac_map.at(name::lpspol)]; }
-bool Trace::lovrok() const { return bools[sac_map.at(name::lovrok)]; }
-bool Trace::lcalda() const { return bools[sac_map.at(name::lcalda)]; }
+bool Trace::leven() const noexcept { return bools[sac_map.at(name::leven)]; }
+bool Trace::lpspol() const noexcept { return bools[sac_map.at(name::lpspol)]; }
+bool Trace::lovrok() const noexcept { return bools[sac_map.at(name::lovrok)]; }
+bool Trace::lcalda() const noexcept { return bools[sac_map.at(name::lcalda)]; }
 // Strings
-std::string Trace::kstnm() const { return strings[sac_map.at(name::kstnm)]; }
-std::string Trace::kevnm() const { return strings[sac_map.at(name::kevnm)]; }
-std::string Trace::khole() const { return strings[sac_map.at(name::khole)]; }
-std::string Trace::ko() const { return strings[sac_map.at(name::ko)]; }
-std::string Trace::ka() const { return strings[sac_map.at(name::ka)]; }
-std::string Trace::kt0() const { return strings[sac_map.at(name::kt0)]; }
-std::string Trace::kt1() const { return strings[sac_map.at(name::kt1)]; }
-std::string Trace::kt2() const { return strings[sac_map.at(name::kt2)]; }
-std::string Trace::kt3() const { return strings[sac_map.at(name::kt3)]; }
-std::string Trace::kt4() const { return strings[sac_map.at(name::kt4)]; }
-std::string Trace::kt5() const { return strings[sac_map.at(name::kt5)]; }
-std::string Trace::kt6() const { return strings[sac_map.at(name::kt6)]; }
-std::string Trace::kt7() const { return strings[sac_map.at(name::kt7)]; }
-std::string Trace::kt8() const { return strings[sac_map.at(name::kt8)]; }
-std::string Trace::kt9() const { return strings[sac_map.at(name::kt9)]; }
-std::string Trace::kf() const { return strings[sac_map.at(name::kf)]; }
-std::string Trace::kuser0() const { return strings[sac_map.at(name::kuser0)]; }
-std::string Trace::kuser1() const { return strings[sac_map.at(name::kuser1)]; }
-std::string Trace::kuser2() const { return strings[sac_map.at(name::kuser2)]; }
-std::string Trace::kcmpnm() const { return strings[sac_map.at(name::kcmpnm)]; }
-std::string Trace::knetwk() const { return strings[sac_map.at(name::knetwk)]; }
-std::string Trace::kdatrd() const { return strings[sac_map.at(name::kdatrd)]; }
-std::string Trace::kinst() const { return strings[sac_map.at(name::kinst)]; }
+std::string Trace::kstnm() const noexcept {
+  return strings[sac_map.at(name::kstnm)];
+}
+std::string Trace::kevnm() const noexcept {
+  return strings[sac_map.at(name::kevnm)];
+}
+std::string Trace::khole() const noexcept {
+  return strings[sac_map.at(name::khole)];
+}
+std::string Trace::ko() const noexcept { return strings[sac_map.at(name::ko)]; }
+std::string Trace::ka() const noexcept { return strings[sac_map.at(name::ka)]; }
+std::string Trace::kt0() const noexcept {
+  return strings[sac_map.at(name::kt0)];
+}
+std::string Trace::kt1() const noexcept {
+  return strings[sac_map.at(name::kt1)];
+}
+std::string Trace::kt2() const noexcept {
+  return strings[sac_map.at(name::kt2)];
+}
+std::string Trace::kt3() const noexcept {
+  return strings[sac_map.at(name::kt3)];
+}
+std::string Trace::kt4() const noexcept {
+  return strings[sac_map.at(name::kt4)];
+}
+std::string Trace::kt5() const noexcept {
+  return strings[sac_map.at(name::kt5)];
+}
+std::string Trace::kt6() const noexcept {
+  return strings[sac_map.at(name::kt6)];
+}
+std::string Trace::kt7() const noexcept {
+  return strings[sac_map.at(name::kt7)];
+}
+std::string Trace::kt8() const noexcept {
+  return strings[sac_map.at(name::kt8)];
+}
+std::string Trace::kt9() const noexcept {
+  return strings[sac_map.at(name::kt9)];
+}
+std::string Trace::kf() const noexcept { return strings[sac_map.at(name::kf)]; }
+std::string Trace::kuser0() const noexcept {
+  return strings[sac_map.at(name::kuser0)];
+}
+std::string Trace::kuser1() const noexcept {
+  return strings[sac_map.at(name::kuser1)];
+}
+std::string Trace::kuser2() const noexcept {
+  return strings[sac_map.at(name::kuser2)];
+}
+std::string Trace::kcmpnm() const noexcept {
+  return strings[sac_map.at(name::kcmpnm)];
+}
+std::string Trace::knetwk() const noexcept {
+  return strings[sac_map.at(name::knetwk)];
+}
+std::string Trace::kdatrd() const noexcept {
+  return strings[sac_map.at(name::kdatrd)];
+}
+std::string Trace::kinst() const noexcept {
+  return strings[sac_map.at(name::kinst)];
+}
 // Data
-std::vector<double> Trace::data1() const {
+std::vector<double> Trace::data1() const noexcept {
   return data[sac_map.at(name::data1)];
 }
-std::vector<double> Trace::data2() const {
+std::vector<double> Trace::data2() const noexcept {
   return data[sac_map.at(name::data2)];
 }
 // Setters
 // Floats
-void Trace::depmin(const float input) {
+void Trace::depmin(const float input) noexcept {
   floats[sac_map.at(name::depmin)] = input;
 }
-void Trace::depmax(const float input) {
+void Trace::depmax(const float input) noexcept {
   floats[sac_map.at(name::depmax)] = input;
 }
-void Trace::odelta(const float input) {
+void Trace::odelta(const float input) noexcept {
   floats[sac_map.at(name::odelta)] = input;
 }
-void Trace::resp0(const float input) {
+void Trace::resp0(const float input) noexcept {
   floats[sac_map.at(name::resp0)] = input;
 }
-void Trace::resp1(const float input) {
+void Trace::resp1(const float input) noexcept {
   floats[sac_map.at(name::resp1)] = input;
 }
-void Trace::resp2(const float input) {
+void Trace::resp2(const float input) noexcept {
   floats[sac_map.at(name::resp2)] = input;
 }
-void Trace::resp3(const float input) {
+void Trace::resp3(const float input) noexcept {
   floats[sac_map.at(name::resp3)] = input;
 }
-void Trace::resp4(const float input) {
+void Trace::resp4(const float input) noexcept {
   floats[sac_map.at(name::resp4)] = input;
 }
-void Trace::resp5(const float input) {
+void Trace::resp5(const float input) noexcept {
   floats[sac_map.at(name::resp5)] = input;
 }
-void Trace::resp6(const float input) {
+void Trace::resp6(const float input) noexcept {
   floats[sac_map.at(name::resp6)] = input;
 }
-void Trace::resp7(const float input) {
+void Trace::resp7(const float input) noexcept {
   floats[sac_map.at(name::resp7)] = input;
 }
-void Trace::resp8(const float input) {
+void Trace::resp8(const float input) noexcept {
   floats[sac_map.at(name::resp8)] = input;
 }
-void Trace::resp9(const float input) {
+void Trace::resp9(const float input) noexcept {
   floats[sac_map.at(name::resp9)] = input;
 }
-void Trace::stel(const float input) { floats[sac_map.at(name::stel)] = input; }
-void Trace::stdp(const float input) { floats[sac_map.at(name::stdp)] = input; }
-void Trace::evel(const float input) { floats[sac_map.at(name::evel)] = input; }
-void Trace::evdp(const float input) { floats[sac_map.at(name::evdp)] = input; }
-void Trace::mag(const float input) { floats[sac_map.at(name::mag)] = input; }
-void Trace::user0(const float input) {
+void Trace::stel(const float input) noexcept {
+  floats[sac_map.at(name::stel)] = input;
+}
+void Trace::stdp(const float input) noexcept {
+  floats[sac_map.at(name::stdp)] = input;
+}
+void Trace::evel(const float input) noexcept {
+  floats[sac_map.at(name::evel)] = input;
+}
+void Trace::evdp(const float input) noexcept {
+  floats[sac_map.at(name::evdp)] = input;
+}
+void Trace::mag(const float input) noexcept {
+  floats[sac_map.at(name::mag)] = input;
+}
+void Trace::user0(const float input) noexcept {
   floats[sac_map.at(name::user0)] = input;
 }
-void Trace::user1(const float input) {
+void Trace::user1(const float input) noexcept {
   floats[sac_map.at(name::user1)] = input;
 }
-void Trace::user2(const float input) {
+void Trace::user2(const float input) noexcept {
   floats[sac_map.at(name::user2)] = input;
 }
-void Trace::user3(const float input) {
+void Trace::user3(const float input) noexcept {
   floats[sac_map.at(name::user3)] = input;
 }
-void Trace::user4(const float input) {
+void Trace::user4(const float input) noexcept {
   floats[sac_map.at(name::user4)] = input;
 }
-void Trace::user5(const float input) {
+void Trace::user5(const float input) noexcept {
   floats[sac_map.at(name::user5)] = input;
 }
-void Trace::user6(const float input) {
+void Trace::user6(const float input) noexcept {
   floats[sac_map.at(name::user6)] = input;
 }
-void Trace::user7(const float input) {
+void Trace::user7(const float input) noexcept {
   floats[sac_map.at(name::user7)] = input;
 }
-void Trace::user8(const float input) {
+void Trace::user8(const float input) noexcept {
   floats[sac_map.at(name::user8)] = input;
 }
-void Trace::user9(const float input) {
+void Trace::user9(const float input) noexcept {
   floats[sac_map.at(name::user9)] = input;
 }
-void Trace::dist(const float input) { floats[sac_map.at(name::dist)] = input; }
-void Trace::az(const float input) { floats[sac_map.at(name::az)] = input; }
-void Trace::baz(const float input) { floats[sac_map.at(name::baz)] = input; }
-void Trace::gcarc(const float input) {
+void Trace::dist(const float input) noexcept {
+  floats[sac_map.at(name::dist)] = input;
+}
+void Trace::az(const float input) noexcept {
+  floats[sac_map.at(name::az)] = input;
+}
+void Trace::baz(const float input) noexcept {
+  floats[sac_map.at(name::baz)] = input;
+}
+void Trace::gcarc(const float input) noexcept {
   floats[sac_map.at(name::gcarc)] = input;
 }
-void Trace::depmen(const float input) {
+void Trace::depmen(const float input) noexcept {
   floats[sac_map.at(name::depmen)] = input;
 }
-void Trace::cmpaz(const float input) {
+void Trace::cmpaz(const float input) noexcept {
   floats[sac_map.at(name::cmpaz)] = input;
 }
-void Trace::cmpinc(const float input) {
+void Trace::cmpinc(const float input) noexcept {
   floats[sac_map.at(name::cmpinc)] = input;
 }
-void Trace::xminimum(const float input) {
+void Trace::xminimum(const float input) noexcept {
   floats[sac_map.at(name::xminimum)] = input;
 }
-void Trace::xmaximum(const float input) {
+void Trace::xmaximum(const float input) noexcept {
   floats[sac_map.at(name::xmaximum)] = input;
 }
-void Trace::yminimum(const float input) {
+void Trace::yminimum(const float input) noexcept {
   floats[sac_map.at(name::yminimum)] = input;
 }
-void Trace::ymaximum(const float input) {
+void Trace::ymaximum(const float input) noexcept {
   floats[sac_map.at(name::ymaximum)] = input;
 }
 // Doubles
-void Trace::delta(const double input) {
+void Trace::delta(const double input) noexcept {
   doubles[sac_map.at(name::delta)] = input;
 }
-void Trace::b(const double input) { doubles[sac_map.at(name::b)] = input; }
-void Trace::e(const double input) { doubles[sac_map.at(name::e)] = input; }
-void Trace::o(const double input) { doubles[sac_map.at(name::o)] = input; }
-void Trace::a(const double input) { doubles[sac_map.at(name::a)] = input; }
-void Trace::t0(const double input) { doubles[sac_map.at(name::t0)] = input; }
-void Trace::t1(const double input) { doubles[sac_map.at(name::t1)] = input; }
-void Trace::t2(const double input) { doubles[sac_map.at(name::t2)] = input; }
-void Trace::t3(const double input) { doubles[sac_map.at(name::t3)] = input; }
-void Trace::t4(const double input) { doubles[sac_map.at(name::t4)] = input; }
-void Trace::t5(const double input) { doubles[sac_map.at(name::t5)] = input; }
-void Trace::t6(const double input) { doubles[sac_map.at(name::t6)] = input; }
-void Trace::t7(const double input) { doubles[sac_map.at(name::t7)] = input; }
-void Trace::t8(const double input) { doubles[sac_map.at(name::t8)] = input; }
-void Trace::t9(const double input) { doubles[sac_map.at(name::t9)] = input; }
-void Trace::f(const double input) { doubles[sac_map.at(name::f)] = input; }
-void Trace::stla(const double input) {
+void Trace::b(const double input) noexcept {
+  doubles[sac_map.at(name::b)] = input;
+}
+void Trace::e(const double input) noexcept {
+  doubles[sac_map.at(name::e)] = input;
+}
+void Trace::o(const double input) noexcept {
+  doubles[sac_map.at(name::o)] = input;
+}
+void Trace::a(const double input) noexcept {
+  doubles[sac_map.at(name::a)] = input;
+}
+void Trace::t0(const double input) noexcept {
+  doubles[sac_map.at(name::t0)] = input;
+}
+void Trace::t1(const double input) noexcept {
+  doubles[sac_map.at(name::t1)] = input;
+}
+void Trace::t2(const double input) noexcept {
+  doubles[sac_map.at(name::t2)] = input;
+}
+void Trace::t3(const double input) noexcept {
+  doubles[sac_map.at(name::t3)] = input;
+}
+void Trace::t4(const double input) noexcept {
+  doubles[sac_map.at(name::t4)] = input;
+}
+void Trace::t5(const double input) noexcept {
+  doubles[sac_map.at(name::t5)] = input;
+}
+void Trace::t6(const double input) noexcept {
+  doubles[sac_map.at(name::t6)] = input;
+}
+void Trace::t7(const double input) noexcept {
+  doubles[sac_map.at(name::t7)] = input;
+}
+void Trace::t8(const double input) noexcept {
+  doubles[sac_map.at(name::t8)] = input;
+}
+void Trace::t9(const double input) noexcept {
+  doubles[sac_map.at(name::t9)] = input;
+}
+void Trace::f(const double input) noexcept {
+  doubles[sac_map.at(name::f)] = input;
+}
+void Trace::stla(const double input) noexcept {
   doubles[sac_map.at(name::stla)] = input;
 }
-void Trace::stlo(const double input) {
+void Trace::stlo(const double input) noexcept {
   doubles[sac_map.at(name::stlo)] = input;
 }
-void Trace::evla(const double input) {
+void Trace::evla(const double input) noexcept {
   doubles[sac_map.at(name::evla)] = input;
 }
-void Trace::evlo(const double input) {
+void Trace::evlo(const double input) noexcept {
   doubles[sac_map.at(name::evlo)] = input;
 }
-void Trace::sb(const double input) { doubles[sac_map.at(name::sb)] = input; }
-void Trace::sdelta(const double input) {
+void Trace::sb(const double input) noexcept {
+  doubles[sac_map.at(name::sb)] = input;
+}
+void Trace::sdelta(const double input) noexcept {
   doubles[sac_map.at(name::sdelta)] = input;
 }
 // Ints
-void Trace::nzyear(const int input) { ints[sac_map.at(name::nzyear)] = input; }
-void Trace::nzjday(const int input) { ints[sac_map.at(name::nzjday)] = input; }
-void Trace::nzhour(const int input) { ints[sac_map.at(name::nzhour)] = input; }
-void Trace::nzmin(const int input) { ints[sac_map.at(name::nzmin)] = input; }
-void Trace::nzsec(const int input) { ints[sac_map.at(name::nzsec)] = input; }
-void Trace::nzmsec(const int input) { ints[sac_map.at(name::nzmsec)] = input; }
-void Trace::nvhdr(const int input) { ints[sac_map.at(name::nvhdr)] = input; }
-void Trace::norid(const int input) { ints[sac_map.at(name::norid)] = input; }
-void Trace::nevid(const int input) { ints[sac_map.at(name::nevid)] = input; }
-void Trace::npts(const int input) { ints[sac_map.at(name::npts)] = input; }
-void Trace::nsnpts(const int input) { ints[sac_map.at(name::nsnpts)] = input; }
-void Trace::nwfid(const int input) { ints[sac_map.at(name::nwfid)] = input; }
-void Trace::nxsize(const int input) { ints[sac_map.at(name::nxsize)] = input; }
-void Trace::nysize(const int input) { ints[sac_map.at(name::nysize)] = input; }
-void Trace::iftype(const int input) { ints[sac_map.at(name::iftype)] = input; }
-void Trace::idep(const int input) { ints[sac_map.at(name::idep)] = input; }
-void Trace::iztype(const int input) { ints[sac_map.at(name::iztype)] = input; }
-void Trace::iinst(const int input) { ints[sac_map.at(name::iinst)] = input; }
-void Trace::istreg(const int input) { ints[sac_map.at(name::istreg)] = input; }
-void Trace::ievreg(const int input) { ints[sac_map.at(name::ievreg)] = input; }
-void Trace::ievtyp(const int input) { ints[sac_map.at(name::ievtyp)] = input; }
-void Trace::iqual(const int input) { ints[sac_map.at(name::iqual)] = input; }
-void Trace::isynth(const int input) { ints[sac_map.at(name::isynth)] = input; }
-void Trace::imagtyp(const int input) {
+void Trace::nzyear(const int input) noexcept {
+  ints[sac_map.at(name::nzyear)] = input;
+}
+void Trace::nzjday(const int input) noexcept {
+  ints[sac_map.at(name::nzjday)] = input;
+}
+void Trace::nzhour(const int input) noexcept {
+  ints[sac_map.at(name::nzhour)] = input;
+}
+void Trace::nzmin(const int input) noexcept {
+  ints[sac_map.at(name::nzmin)] = input;
+}
+void Trace::nzsec(const int input) noexcept {
+  ints[sac_map.at(name::nzsec)] = input;
+}
+void Trace::nzmsec(const int input) noexcept {
+  ints[sac_map.at(name::nzmsec)] = input;
+}
+void Trace::nvhdr(const int input) noexcept {
+  ints[sac_map.at(name::nvhdr)] = input;
+}
+void Trace::norid(const int input) noexcept {
+  ints[sac_map.at(name::norid)] = input;
+}
+void Trace::nevid(const int input) noexcept {
+  ints[sac_map.at(name::nevid)] = input;
+}
+void Trace::npts(const int input) noexcept {
+  ints[sac_map.at(name::npts)] = input;
+}
+void Trace::nsnpts(const int input) noexcept {
+  ints[sac_map.at(name::nsnpts)] = input;
+}
+void Trace::nwfid(const int input) noexcept {
+  ints[sac_map.at(name::nwfid)] = input;
+}
+void Trace::nxsize(const int input) noexcept {
+  ints[sac_map.at(name::nxsize)] = input;
+}
+void Trace::nysize(const int input) noexcept {
+  ints[sac_map.at(name::nysize)] = input;
+}
+void Trace::iftype(const int input) noexcept {
+  ints[sac_map.at(name::iftype)] = input;
+}
+void Trace::idep(const int input) noexcept {
+  ints[sac_map.at(name::idep)] = input;
+}
+void Trace::iztype(const int input) noexcept {
+  ints[sac_map.at(name::iztype)] = input;
+}
+void Trace::iinst(const int input) noexcept {
+  ints[sac_map.at(name::iinst)] = input;
+}
+void Trace::istreg(const int input) noexcept {
+  ints[sac_map.at(name::istreg)] = input;
+}
+void Trace::ievreg(const int input) noexcept {
+  ints[sac_map.at(name::ievreg)] = input;
+}
+void Trace::ievtyp(const int input) noexcept {
+  ints[sac_map.at(name::ievtyp)] = input;
+}
+void Trace::iqual(const int input) noexcept {
+  ints[sac_map.at(name::iqual)] = input;
+}
+void Trace::isynth(const int input) noexcept {
+  ints[sac_map.at(name::isynth)] = input;
+}
+void Trace::imagtyp(const int input) noexcept {
   ints[sac_map.at(name::imagtyp)] = input;
 }
-void Trace::imagsrc(const int input) {
+void Trace::imagsrc(const int input) noexcept {
   ints[sac_map.at(name::imagsrc)] = input;
 }
-void Trace::ibody(const int input) { ints[sac_map.at(name::ibody)] = input; }
+void Trace::ibody(const int input) noexcept {
+  ints[sac_map.at(name::ibody)] = input;
+}
 // Bools
-void Trace::leven(const bool input) { bools[sac_map.at(name::leven)] = input; }
-void Trace::lpspol(const bool input) {
+void Trace::leven(const bool input) noexcept {
+  bools[sac_map.at(name::leven)] = input;
+}
+void Trace::lpspol(const bool input) noexcept {
   bools[sac_map.at(name::lpspol)] = input;
 }
-void Trace::lovrok(const bool input) {
+void Trace::lovrok(const bool input) noexcept {
   bools[sac_map.at(name::lovrok)] = input;
 }
-void Trace::lcalda(const bool input) {
+void Trace::lcalda(const bool input) noexcept {
   bools[sac_map.at(name::lcalda)] = input;
 }
 // Strings
-void Trace::kstnm(const std::string &input) {
+void Trace::kstnm(const std::string &input) noexcept {
   strings[sac_map.at(name::kstnm)] = input;
 }
-void Trace::kevnm(const std::string &input) {
+void Trace::kevnm(const std::string &input) noexcept {
   strings[sac_map.at(name::kevnm)] = input;
 }
-void Trace::khole(const std::string &input) {
+void Trace::khole(const std::string &input) noexcept {
   strings[sac_map.at(name::khole)] = input;
 }
-void Trace::ko(const std::string &input) {
+void Trace::ko(const std::string &input) noexcept {
   strings[sac_map.at(name::ko)] = input;
 }
-void Trace::ka(const std::string &input) {
+void Trace::ka(const std::string &input) noexcept {
   strings[sac_map.at(name::ka)] = input;
 }
-void Trace::kt0(const std::string &input) {
+void Trace::kt0(const std::string &input) noexcept {
   strings[sac_map.at(name::kt0)] = input;
 }
-void Trace::kt1(const std::string &input) {
+void Trace::kt1(const std::string &input) noexcept {
   strings[sac_map.at(name::kt1)] = input;
 }
-void Trace::kt2(const std::string &input) {
+void Trace::kt2(const std::string &input) noexcept {
   strings[sac_map.at(name::kt2)] = input;
 }
-void Trace::kt3(const std::string &input) {
+void Trace::kt3(const std::string &input) noexcept {
   strings[sac_map.at(name::kt3)] = input;
 }
-void Trace::kt4(const std::string &input) {
+void Trace::kt4(const std::string &input) noexcept {
   strings[sac_map.at(name::kt4)] = input;
 }
-void Trace::kt5(const std::string &input) {
+void Trace::kt5(const std::string &input) noexcept {
   strings[sac_map.at(name::kt5)] = input;
 }
-void Trace::kt6(const std::string &input) {
+void Trace::kt6(const std::string &input) noexcept {
   strings[sac_map.at(name::kt6)] = input;
 }
-void Trace::kt7(const std::string &input) {
+void Trace::kt7(const std::string &input) noexcept {
   strings[sac_map.at(name::kt7)] = input;
 }
-void Trace::kt8(const std::string &input) {
+void Trace::kt8(const std::string &input) noexcept {
   strings[sac_map.at(name::kt8)] = input;
 }
-void Trace::kt9(const std::string &input) {
+void Trace::kt9(const std::string &input) noexcept {
   strings[sac_map.at(name::kt9)] = input;
 }
-void Trace::kf(const std::string &input) {
+void Trace::kf(const std::string &input) noexcept {
   strings[sac_map.at(name::kf)] = input;
 }
-void Trace::kuser0(const std::string &input) {
+void Trace::kuser0(const std::string &input) noexcept {
   strings[sac_map.at(name::kuser0)] = input;
 }
-void Trace::kuser1(const std::string &input) {
+void Trace::kuser1(const std::string &input) noexcept {
   strings[sac_map.at(name::kuser1)] = input;
 }
-void Trace::kuser2(const std::string &input) {
+void Trace::kuser2(const std::string &input) noexcept {
   strings[sac_map.at(name::kuser2)] = input;
 }
-void Trace::kcmpnm(const std::string &input) {
+void Trace::kcmpnm(const std::string &input) noexcept {
   strings[sac_map.at(name::kcmpnm)] = input;
 }
-void Trace::knetwk(const std::string &input) {
+void Trace::knetwk(const std::string &input) noexcept {
   strings[sac_map.at(name::knetwk)] = input;
 }
-void Trace::kdatrd(const std::string &input) {
+void Trace::kdatrd(const std::string &input) noexcept {
   strings[sac_map.at(name::kdatrd)] = input;
 }
-void Trace::kinst(const std::string &input) {
+void Trace::kinst(const std::string &input) noexcept {
   strings[sac_map.at(name::kinst)] = input;
 }
 // Data
-void Trace::data1(const std::vector<double> &input) {
+void Trace::data1(const std::vector<double> &input) noexcept {
   data[sac_map.at(name::data1)] = input;
 }
-void Trace::data2(const std::vector<double> &input) {
+void Trace::data2(const std::vector<double> &input) noexcept {
   data[sac_map.at(name::data2)] = input;
 }
 //------------------------------------------------------------------------------

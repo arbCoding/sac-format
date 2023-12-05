@@ -1345,14 +1345,14 @@ TEST_CASE("Trace Read/Write") {
     }
   }
   SECTION("Read Throw") {
-    fs::path tmp_dir{fs::temp_directory_path() / "not_a_dir"};
-    fs::path tmp_file{tmp_dir / "not_real.sac"};
-    REQUIRE_THROWS(Trace(tmp_file));
+    fs::path tmp_dir2{fs::temp_directory_path() / "not_a_dir"};
+    fs::path tmp_file2{tmp_dir2 / "not_real.sac"};
+    REQUIRE_THROWS(Trace(tmp_file2));
   }
   SECTION("Write Throw") {
-    fs::path tmp_dir{fs::temp_directory_path() / "not_a_dir"};
-    fs::path tmp_file{tmp_dir / "not_real.sac"};
-    REQUIRE_THROWS(trace.write(tmp_file));
+    fs::path tmp_dir2{fs::temp_directory_path() / "not_a_dir"};
+    fs::path tmp_file2{tmp_dir2 / "not_real.sac"};
+    REQUIRE_THROWS(trace.write(tmp_file2));
   }
 }
 

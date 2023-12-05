@@ -43,7 +43,7 @@ with binary [[https://ds.iris.edu/files/sac-manual/manual/file_format.html][SAC]
 and easy to read programming-style while providing the high performance brought
 by C++.
 
-sac-format's actively developed on [[https://github.com/arbCoding/sac-format][GitHub]]!
+sac-format's developed on [[https://github.com/arbCoding/sac-format][GitHub]]!
 
 [[https://arbcoding.github.io/sac-format/sac-format_manual.pdf][Download]] an offline version of the documentation (PDF).
 
@@ -56,17 +56,22 @@ working on Windows, macOS, and Linux systems.
 
 *** Safe
 
-sac-format is *safe*---testing is an important part of software development. The
-sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
+sac-format is *safe*---testing is an important part of software development.
+sac-format conforms to a strict set of C++ programming guidelines, chosen to
+ensure safe code-execution. The guideline conformance list is in
+[[https://github.com/arbCoding/sac-format/blob/main/.github/workflows/cpp-linter.yml][=cpp-linter.yml=]] and cross-reference against this [[https://clang.llvm.org/extra/clang-tidy/checks/list.html][master list]]. Results of
+conformance checking is [[https://github.com/arbCoding/sac-format/actions/workflows/cpp-linter.yml][here]].
+
+The sac-format library is extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework.
 Everything from low-level binary conversions to high-level =Trace= reading/writing
 are tested and confirmed working. Check and run the tests yourself. See the
 [[Testing][Testing]] section for more information.
 
 *** Fast
 
-sac-format is *fast*---it's written in C++ and extensively benchmarked. You can
-run the benchmarks yourself to find out how sac-format performs on your system.
-See the [[Benchmarking][Benchmarking]] section for more information.
+sac-format is *fast*---it's written in C++, carefully optimized, and extensively
+benchmarked. You can run the benchmarks yourself to find out how sac-format
+performs on your system. See the [[Benchmarking][Benchmarking]] section for more information.
 
 *** Easy
 
@@ -78,7 +83,7 @@ running.
 *** Small
 
 sac-format is *small*---in total (header + implementation--excluding comments)
-it's fewer than 2000 lines of code. Small size opens the door to using on any
+it's fewer than 2500 lines of code. Small size opens the door to using on any
 sort of hardware (old or new) and makes it easy to expand upon.
 
 *** Documented
@@ -215,7 +220,9 @@ The =Trace= class provides easy access to SAC-files in C++. Each SAC-file is a
 
 *** Reading SAC
 
-SAC-files can be read in by using the parameterized constructor with a [[https://en.cppreference.com/w/cpp/filesystem/path][=std::filesystem::path=]] ([[https://en.cppreference.com/w/cpp/header/filesystem][=<filesystem>=]]) or a [[https://en.cppreference.com/w/cpp/string/basic_string][=std::string=]] ([[https://en.cppreference.com/w/cpp/header/string][=<string>=]]) variable that corresponds to the location of the SAC-file.
+SAC-files can be read in by using the parameterized constructor with a
+[[https://en.cppreference.com/w/cpp/filesystem/path][=std::filesystem::path=]] ([[https://en.cppreference.com/w/cpp/header/filesystem][=<filesystem>=]]) or a [[https://en.cppreference.com/w/cpp/string/basic_string][=std::string=]] ([[https://en.cppreference.com/w/cpp/header/string][=<string>=]])
+variable that corresponds to the location of the SAC-file.
 
 For example:
 #+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
@@ -363,7 +370,7 @@ length.
 ***** =equal_within_tolerance=
 
 Floating-point/double-precision equality within a provided tolerance (default is
-=f_eps=, defined in [[=sac_format.hpp=]]).
+=f_eps=, defined in =sac_format.hpp=).
 
 ** Testing
 
