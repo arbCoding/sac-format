@@ -73,7 +73,7 @@ XoshiroCpp::Xoshiro256Plus init() noexcept {
 }
 
 // Build the PRNG
-inline XoshiroCpp::Xoshiro256Plus xos { init() } noexcept;
+inline XoshiroCpp::Xoshiro256Plus xos { init() };
 
 // Give a random double within the inclusive bounds [min, max]
 inline double get(double min, double max) noexcept {
