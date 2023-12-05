@@ -13,8 +13,6 @@
 // REQUIRE_THAT
 // Catch::Matchers::WithinAbs
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
-// Catch::Matchers::EndsWith
-#include <catch2/matchers/catch_matchers_string.hpp>
 /* My stuff */
 #include <sac_format.hpp>
 #include <util.hpp>
@@ -22,7 +20,6 @@
 using namespace sacfmt;
 namespace fs = std::filesystem;
 using Catch::Matchers::WithinAbs;
-using Catch::Matchers::EndsWith;
 
 //==============================================================================
 // Basic I/O tests (file writing/reading goes with Trace)
@@ -1348,14 +1345,14 @@ TEST_CASE("Trace Read/Write") {
     }
   }
   SECTION("Read Throw") {
-    fs::path tmp_dir{fs::temp_directory_path() / "not_a_dir"};
-    fs::path tmp_file{tmp_dir / "not_real.sac"};
-    REQUIRE_THROWS_WITH(Trace(tmp_file), EndsWith("cannot be opened to read."));
+    fs::path tmp_dir2{fs::temp_directory_path() / "not_a_dir"};
+    fs::path tmp_file2{tmp_dir2 / "not_real.sac"};
+    REQUIRE_THROWS(Trace(tmp_file2));
   }
   SECTION("Write Throw") {
-    fs::path tmp_dir{fs::temp_directory_path() / "not_a_dir"};
-    fs::path tmp_file{tmp_dir / "not_real.sac"};
-    REQUIRE_THROWS_WITH(trace.write(tmp_file), EndsWith("cannot be opened to write."));
+    fs::path tmp_dir2{fs::temp_directory_path() / "not_a_dir"};
+    fs::path tmp_file2{tmp_dir2 / "not_real.sac"};
+    REQUIRE_THROWS(trace.write(tmp_file2));
   }
 }
 
