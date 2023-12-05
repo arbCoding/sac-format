@@ -25,7 +25,7 @@ int binary_to_int(word_one bin) {
     bin = ~bin;
     result = static_cast<int>(bin.to_ulong());
     result += 1;
-    // Change sign to make it as negative
+    // Change sign to make it negative
     result *= -1;
   } else {
     result = static_cast<int>(bin.to_ulong());
