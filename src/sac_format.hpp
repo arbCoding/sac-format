@@ -684,5 +684,13 @@ private:
   // cppcheck-suppress unusedStructMember
   std::array<std::vector<double>, num_data> data{};
 };
+
+class io_error : public std::exception {
+  private:
+  const std::string message{};
+  public:
+  explicit io_error(const std::string msg) : message(msg) {}
+  std::string what() { return message; }
+};
 }; // namespace sacfmt
 #endif

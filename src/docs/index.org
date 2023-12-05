@@ -287,8 +287,8 @@ a [[Lookup Table][lookup table]]. The internal components are below:
 
 *** Exceptions
 
-sac-format throws exceptions of type =std::domain_exception= in the event of a
-failure to read/write a SAC-file.
+sac-format throws exceptions of type =sacfmt::io_error= in the event of a failure
+to read/write a SAC-file.
 
 ** Low-Level I/O
 
@@ -417,7 +417,7 @@ Implementation---function details.
 
 **** =util.hpp=
 
-Utility functions and constants exclusive to testing and benchmarking. Is not
+Utility functions and constants exclusive to testing and benchmarking. Not
 split into interface/implementation.
 
 **** =utests.cpp=

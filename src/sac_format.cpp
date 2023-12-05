@@ -783,7 +783,7 @@ void Trace::data2(const std::vector<double> &input) {
 Trace::Trace(const std::filesystem::path &path) {
   std::ifstream file(path, std::ifstream::binary);
   if (!file) {
-    throw std::domain_error(path.string() + "cannot be opened to read.");
+    throw io_error(path.string() + "cannot be opened to read.");
   }
   file.seekg(0);
   //--------------------------------------------------------------------------
@@ -976,7 +976,7 @@ Trace::Trace(const std::filesystem::path &path) {
 void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   std::ofstream file(path, std::ios::binary | std::ios::out | std::ios::trunc);
   if (!file) {
-    throw std::domain_error(path.string() + "cannot be opened to write.");
+    throw io_error(path.string() + "cannot be opened to write.");
   }
   const int header_version{legacy ? old_hdr_version : modern_hdr_version};
   write_words(&file, convert_to_word(static_cast<float>(delta())));
