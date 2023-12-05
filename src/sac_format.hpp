@@ -24,7 +24,7 @@
 #include <fstream>
 // std::numbers::pi_v<double>
 #include <numbers>
-// std::domain_error
+// std::exception
 #include <stdexcept>
 // std::string
 #include <string>

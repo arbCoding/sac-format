@@ -37,6 +37,7 @@ int binary_to_int(word_one bin) noexcept {
 
 word_one float_to_binary(const float num) noexcept {
   unsigned_int<float> num_as_uint{0};
+  // flawfinder: ignore
   std::memcpy(&num_as_uint, &num, sizeof(float));
   word_one result{num_as_uint};
   return result;
@@ -45,12 +46,14 @@ word_one float_to_binary(const float num) noexcept {
 float binary_to_float(const word_one &bin) noexcept {
   const auto val = bin.to_ulong();
   float result{};
+  // flawfinder: ignore
   memcpy(&result, &val, sizeof(float));
   return result;
 }
 
 word_two double_to_binary(const double num) noexcept {
   unsigned_int<double> num_as_uint{0};
+  // flawfinder: ignore
   std::memcpy(&num_as_uint, &num, sizeof(double));
   word_two result{num_as_uint};
   return result;
@@ -59,6 +62,7 @@ word_two double_to_binary(const double num) noexcept {
 double binary_to_double(const word_two &bin) noexcept {
   const auto val = bin.to_ullong();
   double result{};
+  // flawfinder: ignore
   memcpy(&result, &val, sizeof(double));
   return result;
 }
@@ -116,7 +120,7 @@ std::string bits_string(const T &bits, const size_t num_words) noexcept {
   constexpr size_t char_size{bits_per_byte};
   std::bitset<char_size> byte{};
   for (size_t i{0}; i < num_words * binary_word_size; i += char_size) {
-    for (size_t j{0}; j < char_size; ++j) {
+    for (size_t j{0}; j < char_size; ++j) [[likely]] {
       byte[j] = bits[i + j];
     }
     result.push_back(static_cast<char>(byte.to_ulong()));
@@ -163,7 +167,7 @@ bool binary_to_bool(const word_one &flag) noexcept { return flag[0]; }
 
 word_two concat_words(const word_one &word1, const word_one &word2) noexcept {
   word_two result{};
-  for (size_t i{0}; i < binary_word_size; ++i) {
+  for (size_t i{0}; i < binary_word_size; ++i) [[likely]] {
     result[i] = word1[i];
     result[i + binary_word_size] = word2[i];
   }
@@ -193,11 +197,11 @@ word_one read_word(std::ifstream *sac) {
   sac->read(word, word_length);
   // Take each character
   std::bitset<char_size> byte{};
-  for (size_t i{0}; i < word_length; ++i) {
+  for (size_t i{0}; i < word_length; ++i) [[likely]] {
     size_t character{static_cast<size_t>(word[i])};
     byte = std::bitset<char_size>(character);
     // bit-by-bit
-    for (size_t j{0}; j < char_size; ++j) {
+    for (size_t j{0}; j < char_size; ++j) [[likely]] {
       bits[(i * char_size) + j] = byte[j];
     }
   }
@@ -229,7 +233,7 @@ std::vector<double> read_data(std::ifstream *sac, const size_t n_words,
   sac->seekg(word_position(start));
   std::vector<double> result{};
   result.resize(n_words);
-  for (size_t i{0}; i < n_words; ++i) {
+  for (size_t i{0}; i < n_words; ++i) [[likely]] {
     result[i] = static_cast<double>(binary_to_float(read_word(sac)));
   }
   return result;
@@ -240,7 +244,7 @@ std::vector<double> read_data(std::ifstream *sac, const size_t n_words,
 void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
   std::ofstream &sac = *sac_file;
   if (sac.is_open()) {
-    for (char character : input) {
+    for (char character : input) [[likely]] {
       sac.write(&character, sizeof(char));
     }
   }
@@ -256,7 +260,7 @@ std::vector<char> convert_to_word(const T input) noexcept {
   std::memcpy(tmp, &input, word_length);
   std::vector<char> word{};
   word.resize(word_length);
-  for (int i{0}; i < word_length; ++i) {
+  for (int i{0}; i < word_length; ++i) [[likely]] {
     word[static_cast<size_t>(i)] = tmp[i];
   }
   return word;
@@ -321,7 +325,7 @@ bool equal_within_tolerance(const std::vector<double> &vector1,
   if (vector1.size() != vector2.size()) {
     return false;
   }
-  for (size_t i{0}; i < vector1.size(); ++i) {
+  for (size_t i{0}; i < vector1.size(); ++i) [[likely]] {
     if (!equal_within_tolerance(vector1[i], vector2[i], tolerance)) {
       return false;
     }
@@ -952,7 +956,7 @@ void Trace::data2(const std::vector<double> &input) noexcept {
 Trace::Trace(const std::filesystem::path &path) {
   std::ifstream file(path, std::ifstream::binary);
   if (!file) {
-    throw io_error(path.string() + "cannot be opened to read.");
+    throw io_error(path.string() + " cannot be opened to read.");
   }
   file.seekg(0);
   //--------------------------------------------------------------------------
@@ -1145,7 +1149,7 @@ Trace::Trace(const std::filesystem::path &path) {
 void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   std::ofstream file(path, std::ios::binary | std::ios::out | std::ios::trunc);
   if (!file) {
-    throw io_error(path.string() + "cannot be opened to write.");
+    throw io_error(path.string() + " cannot be opened to write.");
   }
   const int header_version{legacy ? old_hdr_version : modern_hdr_version};
   write_words(&file, convert_to_word(static_cast<float>(delta())));
@@ -1329,7 +1333,7 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   two_words = convert_to_words<sizeof(two_words)>(kinst(), 2);
   write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
   // Data
-  for (double dub : data1()) {
+  for (double dub : data1()) [[likely]] {
     write_words(&file, convert_to_word(static_cast<float>(dub)));
   }
   if (!leven() || (iftype() > 1)) {
