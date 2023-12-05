@@ -38,7 +38,7 @@
 #+latex_header_extra:
 #+description:
 #+keywords:
-#+subtitle: C++20 SAC-file Library @@latex:\\@@ @@html:<br>@@ V0.3.0 @@latex:\\@@ @@html:<br>@@ User Manual
+#+subtitle: C++20 SAC-file Library @@latex:\\@@ @@html:<br>@@ V0.4.0 @@latex:\\@@ @@html:<br>@@ User Manual
 #+latex_engraved_theme:
 #+latex_compiler: pdflatex
 # Special options only for latex export
@@ -56,7 +56,7 @@
     \vspace{4\baselineskip}
     {\Huge User Manual}\\
     \vspace{4\baselineskip}
-    {\Large Version: 0.3.0}\\
+    {\Large Version: 0.4.0}\\
     \vspace{10\baselineskip}
     {\Large\textsc{Alexander R. Blanchette}\par}
     \vspace{10\baselineskip}
