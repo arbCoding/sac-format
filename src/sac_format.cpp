@@ -346,19 +346,26 @@ double radians_to_degrees(const double radians) noexcept {
 }
 
 double gcarc(const double latitude1, const double longitude1,
-             const double latitude2, const double longitude2) {
+             const double latitude2, const double longitude2) noexcept {
   const double lat1{degrees_to_radians(latitude1)};
   const double lon1{degrees_to_radians(longitude1)};
   const double lat2{degrees_to_radians(latitude2)};
   const double lon2{degrees_to_radians(longitude2)};
-  return radians_to_degrees(
+  double result{radians_to_degrees(
       std::acos(std::sin(lat1) * std::sin(lat2) +
-                std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)));
+                std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)))};
+  while (result < 0.0) {
+    result += circle_deg;
+  }
+  while (result > circle_deg) {
+    result -= circle_deg;
+  }
+  return result;
 }
 
 // I wonder if there is a way to do this with n-vectors
 double azimuth(const double latitude1, const double longitude1,
-               const double latitude2, const double longitude2) {
+               const double latitude2, const double longitude2) noexcept {
   const double lat1{degrees_to_radians(latitude1)};
   const double lon1{degrees_to_radians(longitude1)};
   const double lat2{degrees_to_radians(latitude2)};
@@ -368,9 +375,10 @@ double azimuth(const double latitude1, const double longitude1,
   const double denominator{(std::cos(lat1) * std::sin(lat2)) -
                            (std::sin(lat1) * std::cos(lat2) * std::cos(dlon))};
   double result{radians_to_degrees(std::atan2(numerator, denominator))};
-  if (result < 0.0) {
+  while (result < 0.0) {
     result += circle_deg;
-  } else if (result > circle_deg) {
+  }
+  while (result > circle_deg) {
     result -= circle_deg;
   }
   return result;
@@ -407,6 +415,79 @@ bool Trace::operator==(const Trace &other) const noexcept {
   }
   return true;
 }
+// Convenience functions
+void Trace::calc_geometry() noexcept {
+  if (geometry_set()) {
+    calc_gcarc();
+    calc_dist();
+    calc_az();
+    calc_baz();
+  } else {
+    gcarc(unset_double);
+    dist(unset_double);
+    az(unset_double);
+    baz(unset_double);
+  }
+}
+
+double Trace::frequency() const noexcept {
+  const double delta_val{delta()};
+  if ((delta_val == unset_double) || (delta_val <= 0)) {
+    return unset_double;
+  }
+  return 1.0 / delta_val;
+}
+
+bool Trace::geometry_set() const noexcept {
+  return ((stla() != unset_double) && (stlo() != unset_double) &&
+          (evla() != unset_double) && (evlo() != unset_double));
+}
+
+void Trace::calc_gcarc() noexcept {
+  Trace::gcarc(
+      static_cast<float>(sacfmt::gcarc(stla(), stlo(), evla(), evlo())));
+}
+
+void Trace::calc_dist() noexcept {
+  dist(static_cast<float>(earth_radius * rad_per_deg * gcarc()));
+}
+
+void Trace::calc_az() noexcept {
+  az(static_cast<float>(azimuth(evla(), evlo(), stla(), stlo())));
+}
+void Trace::calc_baz() noexcept {
+  baz(static_cast<float>(azimuth(stla(), stlo(), evla(), evlo())));
+}
+
+std::string Trace::date() const noexcept {
+  // Require all to be set
+  if ((nzyear() == unset_int) || (nzjday() == unset_int)) {
+    return unset_word;
+  }
+  std::ostringstream oss{};
+  oss << nzyear();
+  oss << '-';
+  oss << nzjday();
+  return oss.str();
+}
+
+std::string Trace::time() const noexcept {
+  // Require all to be set
+  if ((nzhour() == unset_int) || (nzmin() == unset_int) ||
+      (nzsec() == unset_int) || (nzmsec() == unset_int)) {
+    return unset_word;
+  }
+  std::ostringstream oss{};
+  oss << nzhour();
+  oss << ':';
+  oss << nzmin();
+  oss << ':';
+  oss << nzsec();
+  oss << '.';
+  oss << nzmsec();
+  return oss.str();
+}
+
 // Getters
 // Floats
 float Trace::depmin() const noexcept {

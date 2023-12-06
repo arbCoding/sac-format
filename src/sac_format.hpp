@@ -26,10 +26,10 @@
 #include <numbers>
 // std::exception
 #include <stdexcept>
+// ostringstream
+#include <sstream>
 // std::string
 #include <string>
-// std::string_view (used only once...)
-#include <string_view>
 // std::unordered_map
 #include <unordered_map>
 // std::vector
@@ -53,8 +53,9 @@ constexpr bool unset_bool{false};
 // Accuracy precision expected from SAC floats
 constexpr float f_eps{2.75e-6F};
 // This should work for two and four word string headers
-// This is the only instance of a string_view.
-constexpr std::string_view unset_word{"-12345"};
+// Used to be a string_view, but they're awkward to
+// use with strings...
+const std::string unset_word{"-12345"};
 using word_one = std::bitset<binary_word_size>;
 using word_two = std::bitset<static_cast<size_t>(2) * binary_word_size>;
 using word_four = std::bitset<static_cast<size_t>(4) * binary_word_size>;
@@ -73,6 +74,7 @@ constexpr int common_skip_num{7};
 constexpr double rad_per_deg{std::numbers::pi_v<double> / 180.0};
 constexpr double deg_per_rad{1.0 / rad_per_deg};
 constexpr double circle_deg{360.0};
+constexpr double earth_radius{6378.14}; // km
 //--------------------------------------------------------------------------
 // Conversions
 //--------------------------------------------------------------------------
@@ -177,10 +179,10 @@ double degrees_to_radians(double degrees) noexcept;
 double radians_to_degrees(double radians) noexcept;
 // gcarc
 double gcarc(double latitude1, double longitude1, double latitude2,
-             double longitude2);
+             double longitude2) noexcept;
 // azimuth
 double azimuth(double latitude1, double longitude1, double latitude2,
-               double longitude2);
+               double longitude2) noexcept;
 
 enum class name {
   // Floats
@@ -439,12 +441,10 @@ public:
   void legacy_write(const std::filesystem::path &path) const;
   bool operator==(const Trace &other) const noexcept;
   // Convenience functions
-  // Not implemented yet
-  double frequency() const;
-  std::string date() const;
-  std::string time() const;
-  void calc_gcarc();
-  void calc_dist();
+  void calc_geometry() noexcept;
+  double frequency() const noexcept;
+  std::string date() const noexcept;
+  std::string time() const noexcept;
   // Getters
   // Floats
   float depmin() const noexcept;
@@ -694,6 +694,12 @@ public:
   void data2(const std::vector<double> &input) noexcept;
 
 private:
+  // Convenience methods
+  void calc_gcarc() noexcept;
+  void calc_dist() noexcept;
+  void calc_az() noexcept;
+  void calc_baz() noexcept;
+  bool geometry_set() const noexcept;
   // Objects
   // cppcheck-suppress unusedStructMember
   std::array<float, num_float> floats{};

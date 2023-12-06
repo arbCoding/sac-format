@@ -18,8 +18,6 @@
 #include <limits.h>
 // std::random_device, std::uniform_real_distribution
 #include <random>
-// ostringstream
-#include <sstream>
 // std::string
 #include <string>
 // std::vector
