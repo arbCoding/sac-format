@@ -186,7 +186,7 @@ word_four concat_words(const word_two &word12,
 //-----------------------------------------------------------------------------
 // Reading
 //-----------------------------------------------------------------------------
-word_one read_word(std::ifstream *sac) {
+word_one read_word(std::ifstream *sac) noexcept {
   word_one bits{};
   constexpr size_t char_size{bits_per_byte};
   // Where we will store the characters
@@ -208,7 +208,7 @@ word_one read_word(std::ifstream *sac) {
   return bits;
 }
 
-word_two read_two_words(std::ifstream *sac) {
+word_two read_two_words(std::ifstream *sac) noexcept {
   word_one word1{read_word(sac)};
   word_one word2{read_word(sac)};
   if constexpr (std::endian::native == std::endian::little) {
@@ -218,7 +218,7 @@ word_two read_two_words(std::ifstream *sac) {
   }
 }
 
-word_four read_four_words(std::ifstream *sac) {
+word_four read_four_words(std::ifstream *sac) noexcept {
   word_two word12{read_two_words(sac)};
   word_two word34{read_two_words(sac)};
   if constexpr (std::endian::native == std::endian::little) {
@@ -229,7 +229,7 @@ word_four read_four_words(std::ifstream *sac) {
 }
 
 std::vector<double> read_data(std::ifstream *sac, const size_t n_words,
-                              const int start) {
+                              const int start) noexcept {
   sac->seekg(word_position(start));
   std::vector<double> result{};
   result.resize(n_words);
@@ -1072,194 +1072,233 @@ void Trace::data2(const std::vector<double> &input) noexcept {
 }
 //------------------------------------------------------------------------------
 // Read
+bool nwords_after_current(std::ifstream *sac, const size_t current_pos,
+                          const size_t n_words) noexcept {
+  bool result{false};
+  if (sac->good()) {
+    sac->seekg(0, std::ios::end);
+    const std::size_t final_pos{static_cast<size_t>(sac->tellg())};
+    // Doesn't like size_t since it wants to allow
+    // the possibility of negative offsets (not how I use it)
+    sac->seekg(static_cast<std::streamoff>(current_pos));
+    const std::size_t diff{final_pos - current_pos};
+    result = (diff >= (n_words * word_length));
+  }
+  return result;
+}
+
+bool safe_to_read_header(std::ifstream *sac) noexcept {
+  return nwords_after_current(sac, 0, data_word);
+}
+
+bool safe_to_read_footer(std::ifstream *sac) noexcept {
+  // doubles are two words long
+  return nwords_after_current(sac, sac->tellg(),
+                              static_cast<size_t>(num_footer) * 2);
+}
+
 Trace::Trace(const std::filesystem::path &path) {
   std::ifstream file(path, std::ifstream::binary);
   if (!file) {
     throw io_error(path.string() + " cannot be opened to read.");
   }
-  file.seekg(0);
-  //--------------------------------------------------------------------------
-  // Header
-  delta(binary_to_float(read_word(&file)));
-  depmin(binary_to_float(read_word(&file)));
-  depmax(binary_to_float(read_word(&file)));
-  // Skip 'unused'
-  read_word(&file);
-  odelta(binary_to_float(read_word(&file)));
-  b(binary_to_float(read_word(&file)));
-  e(binary_to_float(read_word(&file)));
-  o(binary_to_float(read_word(&file)));
-  a(binary_to_float(read_word(&file)));
-  // Skip 'internal'
-  read_word(&file);
-  // T# pick headers
-  t0(binary_to_float(read_word(&file)));
-  t1(binary_to_float(read_word(&file)));
-  t2(binary_to_float(read_word(&file)));
-  t3(binary_to_float(read_word(&file)));
-  t4(binary_to_float(read_word(&file)));
-  t5(binary_to_float(read_word(&file)));
-  t6(binary_to_float(read_word(&file)));
-  t7(binary_to_float(read_word(&file)));
-  t8(binary_to_float(read_word(&file)));
-  t9(binary_to_float(read_word(&file)));
-  f(binary_to_float(read_word(&file)));
-  // Response headers
-  resp0(binary_to_float(read_word(&file)));
-  resp1(binary_to_float(read_word(&file)));
-  resp2(binary_to_float(read_word(&file)));
-  resp3(binary_to_float(read_word(&file)));
-  resp4(binary_to_float(read_word(&file)));
-  resp5(binary_to_float(read_word(&file)));
-  resp6(binary_to_float(read_word(&file)));
-  resp7(binary_to_float(read_word(&file)));
-  resp8(binary_to_float(read_word(&file)));
-  resp9(binary_to_float(read_word(&file)));
-  // Station headers
-  stla(binary_to_float(read_word(&file)));
-  stlo(binary_to_float(read_word(&file)));
-  stel(binary_to_float(read_word(&file)));
-  stdp(binary_to_float(read_word(&file)));
-  // Event headers
-  evla(binary_to_float(read_word(&file)));
-  evlo(binary_to_float(read_word(&file)));
-  evel(binary_to_float(read_word(&file)));
-  evdp(binary_to_float(read_word(&file)));
-  mag(binary_to_float(read_word(&file)));
-  // User misc headers
-  user0(binary_to_float(read_word(&file)));
-  user1(binary_to_float(read_word(&file)));
-  user2(binary_to_float(read_word(&file)));
-  user3(binary_to_float(read_word(&file)));
-  user4(binary_to_float(read_word(&file)));
-  user5(binary_to_float(read_word(&file)));
-  user6(binary_to_float(read_word(&file)));
-  user7(binary_to_float(read_word(&file)));
-  user8(binary_to_float(read_word(&file)));
-  user9(binary_to_float(read_word(&file)));
-  // Geometry headers
-  dist(binary_to_float(read_word(&file)));
-  az(binary_to_float(read_word(&file)));
-  baz(binary_to_float(read_word(&file)));
-  gcarc(binary_to_float(read_word(&file)));
-  // Metadata headers
-  sb(binary_to_float(read_word(&file)));
-  sdelta(binary_to_float(read_word(&file)));
-  depmen(binary_to_float(read_word(&file)));
-  cmpaz(binary_to_float(read_word(&file)));
-  cmpinc(binary_to_float(read_word(&file)));
-  xminimum(binary_to_float(read_word(&file)));
-  xmaximum(binary_to_float(read_word(&file)));
-  yminimum(binary_to_float(read_word(&file)));
-  ymaximum(binary_to_float(read_word(&file)));
-  // Skip 'unused' (xcommon_skip_num)
-  for (int i{0}; i < common_skip_num; ++i) {
+  if (safe_to_read_header(&file)) {
+    //--------------------------------------------------------------------------
+    // Header
+    delta(binary_to_float(read_word(&file)));
+    depmin(binary_to_float(read_word(&file)));
+    depmax(binary_to_float(read_word(&file)));
+    // Skip 'unused'
     read_word(&file);
-  }
-  // Date/time headers
-  nzyear(binary_to_int(read_word(&file)));
-  nzjday(binary_to_int(read_word(&file)));
-  nzhour(binary_to_int(read_word(&file)));
-  nzmin(binary_to_int(read_word(&file)));
-  nzsec(binary_to_int(read_word(&file)));
-  nzmsec(binary_to_int(read_word(&file)));
-  // More metadata headers
-  nvhdr(binary_to_int(read_word(&file)));
-  norid(binary_to_int(read_word(&file)));
-  nevid(binary_to_int(read_word(&file)));
-  npts(binary_to_int(read_word(&file)));
-  nsnpts(binary_to_int(read_word(&file)));
-  nwfid(binary_to_int(read_word(&file)));
-  nxsize(binary_to_int(read_word(&file)));
-  nysize(binary_to_int(read_word(&file)));
-  // Skip 'unused'
-  read_word(&file);
-  iftype(binary_to_int(read_word(&file)));
-  idep(binary_to_int(read_word(&file)));
-  iztype(binary_to_int(read_word(&file)));
-  // Skip 'unused'
-  read_word(&file);
-  iinst(binary_to_int(read_word(&file)));
-  istreg(binary_to_int(read_word(&file)));
-  ievreg(binary_to_int(read_word(&file)));
-  ievtyp(binary_to_int(read_word(&file)));
-  iqual(binary_to_int(read_word(&file)));
-  isynth(binary_to_int(read_word(&file)));
-  imagtyp(binary_to_int(read_word(&file)));
-  imagsrc(binary_to_int(read_word(&file)));
-  ibody(binary_to_int(read_word(&file)));
-  // Skip 'unused' (xcommon_skip_num)
-  for (int i{0}; i < common_skip_num; ++i) {
+    odelta(binary_to_float(read_word(&file)));
+    b(binary_to_float(read_word(&file)));
+    e(binary_to_float(read_word(&file)));
+    o(binary_to_float(read_word(&file)));
+    a(binary_to_float(read_word(&file)));
+    // Skip 'internal'
     read_word(&file);
-  }
-  // Logical headers
-  leven(binary_to_bool(read_word(&file)));
-  lpspol(binary_to_bool(read_word(&file)));
-  lovrok(binary_to_bool(read_word(&file)));
-  lcalda(binary_to_bool(read_word(&file)));
-  // Skip 'unused'
-  read_word(&file);
-  // KSTNM is 2 words (normal)
-  kstnm(binary_to_string(read_two_words(&file)));
-  // KEVNM is 4 words long (unique!)
-  kevnm(binary_to_long_string(read_four_words(&file)));
-  // All other 'K' headers are 2 words
-  khole(binary_to_string(read_two_words(&file)));
-  ko(binary_to_string(read_two_words(&file)));
-  ka(binary_to_string(read_two_words(&file)));
-  kt0(binary_to_string(read_two_words(&file)));
-  kt1(binary_to_string(read_two_words(&file)));
-  kt2(binary_to_string(read_two_words(&file)));
-  kt3(binary_to_string(read_two_words(&file)));
-  kt4(binary_to_string(read_two_words(&file)));
-  kt5(binary_to_string(read_two_words(&file)));
-  kt6(binary_to_string(read_two_words(&file)));
-  kt7(binary_to_string(read_two_words(&file)));
-  kt8(binary_to_string(read_two_words(&file)));
-  kt9(binary_to_string(read_two_words(&file)));
-  kf(binary_to_string(read_two_words(&file)));
-  kuser0(binary_to_string(read_two_words(&file)));
-  kuser1(binary_to_string(read_two_words(&file)));
-  kuser2(binary_to_string(read_two_words(&file)));
-  kcmpnm(binary_to_string(read_two_words(&file)));
-  knetwk(binary_to_string(read_two_words(&file)));
-  kdatrd(binary_to_string(read_two_words(&file)));
-  kinst(binary_to_string(read_two_words(&file)));
-  //--------------------------------------------------------------------------
-  // DATA
-  if (npts() != unset_int) {
-    // Originally floats, read as doubles
-    data1(read_data(&file, static_cast<size_t>(npts()), data_word));
-    // Uneven or spectral data
-    if (!leven() || (iftype() > 1)) {
-      data2(read_data(&file, static_cast<size_t>(npts()), data_word + npts()));
+    // T# pick headers
+    t0(binary_to_float(read_word(&file)));
+    t1(binary_to_float(read_word(&file)));
+    t2(binary_to_float(read_word(&file)));
+    t3(binary_to_float(read_word(&file)));
+    t4(binary_to_float(read_word(&file)));
+    t5(binary_to_float(read_word(&file)));
+    t6(binary_to_float(read_word(&file)));
+    t7(binary_to_float(read_word(&file)));
+    t8(binary_to_float(read_word(&file)));
+    t9(binary_to_float(read_word(&file)));
+    f(binary_to_float(read_word(&file)));
+    // Response headers
+    resp0(binary_to_float(read_word(&file)));
+    resp1(binary_to_float(read_word(&file)));
+    resp2(binary_to_float(read_word(&file)));
+    resp3(binary_to_float(read_word(&file)));
+    resp4(binary_to_float(read_word(&file)));
+    resp5(binary_to_float(read_word(&file)));
+    resp6(binary_to_float(read_word(&file)));
+    resp7(binary_to_float(read_word(&file)));
+    resp8(binary_to_float(read_word(&file)));
+    resp9(binary_to_float(read_word(&file)));
+    // Station headers
+    stla(binary_to_float(read_word(&file)));
+    stlo(binary_to_float(read_word(&file)));
+    stel(binary_to_float(read_word(&file)));
+    stdp(binary_to_float(read_word(&file)));
+    // Event headers
+    evla(binary_to_float(read_word(&file)));
+    evlo(binary_to_float(read_word(&file)));
+    evel(binary_to_float(read_word(&file)));
+    evdp(binary_to_float(read_word(&file)));
+    mag(binary_to_float(read_word(&file)));
+    // User misc headers
+    user0(binary_to_float(read_word(&file)));
+    user1(binary_to_float(read_word(&file)));
+    user2(binary_to_float(read_word(&file)));
+    user3(binary_to_float(read_word(&file)));
+    user4(binary_to_float(read_word(&file)));
+    user5(binary_to_float(read_word(&file)));
+    user6(binary_to_float(read_word(&file)));
+    user7(binary_to_float(read_word(&file)));
+    user8(binary_to_float(read_word(&file)));
+    user9(binary_to_float(read_word(&file)));
+    // Geometry headers
+    dist(binary_to_float(read_word(&file)));
+    az(binary_to_float(read_word(&file)));
+    baz(binary_to_float(read_word(&file)));
+    gcarc(binary_to_float(read_word(&file)));
+    // Metadata headers
+    sb(binary_to_float(read_word(&file)));
+    sdelta(binary_to_float(read_word(&file)));
+    depmen(binary_to_float(read_word(&file)));
+    cmpaz(binary_to_float(read_word(&file)));
+    cmpinc(binary_to_float(read_word(&file)));
+    xminimum(binary_to_float(read_word(&file)));
+    xmaximum(binary_to_float(read_word(&file)));
+    yminimum(binary_to_float(read_word(&file)));
+    ymaximum(binary_to_float(read_word(&file)));
+    // Skip 'unused' (xcommon_skip_num)
+    for (int i{0}; i < common_skip_num; ++i) {
+      read_word(&file);
     }
-  }
-  //--------------------------------------------------------------------------
-  // Footer
-  if (nvhdr() == modern_hdr_version) {
-    delta(binary_to_double(read_two_words(&file)));
-    b(binary_to_double(read_two_words(&file)));
-    e(binary_to_double(read_two_words(&file)));
-    o(binary_to_double(read_two_words(&file)));
-    a(binary_to_double(read_two_words(&file)));
-    t0(binary_to_double(read_two_words(&file)));
-    t1(binary_to_double(read_two_words(&file)));
-    t2(binary_to_double(read_two_words(&file)));
-    t3(binary_to_double(read_two_words(&file)));
-    t4(binary_to_double(read_two_words(&file)));
-    t5(binary_to_double(read_two_words(&file)));
-    t6(binary_to_double(read_two_words(&file)));
-    t7(binary_to_double(read_two_words(&file)));
-    t8(binary_to_double(read_two_words(&file)));
-    t9(binary_to_double(read_two_words(&file)));
-    f(binary_to_double(read_two_words(&file)));
-    evlo(binary_to_double(read_two_words(&file)));
-    evla(binary_to_double(read_two_words(&file)));
-    stlo(binary_to_double(read_two_words(&file)));
-    stla(binary_to_double(read_two_words(&file)));
-    sb(binary_to_double(read_two_words(&file)));
-    sdelta(binary_to_double(read_two_words(&file)));
+    // Date/time headers
+    nzyear(binary_to_int(read_word(&file)));
+    nzjday(binary_to_int(read_word(&file)));
+    nzhour(binary_to_int(read_word(&file)));
+    nzmin(binary_to_int(read_word(&file)));
+    nzsec(binary_to_int(read_word(&file)));
+    nzmsec(binary_to_int(read_word(&file)));
+    // More metadata headers
+    nvhdr(binary_to_int(read_word(&file)));
+    norid(binary_to_int(read_word(&file)));
+    nevid(binary_to_int(read_word(&file)));
+    npts(binary_to_int(read_word(&file)));
+    nsnpts(binary_to_int(read_word(&file)));
+    nwfid(binary_to_int(read_word(&file)));
+    nxsize(binary_to_int(read_word(&file)));
+    nysize(binary_to_int(read_word(&file)));
+    // Skip 'unused'
+    read_word(&file);
+    iftype(binary_to_int(read_word(&file)));
+    idep(binary_to_int(read_word(&file)));
+    iztype(binary_to_int(read_word(&file)));
+    // Skip 'unused'
+    read_word(&file);
+    iinst(binary_to_int(read_word(&file)));
+    istreg(binary_to_int(read_word(&file)));
+    ievreg(binary_to_int(read_word(&file)));
+    ievtyp(binary_to_int(read_word(&file)));
+    iqual(binary_to_int(read_word(&file)));
+    isynth(binary_to_int(read_word(&file)));
+    imagtyp(binary_to_int(read_word(&file)));
+    imagsrc(binary_to_int(read_word(&file)));
+    ibody(binary_to_int(read_word(&file)));
+    // Skip 'unused' (xcommon_skip_num)
+    for (int i{0}; i < common_skip_num; ++i) {
+      read_word(&file);
+    }
+    // Logical headers
+    leven(binary_to_bool(read_word(&file)));
+    lpspol(binary_to_bool(read_word(&file)));
+    lovrok(binary_to_bool(read_word(&file)));
+    lcalda(binary_to_bool(read_word(&file)));
+    // Skip 'unused'
+    read_word(&file);
+    // KSTNM is 2 words (normal)
+    kstnm(binary_to_string(read_two_words(&file)));
+    // KEVNM is 4 words long (unique!)
+    kevnm(binary_to_long_string(read_four_words(&file)));
+    // All other 'K' headers are 2 words
+    khole(binary_to_string(read_two_words(&file)));
+    ko(binary_to_string(read_two_words(&file)));
+    ka(binary_to_string(read_two_words(&file)));
+    kt0(binary_to_string(read_two_words(&file)));
+    kt1(binary_to_string(read_two_words(&file)));
+    kt2(binary_to_string(read_two_words(&file)));
+    kt3(binary_to_string(read_two_words(&file)));
+    kt4(binary_to_string(read_two_words(&file)));
+    kt5(binary_to_string(read_two_words(&file)));
+    kt6(binary_to_string(read_two_words(&file)));
+    kt7(binary_to_string(read_two_words(&file)));
+    kt8(binary_to_string(read_two_words(&file)));
+    kt9(binary_to_string(read_two_words(&file)));
+    kf(binary_to_string(read_two_words(&file)));
+    kuser0(binary_to_string(read_two_words(&file)));
+    kuser1(binary_to_string(read_two_words(&file)));
+    kuser2(binary_to_string(read_two_words(&file)));
+    kcmpnm(binary_to_string(read_two_words(&file)));
+    knetwk(binary_to_string(read_two_words(&file)));
+    kdatrd(binary_to_string(read_two_words(&file)));
+    kinst(binary_to_string(read_two_words(&file)));
+    //--------------------------------------------------------------------------
+    // DATA
+    if (npts() != unset_int) {
+      const size_t npts_s{static_cast<size_t>(npts())};
+      bool more_data{nwords_after_current(&file, file.tellg(), npts_s)};
+      if (more_data) {
+        // Originally floats, read as doubles
+        data1(read_data(&file, npts_s, data_word));
+        // Uneven or spectral data
+        if (!leven() || (iftype() > 1)) {
+          more_data = nwords_after_current(&file, file.tellg(), npts_s);
+          if (more_data) {
+            data2(read_data(&file, npts_s, data_word + npts()));
+          }
+        }
+      }
+    }
+    //--------------------------------------------------------------------------
+    // Footer
+    if (nvhdr() == modern_hdr_version) {
+      if (safe_to_read_footer(&file)) {
+        delta(binary_to_double(read_two_words(&file)));
+        b(binary_to_double(read_two_words(&file)));
+        e(binary_to_double(read_two_words(&file)));
+        o(binary_to_double(read_two_words(&file)));
+        a(binary_to_double(read_two_words(&file)));
+        t0(binary_to_double(read_two_words(&file)));
+        t1(binary_to_double(read_two_words(&file)));
+        t2(binary_to_double(read_two_words(&file)));
+        t3(binary_to_double(read_two_words(&file)));
+        t4(binary_to_double(read_two_words(&file)));
+        t5(binary_to_double(read_two_words(&file)));
+        t6(binary_to_double(read_two_words(&file)));
+        t7(binary_to_double(read_two_words(&file)));
+        t8(binary_to_double(read_two_words(&file)));
+        t9(binary_to_double(read_two_words(&file)));
+        f(binary_to_double(read_two_words(&file)));
+        evlo(binary_to_double(read_two_words(&file)));
+        evla(binary_to_double(read_two_words(&file)));
+        stlo(binary_to_double(read_two_words(&file)));
+        stla(binary_to_double(read_two_words(&file)));
+        sb(binary_to_double(read_two_words(&file)));
+        sdelta(binary_to_double(read_two_words(&file)));
+      } else {
+        throw io_error(path.string() + " insufficient filesize for footer.");
+      }
+    }
+  } else {
+    throw io_error(path.string() + " insufficent filesize for header.");
   }
   file.close();
 }
