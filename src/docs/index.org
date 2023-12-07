@@ -215,6 +215,81 @@ int main() {
 
 * Documentation
 
+** Convenience Functions
+
+- =degrees_to_radians=
+
+Convert decimal degrees to radians.
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+double radians{sacfmt::degrees_to_radians(degrees)};
+#+end_src
+#+latex: \end{minipage}\end{center}
+
+
+- =radians_to_degrees=
+
+Convert radians to decimal degrees.
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+double degrees{sacfmt::radians_to_degrees(radians)};
+#+end_src
+#+latex: \end{minipage}\end{center}
+
+- =gcarc=
+
+Calculate great-circle arc distance (spherical planet).
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+double gcarc{sacfmt::gcarc(latitude1, longitude1, latitude2, longitude2)};
+#+end_src
+#+latex: \end{minipage}\end{center}
+
+- =azimuth=
+
+Calculate azimuth between two points (spherical planet).
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+double azimuth{sacfmt::azimuth(latitude2, longitude2, latitude1, longitude2)};
+double back_azimuth{sacfmt::azimuth(latitude1, longitude1, latitude2, longitude2)};
+#+end_src
+#+latex: \end{minipage}\end{center}
+
+- =limit_360=
+
+Take arbitrary value of degrees and unwrap to $[0, 360]$.
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+double degrees_limited{sacfmt::limit_360(degrees)};
+#+end_src
+#+latex: \end{minipage}\end{center}
+
+- =limit_180=
+
+Take arbitrary value of degrees and unwrap to $[-180, 180]$. Useful for
+longitude.
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+double degrees_limited{sacfmt::limit_180(degrees)};
+#+end_src
+#+latex: \end{minipage}\end{center}
+
+- =limit_90=
+
+Take arbitrary value of degrees and unwrap to $[-90, 90]$. Useful for latitude.
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+double degrees_limited{sacfmt::limit_90(degrees)};
+#+end_src
+#+latex: \end{minipage}\end{center}
+
 ** Trace class
 
 The =Trace= class provides easy access to SAC-files in C++. Each SAC-file is a
@@ -261,6 +336,7 @@ Every [[SAC-file format][SAC variable]] is accessed via getters and setters of t
 - =trace.npts()=
 - =trace.data1()=
 - =trace.kstnm()=
+
 **** Example Setters
 
 - =trace.kevnm("Event 1")=
@@ -290,10 +366,54 @@ a [[Lookup Table][lookup table]]. The internal components are below:
 
 *** Convenience Methods
 
-- =degrees_to_radians=
-- =radians_to_degrees=
-- =gcarc=
-- =azimuth=
+- =calc_geometry=
+
+Calculate =gcarc=, =dist=, =az=, and =baz= assuming spherical Earth.
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+trace.stla(45.3);
+trace.stlo(34.5);
+trace.evla(18.5);
+trace.evlo(-34);
+trace.calc_geometry();
+std::cout << "GcArc: " << trace.gcarc() << '\n';
+std::cout << "Dist: " << trace.dist() << '\n';
+std::cout << "Azimuth: " << trace.az() << '\n';
+std::cout << "BAzimuth: " << trace.baz() << '\n';
+#+end_src
+#+latex: \end{minipage}\end{center}
+
+- =frequency=
+
+Calculate frequency from =delta=.
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+double frequency{trace.frequency()};
+#+end_src
+#+latex: \end{minipage}\end{center}
+
+- =date=
+
+Return =std::string= formatted as ~YYYY-JJJ~ from =nzyear= and =nzjday=.
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+std::string date{trace.date()};
+#+end_src
+#+latex: \end{minipage}\end{center}
+
+- =time=
+
+Return =std::string= formatted as ~HH:MM:SS.xxx~ from =nzhour=, =nzmin=, =nzsec=, and
+=nzmsec=.
+#+latex: \begin{center}\begin{minipage}[t]{0.75\textwidth}
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, linenos, bgcolor=LightGray
+#+begin_src C++ :eval no
+std::string time{trace.time()};
+#+end_src
+#+latex: \end{minipage}\end{center}
 
 *** Exceptions
 
@@ -613,17 +733,25 @@ Event end (/fini/) time, in seconds relative to the reference time.
 
 Station latitude in decimal degrees, N/S--positive/negative.
 
+sacfmt automatically enforces $\mathrm{stla}\in[-90, 90]$.
+
 **** =stlo=
 
 Station longitude in decimal degrees, E/W--positive/negative.
+
+sacfmt automatically enforces $\mathrm{stlo}\in[-180, 180]$.
 
 **** =evla=
 
 Event latitude in decimal degrees, N/S--positive/negative.
 
+sacfmt automatically enforces $\mathrm{evla}\in[-90, 90]$.
+
 **** =evlo=
 
 Event longitude in decimal degrees, E/W--positive/negative.
+
+sacfmt automatically enforces $\mathrm{evlo}\in[-180, 180]$.
 
 **** =sb=
 

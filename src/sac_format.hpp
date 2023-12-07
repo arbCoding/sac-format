@@ -174,7 +174,9 @@ bool equal_within_tolerance(const std::vector<double> &vector1,
                             double tolerance = f_eps) noexcept;
 bool equal_within_tolerance(double val1, double val2,
                             double tolerance = f_eps) noexcept;
-// Position methods
+//--------------------------------------------------------------------------
+// Geometric Methods
+//--------------------------------------------------------------------------
 double degrees_to_radians(double degrees) noexcept;
 double radians_to_degrees(double radians) noexcept;
 // gcarc
@@ -183,7 +185,16 @@ double gcarc(double latitude1, double longitude1, double latitude2,
 // azimuth
 double azimuth(double latitude1, double longitude1, double latitude2,
                double longitude2) noexcept;
-
+// Bounds
+// [-inf, inf] -> [0, 360]
+double limit_360(double degrees) noexcept;
+// [-inf, inf] -> [0, 360] -> (-180, 180]
+double limit_180(double degrees) noexcept;
+// [-inf, inf] -> [0, 360] -> (-180, 180] -> [-90, 90]
+double limit_90(double degrees) noexcept;
+//--------------------------------------------------------------------------
+// Trace Class
+//--------------------------------------------------------------------------
 enum class name {
   // Floats
   depmin,

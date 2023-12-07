@@ -354,12 +354,6 @@ double gcarc(const double latitude1, const double longitude1,
   double result{radians_to_degrees(
       std::acos(std::sin(lat1) * std::sin(lat2) +
                 std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)))};
-  while (result < 0.0) {
-    result += circle_deg;
-  }
-  while (result > circle_deg) {
-    result -= circle_deg;
-  }
   return result;
 }
 
@@ -378,8 +372,40 @@ double azimuth(const double latitude1, const double longitude1,
   while (result < 0.0) {
     result += circle_deg;
   }
-  while (result > circle_deg) {
-    result -= circle_deg;
+  return result;
+}
+
+double limit_360(const double degrees) noexcept {
+  double result{degrees};
+  while (std::abs(result) > circle_deg) {
+    if (result > circle_deg) {
+      result -= circle_deg;
+    } else {
+      result += circle_deg;
+    }
+  }
+  if (result < 0) {
+    result += circle_deg;
+  }
+  return result;
+}
+
+double limit_180(const double degrees) noexcept {
+  double result{limit_360(degrees)};
+  constexpr double hemi{180.0};
+  if (result > hemi) {
+    result = result - circle_deg;
+  }
+  return result;
+}
+
+double limit_90(const double degrees) noexcept {
+  double result{limit_180(degrees)};
+  constexpr double quarter{90.0};
+  if (result > quarter) {
+    result = (2 * quarter) - result;
+  } else if (result < -quarter) {
+    result = (-2 * quarter) - result;
   }
   return result;
 }
@@ -845,16 +871,28 @@ void Trace::t9(const double input) noexcept {
 void Trace::f(const double input) noexcept {
   doubles[sac_map.at(name::f)] = input;
 }
-void Trace::stla(const double input) noexcept {
+void Trace::stla(double input) noexcept {
+  if (input != unset_double) {
+    input = limit_90(input);
+  }
   doubles[sac_map.at(name::stla)] = input;
 }
-void Trace::stlo(const double input) noexcept {
+void Trace::stlo(double input) noexcept {
+  if (input != unset_double) {
+    input = limit_180(input);
+  }
   doubles[sac_map.at(name::stlo)] = input;
 }
-void Trace::evla(const double input) noexcept {
+void Trace::evla(double input) noexcept {
+  if (input != unset_double) {
+    input = limit_90(input);
+  }
   doubles[sac_map.at(name::evla)] = input;
 }
-void Trace::evlo(const double input) noexcept {
+void Trace::evlo(double input) noexcept {
+  if (input != unset_double) {
+    input = limit_180(input);
+  }
   doubles[sac_map.at(name::evlo)] = input;
 }
 void Trace::sb(const double input) noexcept {
