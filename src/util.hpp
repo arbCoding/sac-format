@@ -18,8 +18,6 @@
 #include <limits.h>
 // std::random_device, std::uniform_real_distribution
 #include <random>
-// ostringstream
-#include <sstream>
 // std::string
 #include <string>
 // std::vector
@@ -73,7 +71,7 @@ XoshiroCpp::Xoshiro256Plus init() noexcept {
 }
 
 // Build the PRNG
-inline XoshiroCpp::Xoshiro256Plus xos { init() };
+inline XoshiroCpp::Xoshiro256Plus xos{init()};
 
 // Give a random double within the inclusive bounds [min, max]
 inline double get(double min, double max) noexcept {
@@ -214,6 +212,127 @@ Trace gen_fake_trace() noexcept {
     }
   }
   return sac;
+}
+
+void unset_trace(Trace &sac) noexcept {
+  sac.delta(unset_double);
+  sac.depmin(unset_float);
+  sac.depmax(unset_float);
+  sac.odelta(unset_float);
+  sac.b(unset_double);
+  sac.e(unset_double);
+  sac.a(unset_double);
+  sac.o(unset_double);
+  sac.t0(unset_double);
+  sac.t1(unset_double);
+  sac.t2(unset_double);
+  sac.t3(unset_double);
+  sac.t4(unset_double);
+  sac.t5(unset_double);
+  sac.t6(unset_double);
+  sac.t7(unset_double);
+  sac.t8(unset_double);
+  sac.t9(unset_double);
+  sac.f(unset_double);
+  sac.resp0(unset_float);
+  sac.resp1(unset_float);
+  sac.resp2(unset_float);
+  sac.resp3(unset_float);
+  sac.resp4(unset_float);
+  sac.resp5(unset_float);
+  sac.resp6(unset_float);
+  sac.resp7(unset_float);
+  sac.resp8(unset_float);
+  sac.resp9(unset_float);
+  sac.stla(unset_double);
+  sac.stlo(unset_double);
+  sac.stel(unset_float);
+  sac.stdp(unset_float);
+  sac.evla(unset_double);
+  sac.evlo(unset_double);
+  sac.evel(unset_float);
+  sac.evdp(unset_float);
+  sac.mag(unset_float);
+  sac.user0(unset_float);
+  sac.user1(unset_float);
+  sac.user2(unset_float);
+  sac.user3(unset_float);
+  sac.user4(unset_float);
+  sac.user5(unset_float);
+  sac.user6(unset_float);
+  sac.user7(unset_float);
+  sac.user8(unset_float);
+  sac.user9(unset_float);
+  sac.dist(unset_float);
+  sac.az(unset_float);
+  sac.baz(unset_float);
+  sac.gcarc(unset_float);
+  sac.sb(unset_double);
+  sac.sdelta(unset_double);
+  sac.depmen(unset_float);
+  sac.cmpaz(unset_float);
+  sac.cmpinc(unset_float);
+  sac.xminimum(unset_float);
+  sac.xmaximum(unset_float);
+  sac.yminimum(unset_float);
+  sac.ymaximum(unset_float);
+  sac.nzyear(unset_int);
+  sac.nzjday(unset_int);
+  sac.nzhour(unset_int);
+  sac.nzmin(unset_int);
+  sac.nzsec(unset_int);
+  sac.nzmsec(unset_int);
+  sac.nvhdr(unset_int);
+  sac.norid(unset_int);
+  sac.nevid(unset_int);
+  sac.npts(unset_int);
+  sac.nsnpts(unset_int);
+  sac.nwfid(unset_int);
+  sac.nxsize(unset_int);
+  sac.nysize(unset_int);
+  sac.iftype(unset_int);
+  sac.idep(unset_int);
+  sac.iztype(unset_int);
+  sac.iinst(unset_int);
+  sac.istreg(unset_int);
+  sac.ievreg(unset_int);
+  sac.ievtyp(unset_int);
+  sac.iqual(unset_int);
+  sac.isynth(unset_int);
+  sac.imagtyp(unset_int);
+  sac.imagsrc(unset_int);
+  sac.ibody(unset_int);
+  sac.leven(unset_bool);
+  sac.lpspol(unset_bool);
+  sac.lovrok(unset_bool);
+  sac.lcalda(unset_bool);
+  sac.kstnm(unset_word);
+  sac.kevnm(unset_word);
+  sac.khole(unset_word);
+  sac.ko(unset_word);
+  sac.ka(unset_word);
+  sac.kt0(unset_word);
+  sac.kt1(unset_word);
+  sac.kt2(unset_word);
+  sac.kt3(unset_word);
+  sac.kt4(unset_word);
+  sac.kt5(unset_word);
+  sac.kt6(unset_word);
+  sac.kt7(unset_word);
+  sac.kt8(unset_word);
+  sac.kt9(unset_word);
+  sac.kf(unset_word);
+  sac.kuser0(unset_word);
+  sac.kuser1(unset_word);
+  sac.kuser2(unset_word);
+  sac.kcmpnm(unset_word);
+  sac.knetwk(unset_word);
+  sac.kdatrd(unset_word);
+  sac.kinst(unset_word);
+  // Empty data vectors
+  std::vector<double> data{};
+  sac.data1(data);
+  sac.data2(data);
 }
 } // namespace sacfmt
 

@@ -599,7 +599,7 @@ TEST_CASE("Trace Setters") {
     trace.evla(value);
     REQUIRE(trace.evla() == value);
 
-    value = -500;
+    value = -59;
     trace.evlo(value);
     REQUIRE(trace.evlo() == value);
 
@@ -845,6 +845,10 @@ TEST_CASE("Trace Setters") {
     trace.data2(value);
     REQUIRE(trace.data2() == value);
   }
+  SECTION("Convenience Functions") {
+    trace.delta(0.025);
+    REQUIRE(trace.frequency() == 40);
+  }
 }
 
 TEST_CASE("Trace Equality") {
@@ -852,6 +856,7 @@ TEST_CASE("Trace Equality") {
     const Trace trace1{};
     const Trace trace2{};
     REQUIRE(trace1 == trace2);
+    REQUIRE(trace1.frequency() == trace2.frequency());
   }
   // Confirmed it'll fail if you try to make them equal
   SECTION("Inequality") {
@@ -859,6 +864,147 @@ TEST_CASE("Trace Equality") {
     Trace trace2{};
     trace2.kinst("Hello");
     REQUIRE(trace1 != trace2);
+  }
+}
+
+TEST_CASE("Unsetting Trace") {
+  Trace trace = gen_fake_trace();
+  unset_trace(trace);
+  SECTION("Floats") {
+    REQUIRE(trace.depmin() == unset_float);
+    REQUIRE(trace.depmax() == unset_float);
+    REQUIRE(trace.odelta() == unset_float);
+    REQUIRE(trace.resp0() == unset_float);
+    REQUIRE(trace.resp1() == unset_float);
+    REQUIRE(trace.resp2() == unset_float);
+    REQUIRE(trace.resp3() == unset_float);
+    REQUIRE(trace.resp4() == unset_float);
+    REQUIRE(trace.resp5() == unset_float);
+    REQUIRE(trace.resp6() == unset_float);
+    REQUIRE(trace.resp7() == unset_float);
+    REQUIRE(trace.resp8() == unset_float);
+    REQUIRE(trace.resp9() == unset_float);
+    REQUIRE(trace.stel() == unset_float);
+    REQUIRE(trace.stdp() == unset_float);
+    REQUIRE(trace.evel() == unset_float);
+    REQUIRE(trace.evdp() == unset_float);
+    REQUIRE(trace.mag() == unset_float);
+    REQUIRE(trace.user0() == unset_float);
+    REQUIRE(trace.user1() == unset_float);
+    REQUIRE(trace.user2() == unset_float);
+    REQUIRE(trace.user3() == unset_float);
+    REQUIRE(trace.user4() == unset_float);
+    REQUIRE(trace.user5() == unset_float);
+    REQUIRE(trace.user6() == unset_float);
+    REQUIRE(trace.user7() == unset_float);
+    REQUIRE(trace.user8() == unset_float);
+    REQUIRE(trace.user9() == unset_float);
+    REQUIRE(trace.dist() == unset_float);
+    REQUIRE(trace.az() == unset_float);
+    REQUIRE(trace.baz() == unset_float);
+    REQUIRE(trace.gcarc() == unset_float);
+    REQUIRE(trace.depmen() == unset_float);
+    REQUIRE(trace.cmpaz() == unset_float);
+    REQUIRE(trace.cmpinc() == unset_float);
+    REQUIRE(trace.xminimum() == unset_float);
+    REQUIRE(trace.xmaximum() == unset_float);
+    REQUIRE(trace.yminimum() == unset_float);
+    REQUIRE(trace.ymaximum() == unset_float);
+  }
+  SECTION("Doubles") {
+    REQUIRE(trace.delta() == unset_double);
+    REQUIRE(trace.b() == unset_double);
+    REQUIRE(trace.e() == unset_double);
+    REQUIRE(trace.o() == unset_double);
+    REQUIRE(trace.a() == unset_double);
+    REQUIRE(trace.t0() == unset_double);
+    REQUIRE(trace.t1() == unset_double);
+    REQUIRE(trace.t2() == unset_double);
+    REQUIRE(trace.t3() == unset_double);
+    REQUIRE(trace.t4() == unset_double);
+    REQUIRE(trace.t5() == unset_double);
+    REQUIRE(trace.t6() == unset_double);
+    REQUIRE(trace.t7() == unset_double);
+    REQUIRE(trace.t8() == unset_double);
+    REQUIRE(trace.t9() == unset_double);
+    REQUIRE(trace.f() == unset_double);
+    REQUIRE(trace.stla() == unset_double);
+    REQUIRE(trace.stlo() == unset_double);
+    REQUIRE(trace.evla() == unset_double);
+    REQUIRE(trace.evlo() == unset_double);
+    REQUIRE(trace.sb() == unset_double);
+    REQUIRE(trace.sdelta() == unset_double);
+  }
+  SECTION("Integers") {
+    REQUIRE(trace.nzyear() == unset_int);
+    REQUIRE(trace.nzjday() == unset_int);
+    REQUIRE(trace.nzhour() == unset_int);
+    REQUIRE(trace.nzmin() == unset_int);
+    REQUIRE(trace.nzsec() == unset_int);
+    REQUIRE(trace.nzmsec() == unset_int);
+    REQUIRE(trace.nvhdr() == unset_int);
+    REQUIRE(trace.norid() == unset_int);
+    REQUIRE(trace.nevid() == unset_int);
+    REQUIRE(trace.npts() == unset_int);
+    REQUIRE(trace.nsnpts() == unset_int);
+    REQUIRE(trace.nwfid() == unset_int);
+    REQUIRE(trace.nxsize() == unset_int);
+    REQUIRE(trace.nysize() == unset_int);
+    REQUIRE(trace.iftype() == unset_int);
+    REQUIRE(trace.idep() == unset_int);
+    REQUIRE(trace.iztype() == unset_int);
+    REQUIRE(trace.iinst() == unset_int);
+    REQUIRE(trace.istreg() == unset_int);
+    REQUIRE(trace.ievreg() == unset_int);
+    REQUIRE(trace.ievtyp() == unset_int);
+    REQUIRE(trace.iqual() == unset_int);
+    REQUIRE(trace.isynth() == unset_int);
+    REQUIRE(trace.imagtyp() == unset_int);
+    REQUIRE(trace.imagsrc() == unset_int);
+    REQUIRE(trace.ibody() == unset_int);
+  }
+  SECTION("Bools") {
+    REQUIRE(trace.leven() == unset_bool);
+    REQUIRE(trace.lpspol() == unset_bool);
+    REQUIRE(trace.lovrok() == unset_bool);
+    REQUIRE(trace.lcalda() == unset_bool);
+  }
+  SECTION("Strings") {
+    REQUIRE(trace.kstnm() == unset_word);
+    REQUIRE(trace.kevnm() == unset_word);
+    REQUIRE(trace.khole() == unset_word);
+    REQUIRE(trace.ko() == unset_word);
+    REQUIRE(trace.ka() == unset_word);
+    REQUIRE(trace.kt0() == unset_word);
+    REQUIRE(trace.kt1() == unset_word);
+    REQUIRE(trace.kt2() == unset_word);
+    REQUIRE(trace.kt3() == unset_word);
+    REQUIRE(trace.kt4() == unset_word);
+    REQUIRE(trace.kt5() == unset_word);
+    REQUIRE(trace.kt6() == unset_word);
+    REQUIRE(trace.kt7() == unset_word);
+    REQUIRE(trace.kt8() == unset_word);
+    REQUIRE(trace.kt9() == unset_word);
+    REQUIRE(trace.kf() == unset_word);
+    REQUIRE(trace.kuser0() == unset_word);
+    REQUIRE(trace.kuser1() == unset_word);
+    REQUIRE(trace.kuser2() == unset_word);
+    REQUIRE(trace.kcmpnm() == unset_word);
+    REQUIRE(trace.knetwk() == unset_word);
+    REQUIRE(trace.kdatrd() == unset_word);
+    REQUIRE(trace.kinst() == unset_word);
+  }
+  SECTION("Data") {
+    REQUIRE(trace.data1().size() == 0);
+    REQUIRE(trace.data2().size() == 0);
+  }
+  SECTION("Convenience Functions") {
+    REQUIRE(trace.frequency() == unset_double);
+    trace.calc_geometry();
+    REQUIRE(trace.gcarc() == unset_double);
+    REQUIRE(trace.dist() == unset_double);
+    REQUIRE(trace.az() == unset_double);
+    REQUIRE(trace.baz() == unset_double);
   }
 }
 
@@ -1357,7 +1503,235 @@ TEST_CASE("Trace Read/Write") {
 }
 
 TEST_CASE("Geometric operations") {
-  SECTION("Great Circle Arc (gcarc)") {
+  SECTION("Helper Functions") {
+    SECTION("Limit 360 [0, 360.0]") {
+      SECTION("No Adjustment") {
+        REQUIRE(limit_360(0) == 0);
+        REQUIRE(limit_360(-0) == 0);
+        REQUIRE(limit_360(90) == 90);
+        REQUIRE(limit_360(180) == 180);
+        REQUIRE(limit_360(270) == 270);
+        REQUIRE(limit_360(360) == 360);
+      }
+      SECTION("Negatives") {
+        REQUIRE(limit_360(-180) == 180);
+        REQUIRE(limit_360(-270) == 90);
+        REQUIRE(limit_360(-90) == 270);
+      }
+      SECTION("Adjust By One Loop") {
+        REQUIRE(limit_360(1 + circle_deg) == 1);
+        REQUIRE(limit_360(-1 - circle_deg) == circle_deg - 1);
+        REQUIRE(limit_360(90 + circle_deg) == 90);
+        REQUIRE(limit_360(-90 - circle_deg) == 270);
+        REQUIRE(limit_360(180 + circle_deg) == 180);
+        REQUIRE(limit_360(-180 - circle_deg) == 180);
+        REQUIRE(limit_360(270 + circle_deg) == 270);
+        REQUIRE(limit_360(-270 - circle_deg) == 90);
+        REQUIRE(limit_360(2 * circle_deg) == circle_deg);
+        REQUIRE(limit_360(-2 * circle_deg) == 0);
+      }
+      SECTION("Adjust By Many Loops") {
+        REQUIRE(limit_360(10 * circle_deg + 10) == 10);
+        REQUIRE(limit_360(8 * circle_deg + 75) == 75);
+        REQUIRE(limit_360(5 * circle_deg + 35) == 35);
+        REQUIRE(limit_360(-7 * circle_deg - 10) == circle_deg - 10);
+        REQUIRE(limit_360(-3 * circle_deg - 180) == 180);
+      }
+    }
+    SECTION("Limit 180 [-180.0, 180.0]") {
+      SECTION("No Adjustment") {
+        REQUIRE(limit_180(0) == 0);
+        REQUIRE(limit_180(90) == 90);
+        REQUIRE(limit_180(180) == 180);
+        REQUIRE(limit_180(-0) == 0);
+        REQUIRE(limit_180(-10) == -10);
+        REQUIRE(limit_180(-90) == -90);
+        REQUIRE(limit_180(-179) == -179);
+      }
+      SECTION("Adjustment Positives") {
+        REQUIRE(limit_180(360) == 0);
+        REQUIRE(limit_180(270) == -90);
+        REQUIRE(limit_180(181) == -179);
+      }
+      SECTION("Adjustment Negatives") {
+        REQUIRE(limit_180(-180) == 180);
+        REQUIRE(limit_180(-360) == 0);
+        REQUIRE(limit_180(-270) == 90);
+      }
+      SECTION("Multiples of 360") {
+        SECTION("Positive Multiples") {
+          REQUIRE(limit_180(2 * circle_deg - 180) == 180);
+          REQUIRE(limit_180(10 * circle_deg + 10) == 10);
+          REQUIRE(limit_180(8 * circle_deg + 75) == 75);
+          REQUIRE(limit_180(5 * circle_deg + 35) == 35);
+        }
+        SECTION("Negative Multiples") {
+          REQUIRE(limit_180(-7 * circle_deg - 10) == -10);
+          REQUIRE(limit_180(-3 * circle_deg - 180) == 180);
+        }
+      }
+    }
+    SECTION("Limit 90 [-90.0, 90.0]") {
+      SECTION("No Adjustment") {
+        REQUIRE(limit_90(0) == 0);
+        REQUIRE(limit_90(90) == 90);
+        REQUIRE(limit_90(45) == 45);
+        REQUIRE(limit_90(-90) == -90);
+        REQUIRE(limit_90(-45) == -45);
+        REQUIRE(limit_90(-74) == -74);
+      }
+      SECTION("Adustment Positives") {
+        REQUIRE(limit_90(180) == 0);
+        REQUIRE(limit_90(91) == 89);
+        REQUIRE(limit_90(135) == 45);
+        REQUIRE(limit_90(360) == 0);
+        REQUIRE(limit_90(270) == -90);
+      }
+      SECTION("Adjustment Negatives") {
+        REQUIRE(limit_90(-180) == 0);
+        REQUIRE(limit_90(-91) == -89);
+        REQUIRE(limit_90(-135) == -45);
+        REQUIRE(limit_90(-270) == 90);
+        REQUIRE(limit_90(-360) == 0);
+      }
+    }
+  }
+  SECTION("Same location") {
+    constexpr double tol{1e-4};
+    SECTION("Lat: 0, Lon: 0") {
+      constexpr double lat{0};
+      constexpr double lon{0};
+      const double est_gcarc{gcarc(lat, lon, lat, lon)};
+      REQUIRE_THAT(est_gcarc, WithinAbs(0, tol));
+      const double est_az{azimuth(lat, lon, lat, lon)};
+      REQUIRE_THAT(est_az, WithinAbs(0, tol));
+    }
+    SECTION("Lat: 90, Lon: 0") {
+      constexpr double lat{90};
+      constexpr double lon{0};
+      const double est_gcarc{gcarc(lat, lon, lat, lon)};
+      REQUIRE_THAT(est_gcarc, WithinAbs(0, tol));
+      const double est_az{azimuth(lat, lon, lat, lon)};
+      REQUIRE_THAT(est_az, WithinAbs(0, tol));
+    }
+    SECTION("Lat: -90, Lon: 0") {
+      constexpr double lat{-90};
+      constexpr double lon{0};
+      const double est_gcarc{gcarc(lat, lon, lat, lon)};
+      REQUIRE_THAT(est_gcarc, WithinAbs(0, tol));
+      const double est_az{azimuth(lat, lon, lat, lon)};
+      REQUIRE_THAT(est_az, WithinAbs(0, tol));
+    }
+    SECTION("Lat: 0, Lon: 180") {
+      constexpr double lat{0};
+      constexpr double lon{180};
+      const double est_gcarc{gcarc(lat, lon, lat, lon)};
+      REQUIRE_THAT(est_gcarc, WithinAbs(0, tol));
+      const double est_az{azimuth(lat, lon, lat, lon)};
+      REQUIRE_THAT(est_az, WithinAbs(0, tol));
+    }
+    SECTION("Lat: 0, Lon: -180") {
+      constexpr double lat{0};
+      constexpr double lon{-180};
+      const double est_gcarc{gcarc(lat, lon, lat, lon)};
+      REQUIRE_THAT(est_gcarc, WithinAbs(0, tol));
+      const double est_az{azimuth(lat, lon, lat, lon)};
+      REQUIRE_THAT(est_az, WithinAbs(0, tol));
+    }
+  }
+  SECTION("Easy Values") {
+    constexpr double tol{1e-4};
+    SECTION("Equator vs. Pole") {
+      constexpr double eqla{0};
+      constexpr double npla{90};
+      constexpr double spla{-90};
+      constexpr double lon{0};
+      SECTION("North Pole") {
+        const double est_gcarc{gcarc(eqla, lon, npla, lon)};
+        REQUIRE_THAT(est_gcarc, WithinAbs(90, tol));
+        const double est_az{azimuth(eqla, lon, npla, lon)};
+        REQUIRE_THAT(est_az, WithinAbs(0, tol));
+        const double est_baz{azimuth(npla, lon, eqla, lon)};
+        REQUIRE_THAT(est_baz, WithinAbs(180, tol));
+      }
+      SECTION("South Pole") {
+        const double est_gcarc{gcarc(eqla, lon, spla, lon)};
+        REQUIRE_THAT(est_gcarc, WithinAbs(90, tol));
+        const double est_az{azimuth(eqla, lon, spla, lon)};
+        REQUIRE_THAT(est_az, WithinAbs(180, tol));
+        const double est_baz{azimuth(spla, lon, eqla, lon)};
+        REQUIRE_THAT(est_baz, WithinAbs(0, tol));
+      }
+      SECTION("North Pole to South Pole") {
+        const double est_gcarc{gcarc(npla, lon, spla, lon)};
+        REQUIRE_THAT(est_gcarc, WithinAbs(180, tol));
+        const double est_az{azimuth(npla, lon, spla, lon)};
+        REQUIRE_THAT(est_az, WithinAbs(180, tol));
+        const double est_baz{azimuth(spla, lon, npla, lon)};
+        REQUIRE_THAT(est_baz, WithinAbs(0, tol));
+      }
+      SECTION("South Pole to North Pole") {
+        const double est_gcarc{gcarc(spla, lon, npla, lon)};
+        REQUIRE_THAT(est_gcarc, WithinAbs(180, tol));
+      }
+    }
+  }
+  SECTION("Over Poles") {
+    constexpr double tol{1e-4};
+    SECTION("North Pole") {
+      constexpr double lat{70};
+      constexpr double lon1{0};
+      constexpr double lon2{180};
+      constexpr double exp_gcarc{2 * (90 - lat)};
+      const double est_gcarc{gcarc(lat, lon1, lat, lon2)};
+      REQUIRE_THAT(est_gcarc, WithinAbs(exp_gcarc, tol));
+      const double est_az{azimuth(lat, lon1, lat, lon2)};
+      REQUIRE_THAT(est_az, WithinAbs(0, tol));
+      const double est_baz{azimuth(lat, lon2, lat, lon1)};
+      REQUIRE_THAT(est_baz, WithinAbs(360, tol));
+    }
+    SECTION("South Pole") {
+      constexpr double lat{-65};
+      constexpr double lon1{90};
+      constexpr double lon2{-90};
+      constexpr double exp_gcarc{2 * (lat + 90)};
+      const double est_gcarc{gcarc(lat, lon1, lat, lon2)};
+      REQUIRE_THAT(est_gcarc, WithinAbs(exp_gcarc, tol));
+      const double est_az{azimuth(lat, lon1, lat, lon2)};
+      REQUIRE_THAT(est_az, WithinAbs(180, tol));
+      const double est_baz{azimuth(lat, lon2, lat, lon1)};
+      REQUIRE_THAT(est_baz, WithinAbs(180, tol));
+    }
+  }
+  SECTION("Along Equator") {
+    constexpr double tol{1e-4};
+    constexpr double lat{0};
+    double lon1{0};
+    double lon2{90};
+    double est_gcarc{gcarc(lat, lon1, lat, lon2)};
+    REQUIRE_THAT(est_gcarc, WithinAbs(90, tol));
+    double est_az{azimuth(lat, lon1, lat, lon2)};
+    REQUIRE_THAT(est_az, WithinAbs(90, tol));
+    double est_baz{azimuth(lat, lon2, lat, lon1)};
+    REQUIRE_THAT(est_baz, WithinAbs(270, tol));
+    lon1 = 30;
+    lon2 = 70;
+    est_gcarc = gcarc(lat, lon1, lat, lon2);
+    REQUIRE_THAT(est_gcarc, WithinAbs(lon2 - lon1, tol));
+    est_az = azimuth(lat, lon1, lat, lon2);
+    REQUIRE_THAT(est_az, WithinAbs(90, tol));
+    est_baz = azimuth(lat, lon2, lat, lon1);
+    REQUIRE_THAT(est_baz, WithinAbs(270, tol));
+    lon1 = 90;
+    lon2 = -90;
+    est_gcarc = gcarc(lat, lon1, lat, lon2);
+    REQUIRE_THAT(est_gcarc, WithinAbs(lon1 - lon2, tol));
+    est_az = azimuth(lat, lon1, lat, lon2);
+    REQUIRE_THAT(est_az, WithinAbs(270, tol));
+    est_baz = azimuth(lat, lon2, lat, lon1);
+    REQUIRE_THAT(est_baz, WithinAbs(90, tol));
+  }
+  SECTION("Known Values from a Real SAC File") {
     constexpr double lat1{38.4328};
     constexpr double lon1{-118.155};
     constexpr double lat2{36.801};
@@ -1371,5 +1745,50 @@ TEST_CASE("Geometric operations") {
     const double test_baz{azimuth(lat1, lon1, lat2, lon2)};
     REQUIRE_THAT(test_az, WithinAbs(expected_az, 0.2));
     REQUIRE_THAT(test_baz, WithinAbs(expected_baz, 0.2));
+  }
+  SECTION("Trace geometry") {
+    constexpr float gcarc{115.0889663696F};
+    constexpr float az{33.3167991638F};
+    constexpr float baz{185.6029968262F};
+    constexpr float dist{12811.65234375F};
+    Trace trace = gen_fake_trace();
+    REQUIRE(trace.gcarc() != gcarc);
+    REQUIRE(trace.az() != gcarc);
+    REQUIRE(trace.baz() != baz);
+    REQUIRE(trace.dist() != dist);
+    trace.calc_geometry();
+    REQUIRE_THAT(trace.gcarc(), WithinAbs(gcarc, 1e-4));;
+    REQUIRE_THAT(trace.az(), WithinAbs(az, 1e-4));
+    REQUIRE_THAT(trace.baz(), WithinAbs(baz, 1e-4));
+    REQUIRE_THAT(trace.dist(), WithinAbs(dist, 1e-4));
+  }
+  SECTION("Unset Trace geometry") {
+    Trace trace{};
+    REQUIRE(trace.stla() == unset_double);
+    REQUIRE(trace.stlo() == unset_double);
+    REQUIRE(trace.evla() == unset_double);
+    REQUIRE(trace.evlo() == unset_double);
+    trace.calc_geometry();
+    REQUIRE(trace.gcarc() == unset_double);
+    REQUIRE(trace.dist() == unset_double);
+    REQUIRE(trace.az() == unset_double);
+    REQUIRE(trace.baz() == unset_double);
+  }
+}
+
+TEST_CASE("Dates and Times") {
+  SECTION("Default Trace") {
+    Trace trace{};
+    const std::string date{trace.date()};
+    REQUIRE(date == unset_word);
+    const std::string time{trace.time()};
+    REQUIRE(time == unset_word);
+  }
+  SECTION("Default Fake Trace") {
+    Trace trace = gen_fake_trace();
+    const std::string date{trace.date()};
+    REQUIRE(date == "2023-123");
+    const std::string time{trace.time()};
+    REQUIRE(time == "13:57:34.0");
   }
 }
