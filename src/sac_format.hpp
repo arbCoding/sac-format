@@ -158,7 +158,7 @@ bool safe_to_read_footer(std::ifstream *sac) noexcept;
 // The below read functions can technically throw exceptions, if you
 // use them raw (without the above safety functions). I'm marking them
 // as `noexcept` because Trace::Trace uses the safety functions, meaning
-// and exception shouldn't occur (less overhead)
+// an exception shouldn't occur (less overhead)
 // Can read 1, 2, or 4 words and return as a binary bitset
 // Conversion functions are then used to do the conversions
 word_one read_word(std::ifstream *sac) noexcept;

@@ -17,7 +17,9 @@
 <img alt="Code Coverage" src="https://codecov.io/gh/arbCoding/sac-format/graph/badge.svg" />
 </a>
 
+<!---
 <img src="https://tokei.rs/b1/github/arbCoding/sac-format?category=code" />
+--->
 
 <img src="https://img.shields.io/github/languages/code-size/arbCoding/sac-format" />
 
@@ -342,8 +344,8 @@ std::string time{trace.time()};
 
 *** Exceptions
 
-sac-format throws exceptions of type =sacfmt::io_error= in the event of a failure
-to read/write a SAC-file.
+sac-format throws exceptions of type =sacfmt::io_error= (inherits
+[[https://en.cppreference.com/w/cpp/error/exception][=std::exception=]]) in the event of a failure to read/write a SAC-file.
 
 ** Convenience Functions
 
