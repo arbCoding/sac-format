@@ -35,6 +35,8 @@
 // std::vector
 #include <vector>
 
+#include <iostream>
+
 namespace sacfmt {
 //--------------------------------------------------------------------------
 // Constants
@@ -68,6 +70,7 @@ constexpr int num_int{26};
 constexpr int num_bool{4};
 constexpr int num_string{23};
 constexpr int num_data{2};
+constexpr int num_footer{22};
 constexpr int modern_hdr_version{7};
 constexpr int old_hdr_version{6};
 constexpr int common_skip_num{7};
@@ -141,15 +144,30 @@ word_four concat_words(const word_two &word12, const word_two &word34) noexcept;
 //--------------------------------------------------------------------------
 // Reading
 //--------------------------------------------------------------------------
+// The below functions make reading SAFE and prevent exceptions when
+// trying to read a file without a massive performance hit, unless
+// you try to use it for every single word (see how it is chunk-checked
+// in Trace::Trace to see an efficient/intuitive scheme)
+// Does the filesize remaining fit n_words?
+bool nwords_after_current(std::ifstream *sac, size_t current_pos,
+                          size_t n_words) noexcept;
+// Does the filesize fit the header?
+bool safe_to_read_header(std::ifstream *sac) noexcept;
+// Does the remaining filesize fit the footer?
+bool safe_to_read_footer(std::ifstream *sac) noexcept;
+// The below read functions can technically throw exceptions, if you
+// use them raw (without the above safety functions). I'm marking them
+// as `noexcept` because Trace::Trace uses the safety functions, meaning
+// an exception shouldn't occur (less overhead)
 // Can read 1, 2, or 4 words and return as a binary bitset
 // Conversion functions are then used to do the conversions
-word_one read_word(std::ifstream *sac);
-word_two read_two_words(std::ifstream *sac);
-word_four read_four_words(std::ifstream *sac);
+word_one read_word(std::ifstream *sac) noexcept;
+word_two read_two_words(std::ifstream *sac) noexcept;
+word_four read_four_words(std::ifstream *sac) noexcept;
 // Can read any number of words into a vector of doubles
 // Useful for data values
 std::vector<double> read_data(std::ifstream *sac, size_t n_words,
-                              int start = data_word);
+                              int start = data_word) noexcept;
 //--------------------------------------------------------------------------
 // Writing
 //--------------------------------------------------------------------------
@@ -705,6 +723,12 @@ public:
   void data2(const std::vector<double> &input) noexcept;
 
 private:
+  // Trying to reduce cognitive complexity down from 28
+  // according to clang-tidy (limit 25)
+  void read_header(std::ifstream *sac);
+  void read_data1() noexcept;
+  void read_data2() noexcept;
+  void read_footer() noexcept;
   // Convenience methods
   void calc_gcarc() noexcept;
   void calc_dist() noexcept;

@@ -186,7 +186,7 @@ word_four concat_words(const word_two &word12,
 //-----------------------------------------------------------------------------
 // Reading
 //-----------------------------------------------------------------------------
-word_one read_word(std::ifstream *sac) {
+word_one read_word(std::ifstream *sac) noexcept {
   word_one bits{};
   constexpr size_t char_size{bits_per_byte};
   // Where we will store the characters
@@ -208,7 +208,7 @@ word_one read_word(std::ifstream *sac) {
   return bits;
 }
 
-word_two read_two_words(std::ifstream *sac) {
+word_two read_two_words(std::ifstream *sac) noexcept {
   word_one word1{read_word(sac)};
   word_one word2{read_word(sac)};
   if constexpr (std::endian::native == std::endian::little) {
@@ -218,7 +218,7 @@ word_two read_two_words(std::ifstream *sac) {
   }
 }
 
-word_four read_four_words(std::ifstream *sac) {
+word_four read_four_words(std::ifstream *sac) noexcept {
   word_two word12{read_two_words(sac)};
   word_two word34{read_two_words(sac)};
   if constexpr (std::endian::native == std::endian::little) {
@@ -229,7 +229,7 @@ word_four read_four_words(std::ifstream *sac) {
 }
 
 std::vector<double> read_data(std::ifstream *sac, const size_t n_words,
-                              const int start) {
+                              const int start) noexcept {
   sac->seekg(word_position(start));
   std::vector<double> result{};
   result.resize(n_words);
@@ -1072,12 +1072,40 @@ void Trace::data2(const std::vector<double> &input) noexcept {
 }
 //------------------------------------------------------------------------------
 // Read
+bool nwords_after_current(std::ifstream *sac, const size_t current_pos,
+                          const size_t n_words) noexcept {
+  bool result{false};
+  if (sac->good()) {
+    sac->seekg(0, std::ios::end);
+    const std::size_t final_pos{static_cast<size_t>(sac->tellg())};
+    // Doesn't like size_t since it wants to allow
+    // the possibility of negative offsets (not how I use it)
+    sac->seekg(static_cast<std::streamoff>(current_pos));
+    const std::size_t diff{final_pos - current_pos};
+    result = (diff >= (n_words * word_length));
+  }
+  return result;
+}
+
+bool safe_to_read_header(std::ifstream *sac) noexcept {
+  return nwords_after_current(sac, 0, data_word);
+}
+
+bool safe_to_read_footer(std::ifstream *sac) noexcept {
+  // doubles are two words long
+  return nwords_after_current(sac, sac->tellg(),
+                              static_cast<size_t>(num_footer) * 2);
+}
+
 Trace::Trace(const std::filesystem::path &path) {
   std::ifstream file(path, std::ifstream::binary);
   if (!file) {
     throw io_error(path.string() + " cannot be opened to read.");
   }
-  file.seekg(0);
+
+  if (!safe_to_read_header(&file)) {
+    throw io_error(path.string() + " insufficent filesize for header.");
+  }
   //--------------------------------------------------------------------------
   // Header
   delta(binary_to_float(read_word(&file)));
@@ -1227,17 +1255,29 @@ Trace::Trace(const std::filesystem::path &path) {
   kinst(binary_to_string(read_two_words(&file)));
   //--------------------------------------------------------------------------
   // DATA
-  if (npts() != unset_int) {
-    // Originally floats, read as doubles
-    data1(read_data(&file, static_cast<size_t>(npts()), data_word));
-    // Uneven or spectral data
-    if (!leven() || (iftype() > 1)) {
-      data2(read_data(&file, static_cast<size_t>(npts()), data_word + npts()));
+  const bool is_data{npts() != unset_int};
+  // data1
+  const size_t npts_s{static_cast<size_t>(npts())};
+  if (is_data) {
+    if (!nwords_after_current(&file, file.tellg(), npts_s)) {
+      throw io_error(path.string() + " insufficient filesize for data1.");
     }
+    // Originally floats, read as doubles
+    data1(read_data(&file, npts_s, data_word));
+  }
+  // data2 (uneven or spectral data)
+  if (is_data && (!leven() || (iftype() > 1))) {
+    if (!nwords_after_current(&file, file.tellg(), npts_s)) {
+      throw io_error(path.string() + " insufficient filesize for data2.");
+    }
+    data2(read_data(&file, npts_s, data_word + npts()));
   }
   //--------------------------------------------------------------------------
   // Footer
   if (nvhdr() == modern_hdr_version) {
+    if (!safe_to_read_footer(&file)) {
+      throw io_error(path.string() + " insufficient filesize for footer.");
+    }
     delta(binary_to_double(read_two_words(&file)));
     b(binary_to_double(read_two_words(&file)));
     e(binary_to_double(read_two_words(&file)));
