@@ -152,9 +152,11 @@ word_four concat_words(const word_two &word12, const word_two &word34) noexcept;
 bool nwords_after_current(std::ifstream *sac, size_t current_pos,
                           size_t n_words) noexcept;
 // Does the filesize fit the header?
-bool safe_to_read_header(std::ifstream *sac) noexcept;
+void safe_to_read_header(std::ifstream *sac);
 // Does the remaining filesize fit the footer?
-bool safe_to_read_footer(std::ifstream *sac) noexcept;
+void safe_to_read_footer(std::ifstream *sac);
+// Does the remaining filesize fit the data?
+void safe_to_read_data(std::ifstream *sac, size_t n_words, bool data2 = false);
 // The below read functions can technically throw exceptions, if you
 // use them raw (without the above safety functions). I'm marking them
 // as `noexcept` because Trace::Trace uses the safety functions, meaning
@@ -756,6 +758,7 @@ private:
 
 public:
   explicit io_error(const std::string &msg) : message(msg) {}
+  const char *what() const noexcept { return message.c_str(); }
 };
 }; // namespace sacfmt
 #endif
