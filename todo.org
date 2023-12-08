@@ -7,12 +7,18 @@ later.
 Maybe call it =Seismogram=, or for less typing =Trace=. Then it'd be =SAC::Trace=
 which is nice.
 ** DONE SacStream constructor should use std::filesystem::path not std::string
-** DONE Testing :testing:
+** TODO Testing :testing:
 *** DONE Move Unit tests from PsSp :unit:
 *** DONE Benchmarks :benchmark:
 *** DONE data2 read/write :unit:
 *** DONE not =equal_within_tolerance= :unit:
 *** DONE =legacy_write= read/write :unit:
+*** TODO Corrupt sac-files
+**** DONE Insufficient header
+**** DONE Insufficient Data1
+**** DONE Insuficcient Data2
+**** DONE Insufficient footer
+**** TODO File continues past expected end
 ** TODO New functionality :functionality:
 
 *** Incorporate Ellipticity in geometric calculations
@@ -29,9 +35,6 @@ lines ([[https://en.wikipedia.org/wiki/Geographical_distance#Lambert's_formula_f
 *** DONE Azimuth calculation
 Assumes spherical earth
 
-*** TODO Read-inspect function
-Like read, but it prints to std::cout for every header it readers (not data
-vectors!) in case you want to inspect a potentially corrupt SAC-file.
 *** TODO ASCII read/write support :ascii:
 **** TODO Fortran style text files.
 ***** TODO Read in
@@ -92,7 +95,6 @@ This involves setting up the export settings for the website for LaTeX.
 *** TODO convert_sac
 1) convert between v6 and v7
 2) convert between binary and ascii
-*** TODO inspect_sac
 ** DONE Namespace sacfmt
 ** DONE Make single-header!
 * Inbox
