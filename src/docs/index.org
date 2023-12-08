@@ -90,7 +90,7 @@ sort of hardware (old or new) and makes it easy to expand upon.
 
 \ast{} This value includes only the library, excluding all testing/benchmarking
 and example codes. Including =utests.cpp=, =benchmark.cpp=, =util.hpp=, the example
-program (=list_sac=), and sac-format totals just under 5100 lines of code.
+program (=list_sac=), and sac-format totals just over 5100 lines of code.
 
 *** Documented
 
@@ -673,6 +673,11 @@ results (=utests --reporter=compact --success=).
 *** Additional options
 
 To see additional options, run =utests -?=.
+
+*** Using ctest
+
+If you have CMake install, you can run the tests using =ctest=.
+
 
 ** Benchmarking
 
