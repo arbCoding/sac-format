@@ -1087,14 +1087,26 @@ bool nwords_after_current(std::ifstream *sac, const size_t current_pos,
   return result;
 }
 
-bool safe_to_read_header(std::ifstream *sac) noexcept {
-  return nwords_after_current(sac, 0, data_word);
+void safe_to_read_header(std::ifstream *sac) {
+  if (!nwords_after_current(sac, 0, data_word)) {
+    throw io_error("Insufficient filesize for header.");
+  }
 }
 
-bool safe_to_read_footer(std::ifstream *sac) noexcept {
+void safe_to_read_footer(std::ifstream *sac) {
   // doubles are two words long
-  return nwords_after_current(sac, sac->tellg(),
-                              static_cast<size_t>(num_footer) * 2);
+  if (!nwords_after_current(sac, sac->tellg(),
+                            static_cast<size_t>(num_footer) * 2)) {
+    throw io_error("Insufficient filesize for footer.");
+  }
+}
+
+void safe_to_read_data(std::ifstream *sac, const size_t n_words,
+                       const bool data2) {
+  std::string data{data2 ? "data2" : "data1"};
+  if (!nwords_after_current(sac, sac->tellg(), n_words)) {
+    throw io_error("Insufficient filesize for " + data + '.');
+  }
 }
 
 Trace::Trace(const std::filesystem::path &path) {
@@ -1102,10 +1114,7 @@ Trace::Trace(const std::filesystem::path &path) {
   if (!file) {
     throw io_error(path.string() + " cannot be opened to read.");
   }
-
-  if (!safe_to_read_header(&file)) {
-    throw io_error(path.string() + " insufficent filesize for header.");
-  }
+  safe_to_read_header(&file); // throws io_error if not safe
   //--------------------------------------------------------------------------
   // Header
   delta(binary_to_float(read_word(&file)));
@@ -1259,25 +1268,19 @@ Trace::Trace(const std::filesystem::path &path) {
   // data1
   const size_t npts_s{static_cast<size_t>(npts())};
   if (is_data) {
-    if (!nwords_after_current(&file, file.tellg(), npts_s)) {
-      throw io_error(path.string() + " insufficient filesize for data1.");
-    }
+    safe_to_read_data(&file, npts_s); // throws io_error if unsafe
     // Originally floats, read as doubles
     data1(read_data(&file, npts_s, data_word));
   }
   // data2 (uneven or spectral data)
   if (is_data && (!leven() || (iftype() > 1))) {
-    if (!nwords_after_current(&file, file.tellg(), npts_s)) {
-      throw io_error(path.string() + " insufficient filesize for data2.");
-    }
+    safe_to_read_data(&file, npts_s, true); // throws io_error if unsafe
     data2(read_data(&file, npts_s, data_word + npts()));
   }
   //--------------------------------------------------------------------------
   // Footer
   if (nvhdr() == modern_hdr_version) {
-    if (!safe_to_read_footer(&file)) {
-      throw io_error(path.string() + " insufficient filesize for footer.");
-    }
+    safe_to_read_footer(&file); // throws io_error if not safe
     delta(binary_to_double(read_two_words(&file)));
     b(binary_to_double(read_two_words(&file)));
     e(binary_to_double(read_two_words(&file)));

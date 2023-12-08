@@ -8,6 +8,10 @@
 /* Standard library */
 // std::chrono::steady_clock::now()
 #include <chrono>
+// std::filesystem::path
+#include <filesystem>
+// std::ofstream, std::ios::binary, std::ios:trunc
+#include <fstream>
 // std::setprecision
 #include <iomanip>
 // std::cout
@@ -28,6 +32,7 @@
 #include <sac_format.hpp>
 
 namespace sacfmt {
+namespace fs = std::filesystem;
 
 // Testing Constants
 template <typename T> std::string eps_string(const T value) noexcept {
@@ -333,6 +338,109 @@ void unset_trace(Trace &sac) noexcept {
   std::vector<double> data{};
   sac.data1(data);
   sac.data2(data);
+}
+
+// Need flags for npts and data2
+void write_corrupt_sac(const fs::path &file, size_t n_hdr, int fake_npts = 0,
+                       size_t real_npts = 0, bool data2 = false,
+                       size_t real_npts2 = 0, const int header_version = 6,
+                       size_t n_footer = 0) {
+  std::ofstream corrupt_sac(file,
+                            std::ios::binary | std::ios::out | std::ios::trunc);
+  constexpr size_t hdr_word{76};
+  constexpr size_t npts_word{79};
+  constexpr size_t leven_word{105};
+  // Pre-nvhdr
+  size_t limit_1{0};
+  // Pre-npts
+  size_t limit_2{0};
+  // Pre-leven
+  size_t limit_3{0};
+  // Pre-data1
+  size_t limit_4{0};
+  // An oversized header is not useful for testing purposes.
+  n_hdr = (n_hdr > data_word ? data_word : n_hdr);
+  // No data if the header is small
+  if (n_hdr < data_word) {
+    real_npts = 0;
+    fake_npts = 0;
+    real_npts2 = 0;
+    data2 = false;
+  }
+  if (!data2) {
+    real_npts2 = 0;
+  }
+  n_footer = {n_footer > num_footer ? num_footer : n_footer};
+  if (header_version != 7) {
+    n_footer = 0;
+  }
+  real_npts = (n_hdr == data_word ? real_npts : 0);
+  real_npts2 = (n_hdr == data_word ? real_npts2 : 0);
+  if (n_hdr <= hdr_word) {
+    limit_1 = n_hdr;
+  } else {
+    if (n_hdr <= npts_word) {
+      limit_2 = n_hdr - hdr_word;
+    } else {
+      if (n_hdr <= leven_word) {
+        limit_3 = n_hdr - npts_word;
+      } else {
+        limit_3 = leven_word - npts_word;
+        limit_4 = n_hdr - leven_word;
+      }
+      limit_2 = npts_word - hdr_word;
+    }
+    limit_1 = hdr_word;
+  }
+  // Up to hdr_word
+  for (size_t i{0}; i < limit_1; ++i) {
+    // Just a ton of zeros (ints, one word)
+    write_words(&corrupt_sac, convert_to_word(0));
+  }
+  // Only include hdr_word if there are more words to write
+  if (limit_2 > 0) {
+    --limit_2;
+    write_words(&corrupt_sac, convert_to_word(header_version));
+  }
+  // Post hdr_word
+  for (size_t i{0}; i < limit_2; ++i) {
+    write_words(&corrupt_sac, convert_to_word(0));
+  }
+  // Only include npts_word if there are more words to write
+  if (limit_3 > 0) {
+    --limit_3;
+    write_words(&corrupt_sac, convert_to_word(fake_npts));
+  }
+  // Post npts_word
+  for (size_t i{0}; i < limit_3; ++i) {
+    write_words(&corrupt_sac, convert_to_word(0));
+  }
+  // Only include leven if there are more words to write
+  if (limit_4 > 0) {
+    --limit_4;
+    write_words(&corrupt_sac, bool_to_word(!data2));
+  }
+  // Post leven_word
+  for (size_t i{0}; i < limit_4; ++i) {
+    write_words(&corrupt_sac, convert_to_word(0));
+  }
+  // Now for data1 if it exists
+  for (size_t i{0}; i < real_npts; ++i) {
+    // writing floats (1 word)
+    write_words(&corrupt_sac, convert_to_word(0.0F));
+  }
+  // Now for data2 if it exists
+  if (data2) {
+    for (size_t i{0}; i < real_npts2; ++i) {
+      write_words(&corrupt_sac, convert_to_word(1.0F));
+    }
+  }
+  // Footer if it exists
+  for (size_t i{0}; i < n_footer; ++i) {
+    // Doubles (2 words)
+    write_words(&corrupt_sac, convert_to_word(0.0));
+  }
+  corrupt_sac.close();
 }
 } // namespace sacfmt
 
