@@ -870,6 +870,244 @@ TEST_CASE("Trace Equality") {
   }
 }
 
+TEST_CASE("Linked Headers") {
+  SECTION("LEven") {
+    Trace trace{};
+    // Even non-2D data
+    trace.leven(true);
+    trace.iftype(1);
+    trace.npts(10);
+    REQUIRE(trace.leven() == true);
+    REQUIRE(trace.iftype() == 1);
+    REQUIRE(trace.data2().size() == 0);
+    // Uneven data
+    trace.leven(false);
+    REQUIRE(trace.iftype() == 1);
+    REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+    // Return to even data
+    trace.leven(true);
+    REQUIRE(trace.iftype() == 1);
+    REQUIRE(trace.data2().size() == 0);
+    // Spectral even
+    trace.iftype(2);
+    REQUIRE(trace.iftype() == 2);
+    REQUIRE(trace.leven() == true);
+    REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+    // Uneven
+    trace.leven(false);
+    REQUIRE(trace.iftype() == unset_int);
+    REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+    // Return to even
+    trace.leven(true);
+    REQUIRE(trace.iftype() == unset_int);
+    REQUIRE(trace.data2().size() == 0);
+  }
+  SECTION("IFType") {
+    Trace trace{};
+    // Even non-2D data
+    trace.leven(true);
+    trace.iftype(1);
+    trace.npts(10);
+    REQUIRE(trace.leven() == true);
+    REQUIRE(trace.iftype() == 1);
+    REQUIRE(trace.data2().size() == 0);
+    // Spectral data
+    trace.iftype(2);
+    REQUIRE(trace.leven() == true);
+    REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+    // Return to even non-2D data
+    trace.iftype(1);
+    REQUIRE(trace.leven() == true);
+    REQUIRE(trace.data2().size() == 0);
+  }
+  SECTION("Npts") {
+    SECTION("Without Data2") {
+      Trace trace{};
+      // Even non-2D data
+      trace.leven(true);
+      trace.iftype(1);
+      trace.npts(0);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == 0);
+      SECTION("Npts 10") {
+        trace.npts(10);
+        REQUIRE(trace.npts() == 10);
+        REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+        REQUIRE(trace.data2().size() == 0);
+      }
+      SECTION("Grow 10, shrink 5") {
+        trace.npts(10);
+        trace.npts(5);
+        REQUIRE(trace.npts() == 5);
+        REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+        REQUIRE(trace.data2().size() == 0);
+      }
+    }
+    SECTION("With Data2") {
+      SECTION("Uneven timeseries") {
+        Trace trace{};
+        trace.leven(false);
+        trace.iftype(1);
+        trace.npts(0);
+        REQUIRE(trace.npts() == 0);
+        REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+        REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+        SECTION("Npts 10") {
+          trace.npts(10);
+          REQUIRE(trace.npts() == 10);
+          REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+          REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+        }
+        SECTION("Grow 10, shrink 5") {
+          trace.npts(10);
+          trace.npts(5);
+          REQUIRE(trace.npts() == 5);
+          REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+          REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+        }
+      }
+      SECTION("Even Spectral") {
+        Trace trace{};
+        trace.leven(true);
+        trace.iftype(2);
+        trace.npts(0);
+        REQUIRE(trace.npts() == 0);
+        REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+        REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+        SECTION("Npts 10") {
+          trace.npts(10);
+          REQUIRE(trace.npts() == 10);
+          REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+          REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+        }
+        SECTION("Grow 10, shrink 5") {
+          trace.npts(10);
+          trace.npts(5);
+          REQUIRE(trace.npts() == 5);
+          REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+          REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+        }
+      }
+    }
+  }
+  SECTION("Data1") {
+    SECTION("Even timeseries") {
+      Trace trace{};
+      trace.leven(true);
+      trace.iftype(1);
+      trace.npts(0);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      // Change the vector
+      std::vector<double> new_data1{};
+      new_data1.resize(10);
+      trace.data1(new_data1);
+      REQUIRE(trace.npts() == 10);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == 0);
+    }
+    SECTION("Uneven timeseries") {
+      Trace trace{};
+      trace.leven(false);
+      trace.iftype(1);
+      trace.npts(0);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      // Change the vector
+      std::vector<double> new_data1{};
+      new_data1.resize(10);
+      trace.data1(new_data1);
+      REQUIRE(trace.npts() == 10);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+    }
+    SECTION("Spectral") {
+      Trace trace{};
+      trace.leven(true);
+      trace.iftype(2);
+      trace.npts(0);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      // Change the vector
+      std::vector<double> new_data1{};
+      new_data1.resize(10);
+      trace.data1(new_data1);
+      REQUIRE(trace.npts() == 10);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+    }
+  }
+  SECTION("Data2") {
+    SECTION("Even timeseries") {
+      Trace trace{};
+      trace.leven(true);
+      trace.iftype(1);
+      trace.npts(0);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      // Change the vector
+      std::vector<double> new_data2{};
+      new_data2.resize(15);
+      trace.data2(new_data2);
+      REQUIRE(trace.npts() == 15);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+      // Remove data2
+      trace.iftype(1);
+      REQUIRE(trace.npts() == 15);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == 0);
+    }
+    SECTION("Uneven timeseries") {
+      Trace trace{};
+      trace.leven(false);
+      trace.iftype(1);
+      trace.npts(0);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      // Change the vector
+      std::vector<double> new_data2{};
+      new_data2.resize(25);
+      trace.data2(new_data2);
+      REQUIRE(trace.npts() == 25);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+      // Remove data2
+      trace.leven(true);
+      REQUIRE(trace.npts() == 25);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == 0);
+    }
+    SECTION("Spectral") {
+      Trace trace{};
+      trace.leven(true);
+      trace.iftype(2);
+      trace.npts(0);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      // Change the vector
+      std::vector<double> new_data2{};
+      new_data2.resize(12);
+      trace.data2(new_data2);
+      REQUIRE(trace.npts() == 12);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+      // Remove data2
+      trace.iftype(1);
+      REQUIRE(trace.npts() == 12);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == 0);
+    }
+  }
+}
+
 TEST_CASE("Unsetting Trace") {
   Trace trace = gen_fake_trace();
   unset_trace(&trace);

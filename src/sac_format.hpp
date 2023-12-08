@@ -737,6 +737,9 @@ private:
   void calc_az() noexcept;
   void calc_baz() noexcept;
   bool geometry_set() const noexcept;
+  void resize_data1(size_t size) noexcept;
+  void resize_data2(size_t size) noexcept;
+  void resize_data(size_t size) noexcept;
   // Objects
   // cppcheck-suppress unusedStructMember
   std::array<float, num_float> floats{};
