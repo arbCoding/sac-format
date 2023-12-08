@@ -870,6 +870,297 @@ TEST_CASE("Trace Equality") {
   }
 }
 
+void quick_io_check(fs::path tmp_file, const Trace &trace) {
+  // Write/load and check
+  trace.write(tmp_file);
+  Trace in = Trace(tmp_file);
+  fs::remove(tmp_file);
+  REQUIRE(in == trace);
+}
+
+TEST_CASE("Linked Headers") {
+  const fs::path tmp_dir{fs::temp_directory_path()};
+  const fs::path tmp_file{tmp_dir / "linked_parameter_test.sac"};
+  SECTION("LEven") {
+    Trace trace{};
+    // Even non-2D data
+    trace.leven(true);
+    trace.iftype(1);
+    trace.npts(10);
+    trace.nvhdr(7);
+    REQUIRE(trace.leven() == true);
+    REQUIRE(trace.iftype() == 1);
+    REQUIRE(trace.data2().size() == 0);
+    quick_io_check(tmp_file, trace);
+    // Uneven data
+    trace.leven(false);
+    REQUIRE(trace.iftype() == 1);
+    quick_io_check(tmp_file, trace);
+    // Return to even data
+    trace.leven(true);
+    REQUIRE(trace.iftype() == 1);
+    REQUIRE(trace.data2().size() == 0);
+    quick_io_check(tmp_file, trace);
+    // Spectral even
+    trace.iftype(2);
+    REQUIRE(trace.iftype() == 2);
+    REQUIRE(trace.leven() == true);
+    REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+    quick_io_check(tmp_file, trace);
+    // Uneven
+    trace.leven(false);
+    REQUIRE(trace.iftype() == unset_int);
+    REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+    quick_io_check(tmp_file, trace);
+    // Return to even
+    trace.leven(true);
+    REQUIRE(trace.iftype() == unset_int);
+    REQUIRE(trace.data2().size() == 0);
+    quick_io_check(tmp_file, trace);
+  }
+  SECTION("IFType") {
+    Trace trace{};
+    // Even non-2D data
+    trace.leven(true);
+    trace.iftype(1);
+    trace.npts(10);
+    trace.nvhdr(7);
+    REQUIRE(trace.leven() == true);
+    REQUIRE(trace.iftype() == 1);
+    REQUIRE(trace.data2().size() == 0);
+    quick_io_check(tmp_file, trace);
+    // Spectral data
+    trace.iftype(2);
+    REQUIRE(trace.leven() == true);
+    REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+    quick_io_check(tmp_file, trace);
+    // Return to even non-2D data
+    trace.iftype(1);
+    REQUIRE(trace.leven() == true);
+    REQUIRE(trace.data2().size() == 0);
+    quick_io_check(tmp_file, trace);
+  }
+  SECTION("Npts") {
+    SECTION("Without Data2") {
+      Trace trace{};
+      // Even non-2D data
+      trace.leven(true);
+      trace.iftype(1);
+      trace.npts(0);
+      trace.nvhdr(7);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+      SECTION("Npts 10") {
+        trace.npts(10);
+        REQUIRE(trace.npts() == 10);
+        REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+        REQUIRE(trace.data2().size() == 0);
+        quick_io_check(tmp_file, trace);
+      }
+      SECTION("Grow 10, shrink 5") {
+        trace.npts(10);
+        trace.npts(5);
+        REQUIRE(trace.npts() == 5);
+        REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+        REQUIRE(trace.data2().size() == 0);
+        quick_io_check(tmp_file, trace);
+      }
+    }
+    SECTION("With Data2") {
+      SECTION("Uneven timeseries") {
+        Trace trace{};
+        trace.leven(false);
+        trace.iftype(1);
+        trace.npts(0);
+        trace.nvhdr(7);
+        REQUIRE(trace.npts() == 0);
+        REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+        REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+        quick_io_check(tmp_file, trace);
+        SECTION("Npts 10") {
+          trace.npts(10);
+          REQUIRE(trace.npts() == 10);
+          REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+          REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+          quick_io_check(tmp_file, trace);
+        }
+        SECTION("Grow 10, shrink 5") {
+          trace.npts(10);
+          trace.npts(5);
+          REQUIRE(trace.npts() == 5);
+          REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+          REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+          quick_io_check(tmp_file, trace);
+        }
+      }
+      SECTION("Even Spectral") {
+        Trace trace{};
+        trace.leven(true);
+        trace.iftype(2);
+        trace.npts(0);
+        trace.nvhdr(7);
+        REQUIRE(trace.npts() == 0);
+        REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+        REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+        quick_io_check(tmp_file, trace);
+        SECTION("Npts 10") {
+          trace.npts(10);
+          REQUIRE(trace.npts() == 10);
+          REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+          REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+          quick_io_check(tmp_file, trace);
+        }
+        SECTION("Grow 10, shrink 5") {
+          trace.npts(10);
+          trace.npts(5);
+          REQUIRE(trace.npts() == 5);
+          REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+          REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+          quick_io_check(tmp_file, trace);
+        }
+      }
+    }
+  }
+  SECTION("Data1") {
+    SECTION("Even timeseries") {
+      Trace trace{};
+      trace.leven(true);
+      trace.iftype(1);
+      trace.npts(0);
+      trace.nvhdr(7);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+      // Change the vector
+      std::vector<double> new_data1{};
+      new_data1.resize(10);
+      trace.data1(new_data1);
+      REQUIRE(trace.npts() == 10);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+    }
+    SECTION("Uneven timeseries") {
+      Trace trace{};
+      trace.leven(false);
+      trace.iftype(1);
+      trace.npts(0);
+      trace.nvhdr(7);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+      // Change the vector
+      std::vector<double> new_data1{};
+      new_data1.resize(10);
+      trace.data1(new_data1);
+      REQUIRE(trace.npts() == 10);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+      quick_io_check(tmp_file, trace);
+    }
+    SECTION("Spectral") {
+      Trace trace{};
+      trace.leven(true);
+      trace.iftype(2);
+      trace.npts(0);
+      trace.nvhdr(7);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+      // Change the vector
+      std::vector<double> new_data1{};
+      new_data1.resize(10);
+      trace.data1(new_data1);
+      REQUIRE(trace.npts() == 10);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+      quick_io_check(tmp_file, trace);
+    }
+  }
+  SECTION("Data2") {
+    SECTION("Even timeseries") {
+      Trace trace{};
+      trace.leven(true);
+      trace.iftype(1);
+      trace.npts(0);
+      trace.nvhdr(7);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+      // Change the vector
+      std::vector<double> new_data2{};
+      new_data2.resize(15);
+      trace.data2(new_data2);
+      REQUIRE(trace.npts() == 15);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+      quick_io_check(tmp_file, trace);
+      // Remove data2
+      trace.iftype(1);
+      REQUIRE(trace.npts() == 15);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+    }
+    SECTION("Uneven timeseries") {
+      Trace trace{};
+      trace.leven(false);
+      trace.iftype(1);
+      trace.npts(0);
+      trace.nvhdr(7);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+      // Change the vector
+      std::vector<double> new_data2{};
+      new_data2.resize(25);
+      trace.data2(new_data2);
+      REQUIRE(trace.npts() == 25);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+      quick_io_check(tmp_file, trace);
+      // Remove data2
+      trace.leven(true);
+      REQUIRE(trace.npts() == 25);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+    }
+    SECTION("Spectral") {
+      Trace trace{};
+      trace.leven(true);
+      trace.iftype(2);
+      trace.npts(0);
+      trace.nvhdr(7);
+      REQUIRE(trace.npts() == 0);
+      REQUIRE(trace.data1().size() == 0);
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+      // Change the vector
+      std::vector<double> new_data2{};
+      new_data2.resize(12);
+      trace.data2(new_data2);
+      REQUIRE(trace.npts() == 12);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+      quick_io_check(tmp_file, trace);
+      // Remove data2
+      trace.iftype(1);
+      REQUIRE(trace.npts() == 12);
+      REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+      REQUIRE(trace.data2().size() == 0);
+      quick_io_check(tmp_file, trace);
+    }
+  }
+}
+
 TEST_CASE("Unsetting Trace") {
   Trace trace = gen_fake_trace();
   unset_trace(&trace);
@@ -1009,6 +1300,10 @@ TEST_CASE("Unsetting Trace") {
     REQUIRE(trace.az() == unset_double);
     REQUIRE(trace.baz() == unset_double);
   }
+  fs::path tmp_dir{fs::temp_directory_path()};
+  fs::path tmp_file{tmp_dir / "test.SaC"};
+  trace.nvhdr(7);
+  quick_io_check(tmp_file, trace);
 }
 
 TEST_CASE("Trace Read/Write") {

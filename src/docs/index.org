@@ -84,9 +84,13 @@ running.
 
 *** Small
 
-sac-format is *small*---in total (header + implementation--excluding comments)
-it's fewer than 2000 lines of code. Small size opens the door to using on any
+sac-format is *small*---in total (header + implementation--excluding comments) the
+library is under 2100\ast{} lines of code. Small size opens the door to using on any
 sort of hardware (old or new) and makes it easy to expand upon.
+
+\ast{} This value includes only the library, excluding all testing/benchmarking
+and example codes. Including =utests.cpp=, =benchmark.cpp=, =util.hpp=, the example
+program (=list_sac=), and sac-format totals just over 5100 lines of code.
 
 *** Documented
 
@@ -272,6 +276,100 @@ Every [[SAC-file format][SAC variable]] is accessed via getters and setters of t
 - =trace.evla(32.89)=
 - =trace.mag(3.21)=
 
+**** Setter rules
+
+Most of the setters are only constrained by the parameter type
+(single-precision, double-precision, boolean, etc.). *Some* setters are
+constrained by additional rules.
+
+***** Required for sanity
+
+Rules here are required because the sac-format library assumes them (not
+strictly required by the SAC format standard). For instance, the geometric
+functions assume certain bounds on latitudes and longitudes. sac-format
+automatically imposes these rules.
+
+****** =stla(input)=
+
+Limited to $[-90, 90]$ degrees, input that is outside that range is reduced
+using circular symmetry.
+
+****** =stlo(input)=
+
+Limited to $[-180, 180]$ degrees, input that is outside that range is reduced
+using circular symmetry.
+
+****** =evla(input)=
+
+Limited to $[-90, 90]$ degrees, input that is outside that range is reduced
+using circular symmetry.
+
+****** =evlo(input)=
+
+Limited to $[-180, 180]$ degrees, input that is outside that range is reduced
+using circular symmetry.
+
+***** Require for safety
+
+Rules here are required by the SAC format standard. sac-format automatically
+imposes these rules to prevent the creation of corrupt sac-files.
+
+****** =npts(input)=
+
+Because =npts= defines the size of the data vectors, changing this value will
+change the size of =data1= and =data2=\ast{}. Increasing npts resizes the vectors
+([[https://en.cppreference.com/w/cpp/container/vector/resize][std::vector::resize]]) by placing zeros at the *end* of the vectors. Reducing npts
+resizes the vectors down to the *first npts* values.
+
+Therefore, care must be taken to maintain separate copies of =data1= and
+=data2=\ast{} if you plan to manipulate the original data *after* resizing.
+
+\ast{} data2 has =npts= only if it is legal, otherwise it is of size 0.
+
+****** =leven(input)=
+
+Changing the value of =leven= potentially changes the legality of =data2=, it also
+potentially affects the value of =iftype=.
+
+If iftype$>1$, then leven must be ~true~ (evenly sampled data). Therefore, if
+leven is made ~false~ in this scenario (unevenly sampled data) then iftype becomes
+unset\ast{}.
+
+If changing leven makes data2 legal\ast{}\ast{}, then data2 is resized to have
+=npts= zeros.
+
+\ast{} The SAC format defines the unset values for all data-types. For integers
+(like iftype) it is the integer value ~-12345~.
+
+\ast{}\ast{} If data2 was already legal, then it is unaffected.
+
+****** =iftype(input)=
+
+Changing the value of =iftype= poentially changes the legality of =data2=, it also potentially affects the value of =leven=.
+
+If leven is =false=, then iftype must be either 1 or unset. Therefore, changing
+iftype to have a value $>1$ requires that leven becomes =true= (evenly sampled
+data).
+
+If changing iftype makes data2 legal\ast{}, then data2 is resized to have =npts= zeros.
+
+\ast{} If data2 was already legal, then it is unaffected.
+
+****** =data1(input)=
+
+If the size of =data1= is changed, then =npts= must change to reflect the new size.
+If =data2= is legal, this adjusts its size to match as well.
+
+****** =data2(input)=
+
+If the size of =data2= is changed to be larger than 0 and it is illegal, it is
+made legal by setting =iftype(2)= (spectral-data).
+
+When the size of data2 changes, =npts= is updated to the new size and =data1= is
+resized to match.
+
+If =data2= is made illegal, its size is reduced to 0 while =npts= and =data1= are
+unaffected.
 *** Internal Structure
 
 The SAC-trace stores the data internally in a series of pre-allocated
@@ -575,6 +673,11 @@ results (=utests --reporter=compact --success=).
 *** Additional options
 
 To see additional options, run =utests -?=.
+
+*** Using ctest
+
+If you have CMake install, you can run the tests using =ctest=.
+
 
 ** Benchmarking
 

@@ -930,7 +930,11 @@ void Trace::nevid(const int input) noexcept {
   ints[sac_map.at(name::nevid)] = input;
 }
 void Trace::npts(const int input) noexcept {
-  ints[sac_map.at(name::npts)] = input;
+  if ((input >= 0) || (input == unset_int)) {
+    ints[sac_map.at(name::npts)] = input;
+    const size_t size{static_cast<size_t>(input >= 0 ? input : 0)};
+    resize_data(size);
+  }
 }
 void Trace::nsnpts(const int input) noexcept {
   ints[sac_map.at(name::nsnpts)] = input;
@@ -946,6 +950,12 @@ void Trace::nysize(const int input) noexcept {
 }
 void Trace::iftype(const int input) noexcept {
   ints[sac_map.at(name::iftype)] = input;
+  const int size{npts() >= 0 ? npts() : 0};
+  // Uneven 2D data not supported as not in specification
+  if ((input > 1) && !leven()) {
+    leven(true);
+  }
+  resize_data2(size);
 }
 void Trace::idep(const int input) noexcept {
   ints[sac_map.at(name::idep)] = input;
@@ -983,6 +993,12 @@ void Trace::ibody(const int input) noexcept {
 // Bools
 void Trace::leven(const bool input) noexcept {
   bools[sac_map.at(name::leven)] = input;
+  const int size{npts() >= 0 ? npts() : 0};
+  // Uneven 2D data not supported since not in specification
+  if (!input && (iftype() > 1)) {
+    iftype(unset_int);
+  }
+  resize_data2(size);
 }
 void Trace::lpspol(const bool input) noexcept {
   bools[sac_map.at(name::lpspol)] = input;
@@ -1066,9 +1082,59 @@ void Trace::kinst(const std::string &input) noexcept {
 // Data
 void Trace::data1(const std::vector<double> &input) noexcept {
   data[sac_map.at(name::data1)] = input;
+  // Propagate change as needed
+  size_t size{data1().size()};
+  size = (((size == 0) && (npts() == unset_int)) ? unset_int : size);
+  if (static_cast<int>(size) != npts()) {
+    npts(static_cast<int>(size));
+  }
 }
 void Trace::data2(const std::vector<double> &input) noexcept {
   data[sac_map.at(name::data2)] = input;
+  // Proagate change as needed
+  size_t size{data2().size()};
+  size = (((size == 0) && (npts() == unset_int)) ? unset_int : size);
+  // Need to make sure this is legal
+  // If positive size and not-legal, make spectral
+  if (size > 0) {
+    // If not legal, make spectral
+    if (leven() && (iftype() <= 1)) {
+      iftype(2);
+    }
+    // If legal and different from npts, update npts
+    if ((!leven() || (iftype() > 1)) && (static_cast<int>(size) != npts())) {
+      npts(static_cast<int>(size));
+    }
+  }
+}
+
+void Trace::resize_data1(const size_t size) noexcept {
+  if (size != data1().size()) {
+    std::vector<double> new_data1{data1()};
+    new_data1.resize(size, 0.0);
+    data1(new_data1);
+  }
+}
+
+void Trace::resize_data2(const size_t size) noexcept {
+  // Data2 is legal
+  if (!leven() || (iftype() > 1)) {
+    if (size != data2().size()) {
+      std::vector<double> new_data2{data2()};
+      new_data2.resize(size, 0.0);
+      data2(new_data2);
+    }
+  } else {
+    if (!data2().empty()) {
+      std::vector<double> new_data2{};
+      data2(new_data2);
+    }
+  }
+}
+
+void Trace::resize_data(const size_t size) noexcept {
+  resize_data1(size);
+  resize_data2(size);
 }
 //------------------------------------------------------------------------------
 // Read
