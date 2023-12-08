@@ -21,8 +21,8 @@
 
 using namespace sacfmt;
 namespace fs = std::filesystem;
-using Catch::Matchers::WithinAbs;
 using Catch::Matchers::ContainsSubstring;
+using Catch::Matchers::WithinAbs;
 
 //==============================================================================
 // Basic I/O tests (file writing/reading goes with Trace)
@@ -872,7 +872,7 @@ TEST_CASE("Trace Equality") {
 
 TEST_CASE("Unsetting Trace") {
   Trace trace = gen_fake_trace();
-  unset_trace(trace);
+  unset_trace(&trace);
   SECTION("Floats") {
     REQUIRE(trace.depmin() == unset_float);
     REQUIRE(trace.depmax() == unset_float);
@@ -1514,32 +1514,27 @@ TEST_CASE("Corrupt SAC-File") {
     const std::string throw_str{"Insufficient filesize for header."};
     SECTION("10 Header Fields") {
       write_corrupt_sac(tmp_file, 10);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("0 Header Fields") {
       write_corrupt_sac(tmp_file, 0);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("75 Header Fields") {
       write_corrupt_sac(tmp_file, 75);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("76 Header Fields") {
       write_corrupt_sac(tmp_file, 76);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("data_word - 1 Header Fields") {
       write_corrupt_sac(tmp_file, data_word - 1);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("data_word Header Fields") {
@@ -1553,20 +1548,17 @@ TEST_CASE("Corrupt SAC-File") {
     std::string throw_str{"Insufficient filesize for data1."};
     SECTION("Fake_Npts 10, Real_Npts 0") {
       write_corrupt_sac(tmp_file, data_word, 10, 0);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("Fake_Npts 1, Real_Npts 0") {
       write_corrupt_sac(tmp_file, data_word, 1, 0);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("Fake_Npts 1000, Real_Npts 999") {
       write_corrupt_sac(tmp_file, data_word, 1000, 999);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("Fake_Npts 10, Real_Npts 10") {
@@ -1584,32 +1576,27 @@ TEST_CASE("Corrupt SAC-File") {
     std::string throw_str{"Insufficient filesize for data2."};
     SECTION("Fake_Npts 10, Real_Npts 0") {
       write_corrupt_sac(tmp_file, data_word, 10, 10, true, 0);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("Fake_Npts 1, Real_Npts 0") {
       write_corrupt_sac(tmp_file, data_word, 1, 1, true, 0);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("Fake_Npts 1000, Real_Npts 999") {
       write_corrupt_sac(tmp_file, data_word, 1000, 1000, true, 999);
-      REQUIRE_THROWS_WITH(Trace(tmp_file),
-                          ContainsSubstring(throw_str));
+      REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("Fake_Npts 10, Real_Npts 10") {
       write_corrupt_sac(tmp_file, data_word, 10, 10, true, 10);
-      REQUIRE_NOTHROW(Trace(tmp_file),
-                      ContainsSubstring(throw_str));
+      REQUIRE_NOTHROW(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
     SECTION("Fake_npts 0, Real_Npts 0") {
       write_corrupt_sac(tmp_file, data_word, 0, 0, true, 0);
-      REQUIRE_NOTHROW(Trace(tmp_file),
-                      ContainsSubstring(throw_str));
+      REQUIRE_NOTHROW(Trace(tmp_file), ContainsSubstring(throw_str));
       fs::remove(tmp_file);
     }
   }
@@ -1618,40 +1605,34 @@ TEST_CASE("Corrupt SAC-File") {
     SECTION("Without Data2") {
       SECTION("Npts 0, Footer 0") {
         write_corrupt_sac(tmp_file, data_word, 0, 0, false, 0, 7, 0);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 10, Footer 0") {
         write_corrupt_sac(tmp_file, data_word, 10, 10, false, 0, 7, 0);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 0, Footer 10") {
         write_corrupt_sac(tmp_file, data_word, 0, 0, false, 0, 7, 10);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 10, Footer 10") {
         write_corrupt_sac(tmp_file, data_word, 10, 10, false, 0, 7, 10);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 10, Footer num_footer - 1") {
         write_corrupt_sac(tmp_file, data_word, 10, 10, false, 0, 7,
-                         num_footer - 1);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+                          num_footer - 1);
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 1000, Footer num_footer - 1") {
         write_corrupt_sac(tmp_file, data_word, 1000, 1000, false, 0, 7,
                           num_footer - 1);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 0, Footer num_footer") {
@@ -1669,34 +1650,29 @@ TEST_CASE("Corrupt SAC-File") {
     SECTION("With Data2") {
       SECTION("Npts 0, Footer 0") {
         write_corrupt_sac(tmp_file, data_word, 0, 0, true, 0, 7, 0);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 10, Footer 0") {
         write_corrupt_sac(tmp_file, data_word, 10, 10, true, 10, 7, 0);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 10, Footer 10") {
         write_corrupt_sac(tmp_file, data_word, 10, 10, true, 10, 7, 10);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 10, Footer num_footer - 1") {
         write_corrupt_sac(tmp_file, data_word, 10, 10, true, 10, 7,
                           num_footer - 1);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 1000, Footer num_footer - 1") {
         write_corrupt_sac(tmp_file, data_word, 1000, 1000, true, 1000, 7,
                           num_footer - 1);
-        REQUIRE_THROWS_WITH(Trace(tmp_file),
-                            ContainsSubstring(throw_str));
+        REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str));
         fs::remove(tmp_file);
       }
       SECTION("Npts 1, Footer num_footer") {
@@ -1714,6 +1690,167 @@ TEST_CASE("Corrupt SAC-File") {
                           num_footer);
         REQUIRE_NOTHROW(Trace(tmp_file));
         fs::remove(tmp_file);
+      }
+    }
+  }
+  SECTION("Excess data throw") {
+    const std::string throw_str1{"Filesize exceeds data specification with "};
+    const std::string throw_str2{" bytes excess. Data corruption suspected."};
+    SECTION("Without Footer") {
+      SECTION("Without Data2") {
+        SECTION("Npts 0, Excess data 1") {
+          const int npts{0};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0,
+                            1);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 10, Excess data 1") {
+          const int npts{10};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0,
+                            1);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 100, Excess data 1") {
+          const int npts{100};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0,
+                            1);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 0, Excess data 100") {
+          const int npts{0};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0,
+                            100);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 57, Excess data 0") {
+          const int npts{57};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0,
+                            0);
+          REQUIRE_NOTHROW(Trace(tmp_file));
+          fs::remove(tmp_file);
+        }
+      }
+      SECTION("With Data2") {
+        SECTION("Npts 0, Excess data 1") {
+          const int npts{0};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 6, 0,
+                            1);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 100, Excess data 1") {
+          const int npts{100};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 6, 0,
+                            1);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 0, Excess data 1000") {
+          const int npts{1000};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 6, 0,
+                            1);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 100, Excess data 0") {
+          const int npts{1000};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 6, 0,
+                            0);
+          REQUIRE_NOTHROW(Trace(tmp_file));
+          fs::remove(tmp_file);
+        }
+      }
+    }
+    SECTION("With Footer") {
+      SECTION("Without Data2") {
+        SECTION("Npts 0, Excess data 1") {
+          const int npts{0};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7,
+                            num_footer, 1);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 100, Excess data 1") {
+          const int npts{100};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7,
+                            num_footer, 1);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 100, Excess data 101") {
+          const int npts{100};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7,
+                            num_footer, 101);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 10, Excess data 0") {
+          const int npts{10};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7,
+                            num_footer, 0);
+          REQUIRE_NOTHROW(Trace(tmp_file));
+          fs::remove(tmp_file);
+        }
+      }
+      SECTION("With Data2") {
+        SECTION("Npts 0, Excess data 1") {
+          const int npts{0};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7,
+                            num_footer, 1);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 100, Excess data 1") {
+          const int npts{100};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7,
+                            num_footer, 1);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 100, Excess data 100") {
+          const int npts{100};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7,
+                            num_footer, 100);
+          REQUIRE_THROWS_WITH(Trace(tmp_file),
+                              ContainsSubstring(throw_str1) &&
+                                  ContainsSubstring(throw_str2));
+          fs::remove(tmp_file);
+        }
+        SECTION("Npts 100, Excess data 0") {
+          const int npts{100};
+          write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7,
+                            num_footer, 0);
+          REQUIRE_NOTHROW(Trace(tmp_file));
+          fs::remove(tmp_file);
+        }
       }
     }
   }
@@ -1974,7 +2111,7 @@ TEST_CASE("Geometric operations") {
     REQUIRE(trace.baz() != baz);
     REQUIRE(trace.dist() != dist);
     trace.calc_geometry();
-    REQUIRE_THAT(trace.gcarc(), WithinAbs(gcarc, 1e-4));;
+    REQUIRE_THAT(trace.gcarc(), WithinAbs(gcarc, 1e-4));
     REQUIRE_THAT(trace.az(), WithinAbs(az, 1e-4));
     REQUIRE_THAT(trace.baz(), WithinAbs(baz, 1e-4));
     REQUIRE_THAT(trace.dist(), WithinAbs(dist, 1e-4));

@@ -1103,9 +1103,26 @@ void safe_to_read_footer(std::ifstream *sac) {
 
 void safe_to_read_data(std::ifstream *sac, const size_t n_words,
                        const bool data2) {
-  std::string data{data2 ? "data2" : "data1"};
+  const std::string data{data2 ? "data2" : "data1"};
   if (!nwords_after_current(sac, sac->tellg(), n_words)) {
     throw io_error("Insufficient filesize for " + data + '.');
+  }
+}
+
+void safe_to_finish_reading(std::ifstream *sac) {
+  const std::streamoff current_pos{sac->tellg()};
+  sac->seekg(0, std::ios::end);
+  const std::streamoff end_pos{sac->tellg()};
+  sac->seekg(current_pos, std::ios::beg);
+  // How far are we from the end of the file?
+  const std::streamoff diff{end_pos - current_pos};
+  // If there is more, something weird happened...
+  if (diff != 0) {
+    std::ostringstream oss{};
+    oss << "Filesize exceeds data specification with ";
+    oss << diff;
+    oss << " bytes excess. Data corruption suspected.";
+    throw io_error(oss.str());
   }
 }
 
@@ -1268,12 +1285,14 @@ Trace::Trace(const std::filesystem::path &path) {
   // data1
   const size_t npts_s{static_cast<size_t>(npts())};
   if (is_data) {
-    safe_to_read_data(&file, npts_s); // throws io_error if unsafe
+    // false flags for data1
+    safe_to_read_data(&file, npts_s, false); // throws io_error if unsafe
     // Originally floats, read as doubles
     data1(read_data(&file, npts_s, data_word));
   }
   // data2 (uneven or spectral data)
   if (is_data && (!leven() || (iftype() > 1))) {
+    // true flags for data2
     safe_to_read_data(&file, npts_s, true); // throws io_error if unsafe
     data2(read_data(&file, npts_s, data_word + npts()));
   }
@@ -1304,6 +1323,7 @@ Trace::Trace(const std::filesystem::path &path) {
     sb(binary_to_double(read_two_words(&file)));
     sdelta(binary_to_double(read_two_words(&file)));
   }
+  safe_to_finish_reading(&file); // throws io_error if the file isn't finished
   file.close();
 }
 //------------------------------------------------------------------------------

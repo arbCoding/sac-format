@@ -35,8 +35,6 @@
 // std::vector
 #include <vector>
 
-#include <iostream>
-
 namespace sacfmt {
 //--------------------------------------------------------------------------
 // Constants
@@ -157,6 +155,8 @@ void safe_to_read_header(std::ifstream *sac);
 void safe_to_read_footer(std::ifstream *sac);
 // Does the remaining filesize fit the data?
 void safe_to_read_data(std::ifstream *sac, size_t n_words, bool data2 = false);
+// Is the remaining filesize 0? (It should be, otherwise shenanigans).
+void safe_to_finish_reading(std::ifstream *sac);
 // The below read functions can technically throw exceptions, if you
 // use them raw (without the above safety functions). I'm marking them
 // as `noexcept` because Trace::Trace uses the safety functions, meaning

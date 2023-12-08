@@ -61,7 +61,7 @@ working on Windows, macOS, and Linux systems.
 sac-format is *safe*---it conforms to a strict set of C++ programming guidelines,
 chosen to ensure safe code-execution. The guideline conformance list is in
 [[https://github.com/arbCoding/sac-format/blob/main/.github/workflows/cpp-linter.yml][=cpp-linter.yml=]] and can be cross-referenced against this [[https://clang.llvm.org/extra/clang-tidy/checks/list.html][master list]]. Results
-of conformance checking is [[https://github.com/arbCoding/sac-format/actions/workflows/cpp-linter.yml][here]].
+of conformance checking are [[https://github.com/arbCoding/sac-format/actions/workflows/cpp-linter.yml][here]].
 
 Testing is an important part of software development; the sac-format library is
 extensively tested using the [[https://github.com/catchorg/Catch2][Catch2]] testing framework. Everything from low-level
@@ -96,10 +96,12 @@ documentation and in-code comments.
 
 *** Transparent
 
-sac-format is *transparent*---all [[https://app.codacy.com/gh/arbCoding/sac-format/dashboard][analysis]] and [[https://app.codecov.io/gh/arbCoding/sac-format][coverage]] information is publicly
+sac-format is *transparent*---all analysis and coverage information is publicly
 available online.
 
-[[https://www.codefactor.io/repository/github/arbcoding/sac-format][CodeFactor Analysis]]
+- [[https://www.codefactor.io/repository/github/arbcoding/sac-format][CodeFactor Analysis]]
+- [[https://app.codacy.com/gh/arbCoding/sac-format/dashboard][Codacy Analysis]]
+- [[https://app.codecov.io/gh/arbCoding/sac-format][CodeCov Coverage Analysis]]
 
 *** Trace Class
 
@@ -424,7 +426,7 @@ double degrees_limited{sacfmt::limit_90(degrees)};
 
 ** Low-Level I/O
 
-Low-level I/O functions are as follows:
+Low-level I/O functions are discussed below.
 
 **** Binary conversion
 
@@ -498,6 +500,10 @@ std::cout << (input == output) << '\n';
 #+latex: \end{minipage}\end{center}
 
 **** Reading/Writing
+
+*NOTE* that care must be taken when using them to ensure that safe input is
+provided; the =Trace= class ensures safe I/O, low-level I/O functions do not
+necessarily ensure safety.
 
 ***** =read_word=, =read_two_words=, =read_four_words=, and =read_data=
 
