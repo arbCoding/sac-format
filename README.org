@@ -20,7 +20,7 @@
 @@html:<img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/arbCoding/sac-format">@@
 @@html:<img alt="Codacy grade" src="https://img.shields.io/codacy/grade/870db5c2793a48df9ed98e942a08fc9e">@@
 @@html:<img src="https://www.codefactor.io/repository/github/arbcoding/sac-format/badge">@@
-@@html:<a href="https://scan.coverity.com/projects/arbcoding-sac-format"></a>@@
+@@html:<img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/29505/badge.svg"/>@@
 [[https://github.com/arbCoding/sac-format/actions/workflows/cpp-linter.yml][https://github.com/arbCoding/sac-format/actions/workflows/cpp-linter.yml/badge.svg]]
 
 sac-format is a single-header, statically linked library for reading binary
