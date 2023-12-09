@@ -8,7 +8,7 @@ fi
 if [ -e "$base/build/debug/gcc-coverage" ]; then
     rm -rf "$base/build/debug/gcc-coverage"
 fi
-## Build the preset
+# Build the preset
 cmake --preset gcc-coverage
 cmake --build build/debug/gcc-coverage
 # Run my unit tests

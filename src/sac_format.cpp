@@ -7,7 +7,7 @@ namespace sacfmt {
 //-----------------------------------------------------------------------------
 // Conversions
 //-----------------------------------------------------------------------------
-int word_position(const int word_number) noexcept {
+size_t word_position(const size_t word_number) noexcept {
   return (word_number * word_length);
 }
 
@@ -165,21 +165,22 @@ word_one bool_to_binary(const bool flag) noexcept {
 
 bool binary_to_bool(const word_one &flag) noexcept { return flag[0]; }
 
-word_two concat_words(const word_one &word1, const word_one &word2) noexcept {
+word_two concat_words(const word_pair<word_one> &pair_words) noexcept {
   word_two result{};
   for (size_t i{0}; i < binary_word_size; ++i) [[likely]] {
-    result[i] = word1[i];
-    result[i + binary_word_size] = word2[i];
+    result[i] = pair_words.first[i];
+    result[i + binary_word_size] = pair_words.second[i];
   }
   return result;
 }
 
-word_four concat_words(const word_two &word12,
-                       const word_two &word34) noexcept {
+word_four concat_words(const word_pair<word_two> &pair_words) noexcept {
   word_four result{};
-  for (int i{0}; i < 2 * binary_word_size; ++i) {
-    result[i] = word12[i];
-    result[i + (2 * binary_word_size)] = word34[i];
+  for (size_t i{0}; i < static_cast<size_t>(2) * binary_word_size; ++i)
+      [[likely]] {
+    result[i] = pair_words.first[i];
+    result[i + (static_cast<size_t>(2) * binary_word_size)] =
+        pair_words.second[i];
   }
   return result;
 }
@@ -190,50 +191,60 @@ word_one read_word(std::ifstream *sac) noexcept {
   word_one bits{};
   constexpr size_t char_size{bits_per_byte};
   // Where we will store the characters
-  // flawfinder: ignore
-  char word[word_length];
+  std::array<char, word_length> word{};
   // Read to our character array
+  // This can always hold the source due to careful typing/sizing
   // flawfinder: ignore
-  sac->read(word, word_length);
-  // Take each character
-  std::bitset<char_size> byte{};
-  for (size_t i{0}; i < word_length; ++i) [[likely]] {
-    size_t character{static_cast<size_t>(word[i])};
-    byte = std::bitset<char_size>(character);
-    // bit-by-bit
-    for (size_t j{0}; j < char_size; ++j) [[likely]] {
-      bits[(i * char_size) + j] = byte[j];
+  if (sac->read(word.data(), word_length)) {
+    // Take each character
+    std::bitset<char_size> byte{};
+    for (size_t i{0}; i < word_length; ++i) [[likely]] {
+      size_t character{static_cast<size_t>(word[i])};
+      byte = std::bitset<char_size>(character);
+      // bit-by-bit
+      for (size_t j{0}; j < char_size; ++j) [[likely]] {
+        bits[(i * char_size) + j] = byte[j];
+      }
     }
   }
   return bits;
 }
 
 word_two read_two_words(std::ifstream *sac) noexcept {
-  word_one word1{read_word(sac)};
-  word_one word2{read_word(sac)};
+  const word_one first_word{read_word(sac)};
+  const word_one second_word{read_word(sac)};
+  word_pair<word_one> pair_words{};
   if constexpr (std::endian::native == std::endian::little) {
-    return concat_words(word1, word2);
+    pair_words.first = first_word;
+    pair_words.second = second_word;
   } else {
-    return concat_words(word2, word1);
+    pair_words.first = second_word;
+    pair_words.second = first_word;
   }
+  return concat_words(pair_words);
 }
 
 word_four read_four_words(std::ifstream *sac) noexcept {
-  word_two word12{read_two_words(sac)};
-  word_two word34{read_two_words(sac)};
+  const word_two first_words{read_two_words(sac)};
+  const word_two second_words{read_two_words(sac)};
+  word_pair<word_two> pair_words{};
   if constexpr (std::endian::native == std::endian::little) {
-    return concat_words(word12, word34);
+    pair_words.first = first_words;
+    pair_words.second = second_words;
   } else {
-    return concat_words(word34, word12);
+    pair_words.first = second_words;
+    pair_words.second = first_words;
   }
+  return concat_words(pair_words);
 }
 
-std::vector<double> read_data(std::ifstream *sac, const size_t n_words,
-                              const int start) noexcept {
-  sac->seekg(word_position(start));
+std::vector<double> read_data(std::ifstream *sac,
+                              const read_spec &spec) noexcept {
+  // static_cast is safe because I'm never using negative values
+  sac->seekg(static_cast<std::streamoff>(word_position(spec.start_word)));
   std::vector<double> result{};
-  result.resize(n_words);
-  for (size_t i{0}; i < n_words; ++i) [[likely]] {
+  result.resize(spec.num_words);
+  for (size_t i{0}; i < spec.num_words; ++i) [[likely]] {
     result[i] = static_cast<double>(binary_to_float(read_word(sac)));
   }
   return result;
@@ -253,11 +264,10 @@ void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
 // Template on the typename to make possible to handle float or int
 template <typename T>
 std::vector<char> convert_to_word(const T input) noexcept {
-  // flawfinder: ignore
-  char tmp[word_length];
+  std::array<char, word_length> tmp{};
   // Copy bytes from input into the tmp array
   // flawfinder: ignore
-  std::memcpy(tmp, &input, word_length);
+  std::memcpy(tmp.data(), &input, word_length);
   std::vector<char> word{};
   word.resize(word_length);
   for (int i{0}; i < word_length; ++i) [[likely]] {
@@ -271,11 +281,10 @@ template std::vector<char> convert_to_word(const float input) noexcept;
 template std::vector<char> convert_to_word(const int x) noexcept;
 
 std::vector<char> convert_to_word(const double input) noexcept {
-  // flawfinder: ignore
-  char tmp[2 * word_length];
+  std::array<char, static_cast<size_t>(2) * word_length> tmp{};
   // Copy bytes from input into the tmp array
   // flawfinder: ignore
-  std::memcpy(tmp, &input, static_cast<size_t>(2) * word_length);
+  std::memcpy(tmp.data(), &input, static_cast<size_t>(2) * word_length);
   std::vector<char> word{};
   word.resize(static_cast<size_t>(2) * word_length);
   for (int i{0}; i < 2 * word_length; ++i) {
@@ -1138,31 +1147,32 @@ void Trace::resize_data(const size_t size) noexcept {
 }
 //------------------------------------------------------------------------------
 // Read
-bool nwords_after_current(std::ifstream *sac, const size_t current_pos,
-                          const size_t n_words) noexcept {
+bool nwords_after_current(std::ifstream *sac, const read_spec &spec) noexcept {
   bool result{false};
   if (sac->good()) {
     sac->seekg(0, std::ios::end);
     const std::size_t final_pos{static_cast<size_t>(sac->tellg())};
     // Doesn't like size_t since it wants to allow
     // the possibility of negative offsets (not how I use it)
-    sac->seekg(static_cast<std::streamoff>(current_pos));
-    const std::size_t diff{final_pos - current_pos};
-    result = (diff >= (n_words * word_length));
+    sac->seekg(static_cast<std::streamoff>(spec.start_word));
+    const std::size_t diff{final_pos - spec.start_word};
+    result = (diff >= (spec.num_words * word_length));
   }
   return result;
 }
 
 void safe_to_read_header(std::ifstream *sac) {
-  if (!nwords_after_current(sac, 0, data_word)) {
+  const read_spec spec{data_word, 0};
+  if (!nwords_after_current(sac, spec)) {
     throw io_error("Insufficient filesize for header.");
   }
 }
 
 void safe_to_read_footer(std::ifstream *sac) {
   // doubles are two words long
-  if (!nwords_after_current(sac, sac->tellg(),
-                            static_cast<size_t>(num_footer) * 2)) {
+  const read_spec spec{static_cast<size_t>(num_footer) * 2,
+                       static_cast<size_t>(sac->tellg())};
+  if (!nwords_after_current(sac, spec)) {
     throw io_error("Insufficient filesize for footer.");
   }
 }
@@ -1170,7 +1180,8 @@ void safe_to_read_footer(std::ifstream *sac) {
 void safe_to_read_data(std::ifstream *sac, const size_t n_words,
                        const bool data2) {
   const std::string data{data2 ? "data2" : "data1"};
-  if (!nwords_after_current(sac, sac->tellg(), n_words)) {
+  const read_spec spec{n_words, static_cast<size_t>(sac->tellg())};
+  if (!nwords_after_current(sac, spec)) {
     throw io_error("Insufficient filesize for " + data + '.');
   }
 }
@@ -1349,18 +1360,20 @@ Trace::Trace(const std::filesystem::path &path) {
   // DATA
   const bool is_data{npts() != unset_int};
   // data1
-  const size_t npts_s{static_cast<size_t>(npts())};
+  const size_t n_words{static_cast<size_t>(npts())};
   if (is_data) {
     // false flags for data1
-    safe_to_read_data(&file, npts_s, false); // throws io_error if unsafe
+    safe_to_read_data(&file, n_words, false); // throws io_error if unsafe
+    const read_spec spec{n_words, data_word};
     // Originally floats, read as doubles
-    data1(read_data(&file, npts_s, data_word));
+    data1(read_data(&file, spec));
   }
   // data2 (uneven or spectral data)
   if (is_data && (!leven() || (iftype() > 1))) {
     // true flags for data2
-    safe_to_read_data(&file, npts_s, true); // throws io_error if unsafe
-    data2(read_data(&file, npts_s, data_word + npts()));
+    safe_to_read_data(&file, n_words, true); // throws io_error if unsafe
+    const read_spec spec{n_words, data_word + npts()};
+    data2(read_data(&file, spec));
   }
   //--------------------------------------------------------------------------
   // Footer
