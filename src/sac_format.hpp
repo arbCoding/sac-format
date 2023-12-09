@@ -32,6 +32,8 @@
 #include <string>
 // std::unordered_map
 #include <unordered_map>
+// std::move
+#include <utility>
 // std::vector
 #include <vector>
 
@@ -45,7 +47,7 @@ constexpr int bits_per_byte{8}; // binary character size
 // Each word is 32-bits (4 bytes)
 constexpr int binary_word_size{word_length * bits_per_byte};
 // First word of (first) data-section
-constexpr int data_word{158};
+constexpr size_t data_word{158};
 constexpr int unset_int{-12345};
 constexpr float unset_float{-12345.0F};
 constexpr double unset_double{-12345.0};
@@ -80,7 +82,7 @@ constexpr double earth_radius{6378.14}; // km
 // Conversions
 //--------------------------------------------------------------------------
 // Calculate position of word in SAC-file
-int word_position(int word_number) noexcept;
+size_t word_position(size_t word_number) noexcept;
 // SAC uses 32 bit ints
 word_one int_to_binary(int num) noexcept;
 int binary_to_int(word_one bin) noexcept;
@@ -136,19 +138,30 @@ std::string binary_to_long_string(const word_four &str) noexcept;
 word_one bool_to_binary(bool flag) noexcept;
 bool binary_to_bool(const word_one &flag) noexcept;
 // Concat words
+// Struct allay bugprone similar types warning on concat_words
+template <typename T> struct word_pair {
+  T first{};
+  T second{};
+};
 // For some reason, template functions didn't want to work for these...
-word_two concat_words(const word_one &word1, const word_one &word2) noexcept;
-word_four concat_words(const word_two &word12, const word_two &word34) noexcept;
+word_two concat_words(const word_pair<word_one> &pair_words) noexcept;
+word_four concat_words(const word_pair<word_two> &pair_words) noexcept;
 //--------------------------------------------------------------------------
 // Reading
 //--------------------------------------------------------------------------
+// Struct to allay clang-tidy bugprone swappable parameters warning
+struct read_spec {
+  // cppcheck-suppress unusedStructMember
+  size_t num_words{};
+  // cppcheck-suppress unusedStructMember
+  size_t start_word{};
+};
 // The below functions make reading SAFE and prevent exceptions when
 // trying to read a file without a massive performance hit, unless
 // you try to use it for every single word (see how it is chunk-checked
 // in Trace::Trace to see an efficient/intuitive scheme)
 // Does the filesize remaining fit n_words?
-bool nwords_after_current(std::ifstream *sac, size_t current_pos,
-                          size_t n_words) noexcept;
+bool nwords_after_current(std::ifstream *sac, const read_spec &spec) noexcept;
 // Does the filesize fit the header?
 void safe_to_read_header(std::ifstream *sac);
 // Does the remaining filesize fit the footer?
@@ -168,8 +181,8 @@ word_two read_two_words(std::ifstream *sac) noexcept;
 word_four read_four_words(std::ifstream *sac) noexcept;
 // Can read any number of words into a vector of doubles
 // Useful for data values
-std::vector<double> read_data(std::ifstream *sac, size_t n_words,
-                              int start = data_word) noexcept;
+std::vector<double> read_data(std::ifstream *sac,
+                              const read_spec &spec) noexcept;
 //--------------------------------------------------------------------------
 // Writing
 //--------------------------------------------------------------------------
@@ -473,132 +486,132 @@ public:
   bool operator==(const Trace &other) const noexcept;
   // Convenience functions
   void calc_geometry() noexcept;
-  double frequency() const noexcept;
-  std::string date() const noexcept;
-  std::string time() const noexcept;
+  [[nodiscard]] double frequency() const noexcept;
+  [[nodiscard]] std::string date() const noexcept;
+  [[nodiscard]] std::string time() const noexcept;
   // Getters
   // Floats
-  float depmin() const noexcept;
-  float depmax() const noexcept;
-  float odelta() const noexcept;
-  float resp0() const noexcept;
-  float resp1() const noexcept;
-  float resp2() const noexcept;
-  float resp3() const noexcept;
-  float resp4() const noexcept;
-  float resp5() const noexcept;
-  float resp6() const noexcept;
-  float resp7() const noexcept;
-  float resp8() const noexcept;
-  float resp9() const noexcept;
-  float stel() const noexcept;
-  float stdp() const noexcept;
-  float evel() const noexcept;
-  float evdp() const noexcept;
-  float mag() const noexcept;
-  float user0() const noexcept;
-  float user1() const noexcept;
-  float user2() const noexcept;
-  float user3() const noexcept;
-  float user4() const noexcept;
-  float user5() const noexcept;
-  float user6() const noexcept;
-  float user7() const noexcept;
-  float user8() const noexcept;
-  float user9() const noexcept;
-  float dist() const noexcept;
-  float az() const noexcept;
-  float baz() const noexcept;
-  float gcarc() const noexcept;
-  float depmen() const noexcept;
-  float cmpaz() const noexcept;
-  float cmpinc() const noexcept;
-  float xminimum() const noexcept;
-  float xmaximum() const noexcept;
-  float yminimum() const noexcept;
-  float ymaximum() const noexcept;
+  [[nodiscard]] float depmin() const noexcept;
+  [[nodiscard]] float depmax() const noexcept;
+  [[nodiscard]] float odelta() const noexcept;
+  [[nodiscard]] float resp0() const noexcept;
+  [[nodiscard]] float resp1() const noexcept;
+  [[nodiscard]] float resp2() const noexcept;
+  [[nodiscard]] float resp3() const noexcept;
+  [[nodiscard]] float resp4() const noexcept;
+  [[nodiscard]] float resp5() const noexcept;
+  [[nodiscard]] float resp6() const noexcept;
+  [[nodiscard]] float resp7() const noexcept;
+  [[nodiscard]] float resp8() const noexcept;
+  [[nodiscard]] float resp9() const noexcept;
+  [[nodiscard]] float stel() const noexcept;
+  [[nodiscard]] float stdp() const noexcept;
+  [[nodiscard]] float evel() const noexcept;
+  [[nodiscard]] float evdp() const noexcept;
+  [[nodiscard]] float mag() const noexcept;
+  [[nodiscard]] float user0() const noexcept;
+  [[nodiscard]] float user1() const noexcept;
+  [[nodiscard]] float user2() const noexcept;
+  [[nodiscard]] float user3() const noexcept;
+  [[nodiscard]] float user4() const noexcept;
+  [[nodiscard]] float user5() const noexcept;
+  [[nodiscard]] float user6() const noexcept;
+  [[nodiscard]] float user7() const noexcept;
+  [[nodiscard]] float user8() const noexcept;
+  [[nodiscard]] float user9() const noexcept;
+  [[nodiscard]] float dist() const noexcept;
+  [[nodiscard]] float az() const noexcept;
+  [[nodiscard]] float baz() const noexcept;
+  [[nodiscard]] float gcarc() const noexcept;
+  [[nodiscard]] float depmen() const noexcept;
+  [[nodiscard]] float cmpaz() const noexcept;
+  [[nodiscard]] float cmpinc() const noexcept;
+  [[nodiscard]] float xminimum() const noexcept;
+  [[nodiscard]] float xmaximum() const noexcept;
+  [[nodiscard]] float yminimum() const noexcept;
+  [[nodiscard]] float ymaximum() const noexcept;
   // Doubles
-  double delta() const noexcept;
-  double b() const noexcept;
-  double e() const noexcept;
-  double o() const noexcept;
-  double a() const noexcept;
-  double t0() const noexcept;
-  double t1() const noexcept;
-  double t2() const noexcept;
-  double t3() const noexcept;
-  double t4() const noexcept;
-  double t5() const noexcept;
-  double t6() const noexcept;
-  double t7() const noexcept;
-  double t8() const noexcept;
-  double t9() const noexcept;
-  double f() const noexcept;
-  double stla() const noexcept;
-  double stlo() const noexcept;
-  double evla() const noexcept;
-  double evlo() const noexcept;
-  double sb() const noexcept;
-  double sdelta() const noexcept;
+  [[nodiscard]] double delta() const noexcept;
+  [[nodiscard]] double b() const noexcept;
+  [[nodiscard]] double e() const noexcept;
+  [[nodiscard]] double o() const noexcept;
+  [[nodiscard]] double a() const noexcept;
+  [[nodiscard]] double t0() const noexcept;
+  [[nodiscard]] double t1() const noexcept;
+  [[nodiscard]] double t2() const noexcept;
+  [[nodiscard]] double t3() const noexcept;
+  [[nodiscard]] double t4() const noexcept;
+  [[nodiscard]] double t5() const noexcept;
+  [[nodiscard]] double t6() const noexcept;
+  [[nodiscard]] double t7() const noexcept;
+  [[nodiscard]] double t8() const noexcept;
+  [[nodiscard]] double t9() const noexcept;
+  [[nodiscard]] double f() const noexcept;
+  [[nodiscard]] double stla() const noexcept;
+  [[nodiscard]] double stlo() const noexcept;
+  [[nodiscard]] double evla() const noexcept;
+  [[nodiscard]] double evlo() const noexcept;
+  [[nodiscard]] double sb() const noexcept;
+  [[nodiscard]] double sdelta() const noexcept;
   // Ints
-  int nzyear() const noexcept;
-  int nzjday() const noexcept;
-  int nzhour() const noexcept;
-  int nzmin() const noexcept;
-  int nzsec() const noexcept;
-  int nzmsec() const noexcept;
-  int nvhdr() const noexcept;
-  int norid() const noexcept;
-  int nevid() const noexcept;
-  int npts() const noexcept;
-  int nsnpts() const noexcept;
-  int nwfid() const noexcept;
-  int nxsize() const noexcept;
-  int nysize() const noexcept;
-  int iftype() const noexcept;
-  int idep() const noexcept;
-  int iztype() const noexcept;
-  int iinst() const noexcept;
-  int istreg() const noexcept;
-  int ievreg() const noexcept;
-  int ievtyp() const noexcept;
-  int iqual() const noexcept;
-  int isynth() const noexcept;
-  int imagtyp() const noexcept;
-  int imagsrc() const noexcept;
-  int ibody() const noexcept;
+  [[nodiscard]] int nzyear() const noexcept;
+  [[nodiscard]] int nzjday() const noexcept;
+  [[nodiscard]] int nzhour() const noexcept;
+  [[nodiscard]] int nzmin() const noexcept;
+  [[nodiscard]] int nzsec() const noexcept;
+  [[nodiscard]] int nzmsec() const noexcept;
+  [[nodiscard]] int nvhdr() const noexcept;
+  [[nodiscard]] int norid() const noexcept;
+  [[nodiscard]] int nevid() const noexcept;
+  [[nodiscard]] int npts() const noexcept;
+  [[nodiscard]] int nsnpts() const noexcept;
+  [[nodiscard]] int nwfid() const noexcept;
+  [[nodiscard]] int nxsize() const noexcept;
+  [[nodiscard]] int nysize() const noexcept;
+  [[nodiscard]] int iftype() const noexcept;
+  [[nodiscard]] int idep() const noexcept;
+  [[nodiscard]] int iztype() const noexcept;
+  [[nodiscard]] int iinst() const noexcept;
+  [[nodiscard]] int istreg() const noexcept;
+  [[nodiscard]] int ievreg() const noexcept;
+  [[nodiscard]] int ievtyp() const noexcept;
+  [[nodiscard]] int iqual() const noexcept;
+  [[nodiscard]] int isynth() const noexcept;
+  [[nodiscard]] int imagtyp() const noexcept;
+  [[nodiscard]] int imagsrc() const noexcept;
+  [[nodiscard]] int ibody() const noexcept;
   // Bools
-  bool leven() const noexcept;
-  bool lpspol() const noexcept;
-  bool lovrok() const noexcept;
-  bool lcalda() const noexcept;
+  [[nodiscard]] bool leven() const noexcept;
+  [[nodiscard]] bool lpspol() const noexcept;
+  [[nodiscard]] bool lovrok() const noexcept;
+  [[nodiscard]] bool lcalda() const noexcept;
   // Strings
-  std::string kstnm() const noexcept;
-  std::string kevnm() const noexcept;
-  std::string khole() const noexcept;
-  std::string ko() const noexcept;
-  std::string ka() const noexcept;
-  std::string kt0() const noexcept;
-  std::string kt1() const noexcept;
-  std::string kt2() const noexcept;
-  std::string kt3() const noexcept;
-  std::string kt4() const noexcept;
-  std::string kt5() const noexcept;
-  std::string kt6() const noexcept;
-  std::string kt7() const noexcept;
-  std::string kt8() const noexcept;
-  std::string kt9() const noexcept;
-  std::string kf() const noexcept;
-  std::string kuser0() const noexcept;
-  std::string kuser1() const noexcept;
-  std::string kuser2() const noexcept;
-  std::string kcmpnm() const noexcept;
-  std::string knetwk() const noexcept;
-  std::string kdatrd() const noexcept;
-  std::string kinst() const noexcept;
+  [[nodiscard]] std::string kstnm() const noexcept;
+  [[nodiscard]] std::string kevnm() const noexcept;
+  [[nodiscard]] std::string khole() const noexcept;
+  [[nodiscard]] std::string ko() const noexcept;
+  [[nodiscard]] std::string ka() const noexcept;
+  [[nodiscard]] std::string kt0() const noexcept;
+  [[nodiscard]] std::string kt1() const noexcept;
+  [[nodiscard]] std::string kt2() const noexcept;
+  [[nodiscard]] std::string kt3() const noexcept;
+  [[nodiscard]] std::string kt4() const noexcept;
+  [[nodiscard]] std::string kt5() const noexcept;
+  [[nodiscard]] std::string kt6() const noexcept;
+  [[nodiscard]] std::string kt7() const noexcept;
+  [[nodiscard]] std::string kt8() const noexcept;
+  [[nodiscard]] std::string kt9() const noexcept;
+  [[nodiscard]] std::string kf() const noexcept;
+  [[nodiscard]] std::string kuser0() const noexcept;
+  [[nodiscard]] std::string kuser1() const noexcept;
+  [[nodiscard]] std::string kuser2() const noexcept;
+  [[nodiscard]] std::string kcmpnm() const noexcept;
+  [[nodiscard]] std::string knetwk() const noexcept;
+  [[nodiscard]] std::string kdatrd() const noexcept;
+  [[nodiscard]] std::string kinst() const noexcept;
   // Data
-  std::vector<double> data1() const noexcept;
-  std::vector<double> data2() const noexcept;
+  [[nodiscard]] std::vector<double> data1() const noexcept;
+  [[nodiscard]] std::vector<double> data2() const noexcept;
   // Setters
   // Floats
   void depmin(float input) noexcept;
@@ -736,7 +749,7 @@ private:
   void calc_dist() noexcept;
   void calc_az() noexcept;
   void calc_baz() noexcept;
-  bool geometry_set() const noexcept;
+  [[nodiscard]] bool geometry_set() const noexcept;
   void resize_data1(size_t size) noexcept;
   void resize_data2(size_t size) noexcept;
   void resize_data(size_t size) noexcept;
@@ -760,8 +773,10 @@ private:
   const std::string message{};
 
 public:
-  explicit io_error(const std::string &msg) : message(msg) {}
-  const char *what() const noexcept { return message.c_str(); }
+  explicit io_error(std::string msg) : message(std::move(msg)) {}
+  [[nodiscard]] const char *what() const noexcept override {
+    return message.c_str();
+  }
 };
 }; // namespace sacfmt
 #endif

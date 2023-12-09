@@ -57,7 +57,12 @@ leven(false) and iftype(<1), but data2 exists, clear it.
 ***** TODO Read in
 ***** TODO Write out
 *** TODO Support Big-Endian sac-files (currently only little-endian)
-
+*** TODO Provide functions to update dependent parameters
+**** TODO xminimum/xmaximum
+**** TODO yminimum/ymaximum
+**** TODO depmin/depmen/depmax
+*** TODO String setters should be limited in length
+Same rules apply as for the strings themselves.
 ** DONE Refactor Trace :refactor:
 *** DONE Remove boost dependency
 The only reason I need boost is for boost::algorithm::trim(); to remove leading

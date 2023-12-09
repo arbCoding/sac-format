@@ -24,7 +24,7 @@ jobs:
           style: file
           version: 15
           files-changed-only: false
-          tidy-checks:  "bugprone-a*,bugprone-b*,bugprone-c*,bugprone-d*,bugprone-em*,bugprone-ex*,bugprone-f*,bugprone-i*,bugprone-l*,bugprone-m*,bugprone-n*,bugprone-o*,bugprone-p*,bugprone-r*,bugprone-s*,bugprone-t*,bugprone-u*,bugprone-v*,performance-*,readability-a*,readability-b*,readability-c*,readability-d*,readability-e*,readability-f*,readability-i*,readability-m*,readability-n*,readability-o*,readability-q*,readability-r*,readability-si*,readability-st*,readability-u*,portability-*,clang-analyzer-*,cppcoreguidelines-avoid-ca*,cpp-coreguidelines-avoid-co*,cpp-coreguidelines-avoid-d*,cpp-coreguidelines-avoid-g*,cpp-coreguidelines-avoid-n*,cpp-coreguidelines-avoid-r*,cpp-coreguidelines-i*,cpp-coreguidelines-m*,cpp-coreguidelines-n*,cpp-coreguidelines-o*,cpp-coreguidelines-pr*,cpp-coreguidelines-pro-bounds-p*,cpp-coreguidelines-pro-t*,cpp-coreguidelines-r*,cpp-coreguidelines-s*,cpp-coreguidelines-v*"
+          tidy-checks: "bugprone-*,performance-*,readability-*,portability-*,clang-analyzer-*,cpp-coreguidelines-*,modernize-a*,modernize-c*,modernize-d*,modernize-l*,modernize-m*,modernize-p*,modernize-r*,modernize-s*,modernize-t*,modernize-un*,modernize-use-a*,modernize-use-b*,modernize-use-c*,modernize-use-d*,modernize-use-e*,modernize-use-n*,modernize-use-o*,modernize-use-s*,modernize-use-tran*,modernize-use-u*"
           database: "build/debug/gh-coverage/compile_commands.json"
           ignore: "build/debug/gh-coverage/_deps | build/debug/gh-coverage/CMakeFiles | src/utests.cpp | src/benchmark.cpp | src/util.hpp | .github"
           extra-args: "-O0 -Wall -Werror -Wshadow -Wextra -pedantic-errors -std=c++20"
