@@ -1,15 +1,1 @@
 * Inbox
-** [2023-11-21 Tue 12:16]
-Running clang-tidy locally prior to GitHub
-** [2023-11-21 Tue 10:16]
-Prior to =git add -A= be sure to run =clang-format= on all *.cpp and *.hpp files!
-
-~clang-format -style=file -i src/sac_format.cpp~
-
-** Alternative check
-
-*NOTE* excluding: modernize-use-trailing-return-type because trailing return
- types are silly. Just use type function() {}, instead of auto function -> type
- {}.
-
-~clang-tidy --checks="bugprone-*,performance-*,readability-*,portability-*,clang-analyzer-*,cpp-coreguidelines-*,modernize-a*,modernize-c*,modernize-d*,modernize-l*,modernize-m*,modernize-p*,modernize-r*,modernize-s*,modernize-t*,modernize-un*,modernize-use-a*,modernize-use-b*,modernize-use-c*,modernize-use-d*,modernize-use-e*,modernize-use-n*,modernize-use-o*,modernize-use-s*,modernize-use-tran*,modernize-use-u*" --extra-arg="-std=c++20" -p ./compile_commands.json src/sac_format.cpp~

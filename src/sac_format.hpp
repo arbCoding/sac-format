@@ -47,7 +47,7 @@ constexpr int bits_per_byte{8}; // binary character size
 // Each word is 32-bits (4 bytes)
 constexpr int binary_word_size{word_length * bits_per_byte};
 // First word of (first) data-section
-constexpr size_t data_word{158};
+constexpr std::streamoff data_word{158};
 constexpr int unset_int{-12345};
 constexpr float unset_float{-12345.0F};
 constexpr double unset_double{-12345.0};
@@ -82,7 +82,7 @@ constexpr double earth_radius{6378.14}; // km
 // Conversions
 //--------------------------------------------------------------------------
 // Calculate position of word in SAC-file
-size_t word_position(size_t word_number) noexcept;
+std::streamoff word_position(size_t word_number) noexcept;
 // SAC uses 32 bit ints
 word_one int_to_binary(int num) noexcept;
 int binary_to_int(word_one bin) noexcept;
@@ -170,19 +170,14 @@ void safe_to_read_footer(std::ifstream *sac);
 void safe_to_read_data(std::ifstream *sac, size_t n_words, bool data2 = false);
 // Is the remaining filesize 0? (It should be, otherwise shenanigans).
 void safe_to_finish_reading(std::ifstream *sac);
-// The below read functions can technically throw exceptions, if you
-// use them raw (without the above safety functions). I'm marking them
-// as `noexcept` because Trace::Trace uses the safety functions, meaning
-// an exception shouldn't occur (less overhead)
 // Can read 1, 2, or 4 words and return as a binary bitset
 // Conversion functions are then used to do the conversions
-word_one read_word(std::ifstream *sac) noexcept;
-word_two read_two_words(std::ifstream *sac) noexcept;
-word_four read_four_words(std::ifstream *sac) noexcept;
+word_one read_word(std::ifstream *sac);
+word_two read_two_words(std::ifstream *sac);
+word_four read_four_words(std::ifstream *sac);
 // Can read any number of words into a vector of doubles
 // Useful for data values
-std::vector<double> read_data(std::ifstream *sac,
-                              const read_spec &spec) noexcept;
+std::vector<double> read_data(std::ifstream *sac, const read_spec &spec);
 //--------------------------------------------------------------------------
 // Writing
 //--------------------------------------------------------------------------
