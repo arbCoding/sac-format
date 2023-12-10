@@ -7,8 +7,8 @@ namespace sacfmt {
 //-----------------------------------------------------------------------------
 // Conversions
 //-----------------------------------------------------------------------------
-size_t word_position(const size_t word_number) noexcept {
-  return (word_number * word_length);
+std::streamoff word_position(const size_t word_number) noexcept {
+  return static_cast<std::streamoff>(word_number * word_length);
 }
 
 word_one int_to_binary(const int num) noexcept {
@@ -176,20 +176,18 @@ word_two concat_words(const word_pair<word_one> &pair_words) noexcept {
 
 word_four concat_words(const word_pair<word_two> &pair_words) noexcept {
   word_four result{};
-  for (size_t i{0}; i < static_cast<size_t>(2) * binary_word_size; ++i)
-      [[likely]] {
+  for (int i{0}; i < 2 * binary_word_size; ++i) [[likely]] {
     result[i] = pair_words.first[i];
-    result[i + (static_cast<size_t>(2) * binary_word_size)] =
-        pair_words.second[i];
+    result[i + (2 * binary_word_size)] = pair_words.second[i];
   }
   return result;
 }
 //-----------------------------------------------------------------------------
 // Reading
 //-----------------------------------------------------------------------------
-word_one read_word(std::ifstream *sac) noexcept {
+word_one read_word(std::ifstream *sac) {
   word_one bits{};
-  constexpr size_t char_size{bits_per_byte};
+  constexpr int char_size{bits_per_byte};
   // Where we will store the characters
   std::array<char, word_length> word{};
   // Read to our character array
@@ -198,11 +196,11 @@ word_one read_word(std::ifstream *sac) noexcept {
   if (sac->read(word.data(), word_length)) {
     // Take each character
     std::bitset<char_size> byte{};
-    for (size_t i{0}; i < word_length; ++i) [[likely]] {
-      size_t character{static_cast<size_t>(word[i])};
+    for (int i{0}; i < word_length; ++i) [[likely]] {
+      int character{word[i]};
       byte = std::bitset<char_size>(character);
       // bit-by-bit
-      for (size_t j{0}; j < char_size; ++j) [[likely]] {
+      for (int j{0}; j < char_size; ++j) [[likely]] {
         bits[(i * char_size) + j] = byte[j];
       }
     }
@@ -210,7 +208,7 @@ word_one read_word(std::ifstream *sac) noexcept {
   return bits;
 }
 
-word_two read_two_words(std::ifstream *sac) noexcept {
+word_two read_two_words(std::ifstream *sac) {
   const word_one first_word{read_word(sac)};
   const word_one second_word{read_word(sac)};
   word_pair<word_one> pair_words{};
@@ -224,7 +222,7 @@ word_two read_two_words(std::ifstream *sac) noexcept {
   return concat_words(pair_words);
 }
 
-word_four read_four_words(std::ifstream *sac) noexcept {
+word_four read_four_words(std::ifstream *sac) {
   const word_two first_words{read_two_words(sac)};
   const word_two second_words{read_two_words(sac)};
   word_pair<word_two> pair_words{};
@@ -238,10 +236,8 @@ word_four read_four_words(std::ifstream *sac) noexcept {
   return concat_words(pair_words);
 }
 
-std::vector<double> read_data(std::ifstream *sac,
-                              const read_spec &spec) noexcept {
-  // static_cast is safe because I'm never using negative values
-  sac->seekg(static_cast<std::streamoff>(word_position(spec.start_word)));
+std::vector<double> read_data(std::ifstream *sac, const read_spec &spec) {
+  sac->seekg(word_position(spec.start_word));
   std::vector<double> result{};
   result.resize(spec.num_words);
   for (size_t i{0}; i < spec.num_words; ++i) [[likely]] {
@@ -271,7 +267,7 @@ std::vector<char> convert_to_word(const T input) noexcept {
   std::vector<char> word{};
   word.resize(word_length);
   for (int i{0}; i < word_length; ++i) [[likely]] {
-    word[static_cast<size_t>(i)] = tmp[i];
+    word[i] = tmp[i];
   }
   return word;
 }
@@ -1372,7 +1368,7 @@ Trace::Trace(const std::filesystem::path &path) {
   if (is_data && (!leven() || (iftype() > 1))) {
     // true flags for data2
     safe_to_read_data(&file, n_words, true); // throws io_error if unsafe
-    const read_spec spec{n_words, data_word + npts()};
+    const read_spec spec{n_words, static_cast<size_t>(data_word) + npts()};
     data2(read_data(&file, spec));
   }
   //--------------------------------------------------------------------------
