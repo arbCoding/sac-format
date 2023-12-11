@@ -25,6 +25,7 @@ jobs:
       run: cpack
 
     - name: Archive Build Artifacts
+      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
       uses: actions/upload-artifact@v3
       with:
         path: |
