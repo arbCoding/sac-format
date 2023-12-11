@@ -51,6 +51,8 @@ by C++.
 
 sac-format's developed on [[https://github.com/arbCoding/sac-format][GitHub]]!
 
+Download [[https://github.com/arbCoding/sac-format/releases][sac-format]] from the GitHub release page.
+
 [[https://arbcoding.github.io/sac-format/sac-format_manual.pdf][Download]] an offline version of the documentation (PDF).
 
 ** Why sac-format
