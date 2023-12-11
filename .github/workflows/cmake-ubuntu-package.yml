@@ -26,7 +26,8 @@ jobs:
 
     - name: Archive Build Artifacts
       uses: actions/upload-artifact@v3
-      path: |
-        sac-format-?.?.?-Linux-*.tar.gz*
-        sac-format-?.?.?-Linux-*.sh
-      retention-days: 1
+      with:
+        path: |
+          sac-format-?.?.?-Linux-*.tar.gz*
+          sac-format-?.?.?-Linux-*.sh
+        retention-days: 1
