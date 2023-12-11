@@ -1,4 +1,4 @@
-name: Ubuntu Release Package
+name: macOS Release Package
 
 on:
   workflow_dispatch:
