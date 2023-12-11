@@ -25,10 +25,9 @@ jobs:
       run: cpack
 
     - name: Archive Build Artifacts
-      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
       uses: actions/upload-artifact@v3
       with:
         path: |
-          sac-format-?.?.?-Linux-*.tar.gz*
-          sac-format-?.?.?-Linux-*.sh
+          ${{github.workspace}}/buil/release/gh-ubuntu/sac-format-?.?.?-Linux-*.tar.gz*
+          ${{github.workspace}}/buil/release/gh-ubuntu/sac-format-?.?.?-Linux-*.sh
         retention-days: 1
