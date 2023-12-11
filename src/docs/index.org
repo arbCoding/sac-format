@@ -109,8 +109,8 @@ available online.
 
 - [[https://www.codefactor.io/repository/github/arbcoding/sac-format][CodeFactor]]
 - [[https://app.codacy.com/gh/arbCoding/sac-format/dashboard][Codacy]]
-- [[https://app.codecov.io/gh/arbCoding/sac-format][CodeCov Coverage]]
-- [[https://scan.coverity.com/projects/arbcoding-sac-format][Coverty Scan]]
+- [[https://app.codecov.io/gh/arbCoding/sac-format][CodeCov]]
+- [[https://scan.coverity.com/projects/arbcoding-sac-format][Coverity Scan]]
 
 *** Trace Class
 

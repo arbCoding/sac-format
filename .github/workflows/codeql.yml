@@ -60,7 +60,7 @@ jobs:
         # queries: security-extended,security-and-quality
     - run: |
       cmake --preset gh-coverage
-      cmake --build ${github.workspace}}/build/debug/gh-coverage
+      cmake --build ${{github.workspace}}/build/debug/gh-coverage
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
