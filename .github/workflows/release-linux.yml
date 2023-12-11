@@ -1,0 +1,48 @@
+name: Automatic Linux Release
+
+on: release
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=ON -DCMAKE_CXX_EXTENSIONS=OFF -DCMAKE_CXX_FLAGS="-O3 -DNDEBUG"
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build --config Release
+
+    - name: Package
+      working-directory: ${{github.workspace}}/build/
+      run: cpack
+
+    - name: Upload tar.gz to release
+      uses: JasonEtco/upload-to-release@master
+      with:
+        args: ${{github.workspace}}/build/sac-format-?.?.?-Linux-*.tar.gz application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload tar.gz.sha512 to release
+      uses: JasonEtco/upload-to-release@master
+      with:
+        args: ${{github.workspace}}/build/sac-format-?.?.?-Linux-*.tar.gz.sha512 text/plain
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload .sh to release
+      uses: JasonEtco/upload-to-relase@master
+      with:
+        args: ${{github.workspace}}/build/sac-format-?.?.?-Linux-*.sh application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Uplaod .sh.sha512 to release
+      uses: JasonEtcho/upload-to-release@master
+      with:
+        args: ${{github.workspace}}/build/sac-format-?.?.?-Linux-*.sh.sha512 text/plain
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

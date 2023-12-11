@@ -89,15 +89,16 @@ install(FILES ${sac-format_SOURCE_DIR}/LICENSE DESTINATION . COMPONENT license)
 cpack_add_component(library DISPLAY_NAME "sac-format" GROUP development
   DESCRIPTION "sac-format library to use in your own programs.")
 cpack_add_component(tests DISPLAY_NAME "Unit/Integration Testing" GROUP misc
-  DESCRIPTION "utests.exe - Collection of command line  unit and integration\
+  DESCRIPTION "utests.exe - Collection of command line unit and integration \
 tests that ensure sac-format is working correctly.")
 cpack_add_component(benchmarks DISPLAY_NAME "Benchmarks" GROUP misc
-  DESCRIPTION "benchmarks.exe - Collection of command line benchmarks for\
+  DESCRIPTION "benchmarks.exe - Collection of command line benchmarks for \
 determining sac-format performance.")
 cpack_add_component(list_sac DISPLAY_NAME "list_sac" GROUP programs
-  DESCRIPTION "list_sac.exe - Example command line program that lists all\
+  DESCRIPTION "list_sac.exe - Example command line program that lists all \
 header information from an input SAC file.")
-cpack_add_component(license DISPLAY_NAME "license")
+cpack_add_component(license DISPLAY_NAME "license"
+  DESCRIPTION "sac-format license file.")
 set(CPACK_COMPONENT_license_HIDDEN TRUE)
 set(CPACK_COMPONENT_license_REQUIRED TRUE)
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "sac-format")
