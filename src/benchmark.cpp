@@ -229,9 +229,9 @@ TEST_CASE("Input/Output") {
       }
       test_sac.write(tmp_file);
       Trace in_sac = Trace(tmp_file);
-      // Note that this equality tests to equality within tolerance of what can
-      // be handled via a float this is because binary SAC files use floats for
-      // the data values, not doubles
+      // Note that this equality tests to equality within tolerance of
+      // what can be handled via a float this is because binary SAC files
+      // use floats for the data values, not doubles
       BENCHMARK("Trace Comparison") { (void)(test_sac == in_sac); };
       fs::remove(tmp_file);
     }

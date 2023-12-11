@@ -5,12 +5,16 @@
 #pragma once
 /* Standard library
    https://en.cppreference.com/w/cpp/standard_library */
+/* v cpplint thinks these are C-libraries v */
+// std::endian
+#include <bit>
+// std::numbers::pi_v<double>
+#include <numbers>
+/* ^ cpplint thinks these are C-libraries ^ */
 // std::ranges::fill
 #include <algorithm>
 // std::array
 #include <array>
-// std::endian
-#include <bit>
 // std::bitset
 #include <bitset>
 // std::abs, std::acos, std::sin, std::cos, std::atan2, std::pow
@@ -22,8 +26,6 @@
 // std::ifstream, std::ifstream::binary, std::ofstream, std::ios::binary,
 // std::ios::out, std::ios::trunc
 #include <fstream>
-// std::numbers::pi_v<double>
-#include <numbers>
 // std::exception
 #include <stdexcept>
 // ostringstream
@@ -42,8 +44,8 @@ namespace sacfmt {
 // Constants
 //--------------------------------------------------------------------------
 // Size of data chunks in binary SAC files (called words)
-constexpr int word_length{4};   // bytes
-constexpr int bits_per_byte{8}; // binary character size
+constexpr int word_length{4};    // bytes
+constexpr int bits_per_byte{8};  // binary character size
 // Each word is 32-bits (4 bytes)
 constexpr int binary_word_size{word_length * bits_per_byte};
 // First word of (first) data-section
@@ -77,7 +79,7 @@ constexpr int common_skip_num{7};
 constexpr double rad_per_deg{std::numbers::pi_v<double> / 180.0};
 constexpr double deg_per_rad{1.0 / rad_per_deg};
 constexpr double circle_deg{360.0};
-constexpr double earth_radius{6378.14}; // km
+constexpr double earth_radius{6378.14};  // km
 //--------------------------------------------------------------------------
 // Conversions
 //--------------------------------------------------------------------------
@@ -103,7 +105,7 @@ constexpr int bytes{8};
 template <> struct uint<bytes * bits_per_byte> {
   using type = uint64_t;
 };
-} // namespace bitset_type
+}  // namespace bitset_type
 template <class T>
 using unsigned_int =
     typename bitset_type::uint<sizeof(T) * bits_per_byte>::type;
@@ -773,5 +775,5 @@ public:
     return message.c_str();
   }
 };
-}; // namespace sacfmt
+};  // namespace sacfmt
 #endif

@@ -447,6 +447,6 @@ void write_corrupt_sac(const fs::path &file, size_t n_hdr, int fake_npts = 0,
   }
   corrupt_sac.close();
 }
-} // namespace sacfmt
+}  // namespace sacfmt
 
 #endif
