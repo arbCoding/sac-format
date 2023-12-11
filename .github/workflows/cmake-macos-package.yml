@@ -27,7 +27,7 @@ jobs:
     - name: Archive Build Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: ubuntu-22.04
+        name: macos-13
         path: |
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.tar.gz*
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.sh*
