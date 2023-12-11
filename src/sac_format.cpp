@@ -1204,7 +1204,7 @@ Trace::Trace(const std::filesystem::path &path) {
   if (!file) {
     throw io_error(path.string() + " cannot be opened to read.");
   }
-  safe_to_read_header(&file); // throws io_error if not safe
+  safe_to_read_header(&file);  // throws io_error if not safe
   //--------------------------------------------------------------------------
   // Header
   delta(binary_to_float(read_word(&file)));
@@ -1359,7 +1359,7 @@ Trace::Trace(const std::filesystem::path &path) {
   const size_t n_words{static_cast<size_t>(npts())};
   if (is_data) {
     // false flags for data1
-    safe_to_read_data(&file, n_words, false); // throws io_error if unsafe
+    safe_to_read_data(&file, n_words, false);  // throws io_error if unsafe
     const read_spec spec{n_words, data_word};
     // Originally floats, read as doubles
     data1(read_data(&file, spec));
@@ -1367,14 +1367,14 @@ Trace::Trace(const std::filesystem::path &path) {
   // data2 (uneven or spectral data)
   if (is_data && (!leven() || (iftype() > 1))) {
     // true flags for data2
-    safe_to_read_data(&file, n_words, true); // throws io_error if unsafe
+    safe_to_read_data(&file, n_words, true);  // throws io_error if unsafe
     const read_spec spec{n_words, static_cast<size_t>(data_word) + npts()};
     data2(read_data(&file, spec));
   }
   //--------------------------------------------------------------------------
   // Footer
   if (nvhdr() == modern_hdr_version) {
-    safe_to_read_footer(&file); // throws io_error if not safe
+    safe_to_read_footer(&file);  // throws io_error if not safe
     delta(binary_to_double(read_two_words(&file)));
     b(binary_to_double(read_two_words(&file)));
     e(binary_to_double(read_two_words(&file)));
@@ -1398,7 +1398,7 @@ Trace::Trace(const std::filesystem::path &path) {
     sb(binary_to_double(read_two_words(&file)));
     sdelta(binary_to_double(read_two_words(&file)));
   }
-  safe_to_finish_reading(&file); // throws io_error if the file isn't finished
+  safe_to_finish_reading(&file);  // throws io_error if the file isn't finished
   file.close();
 }
 //------------------------------------------------------------------------------
@@ -1629,4 +1629,4 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
 void Trace::legacy_write(const std::filesystem::path &path) const {
   write(path, true);
 }
-}; // namespace sacfmt
+};  // namespace sacfmt

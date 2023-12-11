@@ -1,0 +1,32 @@
+name: Ubuntu Release Package
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake
+      run: cmake --preset gh-ubuntu-release
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build/release/gh-ubuntu
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+      run: ctest
+
+    - name: Package
+      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+      run: cpack
+
+    - name: Archive Build Artifacts
+      uses: actions/upload-artifact@v3
+      path: |
+        sac-format-?.?.?-Linux-*.tar.gz*
+        sac-format-?.?.?-Linux-*.sh
+      retention-days: 1

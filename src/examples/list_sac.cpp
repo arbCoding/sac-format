@@ -13,7 +13,6 @@ std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 #endif
 
 namespace fs = std::filesystem;
-using namespace sacfmt;
 
 int main(const int arg_count, const char *arg_array[]) {
   // Correct number of arguments
@@ -43,7 +42,7 @@ int main(const int arg_count, const char *arg_array[]) {
     std::cout << "WARNING: " << file << " does not have a SAC extension.\n";
   }
   // Okay, now we assume it is a SAC-file, let's go.
-  Trace trace = Trace(file);
+  sacfmt::Trace trace = sacfmt::Trace(file);
   // Time to spit out the information
   std::cout << "\033[1;36;40m=========================="
             << "=============================\n";
