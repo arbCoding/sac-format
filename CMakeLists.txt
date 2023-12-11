@@ -83,13 +83,12 @@ catch_discover_tests(utests)
 install(TARGETS sac-format COMPONENT library)
 install(TARGETS benchmark utests RUNTIME DESTINATION bin COMPONENT testing)
 install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
+install(FILES ${sac-format_SOURCE_DIR}/LICENSE DESTINATION . COMPONENT license)
 # Group components
-cpack_add_component(library DISPLAY_NAME "sac-format library"
-  GROUP dev)
-cpack_add_component(testing DISPLAY_NAME "Testing/Benchmarking"
-  GROUP dev)
-cpack_add_component(list_sac DISPLAY_NAME "list_sac"
-  GROUP prog)
+cpack_add_component(library DISPLAY_NAME "sac-format library" GROUP dev)
+cpack_add_component(testing DISPLAY_NAME "Testing/Benchmarking" GROUP dev)
+cpack_add_component(list_sac DISPLAY_NAME "list_sac" GROUP prog)
+cpack_add_component(license DISPLAY_NAME "license")
 # Added license
 set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/LICENSE)
 # Allow separating components instead of monolithic
@@ -108,6 +107,6 @@ ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 # Make checksum
 set(CPACK_PACKAGE_CHECKSUM SHA512)
 # Only specified components (exclude catch2)
-set(CPACK_COMPONENTS_ALL library testing list_sac)
+set(CPACK_COMPONENTS_ALL library testing list_sac license)
 set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 include(CPack)
