@@ -81,14 +81,26 @@ catch_discover_tests(utests)
 #===============================================================================
 # Setup components
 install(TARGETS sac-format COMPONENT library)
-install(TARGETS benchmark utests RUNTIME DESTINATION bin COMPONENT testing)
+install(TARGETS utests RUNTIME DESTINATION bin COMPONENT tests)
+install(TARGETS benchmark RUNTIME DESTINATION bin COMPONENT benchmarks)
 install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
 install(FILES ${sac-format_SOURCE_DIR}/LICENSE DESTINATION . COMPONENT license)
 # Group components
-cpack_add_component(library DISPLAY_NAME "sac-format library" GROUP dev)
-cpack_add_component(testing DISPLAY_NAME "Testing/Benchmarking" GROUP dev)
-cpack_add_component(list_sac DISPLAY_NAME "list_sac" GROUP prog)
+cpack_add_component(library DISPLAY_NAME "sac-format" GROUP development
+  DESCRIPTION "sac-format library to use in your own programs.")
+cpack_add_component(tests DISPLAY_NAME "Unit/Integration Testing" GROUP misc
+  DESCRIPTION "utests.exe - Collection of command line  unit and integration\
+tests that ensure sac-format is working correctly.")
+cpack_add_component(benchmarks DISPLAY_NAME "Benchmarks" GROUP misc
+  DESCRIPTION "benchmarks.exe - Collection of command line benchmarks for\
+determining sac-format performance.")
+cpack_add_component(list_sac DISPLAY_NAME "list_sac" GROUP programs
+  DESCRIPTION "list_sac.exe - Example command line program that lists all\
+header information from an input SAC file.")
 cpack_add_component(license DISPLAY_NAME "license")
+set(CPACK_COMPONENT_license_HIDDEN TRUE)
+set(CPACK_COMPONENT_license_REQUIRED TRUE)
+set(CPACK_PACKAGE_VENDOR "Alexander R. Blanchette")
 # Added license
 set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/LICENSE)
 # Allow separating components instead of monolithic
@@ -97,6 +109,7 @@ set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 set(CPACK_PACKAGE_NAME "sac-format")
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 set(CPACK_PACKAGE_VENDER "https://arbCoding.github.io/sac-format/")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://arbCoding.github.io/sac-format/")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
   "C++20 Single-Header SAC File library")
 # Filename/installation directory
@@ -107,6 +120,10 @@ ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 # Make checksum
 set(CPACK_PACKAGE_CHECKSUM SHA512)
 # Only specified components (exclude catch2)
-set(CPACK_COMPONENTS_ALL library testing list_sac license)
+set(CPACK_COMPONENTS_ALL library tests benchmarks list_sac license)
 set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
+# Windows Specific NSIS installer
+set(CPACK_NSIS_HELP_LINK "https://arbCoding.github.io/sac-format/")
+set(CPACK_NSIS_PACKAGE_INSTALL_DIRECTORY "sac-format")
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 include(CPack)

@@ -16,6 +16,10 @@ jobs:
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config Release
 
+    - name: Test
+      working_directory: ${{github.workspace}}/build
+      run: ctest -C Release
+
     - name: Package
       working-directory: ${{github.workspace}}/build/
       run: cpack
