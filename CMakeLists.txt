@@ -76,3 +76,8 @@ list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 include(CTest)
 include(Catch)
 catch_discover_tests(utests)
+#===============================================================================
+# CPack Installation
+#===============================================================================
+install(TARGETS sac-format list_sac benchmark utests RUNTIME DESTINATION bin)
+include(CPack)
