@@ -79,5 +79,35 @@ catch_discover_tests(utests)
 #===============================================================================
 # CPack Installation
 #===============================================================================
-install(TARGETS sac-format list_sac benchmark utests RUNTIME DESTINATION bin)
+# Setup components
+install(TARGETS sac-format COMPONENT library)
+install(TARGETS benchmark utests RUNTIME DESTINATION bin COMPONENT testing)
+install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
+# Group components
+cpack_add_component(library DISPLAY_NAME "sac-format library"
+  GROUP dev)
+cpack_add_component(testing DISPLAY_NAME "Testing/Benchmarking"
+  GROUP dev)
+cpack_add_component(list_sac DISPLAY_NAME "list_sac"
+  GROUP prog)
+# Added license
+set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/LICENSE)
+# Allow separating components instead of monolithic
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+# Meta-data
+set(CPACK_PACKAGE_NAME "sac-format")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_VENDER "https://arbCoding.github.io/sac-format/")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
+  "C++20 Single-Header SAC File library")
+# Filename/installation directory
+set(CPACK_PACKAGE_FILE_NAME "sac-format")
+# Archive filename
+set(CPACK_ARCHIVE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-\
+${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
+# Make checksum
+set(CPACK_PACKAGE_CHECKSUM SHA512)
+# Only specified components (exclude catch2)
+set(CPACK_COMPONENTS_ALL library testing list_sac)
+set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 include(CPack)
