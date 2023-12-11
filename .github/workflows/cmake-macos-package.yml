@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: macos-13
 
     steps:
     - uses: actions/checkout@v3
@@ -29,6 +29,6 @@ jobs:
       with:
         name: ubuntu-22.04
         path: |
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.tar.gz*
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.sh*
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.tar.gz*
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.sh*
         retention-days: 1
