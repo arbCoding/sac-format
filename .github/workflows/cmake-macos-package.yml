@@ -1,11 +1,11 @@
-name: Ubuntu Release Package
+name: macOS Release Package
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: macos-13
 
     steps:
     - uses: actions/checkout@v3
@@ -27,8 +27,8 @@ jobs:
     - name: Archive Build Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: ubuntu-22.04
+        name: macos-13
         path: |
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.tar.gz*
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.sh*
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.tar.gz*
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.sh*
         retention-days: 1
