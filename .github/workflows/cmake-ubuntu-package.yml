@@ -28,6 +28,6 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: |
-          ${{github.workspace}}/buil/release/gh-ubuntu/sac-format-?.?.?-Linux-*.tar.gz*
-          ${{github.workspace}}/buil/release/gh-ubuntu/sac-format-?.?.?-Linux-*.sh
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.tar.gz*
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.sh
         retention-days: 1
