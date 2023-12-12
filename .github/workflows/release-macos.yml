@@ -1,9 +1,6 @@
 name: Automatic macOS Release
 
-on:
-  release:
-    types:
-      [created]
+on: release
 
 jobs:
   build:
