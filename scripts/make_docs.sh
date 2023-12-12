@@ -1,12 +1,14 @@
 #!/bin/dash
 # Clean up old files
-base=$(pwd)
+scripts=$(pwd)
+base=$(pwd)/..
+cd "$base" || exit
 echo "Cleaning up past build!"
 rm -r ./docs/*
 
 # Build with emacs
 echo "\nBuilding with emacs!"
-emacs -Q --script ./make_docs.el
+emacs -Q --script "$scripts/make_docs.el"
 
 # Time to shrink the files!
 echo "\nMinify-ing files!"
@@ -36,4 +38,4 @@ new_size=$(echo 'scale=4; '"$new_size"' / 1000.0' | bc)
 new_size=$(echo "$new_size" | python -c "print(round(float(input()), 2))")
 
 echo "($orig_size kB, $new_size kB, $percent%)\n"
-cd "$base" || exit
+cd "$scripts" || exit

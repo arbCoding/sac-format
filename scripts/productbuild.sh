@@ -1,10 +1,13 @@
 #!/bin/dash
 # Build productbuild macOS package
-base=$(pwd)
+script=$(pwd)
+base=$(pwd)/..
+cd "$base" || exit
 # Cleanup
 if [ -e "$base/build/release/clang" ]; then
     rm -rf "$base/build/release/clang"
 fi
+cp "$base/LICENSE" "$base/License.txt"
 # Prep the build
 cmake -DCPACK_GENERATOR=productbuild \
     -DCMAKE_INSTALL_PREFIX=/opt/sac-format \
@@ -16,5 +19,7 @@ cmake --build .
 cpack -G productbuild
 # Move the package
 mv ./sac-format.pkg "$base/sac-format.pkg"
+# Cleanup
+rm "$base/License.txt"
 # Return home
-cd "$base" || exit
+cd "$script" || exit

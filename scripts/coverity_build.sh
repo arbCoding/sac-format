@@ -1,5 +1,7 @@
 #!/bin/dash
-base=$(pwd)
+script=$(pwd)
+base=$(pwd)/..
+cd "$base" || exit
 # Cleanup
 if [ -e "$base/build/debug/gcc" ]; then
     rm -rf "$base/build/debug/gcc"
@@ -21,4 +23,4 @@ tar czf sac-format.tgz cov-int
 # Move to base dir
 mv ./sac-format.tgz "$base/sac-format.tgz"
 # Return home
-cd "$base" || exit
+cd "$script" || exit
