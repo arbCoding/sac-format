@@ -153,7 +153,7 @@ By default, Microsoft Defender will block the installer with a pop-up like that 
 #+attr_org: :width 200px
 #+attr_html: :width 350px
 #+attr_latex: :width 200px
-[[file:~/my_git/sac-format/screenshots/Windows/warning_1_install.png]]
+[[file:./screenshots/Windows/warning_1_install.png]]
 
 To continue the install, click on the 'More Info' link and then the 'Run anyway'
 button as seen in the following image:
@@ -161,35 +161,35 @@ button as seen in the following image:
 #+attr_org: :width 200px
 #+attr_html: :width 350px
 #+attr_latex: :width 200px
-[[file:~/my_git/sac-format/screenshots/Windows/warning_2_install.png]]
+[[file:./screenshots/Windows/warning_2_install.png]]
 
 Then the installer will open and present you with the welcome screen:
 
 #+attr_org: :width 300px
 #+attr_html: :width 500px
 #+attr_latex: :width 300px
-[[file:~/my_git/sac-format/screenshots/Windows/intro_install.png]]
+[[file:./screenshots/Windows/intro_install.png]]
 
 By default, sac-format installs in =C:/Program Files/sac-format= as seen in the screen below:
 
 #+attr_org: :width 300px
 #+attr_html: :width 500px
 #+attr_latex: :width 300px
-[[file:~/my_git/sac-format/screenshots/Windows/location_install.png]]
+[[file:./screenshots/Windows/location_install.png]]
 
 Because all programs in sac-format are command-line based feel free to disable Start Menu shortcuts:
 
 #+attr_org: :width 300px
 #+attr_html: :width 500px
 #+attr_latex: :width 300px
-[[file:~/my_git/sac-format/screenshots/Windows/no_shortcuts_install.png]]
+[[file:./screenshots/Windows/no_shortcuts_install.png]]
 
 Upon successful install of sac-format you will see this window:
 
 #+attr_org: :width 300px
 #+attr_html: :width 500px
 #+attr_latex: :width 300px
-[[file:~/my_git/sac-format/screenshots/Windows/successful_install.png]]
+[[file:./screenshots/Windows/successful_install.png]]
 
 *** macOS
 
@@ -206,19 +206,19 @@ By default, macOS will block the installer. To install, right-click on
 #+attr_org: :width 250px
 #+attr_html: :width 400px
 #+attr_latex: :width 250px
-[[file:~/my_git/sac-format/screenshots/macOS/warning_install.png]]
+[[file:./screenshots/macOS/warning_install.png]]
 
 Simply click 'Open' and the installer will begin from the first screen:
 #+attr_org: :width 400px
 #+attr_html: :width 600px
 #+attr_latex: :width 400px
-[[file:~/my_git/sac-format/screenshots/macOS/intro_install.png]]
+[[file:./screenshots/macOS/intro_install.png]]
 
 Upon successfull installation you will see:
 #+attr_org: :width 400px
 #+attr_html: :width 600px
 #+attr_latex: :width 400px
-[[file:~/my_git/sac-format/screenshots/macOS/successful_install.png]]
+[[file:./screenshots/macOS/successful_install.png]]
 
 **** Command line
 

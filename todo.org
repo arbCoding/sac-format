@@ -63,13 +63,13 @@ leven(false) and iftype(<1), but data2 exists, clear it.
 **** TODO depmin/depmen/depmax
 *** TODO String setters should be limited in length
 Same rules apply as for the strings themselves.
-** TODO Installers
+** DONE Installers
 *** DONE Windows
 *** DONE macOS
-*** TODO Linux
+*** DONE Linux
 **** DONE Gzipped Tar Archive
-**** TODO RPM
-**** TODO DEB
+**** DONE RPM
+**** DONE DEB
 ** DONE Refactor Trace :refactor:
 *** DONE Remove boost dependency
 The only reason I need boost is for boost::algorithm::trim(); to remove leading
