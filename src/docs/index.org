@@ -55,6 +55,8 @@ Download [[https://github.com/arbCoding/sac-format/releases][sac-format]] from t
 
 [[https://arbcoding.github.io/sac-format/sac-format_manual.pdf][Download]] an offline version of the documentation (PDF).
 
+Get [[https://github.com/arbCoding/sac-format/discussions/][help]] from the community forum.
+
 ** Why sac-format
 
 sac-format is Free and Open Source Software (FOSS) released under the MIT

@@ -86,6 +86,8 @@ install(TARGETS benchmark RUNTIME DESTINATION bin/tests COMPONENT benchmarks)
 install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
 if(CPACK_GENERATOR MATCHES "productbuild")
   # macOS
+  set(CPACK_RESOURCE_FILE_README ${sac-format_SOURCE_DIR}/installers/macOS/Readme.txt)
+  set(CPACK_RESOURCE_FILE_WELCOME ${sac-format_SOURCE_DIR}/installers/macOS/Welcome.txt)
   install(FILES ${sac-format_SOURCE_DIR}/License.txt DESTINATION . COMPONENT license)
   set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/License2.txt)
   set(CPACK_SET_DESTDIR "ON")
@@ -93,6 +95,11 @@ else()
   # Windows/Linux
   install(FILES ${sac-format_SOURCE_DIR}/LICENSE DESTINATION . COMPONENT license)
   set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/LICENSE)
+endif()
+
+if(CPACK_GENERATOR MATCHES "NSIS")
+  set(CPACK_RESOURCE_FILE_README ${sac-format_SOURCE_DIR}/installers/Windows/Readme.txt)
+  set(CPACK_RESOURCE_FILE_WELCOME ${sac-format_SOURCE_DIR}/installers/Windows/Welcome.txt)
 endif()
 # Group components
 cpack_add_component(library DISPLAY_NAME "sac-format" GROUP development
