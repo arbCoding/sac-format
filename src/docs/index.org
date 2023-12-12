@@ -225,7 +225,7 @@ Upon successfull installation you will see:
 Command line installation is performed either using the self-extrating archive
 or by manually extracting the gzipped tar archive.
 
-***** Self-extracting Archive
+***** Self-Extracting Archive
 
 #+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
 #+begin_src bash :returns code :eval no
@@ -244,10 +244,23 @@ architectures, respectively (for example: =sac-format-0.4.0-Darwin-x86_64.sh=).
 #+begin_src bash :returns code :eval no
 # Check the sha512 checksum
 sha512sum -c sac-format-<version>-Darwin-<arch>.tar.gz.sha512
-bash sac-format-<version>-Darwin-<arch>.tar.gz
+# Extract Gzipped tar archive
+tar -xzf sac-format-<version>-Darwin-<arch>.tar.gz
 #+end_src
 
 *** Linux
+
+sac-format provides four different command line installation methods on Linux.
+
+[[https://www.debian.org/][Debian]] based distributions (for example: Debian, Ubuntu, Linux Mint) can use the
+Debian Archive.
+
+[[https://www.redhat.com/][RedHat]] based distributions (for example: RedHat, Fedora, CentOS) can use the RPM
+Archive.
+
+All distributions can use the Self-Extracting Archive.
+
+All distributions can use the Gzipped Tar Archive.
 
 ***** Debian Archive
 
@@ -269,12 +282,25 @@ sha512sum -c sac-format.rpm.sha512
 sudo rpm -i sac-format.rpm
 #+end_src
 
+***** Self-Extrating Archive
 
 #+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
 #+begin_src bash :returns code :eval no
-# Ceck the sha512 checksum
-sha512sum -c sac-format-<version>-Linux-<arch>tar.gz.sha512
-bash sac-format-<version>-Linux-<arch>.tar.gz
+# Check the sha512 checksum
+sha512sum -c sac-format-<version>-Linux-<arch>.sh.sha512
+# Run self-extrating archive
+bash sac-format-<version>-Linux-<arch>.sh
+#+end_src
+
+
+***** Gzipped Tar Archive
+
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
+#+begin_src bash :returns code :eval no
+# Check the sha512 checksum
+sha512sum -c sac-format-<version>-Linux-<arch>.tar.gz.sha512
+# Extract gzipped tar archive
+tar -xzf sac-format-<version>-Linux-<arch>.tar.gz
 #+end_src
 
 ** Build Instructions
