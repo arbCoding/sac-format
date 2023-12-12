@@ -21,12 +21,26 @@
          :base-extension "org"
          :publishing-directory "./docs/"
          :publishing-function org-html-publish-to-html)
+        ("png-windows"
+         :base-directory "./src/docs/screenshots/Windows"
+         :base-extension "png"
+         :publishing-directory "./docs/screenshots/Windows"
+         :publishing-function org-publish-attachment)
+        ("png-macos"
+         :base-directory "./src/docs/screenshots/macOS"
+         :base-extension "png"
+         :publishing-directory "./docs/screenshots/macOS"
+         :publishing-function org-publish-attachment)
         ("pdf"
          :base-directory "./src/docs"
          :base-extension "org"
          :publishing-directory "./docs/"
          :publishing-function org-latex-publish-to-pdf)
-        ("arbCoding.github.io/sac-format" :components ("html", "pdf"))))
+        ("arbCoding.github.io/sac-format"
+         :components ("html",
+                      "png-windows",
+                      "png-macos",
+                      "pdf"))))
 
 ;; Generate the site output
 (org-publish-all t)
