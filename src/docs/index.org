@@ -157,13 +157,61 @@ sac-format provides both command line and graphical installers on macOS.
 
 **** Graphical
 
-The graphical installer is =sac-format.pkg= and will walk you through the installation process. *NOTE*: the default installation location is =/opt/sac-format=.
+The graphical installer is =sac-format.pkg= and will walk you through the
+installation process. *NOTE*: the default installation location is
+=/opt/sac-format=.
+
+By default, macOS will block the installer. To install, right-click on
+=sac-format.pkg= and select open. A warning will pop up that looks like:
+#+attr_org: :width 250px
+#+attr_html: :width 400px
+#+attr_latex: :width 250px
+[[file:~/my_git/sac-format/screenshots/macOS/warning_install.png]]
+
+Simply click 'Open' and the installer will begin from the first screen:
+#+attr_org: :width 400px
+#+attr_html: :width 600px
+#+attr_latex: :width 400px
+[[file:~/my_git/sac-format/screenshots/macOS/intro_install.png]]
+
+Upon successfull installation you will see:
+#+attr_org: :width 400px
+#+attr_html: :width 600px
+#+attr_latex: :width 400px
+[[file:~/my_git/sac-format/screenshots/macOS/successful_install.png]]
 
 **** Command line
 
+***** Self-extracting Archive
 
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
+#+begin_src bash :returns code :eval no
+# Check the sha512 checksum
+sha512sum -c sac-format-<version>-Darwin-<arch>.sh.sha512
+# Run self-extracting archive
+bash sac-format-<version>-Darwin-<arch>.sh
+#+end_src
+
+Be sure to replace =<version>= and =<arch>= with the correct versions and
+architectures, respectively (for example: =sac-format-0.4.0-Darwin-x86_64.sh=).
+
+***** Gzipped Tar Archive
+
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
+#+begin_src bash :returns code :eval no
+# Check the sha512 checksum
+sha512sum -c sac-format-<version>-Darwin-<arch>.tar.gz.sha512
+bash sac-format-<version>-Darwin-<arch>.tar.gz
+#+end_src
 
 *** Linux
+
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
+#+begin_src bash :returns code :eval no
+# Ceck the sha512 checksum
+sha512sum -c sac-format-<version>-Linux-<arch>tar.gz.sha512
+bash sac-format-<version>-Linux-<arch>.tar.gz
+#+end_src
 
 ** Build Instructions
 
