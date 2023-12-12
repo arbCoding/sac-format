@@ -43,6 +43,7 @@
 #+latex_compiler: pdflatex
 # Special options only for latex export
 #+MACRO: options_latex (eval (if (org-export-derived-backend-p org-export-current-backend 'latex) "#+OPTIONS: H:2 title:nil toc:nil"))
+#+HTML_HEAD_EXTRA: <style> .figure p {text-align: center;}</style>
 
 {{{options_latex}}}
 

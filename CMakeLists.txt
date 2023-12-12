@@ -81,10 +81,25 @@ catch_discover_tests(utests)
 #===============================================================================
 # Setup components
 install(TARGETS sac-format COMPONENT library)
-install(TARGETS utests RUNTIME DESTINATION bin COMPONENT tests)
-install(TARGETS benchmark RUNTIME DESTINATION bin COMPONENT benchmarks)
+install(TARGETS utests RUNTIME DESTINATION bin/tests COMPONENT tests)
+install(TARGETS benchmark RUNTIME DESTINATION bin/tests COMPONENT benchmarks)
 install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
-install(FILES ${sac-format_SOURCE_DIR}/LICENSE DESTINATION . COMPONENT license)
+if(CPACK_GENERATOR MATCHES "productbuild")
+  # macOS
+  set(CPACK_RESOURCE_FILE_README
+    ${sac-format_SOURCE_DIR}/installers/macOS/Readme.txt)
+  set(CPACK_RESOURCE_FILE_WELCOME
+    ${sac-format_SOURCE_DIR}/installers/macOS/Welcome.txt)
+  install(FILES ${sac-format_SOURCE_DIR}/License.txt DESTINATION .
+    COMPONENT license)
+  set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/License2.txt)
+  set(CPACK_SET_DESTDIR "ON")
+else()
+  # Windows/Linux
+  install(FILES ${sac-format_SOURCE_DIR}/LICENSE DESTINATION .
+    COMPONENT license)
+  set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/LICENSE)
+endif()
 # Group components
 cpack_add_component(library DISPLAY_NAME "sac-format" GROUP development
   DESCRIPTION "sac-format library to use in your own programs.")
@@ -102,9 +117,7 @@ cpack_add_component(license DISPLAY_NAME "license"
 set(CPACK_COMPONENT_license_HIDDEN TRUE)
 set(CPACK_COMPONENT_license_REQUIRED TRUE)
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "sac-format")
-set(CPACK_PACKAGE_VENDOR "Alexander R. Blanchette")
-# Added license
-set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/LICENSE)
+set(CPACK_PACKAGE_VENDOR "Alexander R. Blanchette <arbCoding@gmail.com>")
 # Allow separating components instead of monolithic
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 # Meta-data
@@ -127,4 +140,19 @@ set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 # Windows Specific NSIS installer
 set(CPACK_NSIS_HELP_LINK "https://arbCoding.github.io/sac-format/")
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+# Debian Specific
+# Installs into /usr (tests go into /usr/bin/tests)
+# libsac-format.a goes into /usr/lib64
+# sac-format.hpp goes into /usr/include
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
+set(CPACK_DEB_COMPONENT_INSTALL ON)
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Alexander R. Blanchette \
+<arbCoding@gmail.com>")
+# RedHat Specific
+# Installs into /usr (tests go into /usr/bin/tests)
+# libsac-format.a goes into /usr/lib64
+# sac-format.hpp goes into /usr/include
+set(CPACK_RPM_COMPONENT_INSTALL ON)
+# Don't strip binaries
+set(CPACK_RPM_SPEC_MORE_DEFINE "%define __spec_install_post /bin/true")
 include(CPack)

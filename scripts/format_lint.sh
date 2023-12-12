@@ -1,6 +1,7 @@
 #!/bin/dash
-base=$(pwd)
-
+scripts=$(pwd)
+base=$(pwd)/..
+cd "$base" || exit
 ct_cmd () {
     clang-tidy --checks="bugprone-*,performance-*,readability-*,portability-*,\
         clang-analyzer-*,cpp-coreguidelines-*,modernize-a*,modernize-c*,\
@@ -56,6 +57,7 @@ echo ""
 echo "Done"
 echo ""
 echo "Running shellcheck on *.sh"
-shellcheck "$base/"*.sh
+shellcheck "$scripts/"*.sh
 echo ""
 echo "Done"
+cd "$scripts" || exit

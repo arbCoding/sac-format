@@ -10,6 +10,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Prep License File for Distribution
+      run: |
+        fold -s LICENSE > LICENSE2
+        mv LICENSE2 LICENSE
+
     - name: Configure CMake
       run: cmake --preset gh-ubuntu-release
 
@@ -20,9 +25,21 @@ jobs:
       working-directory: ${{github.workspace}}/build/release/gh-ubuntu
       run: ctest
 
-    - name: Package
+    - name: Package tar.gz
       working-directory: ${{github.workspace}}/build/release/gh-ubuntu
       run: cpack
+
+    - name: Package .deb
+      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+      run: |
+        cmake -DCPACK_GENERATOR=DEB .
+        cpack -G DEB
+
+    - name: Package .rpm
+      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+      run: |
+        cmake -DCPACK_GENERATOR=RPM .
+        sudo cpack -G RPM
 
     - name: Archive Build Artifacts
       uses: actions/upload-artifact@v3
@@ -31,4 +48,6 @@ jobs:
         path: |
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.tar.gz*
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.sh*
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format.deb*
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format.rpm*
         retention-days: 1

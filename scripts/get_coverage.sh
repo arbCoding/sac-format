@@ -1,5 +1,7 @@
 #!/bin/dash
-base=$(pwd)
+script=$(pwd)
+base=$(pwd)/..
+cd "$base" || exit
 # Cleanup
 if [ -e "$base/coverage" ]; then
     rm -r "$base/coverage"
@@ -24,4 +26,4 @@ lcov -r ./sac-format.lcov "/usr*" -o ./sac-format.lcov
 genhtml --demangle-cpp sac-format.lcov -o coverage --num-spaces 4
 # Move the coverage files
 mv ./coverage "$base/coverage"
-cd "$base" || exit
+cd "$script" || exit

@@ -1,0 +1,9 @@
+This will install the sac-format library on your macOS computer.
+
+----------------------------------------------------------------------
+
+Thank you for trying out sac-format!
+
+If you have any questions, please ask it on the sac-format community forum:
+
+https://github.com/arbCoding/sac-format/discussions/
