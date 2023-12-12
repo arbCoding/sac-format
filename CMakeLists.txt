@@ -87,7 +87,7 @@ install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
 if(CPACK_GENERATOR MATCHES "productbuild")
   # macOS
   install(FILES ${sac-format_SOURCE_DIR}/License.txt DESTINATION . COMPONENT license)
-  set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/License.txt)
+  set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/License2.txt)
   set(CPACK_SET_DESTDIR "ON")
 else()
   # Windows/Linux

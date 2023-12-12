@@ -10,6 +10,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Prep License file
+      run: |
+        fold -s LICENSE > LICENSE2
+        mv LICENSE2 LICENSE
+
     - name: Configure CMake
       run: cmake --preset gh-ubuntu-release
 
