@@ -81,10 +81,19 @@ catch_discover_tests(utests)
 #===============================================================================
 # Setup components
 install(TARGETS sac-format COMPONENT library)
-install(TARGETS utests RUNTIME DESTINATION bin COMPONENT tests)
-install(TARGETS benchmark RUNTIME DESTINATION bin COMPONENT benchmarks)
+install(TARGETS utests RUNTIME DESTINATION bin/tests COMPONENT tests)
+install(TARGETS benchmark RUNTIME DESTINATION bin/tests COMPONENT benchmarks)
 install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
-install(FILES ${sac-format_SOURCE_DIR}/License.txt DESTINATION . COMPONENT license)
+if(CPACK_GENERATOR MATCHES "productbuild")
+  # macOS
+  install(FILES ${sac-format_SOURCE_DIR}/License.txt DESTINATION . COMPONENT license)
+  set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/License.txt)
+  set(CPACK_SET_DESTDIR "ON")
+else()
+  # Windows/Linux
+  install(FILES ${sac-format_SOURCE_DIR}/LICENSE DESTINATION . COMPONENT license)
+  set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/LICENSE)
+endif()
 # Group components
 cpack_add_component(library DISPLAY_NAME "sac-format" GROUP development
   DESCRIPTION "sac-format library to use in your own programs.")
@@ -103,8 +112,6 @@ set(CPACK_COMPONENT_license_HIDDEN TRUE)
 set(CPACK_COMPONENT_license_REQUIRED TRUE)
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "sac-format")
 set(CPACK_PACKAGE_VENDOR "Alexander R. Blanchette")
-# Added license
-set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/License.txt)
 # Allow separating components instead of monolithic
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 # Meta-data
@@ -127,7 +134,4 @@ set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 # Windows Specific NSIS installer
 set(CPACK_NSIS_HELP_LINK "https://arbCoding.github.io/sac-format/")
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
-if(CPACK_GENERATOR MATCHES "productbuild")
-  set(CPACK_SET_DESTDIR "ON")
-endif()
 include(CPack)
