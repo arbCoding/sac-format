@@ -30,7 +30,7 @@ jobs:
       run: cpack
 
     - name: Package .deb
-      working_directory: ${{github.workspace}}/build/release/gh-ubuntu
+      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
       run: |
         cmake -DCPACK_GENERATOR=DEB .
         cpack -G DEB
