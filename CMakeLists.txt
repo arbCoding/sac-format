@@ -117,7 +117,7 @@ cpack_add_component(license DISPLAY_NAME "license"
 set(CPACK_COMPONENT_license_HIDDEN TRUE)
 set(CPACK_COMPONENT_license_REQUIRED TRUE)
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "sac-format")
-set(CPACK_PACKAGE_VENDOR "Alexander R. Blanchette")
+set(CPACK_PACKAGE_VENDOR "Alexander R. Blanchette <arbCoding@gmail.com>")
 # Allow separating components instead of monolithic
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 # Meta-data
@@ -140,4 +140,13 @@ set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 # Windows Specific NSIS installer
 set(CPACK_NSIS_HELP_LINK "https://arbCoding.github.io/sac-format/")
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+# Debian Specific
+# Installs into /usr (tests go into /usr/bin/tests)
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
+set(CPACK_DEB_COMPONENT_INSTALL ON)
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Alexander R. Blanchette \
+<arbCoding@gmail.com>")
+# RedHat Specific
+set(CPACK_RPM_COMPONENT_INSTALL ON)
+
 include(CPack)

@@ -25,9 +25,15 @@ jobs:
       working-directory: ${{github.workspace}}/build/release/gh-ubuntu
       run: ctest
 
-    - name: Package
+    - name: Package tar.gz
       working-directory: ${{github.workspace}}/build/release/gh-ubuntu
       run: cpack
+
+    - name: Package .deb
+      working_directory: ${{github.workspace}}/build/release/gh-ubuntu
+      run: |
+        cmake -DCPACK_GENERATOR=DEB .
+        cpack -G DEB
 
     - name: Archive Build Artifacts
       uses: actions/upload-artifact@v3
@@ -36,4 +42,5 @@ jobs:
         path: |
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.tar.gz*
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.sh*
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format.deb*
         retention-days: 1

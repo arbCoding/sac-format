@@ -182,6 +182,10 @@ Upon successfull installation you will see:
 
 **** Command line
 
+***** Debian Archive
+
+***** RPM Archive
+
 ***** Self-extracting Archive
 
 #+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
