@@ -13,7 +13,7 @@ emacs -Q --script "$scripts/make_docs.el"
 # Time to shrink the files!
 echo "\nMinify-ing files!"
 cd "$base/docs/" || exit
-#ls -1 | grep html | parallel 'minify {} -o {}.new; mv {}.new {}'
+ls -1 | grep html | parallel 'minify {} -o {}.new; mv {}.new {}'
 cd "$base" || exit
 
 # Cleanup
