@@ -19,30 +19,39 @@ jobs:
       working-directory: ${{github.workspace}}/build/
       run: cpack
 
+    - name: Get Info
+      working-directory: ${{github.workspace}}/build/
+      run: |
+        file=$(ls -1 | grep sac-format | grep tar.gz | grep -v sha512)
+        version=$(echo $file | awk -F - '{print $3}')
+        arch=$(echo $file | awk -F - '{print $5}' | awk -F . '{print $1}')
+        echo "version=$version" >> $GITHUB_ENV
+        echo "arch=$arch" >> GITHUB_ENV
+
     - name: Upload tar.gz to release
       uses: JasonEtco/upload-to-release@master
       with:
-        args: ${{github.workspace}}/build/sac-format-?.?.?-Linux-*.tar.gz application/zip
+        args: ${{github.workspace}}/build/sac-format-${{ env.version }}-Linux-${{ env.arch }}.tar.gz application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload tar.gz.sha512 to release
       uses: JasonEtco/upload-to-release@master
       with:
-        args: ${{github.workspace}}/build/sac-format-?.?.?-Linux-*.tar.gz.sha512 text/plain
+        args: ${{github.workspace}}/build/sac-format-${{ env.version }}-Linux-${{ env.arch }}.tar.gz.sha512 text/plain
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload .sh to release
       uses: JasonEtco/upload-to-release@master
       with:
-        args: ${{github.workspace}}/build/sac-format-?.?.?-Linux-*.sh application/zip
+        args: ${{github.workspace}}/build/sac-format-${{ env.version }}-Linux-${{ env.arch }}.sh application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Uplaod .sh.sha512 to release
       uses: JasonEtco/upload-to-release@master
       with:
-        args: ${{github.workspace}}/build/sac-format-?.?.?-Linux-*.sh.sha512 text/plain
+        args: ${{github.workspace}}/build/sac-format-${{ env.version }}-Linux-${{ env.arch }}.sh.sha512 text/plain
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
