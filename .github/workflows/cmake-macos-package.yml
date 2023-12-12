@@ -12,8 +12,8 @@ jobs:
 
     - name: Prep License file
       run: |
-        cp LICENSE License.txt
-        fold -s LICENSE > License2.txt
+        cp LICENSE License2.txt
+        fold -s LICENSE > License.txt
 
     - name: Configure CMake
       run: cmake --preset gh-ubuntu-release

@@ -7,8 +7,8 @@ cd "$base" || exit
 if [ -e "$base/build/release/clang" ]; then
     rm -rf "$base/build/release/clang"
 fi
-cp "$base/LICENSE" "$base/License.txt"
-fold -s "$base/LICENSE" > "$base/License2.txt"
+cp "$base/LICENSE" "$base/License2.txt"
+fold -s "$base/LICENSE" > "$base/License.txt"
 # Prep the build
 cmake -DCPACK_GENERATOR=productbuild \
     -DCMAKE_INSTALL_PREFIX=/opt/sac-format \
