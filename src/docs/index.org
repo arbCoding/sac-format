@@ -161,7 +161,7 @@ cmake --build ./build/release/clang
 *** Use
 
 To use link to the compiled library (=libsac-format.a= on Linux/macOS,
-=libsac-format.lib= on Windows) and include =src/sac_format.hpp=.
+=sac-format.lib= on Windows) and include =src/sac_format.hpp=.
 
 ** Example Programs
 
