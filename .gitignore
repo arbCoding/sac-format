@@ -74,5 +74,13 @@ coverage/*
 # Infer
 infer-out/*
 
+# macOS productbuild
+CMakeFiles/*
+*.cmake
+DART*.tcl
+_deps/*
+CMakeCache.txt
+*.pkg
+
 # minted
 **/_minted-index/*
