@@ -35,6 +35,12 @@ jobs:
         cmake -DCPACK_GENERATOR=DEB .
         cpack -G DEB
 
+    - name: Package .rpm
+      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+      run: |
+        cmake -DCPACK_GENERATOR=RPM .
+        sudo cpack -G RPM
+
     - name: Archive Build Artifacts
       uses: actions/upload-artifact@v3
       with:
@@ -43,4 +49,5 @@ jobs:
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.tar.gz*
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.sh*
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format.deb*
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format.rpm*
         retention-days: 1

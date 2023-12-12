@@ -142,11 +142,17 @@ set(CPACK_NSIS_HELP_LINK "https://arbCoding.github.io/sac-format/")
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 # Debian Specific
 # Installs into /usr (tests go into /usr/bin/tests)
+# libsac-format.a goes into /usr/lib64
+# sac-format.hpp goes into /usr/include
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Alexander R. Blanchette \
 <arbCoding@gmail.com>")
 # RedHat Specific
+# Installs into /usr (tests go into /usr/bin/tests)
+# libsac-format.a goes into /usr/lib64
+# sac-format.hpp goes into /usr/include
 set(CPACK_RPM_COMPONENT_INSTALL ON)
-
+# Don't strip binaries
+set(CPACK_RPM_SPEC_MORE_DEFINE "%define __spec_install_post /bin/true")
 include(CPack)

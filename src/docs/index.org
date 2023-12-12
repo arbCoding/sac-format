@@ -143,13 +143,53 @@ ensure the file is safe (for example: =sac-format.pkg= corresponds to
 
 *** Windows
 
-sac-format provides a graphical installer on Windows (=sac-format.exe=)\ast{}.
+sac-format provides a graphical installer on Windows (=sac-format.exe=).
 
-\ast{} You will get a warning from Windows Defender that this is from an unknown
-developer. To run the installer you'll need to click on 'More Info' and then
-agree to run anyway. If you're unsure of the provenance of the file, be sure to
-only download from the [[https://github.com/arbCoding/sac-format/releases][releases]] page and to check the sha512 checksum of the
-installer ([[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7.4][more info here]]) against =sac-format.exe.sha512=.
+Always check the sha512 checksum value of the installer (=sac-format.exe=; [[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7.4][more
+info here]]) against =sac-format.exe.sha512=.
+
+By default, Microsoft Defender will block the installer with a pop-up like that one below:
+
+#+attr_org: :width 200px
+#+attr_html: :width 350px
+#+attr_latex: :width 200px
+[[file:~/my_git/sac-format/screenshots/Windows/warning_1_install.png]]
+
+To continue the install, click on the 'More Info' link and then the 'Run anyway'
+button as seen in the following image:
+
+#+attr_org: :width 200px
+#+attr_html: :width 350px
+#+attr_latex: :width 200px
+[[file:~/my_git/sac-format/screenshots/Windows/warning_2_install.png]]
+
+Then the installer will open and present you with the welcome screen:
+
+#+attr_org: :width 300px
+#+attr_html: :width 500px
+#+attr_latex: :width 300px
+[[file:~/my_git/sac-format/screenshots/Windows/intro_install.png]]
+
+By default, sac-format installs in =C:/Program Files/sac-format= as seen in the screen below:
+
+#+attr_org: :width 300px
+#+attr_html: :width 500px
+#+attr_latex: :width 300px
+[[file:~/my_git/sac-format/screenshots/Windows/location_install.png]]
+
+Because all programs in sac-format are command-line based feel free to disable Start Menu shortcuts:
+
+#+attr_org: :width 300px
+#+attr_html: :width 500px
+#+attr_latex: :width 300px
+[[file:~/my_git/sac-format/screenshots/Windows/no_shortcuts_install.png]]
+
+Upon successful install of sac-format you will see this window:
+
+#+attr_org: :width 300px
+#+attr_html: :width 500px
+#+attr_latex: :width 300px
+[[file:~/my_git/sac-format/screenshots/Windows/successful_install.png]]
 
 *** macOS
 
@@ -182,9 +222,8 @@ Upon successfull installation you will see:
 
 **** Command line
 
-***** Debian Archive
-
-***** RPM Archive
+Command line installation is performed either using the self-extrating archive
+or by manually extracting the gzipped tar archive.
 
 ***** Self-extracting Archive
 
@@ -209,6 +248,27 @@ bash sac-format-<version>-Darwin-<arch>.tar.gz
 #+end_src
 
 *** Linux
+
+***** Debian Archive
+
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
+#+begin_src bash :returns code :eval no
+# Check the sha512 checksum
+sha512sum -c sac-format.deb.sha512
+# Install using apt
+sudo apt install ./sac-format.deb
+#+end_src
+
+***** RPM Archive
+
+#+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
+#+begin_src bash :returns code :eval no
+# Check the sha512 checksum
+sha512sum -c sac-format.rpm.sha512
+# Install using rpm
+sudo rpm -i sac-format.rpm
+#+end_src
+
 
 #+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
 #+begin_src bash :returns code :eval no
