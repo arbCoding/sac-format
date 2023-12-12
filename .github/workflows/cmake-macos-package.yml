@@ -18,11 +18,6 @@ jobs:
     - name: Configure CMake
       run: cmake --preset gh-ubuntu-release
 
-    - name: Prep License File for Distribution
-      run: |
-        cp LICENSE License2.txt
-        fold -s LICENSE > License.txt
-
     - name: Build
       run: cmake --build ${{github.workspace}}/build/release/gh-ubuntu
 
