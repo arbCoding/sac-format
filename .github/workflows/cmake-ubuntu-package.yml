@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Prep License file
+    - name: Prep License File for Distribution
       run: |
         fold -s LICENSE > LICENSE2
         mv LICENSE2 LICENSE

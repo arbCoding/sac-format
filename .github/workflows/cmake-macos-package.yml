@@ -18,6 +18,10 @@ jobs:
     - name: Configure CMake
       run: cmake --preset gh-ubuntu-release
 
+    - name: Prep License File for Distribution
+      run: |
+        cp LICENSE License2.txt
+        fold -s LICENSE > License.txt
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build/release/gh-ubuntu
@@ -26,9 +30,15 @@ jobs:
       working-directory: ${{github.workspace}}/build/release/gh-ubuntu
       run: ctest
 
-    - name: Package
+    - name: Package CLI Installers
       working-directory: ${{github.workspace}}/build/release/gh-ubuntu
       run: cpack
+
+    - name: Package GUI Installer
+      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+      run: |
+        cmake -DCPACK_GENERATOR=productbuild -DCMAKE_INSTALL_PREFIX=/opt/sac-format .
+        cpack -G productbuild
 
     - name: Archive Build Artifacts
       uses: actions/upload-artifact@v3
@@ -37,4 +47,5 @@ jobs:
         path: |
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.tar.gz*
           ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.sh*
+          ${{github.workspace}}/build/release/gh-ubuntu/sac-format.pkg*
         retention-days: 1

@@ -86,9 +86,9 @@ performs on your system. See the [[Benchmarking][Benchmarking]] section for more
 *** Easy
 
 sac-format is *easy*---single-header makes integration in any project simple.
-Building is a breeze with [[https://cmake.org/][CMake]], even on different platforms. Object-oriented
-design makes use easy and intuitive. See the [[Quickstart][Quickstart]] section to get up and
-running.
+Installation is easy with our automatic installers. Building is a breeze with
+[[https://cmake.org/][CMake]], even on different platforms. Object-oriented design makes use easy and
+intuitive. See the [[Quickstart][Quickstart]] section to get up and running.
 
 *** Small
 
@@ -133,14 +133,44 @@ confirmed working---they're used to build the =Trace= class!
 
 * Quickstart
 
-** Manual Instructions
+** Installation
 
-*** Build Instructions
+The easiest way to use sac-format is to install it via the automatic installers.
+Installers for the latest release are located [[https://github.com/arbCoding/sac-format/releases/latest][here]]. Be sure to check the sha512
+checksum of the installer against its correspondingly named =.sha515= file to
+ensure the file is safe (for example: =sac-format.pkg= corresponds to
+=sac-format.pkg.sha512=).
+
+*** Windows
+
+sac-format provides a graphical installer on Windows (=sac-format.exe=)\ast{}.
+
+\ast{} You will get a warning from Windows Defender that this is from an unknown
+developer. To run the installer you'll need to click on 'More Info' and then
+agree to run anyway. If you're unsure of the provenance of the file, be sure to
+only download from the [[https://github.com/arbCoding/sac-format/releases][releases]] page and to check the sha512 checksum of the
+installer ([[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7.4][more info here]]) against =sac-format.exe.sha512=.
+
+*** macOS
+
+sac-format provides both command line and graphical installers on macOS.
+
+**** Graphical
+
+The graphical installer is =sac-format.pkg= and will walk you through the installation process. *NOTE*: the default installation location is =/opt/sac-format=.
+
+**** Command line
+
+
+
+*** Linux
+
+** Build Instructions
 
 Building is as easy as cloning the repository, running CMake for your preferred
 build tool, and then building.
 
-**** GCC
+*** GCC
 
 #+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
 #+begin_src bash :returns code :eval no
@@ -149,7 +179,7 @@ cmake --preset gcc-release
 cmake --build ./build/release/gcc
 #+end_src
 
-**** Clang
+*** Clang
 
 #+attr_latex: :options frame=lines, framesep=2mm, baselinestretch=1.2, fontsize=\footnotesize, bgcolor=LightGray
 #+begin_src bash :returns code :eval no
@@ -158,10 +188,10 @@ cmake --preset clang-release
 cmake --build ./build/release/clang
 #+end_src
 
-*** Use
+** Use
 
 To use link to the compiled library (=libsac-format.a= on Linux/macOS,
-=sac-format.lib= on Windows) and include =src/sac_format.hpp=.
+=sac-format.lib= on Windows) and include =sac_format.hpp=.
 
 ** Example Programs
 
