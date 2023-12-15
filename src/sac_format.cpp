@@ -1,6 +1,6 @@
 // Copyright 2023 Alexander R. Blanchette
 
-#include <sac_format.hpp>
+#include "sac_format.hpp"
 
 // Implementation of the interface in sac_format.hpp
 namespace sacfmt {

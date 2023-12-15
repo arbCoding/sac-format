@@ -22,7 +22,7 @@ FetchContent_Declare(xoshiro
   GIT_TAG v1.1)
 FetchContent_MakeAvailable(Catch2 xoshiro)
 # Include Xoshiro since it doesn't have a CMakeLists.txt
-include_directories(${xoshiro_SOURCE_DIR})
+include_directories(SYSTEM ${xoshiro_SOURCE_DIR})
 #==============================================================================
 # sac-format
 #==============================================================================
@@ -76,6 +76,18 @@ list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 include(CTest)
 include(Catch)
 catch_discover_tests(utests)
+#===============================================================================
+# Release preparation
+#===============================================================================
+if (UNIX AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
+  set(Exes utests benchmark list_sac)
+  foreach(program ${Exes})
+    message(STATUS "\n ${program} will be stripped to reduce filesize.\n")
+    add_custom_command(TARGET ${program}
+      COMMAND strip "$<TARGET_FILE:${program}>"
+      VERBATIM)
+  endforeach()
+endif()
 #===============================================================================
 # CPack Installation
 #===============================================================================
