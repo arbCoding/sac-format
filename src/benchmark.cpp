@@ -1,17 +1,20 @@
 // Copyright 2023 Alexander R. Blanchette
 
+#include "sac-format/sac_format.hpp"
+#include "sac-format/util.hpp"
+// Catch2 https://github.com/catchorg/Catch2/tree/v3.4.0
+#define CATCH_CONFIG_FAST_COMPILE
+#define CATCH_CONFIG_MAIN
+// BENCHMARK
+#include <catch2/benchmark/catch_benchmark.hpp>
+// testing macros
+// TEST_CASE, SECTION,
+#include <catch2/catch_test_macros.hpp>
+// Standard Library
+//   https://en.cppreference.com/w/cpp/standard_library
 #include <bitset>
 #include <iomanip>
 #include <limits>
-
-#define CATCH_CONFIG_FAST_COMPILE
-#define CATCH_CONFIG_MAIN
-
-#include <catch2/benchmark/catch_benchmark.hpp>
-#include <catch2/catch_test_macros.hpp>
-
-#include <sac_format.hpp>
-#include <util.hpp>
 
 using namespace sacfmt;
 namespace fs = std::filesystem;
@@ -31,23 +34,23 @@ TEST_CASE("Binary Conversion") {
       };
     }
     SECTION("Negative") {
-      BENCHMARK("Int->Binary INT_MIN") { return int_to_binary(INT_MIN); };
-      BENCHMARK("Int->Binary->Int INT_MIN") {
-        return binary_to_int(int_to_binary(INT_MIN));
+      BENCHMARK("Int->Binary lowest_i") { return int_to_binary(lowest_i); };
+      BENCHMARK("Int->Binary->Int lowest_i") {
+        return binary_to_int(int_to_binary(lowest_i));
       };
     }
     SECTION("Positive") {
-      BENCHMARK("Int->Binary INT_MAX") { return int_to_binary(INT_MAX); };
-      BENCHMARK("Int->Binary->Int INT_MAX") {
-        return binary_to_int(int_to_binary(INT_MAX));
+      BENCHMARK("Int->Binary highest_i") { return int_to_binary(highest_i); };
+      BENCHMARK("Int->Binary->Int highest_i") {
+        return binary_to_int(int_to_binary(highest_i));
       };
     }
   }
   SECTION("Floats") {
     SECTION("Zero") {
-      BENCHMARK("Float->Binary 0.0f") { return float_to_binary(0.0f); };
-      BENCHMARK("Float->Binary->Float 0.0f") {
-        return binary_to_float(float_to_binary(0.0f));
+      BENCHMARK("Float->Binary 0.0F") { return float_to_binary(0.0F); };
+      BENCHMARK("Float->Binary->Float 0.0F") {
+        return binary_to_float(float_to_binary(0.0F));
       };
     }
     SECTION("Negative") {
@@ -79,22 +82,22 @@ TEST_CASE("Binary Conversion") {
     SECTION("Negative") {
       BENCHMARK("Double->Binary->Double"
                 " std::numeric_limits<double>::lowest()") {
-        return binary_to_double(double_to_binary(lowest));
+        return binary_to_double(double_to_binary(lowest_d));
       };
-      CAPTURE(s_neg_epsilon);
+      CAPTURE(s_neg_epsilon_d);
       BENCHMARK("Double->Binary->Double negative"
                 " std::numeric_limits<double>::epsilon()") {
-        return binary_to_double(double_to_binary(neg_epsilon));
+        return binary_to_double(double_to_binary(neg_epsilon_d));
       };
     }
     SECTION("Positive") {
       BENCHMARK("Double->Binary->Double std::numeric_limits<double>::max()") {
-        return binary_to_double(double_to_binary(highest));
+        return binary_to_double(double_to_binary(highest_d));
       };
-      CAPTURE(s_epsilon);
+      CAPTURE(s_epsilon_d);
       BENCHMARK("Double->Binary->Double"
                 " std::numeric_limits<double>::epsilon()") {
-        return binary_to_double(double_to_binary(epsilon));
+        return binary_to_double(double_to_binary(epsilon_d));
       };
     }
   }
@@ -108,7 +111,7 @@ TEST_CASE("Binary Conversion") {
         };
       }
       SECTION("Empty") {
-        const std::string test_str{""};
+        const std::string test_str{};
         BENCHMARK("String->Binary->String Empty") {
           return binary_to_string(string_to_binary(test_str));
         };
@@ -135,7 +138,7 @@ TEST_CASE("Binary Conversion") {
         };
       }
       SECTION("Empty") {
-        const std::string test_str{""};
+        const std::string test_str{};
         BENCHMARK("String->Binary->String Empty") {
           return binary_to_long_string(long_string_to_binary(test_str));
         };
@@ -222,7 +225,7 @@ TEST_CASE("Input/Output") {
       data.resize(test_sac.npts());
       random_vector(&data);
       test_sac.data1(data);
-      if (test_sac.leven() == false || test_sac.iftype() > 1) {
+      if (!test_sac.leven() || test_sac.iftype() > 1) {
         data.resize(test_sac.data2().size());
         random_vector(&data);
         test_sac.data2(data);

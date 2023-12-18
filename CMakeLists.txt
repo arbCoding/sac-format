@@ -32,50 +32,53 @@ project(sac-format
   HOMEPAGE_URL https://arbCoding.github.io/sac-format
   VERSION 0.4.0)
 
-include_directories(${sac-format_SOURCE_DIR}/src)
+include_directories(${sac-format_SOURCE_DIR}/include)
 
 add_library(sac-format STATIC
-  src/sac_format.hpp
   src/sac_format.cpp)
 
 set_target_properties(sac-format PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(sac-format PROPERTIES PUBLIC_HEADER src/sac_format.hpp)
+set_target_properties(sac-format PROPERTIES PUBLIC_HEADER
+  include/sac-format/sac_format.hpp)
 #===============================================================================
 # Example programs
 #===============================================================================
-add_executable(list_sac
-  src/sac_format.hpp
-  src/examples/list_sac.cpp)
-
-target_link_libraries(list_sac
-  sac-format)
+add_executable(list_sac src/examples/list_sac.cpp)
+target_link_libraries(list_sac sac-format)
 #===============================================================================
 # Benchmarks
 #===============================================================================
-add_executable(benchmark
-  src/sac_format.hpp
-  src/util.hpp
-  src/benchmark.cpp)
-
+add_executable(benchmark src/benchmark.cpp)
 target_link_libraries(benchmark
   PRIVATE Catch2::Catch2WithMain
   sac-format)
 #===============================================================================
 # Unit tests
 #===============================================================================
-add_executable(utests
-  src/sac_format.hpp
-  src/util.hpp
-  src/utests.cpp)
-
-target_link_libraries(utests
+set(basic_sources
+  src/tests/binary_conversions.cpp
+  src/tests/constants.cpp)
+add_executable(basic_tests ${basic_sources})
+target_link_libraries(basic_tests
   PRIVATE Catch2::Catch2WithMain
   sac-format)
+
+add_executable(trace_tests
+  src/tests/trace.cpp)
+target_link_libraries(trace_tests
+  PRIVATE Catch2::Catch2WithMain
+  sac-format)
+
+#set(other_sources
+#  src/tests/datetime.cpp
+#  src/tests/geometry.cpp)
 
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 include(CTest)
 include(Catch)
-catch_discover_tests(utests)
+
+catch_discover_tests(basic_tests)
+catch_discover_tests(trace_tests)
 #===============================================================================
 # Release preparation
 #===============================================================================
@@ -93,7 +96,8 @@ endif()
 #===============================================================================
 # Setup components
 install(TARGETS sac-format COMPONENT library)
-install(TARGETS utests RUNTIME DESTINATION bin/tests COMPONENT tests)
+install(TARGETS basic_tests trace_tests RUNTIME DESTINATION bin/tests
+  COMPONENT tests)
 install(TARGETS benchmark RUNTIME DESTINATION bin/tests COMPONENT benchmarks)
 install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
 if(CPACK_GENERATOR MATCHES "productbuild")
@@ -116,7 +120,7 @@ endif()
 cpack_add_component(library DISPLAY_NAME "sac-format" GROUP development
   DESCRIPTION "sac-format library to use in your own programs.")
 cpack_add_component(tests DISPLAY_NAME "Unit/Integration Testing" GROUP misc
-  DESCRIPTION "utests.exe - Collection of command line unit and integration \
+  DESCRIPTION "Collection of command line unit and integration \
 tests that ensure sac-format is working correctly.")
 cpack_add_component(benchmarks DISPLAY_NAME "Benchmarks" GROUP misc
   DESCRIPTION "benchmarks.exe - Collection of command line benchmarks for \

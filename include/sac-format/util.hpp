@@ -2,10 +2,15 @@
 
 #ifndef SAC_FORMAT_UTIL_HPP_20231121_0727
 #define SAC_FORMAT_UTIL_HPP_20231121_0727
-
 #pragma once
 
-/* Standard library */
+// sac-format
+#include "sac-format/sac_format.hpp"
+// Xoshiro Random Number generator
+//   https://github.com/Reputeless/Xoshiro-cpp
+#include <XoshiroCpp.hpp>
+// Standard Library
+//   https://en.cppreference.com/w/cpp/standard_library
 // std::chrono::steady_clock::now()
 #include <chrono>
 // std::filesystem::path
@@ -18,18 +23,12 @@
 #include <iostream>
 // std::numeric_limits
 #include <limits>
-// INT_MIN and INT_MAX
-#include <limits.h>
 // std::random_device, std::uniform_real_distribution
 #include <random>
 // std::string
 #include <string>
 // std::vector
 #include <vector>
-/* Xoshiro Random Number generator */
-#include <XoshiroCpp.hpp>
-/* My stuff */
-#include <sac_format.hpp>
 
 namespace sacfmt {
 namespace fs = std::filesystem;
@@ -40,6 +39,9 @@ template <typename T> std::string eps_string(const T value) noexcept {
   oss << std::setprecision(std::numeric_limits<T>::max_digits10) << value;
   return oss.str();
 }
+// Ints
+constexpr int lowest_i{std::numeric_limits<int>::lowest()};
+constexpr int highest_i{std::numeric_limits<int>::max()};
 // Floats
 // Negative
 constexpr float lowest_f{std::numeric_limits<float>::lowest()};
@@ -51,16 +53,16 @@ constexpr float epsilon_f{std::numeric_limits<float>::epsilon()};
 const std::string s_epsilon_f{eps_string(epsilon_f)};
 // Doubles
 // Negative
-constexpr double lowest{std::numeric_limits<double>::lowest()};
-constexpr double neg_epsilon{-std::numeric_limits<double>::epsilon()};
-const std::string s_neg_epsilon{eps_string(neg_epsilon)};
+constexpr double lowest_d{std::numeric_limits<double>::lowest()};
+constexpr double neg_epsilon_d{-std::numeric_limits<double>::epsilon()};
+const std::string s_neg_epsilon_d{eps_string(neg_epsilon_d)};
 // Positive
-constexpr double highest{std::numeric_limits<double>::max()};
-constexpr double epsilon{std::numeric_limits<double>::epsilon()};
-const std::string s_epsilon{eps_string(epsilon)};
+constexpr double highest_d{std::numeric_limits<double>::max()};
+constexpr double epsilon_d{std::numeric_limits<double>::epsilon()};
+const std::string s_epsilon_d{eps_string(epsilon_d)};
 
 // Self-seed the random number generator
-XoshiroCpp::Xoshiro256Plus init() noexcept {
+inline XoshiroCpp::Xoshiro256Plus init() noexcept {
   // Random device for seeding
   std::random_device rand_dev{};
   // Two random runtime constants
@@ -91,6 +93,7 @@ void random_vector(std::vector<double> *data, const double minimum = -1.0,
   }
 }
 
+// NOLINTBEGIN(readability-magic-numbers)
 Trace gen_fake_trace() noexcept {
   Trace sac{};
   sac.delta(0.025);
@@ -218,6 +221,7 @@ Trace gen_fake_trace() noexcept {
   }
   return sac;
 }
+// NOLINTEND(readability-magic-numbers)
 
 void unset_trace(Trace *sac) noexcept {
   sac->delta(unset_double);
@@ -341,6 +345,7 @@ void unset_trace(Trace *sac) noexcept {
 }
 
 // Need flags for npts and data2
+// NOLINTBEGIN(readability-magic-numbers)
 void write_corrupt_sac(const fs::path &file, size_t n_hdr, int fake_npts = 0,
                        size_t real_npts = 0, bool data2 = false,
                        size_t real_npts2 = 0, const int header_version = 6,
@@ -447,6 +452,7 @@ void write_corrupt_sac(const fs::path &file, size_t n_hdr, int fake_npts = 0,
   }
   corrupt_sac.close();
 }
+// NOLINTEND(readability-magic-numbers)
 }  // namespace sacfmt
 
 #endif

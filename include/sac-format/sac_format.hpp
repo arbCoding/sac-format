@@ -3,18 +3,14 @@
 #ifndef SAC_FORMAT_HPP_20231115_0945
 #define SAC_FORMAT_HPP_20231115_0945
 #pragma once
-/* Standard library
-   https://en.cppreference.com/w/cpp/standard_library */
-/* v cpplint thinks these are C-libraries v */
-// std::endian
-#include <bit>
-// std::numbers::pi_v<double>
-#include <numbers>
-/* ^ cpplint thinks these are C-libraries ^ */
+// Standard Library
+//   https://en.cppreference.com/w/cpp/standard_library
 // std::ranges::fill
 #include <algorithm>
 // std::array
 #include <array>
+// std::endian
+#include <bit>
 // std::bitset
 #include <bitset>
 // std::abs, std::acos, std::sin, std::cos, std::atan2, std::pow
@@ -26,6 +22,8 @@
 // std::ifstream, std::ifstream::binary, std::ofstream, std::ios::binary,
 // std::ios::out, std::ios::trunc
 #include <fstream>
+// std::numbers::pi_v<double>
+#include <numbers>
 // std::exception
 #include <stdexcept>
 // ostringstream
