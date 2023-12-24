@@ -471,8 +471,13 @@ const std::unordered_map<name, const int> sac_map = {
     // Data
     {name::data1, 0},
     {name::data2, 1}};
+//! Trace class
+/*!
+ This is the trace class.
+ */
 class Trace {
 public:
+  //! Default constructor
   Trace() noexcept;
   // Parametric constructor (read file)
   explicit Trace(const std::filesystem::path &path);
