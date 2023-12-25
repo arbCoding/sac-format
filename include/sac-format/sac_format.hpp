@@ -201,7 +201,7 @@ template <typename T> struct word_pair {
   T second{};  //!< Second 'word' in the pair.
 };
 // For some reason, template functions didn't want to work for these...
-/*! \brief Concatenate two ::word_ond structs into a ::word_two struct.
+/*! \brief Concatenate two ::word_one structs into a ::word_two struct.
 
   Useful for reading strings from SAC-files.
   */

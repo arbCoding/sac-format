@@ -1,4 +1,10 @@
 util.hpp
+binary_conversions.cpp
+constants.cpp
+trace.cpp
+trace_default.cpp
+geometry.cpp
+datetime.cpp
 utests.cpp
 benchmark.cpp
 *.sh
@@ -7,4 +13,5 @@ benchmark.cpp
 *.json
 *.txt
 *.org
+*.md
 list_sac.cpp
