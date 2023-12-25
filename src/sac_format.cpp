@@ -1,5 +1,13 @@
 // Copyright 2023 Alexander R. Blanchette
 
+/*!
+  \file sac_format.cpp
+
+  \brief Brief
+
+  This file is the implementation of the sac-format library
+  */
+
 #include "sac-format/sac_format.hpp"
 
 // Implementation of the interface in sac_format.hpp
@@ -7,6 +15,13 @@ namespace sacfmt {
 //-----------------------------------------------------------------------------
 // Conversions
 //-----------------------------------------------------------------------------
+/*!
+  Multiplies given word number by the length of a word defined by the SAC
+  format.
+
+  @param[in] word_number Number of desired word in file stream.
+  @returns stream offset, from beginning of stream, of desired word.
+  */
 std::streamoff word_position(const size_t word_number) noexcept {
   return static_cast<std::streamoff>(word_number * word_length);
 }

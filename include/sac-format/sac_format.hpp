@@ -1,5 +1,17 @@
 // Copyright 2023 Alexander R. Blanchette
 
+/*!
+  \file sac_format.hpp
+
+  \brief Testing
+
+  \author Alexander R. Blanchette
+
+  \date 24 December 2023
+
+  This file is the main interface for sac-format
+  */
+
 #ifndef SAC_FORMAT_HPP_20231115_0945
 #define SAC_FORMAT_HPP_20231115_0945
 #pragma once
@@ -37,146 +49,199 @@
 // std::vector
 #include <vector>
 
+//! sac-format namespace
 namespace sacfmt {
 //--------------------------------------------------------------------------
 // Constants
 //--------------------------------------------------------------------------
-// Size of data chunks in binary SAC files (called words)
-constexpr int word_length{4};    // bytes
-constexpr int bits_per_byte{8};  // binary character size
-// Each word is 32-bits (4 bytes)
+//! Size (bytes) of fundamental data-chunk.
+constexpr int word_length{4};
+//! Size (bits) of binary character.
+constexpr int bits_per_byte{8};
+//! Size (bits) of funamental data-chunk.
 constexpr int binary_word_size{word_length * bits_per_byte};
-// First word of (first) data-section
+//! First word of (first) data-section (stream offset).
 constexpr std::streamoff data_word{158};
+//! Integer unset value (SAC Magic).
 constexpr int unset_int{-12345};
+//! Float-point unset value (SAC Magic).
 constexpr float unset_float{-12345.0F};
+//! Double-precision unset value (SAC Magic).
 constexpr double unset_double{-12345.0};
+//! Boolean unset value (SAC Magic).
 constexpr bool unset_bool{false};
-// Accuracy precision expected from SAC floats
-constexpr float f_eps{2.75e-6F};
-// This should work for two and four word string headers
-// Used to be a string_view, but they're awkward to
-// use with strings...
+//! String unset value (SAC Magic).
 const std::string unset_word{"-12345"};
+//! Accuracy precision expected of SAC floating-point values.
+constexpr float f_eps{2.75e-6F};
+//! One binary word (useful for non-strings).
 using word_one = std::bitset<binary_word_size>;
+//! Two binary words (useful for strings).
 using word_two = std::bitset<static_cast<size_t>(2) * binary_word_size>;
+//! Four binary words (kEvNm only).
 using word_four = std::bitset<static_cast<size_t>(4) * binary_word_size>;
-// This character and below show up as whitespace
+//! ASCII-code of 'space' character.
 constexpr int ascii_space{32};
-// Number of variables
+//! Number of float-poing header values in SAC format.
 constexpr int num_float{39};
+//! Number of double-precision header values in SAC format.
 constexpr int num_double{22};
+//! Number of integer header values in SAC format.
 constexpr int num_int{26};
+//! Number of boolean header values in SAC format.
 constexpr int num_bool{4};
+//! Number of string header values in SAC format.
 constexpr int num_string{23};
+//! Number of data arrays in SAC format.
 constexpr int num_data{2};
+//! Number of double-precision footer values in SAC format (version 7).
 constexpr int num_footer{22};
+//! nVHdr value for newest SAC format (2020+).
 constexpr int modern_hdr_version{7};
+//! nVHdr value for historic SAC format (pre-2020).
 constexpr int old_hdr_version{6};
+//! Extremely common number of 'internal use' headers in SAC format.
 constexpr int common_skip_num{7};
+//! Radians per degree.
 constexpr double rad_per_deg{std::numbers::pi_v<double> / 180.0};
+//! Degrees per radian.
 constexpr double deg_per_rad{1.0 / rad_per_deg};
+//! Degrees in a circle.
 constexpr double circle_deg{360.0};
-constexpr double earth_radius{6378.14};  // km
+//! Average radius of Earth (kilometers).
+constexpr double earth_radius{6378.14};
 //--------------------------------------------------------------------------
 // Conversions
 //--------------------------------------------------------------------------
-// Calculate position of word in SAC-file
+//! Calculate position of word in SAC-file.
 std::streamoff word_position(size_t word_number) noexcept;
-// SAC uses 32 bit ints
+//! Convert integer to 32-bit (one word) binary bitset.
 word_one int_to_binary(int num) noexcept;
+//! Convert 32-bit (one word) binary bitset to integer.
 int binary_to_int(word_one bin) noexcept;
-// Ensure type-safety for conversions between floats/doubles
-// and bitsets
+//! bitset type-safety namespace.
 namespace bitset_type {
+//! Ensure type-safety for conversions between floats/doubles and bitsets.
 template <unsigned nbits> struct uint {};
+//! Single-word type-safety (non-strings).
 template <> struct uint<bits_per_byte> {
   using type = uint8_t;
 };
+//! Two-word type-safety (strings).
 template <> struct uint<2 * bits_per_byte> {
   using type = uint16_t;
 };
+//! Four-word type-safety (kEvNm).
 template <> struct uint<4 * bits_per_byte> {
   using type = uint32_t;
 };
+//! ? type-safety?
 constexpr int bytes{8};
 template <> struct uint<bytes * bits_per_byte> {
   using type = uint64_t;
 };
 }  // namespace bitset_type
+//! Convert variable to unsigned-integer using type-safe conversions.
 template <class T>
 using unsigned_int =
     typename bitset_type::uint<sizeof(T) * bits_per_byte>::type;
-// Convert floats/doubles to bitsets and back
-// SAC uses 32 bit floats
+//! Convert floating-point value to 32-bit (one word) binary bitset.
 word_one float_to_binary(float num) noexcept;
+//! Convert 32-bit (one word) binary bitset to floating-point value.
 float binary_to_float(const word_one &bin) noexcept;
-// SAC uses 64 bit doubles (2 words, 8 bytes)
+//! Convert double-precision value to 64-bit (two words) binary bitset.
 word_two double_to_binary(double num) noexcept;
+//! Convert 64-bit (two words) binary bitset to double-precision value.
 double binary_to_double(const word_two &bin) noexcept;
+//! Remove leading spaces from string.
 void remove_leading_spaces(std::string *str) noexcept;
+//! Remove trailing spaces from string.
 void remove_trailing_spaces(std::string *str) noexcept;
-// Remove leading/trailing white-space and control characters
+//! Remove leading/trailing white-space and control characters from string.
 std::string string_cleaning(const std::string &str) noexcept;
-//
+//! ?
 void prep_string(std::string *str, size_t str_size) noexcept;
-//
+//! ?
 template <typename T>
 void string_bits(T *bits, const std::string &str, size_t str_size) noexcept;
-//
+//! ?
 template <typename T>
 std::string bits_string(const T &bits, size_t num_words) noexcept;
-// Note the string conversion functions handle over-sized strings
-// by truncating them, and undersized strings by padding them with spaces
-// SAC uses either 64 bit strings (2 words, 8 bytes, 8 characters)
+/*! \brief Convert string to a 64-bit (two word) binary bitset.
+
+  If the string is longer than 8 characters, then only the first 8 characters
+  are kept. If the string is less than 8 characters long, it is right-padded
+  with spaces.
+  */
 word_two string_to_binary(std::string str) noexcept;
+//! Convert a 64-bit (two word) binary bitset to a string.
 std::string binary_to_string(const word_two &str) noexcept;
-// 128 bit string (4 words, 16 bytes, only KEVNM header, 16 characters)
+/*! \brief Convert a string to a 128-bit (four word) binary bitset.
+
+  If the string is longer than 16 characters, then only the first 16 charactesr
+  are kept. If the string is less than 16 characters long, it is right-padded
+  with spaces. Exclusively used to work with the kEvNm header.
+  */
 word_four long_string_to_binary(std::string str) noexcept;
+//! Convert a 128-bit (four word) binary bitset to a string.
 std::string binary_to_long_string(const word_four &str) noexcept;
-// Booleans
+//! Convert a boolean to a 32-bit (one word) binary bitset.
 word_one bool_to_binary(bool flag) noexcept;
+//! Convert a 32-bit (one word) binary bitset to a boolean.
 bool binary_to_bool(const word_one &flag) noexcept;
-// Concat words
-// Struct allay bugprone similar types warning on concat_words
+/*! Struct containing a pair of words.
+
+  Prevents bug-prone word-swapping in functions that use a pair of words.
+
+  These are not necessarily single words, it could be a pair of ::word_one or
+  a pair of ::word_two.
+  */
 template <typename T> struct word_pair {
-  T first{};
-  T second{};
+  T first{};  //!< First 'word' in the pair.
+  T second{};  //!< Second 'word' in the pair.
 };
 // For some reason, template functions didn't want to work for these...
+/*! \brief Concatenate two ::word_ond structs into a ::word_two struct.
+
+  Useful for reading strings from SAC-files.
+  */
 word_two concat_words(const word_pair<word_one> &pair_words) noexcept;
+/*! \brief Concatenate two ::word_two structs into a ::word_four struct.
+
+  Useful for reading kEvNm string from SAC-files.
+  */
 word_four concat_words(const word_pair<word_two> &pair_words) noexcept;
 //--------------------------------------------------------------------------
 // Reading
 //--------------------------------------------------------------------------
-// Struct to allay clang-tidy bugprone swappable parameters warning
+/*! Struct that specifies parameters for reading.
+  */
 struct read_spec {
   // cppcheck-suppress unusedStructMember
-  size_t num_words{};
+  size_t num_words{}; //!< Number of words to read.
   // cppcheck-suppress unusedStructMember
-  size_t start_word{};
+  size_t start_word{}; //!< Word to start reading from.
 };
-// The below functions make reading SAFE and prevent exceptions when
-// trying to read a file without a massive performance hit, unless
-// you try to use it for every single word (see how it is chunk-checked
-// in Trace::Trace to see an efficient/intuitive scheme)
-// Does the filesize remaining fit n_words?
+//! Checks safety of reading N-more words from current position in file.
 bool nwords_after_current(std::ifstream *sac, const read_spec &spec) noexcept;
-// Does the filesize fit the header?
+//! Is the SAC-file large enough to fit a proper header?
 void safe_to_read_header(std::ifstream *sac);
-// Does the remaining filesize fit the footer?
+//! Is the SAC-file large enough to fit a proper footer (if appropriate)?
 void safe_to_read_footer(std::ifstream *sac);
-// Does the remaining filesize fit the data?
+//! Is the SAC-file large enough to fit a proper data vector?
 void safe_to_read_data(std::ifstream *sac, size_t n_words, bool data2 = false);
-// Is the remaining filesize 0? (It should be, otherwise shenanigans).
+//! Have we reached the end of the SAC-file or are there shenanigans?
 void safe_to_finish_reading(std::ifstream *sac);
-// Can read 1, 2, or 4 words and return as a binary bitset
-// Conversion functions are then used to do the conversions
+//! Read one word (32 bits, useful for non-strings) from a binary SAC-file.
 word_one read_word(std::ifstream *sac);
+//! Read two words (64 bits, useful for strings) from a binary SAC-file.
 word_two read_two_words(std::ifstream *sac);
+//! Read four words (128 bits, kEvNm only) from a binary SAC-file.
 word_four read_four_words(std::ifstream *sac);
-// Can read any number of words into a vector of doubles
-// Useful for data values
+/*! \brief Read an arbitrary number of words from a binary SAC-file.
+
+  This is useful for reading data vectors.
+  */
 std::vector<double> read_data(std::ifstream *sac, const read_spec &spec);
 //--------------------------------------------------------------------------
 // Writing
