@@ -290,7 +290,7 @@ double limit_90(double degrees) noexcept;
 //--------------------------------------------------------------------------
 enum class name {
   // Floats
-  depmin,
+  depmin, //!< Minimum value of dependent variable (x)
   depmax,
   odelta,
   resp0,

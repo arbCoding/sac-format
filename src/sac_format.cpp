@@ -26,6 +26,12 @@ std::streamoff word_position(const size_t word_number) noexcept {
   return static_cast<std::streamoff>(word_number * word_length);
 }
 
+/*!
+  Uses two's compliment to convert an integer into a binary value.
+
+  @param[in] num Number to be converted.
+  @returns ::word_one (32-bit bitset).
+  */
 word_one int_to_binary(const int num) noexcept {
   word_one bits{};
   if (num >= 0) {
@@ -36,6 +42,12 @@ word_one int_to_binary(const int num) noexcept {
   return bits;
 }
 
+/*!
+  Uses two's complement to convert a binary value into an integer.
+
+  @param[in] bin Binary value to be converted.
+  @returns int value.
+ */
 int binary_to_int(word_one bin) noexcept {
   int result{};
   if (bin.test(binary_word_size - 1)) {

@@ -62,6 +62,6 @@ min_html
 echo -e "\nMaking Doxygen pdf docs"
 cd "$base"/docs/doxygen/latex || exit
 make
-compress_pdf refman.pdf
+#compress_pdf refman.pdf
 
 cd "$scripts" || exit

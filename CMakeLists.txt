@@ -83,7 +83,7 @@ catch_discover_tests(trace_tests)
 # Release preparation
 #===============================================================================
 if (UNIX AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
-  set(Exes utests benchmark list_sac)
+  set(Exes basic_tests trace_tests benchmark list_sac)
   foreach(program ${Exes})
     message(STATUS "\n ${program} will be stripped to reduce filesize.\n")
     add_custom_command(TARGET ${program}
