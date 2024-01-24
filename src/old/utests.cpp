@@ -30,67 +30,6 @@ using Catch::Matchers::WithinAbs;
 // Trace tests
 //------------------------------------------------------------------------------
 TEST_CASE("Linked Headers") {
-  const fs::path tmp_dir{fs::temp_directory_path()};
-  const fs::path tmp_file{tmp_dir / "linked_parameter_test.sac"};
-  SECTION("LEven") {
-    Trace trace{};
-    // Even non-2D data
-    trace.leven(true);
-    trace.iftype(1);
-    trace.npts(10);
-    trace.nvhdr(7);
-    REQUIRE(trace.leven() == true);
-    REQUIRE(trace.iftype() == 1);
-    REQUIRE(trace.data2().size() == 0);
-    quick_io_check(tmp_file, trace);
-    // Uneven data
-    trace.leven(false);
-    REQUIRE(trace.iftype() == 1);
-    quick_io_check(tmp_file, trace);
-    // Return to even data
-    trace.leven(true);
-    REQUIRE(trace.iftype() == 1);
-    REQUIRE(trace.data2().size() == 0);
-    quick_io_check(tmp_file, trace);
-    // Spectral even
-    trace.iftype(2);
-    REQUIRE(trace.iftype() == 2);
-    REQUIRE(trace.leven() == true);
-    REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
-    quick_io_check(tmp_file, trace);
-    // Uneven
-    trace.leven(false);
-    REQUIRE(trace.iftype() == unset_int);
-    REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
-    quick_io_check(tmp_file, trace);
-    // Return to even
-    trace.leven(true);
-    REQUIRE(trace.iftype() == unset_int);
-    REQUIRE(trace.data2().size() == 0);
-    quick_io_check(tmp_file, trace);
-  }
-  SECTION("IFType") {
-    Trace trace{};
-    // Even non-2D data
-    trace.leven(true);
-    trace.iftype(1);
-    trace.npts(10);
-    trace.nvhdr(7);
-    REQUIRE(trace.leven() == true);
-    REQUIRE(trace.iftype() == 1);
-    REQUIRE(trace.data2().size() == 0);
-    quick_io_check(tmp_file, trace);
-    // Spectral data
-    trace.iftype(2);
-    REQUIRE(trace.leven() == true);
-    REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
-    quick_io_check(tmp_file, trace);
-    // Return to even non-2D data
-    trace.iftype(1);
-    REQUIRE(trace.leven() == true);
-    REQUIRE(trace.data2().size() == 0);
-    quick_io_check(tmp_file, trace);
-  }
   SECTION("Npts") {
     SECTION("Without Data2") {
       Trace trace{};

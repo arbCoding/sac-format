@@ -197,7 +197,7 @@ bool binary_to_bool(const word_one &flag) noexcept;
   a pair of ::word_two.
   */
 template <typename T> struct word_pair {
-  T first{};  //!< First 'word' in the pair.
+  T first{};   //!< First 'word' in the pair.
   T second{};  //!< Second 'word' in the pair.
 };
 // For some reason, template functions didn't want to work for these...
@@ -215,12 +215,12 @@ word_four concat_words(const word_pair<word_two> &pair_words) noexcept;
 // Reading
 //--------------------------------------------------------------------------
 /*! Struct that specifies parameters for reading.
-  */
+ */
 struct read_spec {
   // cppcheck-suppress unusedStructMember
-  size_t num_words{}; //!< Number of words to read.
+  size_t num_words{};  //!< Number of words to read.
   // cppcheck-suppress unusedStructMember
-  size_t start_word{}; //!< Word to start reading from.
+  size_t start_word{};  //!< Word to start reading from.
 };
 //! Checks safety of reading N-more words from current position in file.
 bool nwords_after_current(std::ifstream *sac, const read_spec &spec) noexcept;
@@ -290,7 +290,7 @@ double limit_90(double degrees) noexcept;
 //--------------------------------------------------------------------------
 enum class name {
   // Floats
-  depmin, //!< Minimum value of dependent variable (x)
+  depmin,  //!< Minimum value of dependent variable (x)
   depmax,
   odelta,
   resp0,

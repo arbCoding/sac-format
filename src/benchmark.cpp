@@ -16,9 +16,10 @@
 #include <iomanip>
 #include <limits>
 
-using namespace sacfmt;
+// using namespace sacfmt;
 namespace fs = std::filesystem;
-
+// NOLINTBEGIN(readability-function-cognitive-complexity)
+namespace sacfmt {
 TEST_CASE("Binary Conversion") {
   SECTION("Booleans") {
     BENCHMARK("Bool->Binary False") { return bool_to_binary(unset_bool); };
@@ -240,3 +241,5 @@ TEST_CASE("Input/Output") {
     }
   }
 }
+}  // namespace sacfmt
+// NOLINTEND(readability-function-cognitive-complexity)

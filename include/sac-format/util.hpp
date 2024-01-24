@@ -93,7 +93,8 @@ void random_vector(std::vector<double> *data, const double minimum = -1.0,
   }
 }
 
-// NOLINTBEGIN(readability-magic-numbers)
+// NOLINTBEGIN(readability-magic-numbers,
+// readibility-function-cognitive-complexity)
 Trace gen_fake_trace() noexcept {
   Trace sac{};
   sac.delta(0.025);
@@ -221,7 +222,8 @@ Trace gen_fake_trace() noexcept {
   }
   return sac;
 }
-// NOLINTEND(readability-magic-numbers)
+// NOLINTEND(readability-magic-numbers,
+// readbility-function-cognitive-complexity)
 
 void unset_trace(Trace *sac) noexcept {
   sac->delta(unset_double);
@@ -345,7 +347,8 @@ void unset_trace(Trace *sac) noexcept {
 }
 
 // Need flags for npts and data2
-// NOLINTBEGIN(readability-magic-numbers)
+// NOLINTBEGIN(readability-magic-numbers,
+// readability-function-cognitive-complexity)
 void write_corrupt_sac(const fs::path &file, size_t n_hdr, int fake_npts = 0,
                        size_t real_npts = 0, bool data2 = false,
                        size_t real_npts2 = 0, const int header_version = 6,
@@ -452,7 +455,8 @@ void write_corrupt_sac(const fs::path &file, size_t n_hdr, int fake_npts = 0,
   }
   corrupt_sac.close();
 }
-// NOLINTEND(readability-magic-numbers)
+// NOLINTEND(readability-magic-numbers,
+// readability-function-cognitive-complexity)
 }  // namespace sacfmt
 
 #endif

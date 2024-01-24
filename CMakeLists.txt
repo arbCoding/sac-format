@@ -69,10 +69,6 @@ target_link_libraries(trace_tests
   PRIVATE Catch2::Catch2WithMain
   sac-format)
 
-#set(other_sources
-#  src/tests/datetime.cpp
-#  src/tests/geometry.cpp)
-
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 include(CTest)
 include(Catch)

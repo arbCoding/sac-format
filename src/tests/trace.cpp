@@ -13,14 +13,16 @@
 #include <catch2/catch_test_macros.hpp>
 
 namespace sacfmt {
-void quick_io_check(fs::path tmp_file, const Trace &trace) {
+void quick_io_check(const fs::path &tmp_file, const Trace &trace) {
   // Write/load and check
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace input = Trace(tmp_file);
   fs::remove(tmp_file);
-  REQUIRE(in == trace);
-}
+  REQUIRE(input == trace);
+}  // namespace sacfmt
 
+// NOLINTBEGIN(readability-magic-numbers,
+// readability-function-cognitive-complexity)
 TEST_CASE("Trace: Default: Floats") {
   const Trace trace{};
   REQUIRE(trace.depmin() == unset_float);
@@ -160,7 +162,7 @@ TEST_CASE("Trace: Default: Data") {
   REQUIRE(trace.data1().empty());
   REQUIRE(trace.data2().empty());
 }
-// NOLINTBEGIN(readability-magic-numbers)
+
 TEST_CASE("Trace: Setters: Floats") {
   Trace trace{};
   float value{0.001f};
@@ -672,5 +674,93 @@ TEST_CASE("Trace: Equality: Inequality") {
   trace2.kinst("Hello");
   REQUIRE(trace1 != trace2);
 }
-// NOLINTEND(readability-magic-numbers)
+
+const fs::path tmp_dir{fs::temp_directory_path()};
+const fs::path tmp_file{tmp_dir / "test.sac"};
+TEST_CASE("Trace: Linked Headers: LEven") {
+  Trace trace{};
+  // Even non-2D data
+  trace.leven(true);
+  trace.iftype(1);
+  trace.npts(10);
+  trace.nvhdr(7);
+  REQUIRE(trace.leven() == true);
+  REQUIRE(trace.iftype() == 1);
+  REQUIRE(trace.data2().size() == 0);
+  quick_io_check(tmp_file, trace);
+  // Uneven data
+  trace.leven(false);
+  REQUIRE(trace.iftype() == 1);
+  quick_io_check(tmp_file, trace);
+  // Return to even data
+  trace.leven(true);
+  REQUIRE(trace.iftype() == 1);
+  REQUIRE(trace.data2().size() == 0);
+  quick_io_check(tmp_file, trace);
+  // Spectral even
+  trace.iftype(2);
+  REQUIRE(trace.iftype() == 2);
+  REQUIRE(trace.leven() == true);
+  REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+  quick_io_check(tmp_file, trace);
+  // Uneven
+  trace.leven(false);
+  REQUIRE(trace.iftype() == unset_int);
+  REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+  quick_io_check(tmp_file, trace);
+  // Return to even
+  trace.leven(true);
+  REQUIRE(trace.iftype() == unset_int);
+  REQUIRE(trace.data2().size() == 0);
+  quick_io_check(tmp_file, trace);
+}
+
+TEST_CASE("Trace: Linked Headers: iFType") {
+  Trace trace{};
+  // Even non-2D data
+  trace.leven(true);
+  trace.iftype(1);
+  trace.npts(10);
+  trace.nvhdr(7);
+  REQUIRE(trace.leven() == true);
+  REQUIRE(trace.iftype() == 1);
+  REQUIRE(trace.data2().size() == 0);
+  quick_io_check(tmp_file, trace);
+  // Spectral data
+  trace.iftype(2);
+  REQUIRE(trace.leven() == true);
+  REQUIRE(trace.data2().size() == static_cast<size_t>(trace.npts()));
+  quick_io_check(tmp_file, trace);
+  // Return to even non-2D data
+  trace.iftype(1);
+  REQUIRE(trace.leven() == true);
+  REQUIRE(trace.data2().size() == 0);
+  quick_io_check(tmp_file, trace);
+}
+
+TEST_CASE("Trace: Linked Headers: nPts: No Data2") {
+  Trace trace{};
+  // Even non-2D data
+  trace.leven(true);
+  trace.iftype(1);
+  trace.npts(0);
+  trace.nvhdr(7);
+  REQUIRE(trace.npts() == 0);
+  REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+  REQUIRE(trace.data2().size() == 0);
+  quick_io_check(tmp_file, trace);
+  trace.npts(10);
+  REQUIRE(trace.npts() == 10);
+  REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+  REQUIRE(trace.data2().size() == 0);
+  quick_io_check(tmp_file, trace);
+  trace.npts(10);
+  trace.npts(5);
+  REQUIRE(trace.npts() == 5);
+  REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
+  REQUIRE(trace.data2().size() == 0);
+  quick_io_check(tmp_file, trace);
+}
+// NOLINTEND(readability-magic-numbers,
+// readability-function-cognitive-complexity)
 }  // namespace sacfmt

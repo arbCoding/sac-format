@@ -9,6 +9,10 @@ min_html () {
     ls -1 | grep html | parallel 'minify {} -o {}.new; mv {}.new {}'
 }
 
+min_web() {
+    ls -1 | grep 'html\|js\|css' | parallel 'minify {} -o {}.new; mv {}.new {}'
+}
+
 # Compress pdf files
 
 compress_pdf () {
@@ -57,8 +61,19 @@ cd "$base" || exit
 doxygen Doxyfile
 # Minify doxygen files
 echo -e "\nMinify-ing Doxygen html docs"
-cd "$base"/docs/doxygen/html || exit
-min_html
+html_dox="$base"/docs/doxygen/html
+dir_list=("$html_dox" "$html_dox/search")
+for dir in "${dir_list[@]}"; do
+  cd "$dir" || exit
+  echo -e "Minify html, js, and css for $dir\n"
+  # Shrink all html, js, and css files
+  min_web
+  echo -e "Optimize all png for $dir\n"
+  # Shrink all png files
+  optipng -quiet ./*.png
+  echo ""
+done
+
 echo -e "\nMaking Doxygen pdf docs"
 cd "$base"/docs/doxygen/latex || exit
 make

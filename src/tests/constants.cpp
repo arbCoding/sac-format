@@ -19,7 +19,7 @@ TEST_CASE("Fundamental Constants") {
   REQUIRE(binary_word_size == 32);
   REQUIRE(data_word == 158);
   REQUIRE(unset_int == -12345);
-  REQUIRE(unset_float == -12345.0f);
+  REQUIRE(unset_float == -12345.0F);
   REQUIRE(unset_double == -12345.0);
   REQUIRE(unset_bool == false);
   REQUIRE(unset_word == "-12345");
