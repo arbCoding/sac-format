@@ -30,7 +30,7 @@ project(sac-format
   LANGUAGES CXX
   DESCRIPTION "C++20 Single-Header SAC File library"
   HOMEPAGE_URL https://arbCoding.github.io/sac-format
-  VERSION 0.4.0)
+  VERSION 0.6.0)
 
 include_directories(${sac-format_SOURCE_DIR}/include)
 
@@ -69,12 +69,21 @@ target_link_libraries(trace_tests
   PRIVATE Catch2::Catch2WithMain
   sac-format)
 
+add_executable(geometry_tests
+  src/tests/geometry.cpp)
+target_link_libraries(geometry_tests
+  PRIVATE Catch2::Catch2WithMain
+  sac-format
+)
+
+
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 include(CTest)
 include(Catch)
 
 catch_discover_tests(basic_tests)
 catch_discover_tests(trace_tests)
+catch_discover_tests(geometry_tests)
 #===============================================================================
 # Release preparation
 #===============================================================================
@@ -92,8 +101,8 @@ endif()
 #===============================================================================
 # Setup components
 install(TARGETS sac-format COMPONENT library)
-install(TARGETS basic_tests trace_tests RUNTIME DESTINATION bin/tests
-  COMPONENT tests)
+install(TARGETS basic_tests trace_tests geometry_tests RUNTIME DESTINATION
+  bin/tests COMPONENT tests)
 install(TARGETS benchmark RUNTIME DESTINATION bin/tests COMPONENT benchmarks)
 install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
 if(CPACK_GENERATOR MATCHES "productbuild")
