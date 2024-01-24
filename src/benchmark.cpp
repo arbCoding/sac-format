@@ -1,4 +1,4 @@
-// Copyright 2023 Alexander R. Blanchette
+// Copyright 2023-2024 Alexander R. Blanchette
 
 #include "sac-format/sac_format.hpp"
 #include "sac-format/util.hpp"

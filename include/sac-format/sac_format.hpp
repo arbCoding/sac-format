@@ -1,4 +1,4 @@
-// Copyright 2023 Alexander R. Blanchette
+// Copyright 2023-2024 Alexander R. Blanchette
 
 /*!
   \file sac_format.hpp
@@ -6,8 +6,6 @@
   \brief Testing
 
   \author Alexander R. Blanchette
-
-  \date 24 December 2023
 
   This file is the main interface for sac-format
   */

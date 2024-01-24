@@ -1,4 +1,4 @@
-// Copyright 2023 Alexander R. Blanchette
+// Copyright 2023-2024 Alexander R. Blanchette
 
 #ifndef SAC_FORMAT_UTIL_HPP_20231121_0727
 #define SAC_FORMAT_UTIL_HPP_20231121_0727

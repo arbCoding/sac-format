@@ -858,7 +858,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Floats") {
   random_vector(&data);
   trace.data1(data);
   data = trace.data2();
-  if (!data.empty()) { random_vector(&data); trace.data2(data); }
+  if (!data.empty()) {
+    random_vector(&data);
+    trace.data2(data);
+  }
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
@@ -909,7 +912,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Doubles") {
   random_vector(&data);
   trace.data1(data);
   data = trace.data2();
-  if (!data.empty()) { random_vector(&data); trace.data2(data); }
+  if (!data.empty()) {
+    random_vector(&data);
+    trace.data2(data);
+  }
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
@@ -943,7 +949,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Integers") {
   random_vector(&data);
   trace.data1(data);
   data = trace.data2();
-  if (!data.empty()) { random_vector(&data); trace.data2(data); }
+  if (!data.empty()) {
+    random_vector(&data);
+    trace.data2(data);
+  }
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
@@ -981,7 +990,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Booleans") {
   random_vector(&data);
   trace.data1(data);
   data = trace.data2();
-  if (!data.empty()) { random_vector(&data); trace.data2(data); }
+  if (!data.empty()) {
+    random_vector(&data);
+    trace.data2(data);
+  }
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
@@ -997,7 +1009,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Strings") {
   random_vector(&data);
   trace.data1(data);
   data = trace.data2();
-  if (!data.empty()) { random_vector(&data); trace.data2(data); }
+  if (!data.empty()) {
+    random_vector(&data);
+    trace.data2(data);
+  }
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
@@ -1032,7 +1047,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Data Vectors") {
   random_vector(&data);
   trace.data1(data);
   data = trace.data2();
-  if (!data.empty()) { random_vector(&data); trace.data2(data); }
+  if (!data.empty()) {
+    random_vector(&data);
+    trace.data2(data);
+  }
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
@@ -1046,7 +1064,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Everything") {
   random_vector(&data);
   trace.data1(data);
   data = trace.data2();
-  if (!data.empty()) { random_vector(&data); trace.data2(data); }
+  if (!data.empty()) {
+    random_vector(&data);
+    trace.data2(data);
+  }
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
@@ -1059,7 +1080,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Resize Data") {
   random_vector(&data);
   trace.data1(data);
   data = trace.data2();
-  if (!data.empty()) { random_vector(&data); trace.data2(data); }
+  if (!data.empty()) {
+    random_vector(&data);
+    trace.data2(data);
+  }
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
@@ -1077,7 +1101,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Modify Header: EvDp") {
   random_vector(&data);
   trace.data1(data);
   data = trace.data2();
-  if (!data.empty()) { random_vector(&data); trace.data2(data); }
+  if (!data.empty()) {
+    random_vector(&data);
+    trace.data2(data);
+  }
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
@@ -1093,7 +1120,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Modify Data") {
   random_vector(&data);
   trace.data1(data);
   data = trace.data2();
-  if (!data.empty()) { random_vector(&data); trace.data2(data); }
+  if (!data.empty()) {
+    random_vector(&data);
+    trace.data2(data);
+  }
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
@@ -1530,7 +1560,7 @@ TEST_CASE("Trace: Linked Headers: Data2: Uneven Timeseries") {
   REQUIRE(trace.data1().size() == static_cast<size_t>(trace.npts()));
   REQUIRE(trace.data2().size() == 0);
   quick_io_check(tmp_file, trace);
-}                                            
+}
 
 TEST_CASE("Trace: Linked Headers: Data2: Spectral") {
   Trace trace{};
@@ -1775,13 +1805,15 @@ TEST_CASE("Trace: I/O: Corrupt SAC-File: Header Throw: 76 Header Fields") {
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Header Throw: data_word - 1 Header Fields") {
+TEST_CASE(
+    "Trace: I/O: Corrupt SAC-File: Header Throw: data_word - 1 Header Fields") {
   write_corrupt_sac(tmp_file, data_word - 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_hdr_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Header Throw: data_word Header Fields") {
+TEST_CASE(
+    "Trace: I/O: Corrupt SAC-File: Header Throw: data_word Header Fields") {
   // 632 bytes written
   write_corrupt_sac(tmp_file, data_word);
   REQUIRE_NOTHROW(Trace(tmp_file));
@@ -1789,308 +1821,347 @@ TEST_CASE("Trace: I/O: Corrupt SAC-File: Header Throw: data_word Header Fields")
 }
 
 const std::string throw_data1_str{"Insufficient filesize for data1."};
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Data1 Throw: Fake_nPts 10, Real_nPts 0") {
+TEST_CASE(
+    "Trace: I/O: Corrupt SAC-File: Data1 Throw: Fake_nPts 10, Real_nPts 0") {
   write_corrupt_sac(tmp_file, data_word, 10, 0);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_data1_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Data1 Throw: Fake_nPts 1, Real_nPts 0") {
+TEST_CASE(
+    "Trace: I/O: Corrupt SAC-File: Data1 Throw: Fake_nPts 1, Real_nPts 0") {
   write_corrupt_sac(tmp_file, data_word, 1, 0);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_data1_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Data1 Throw: Fake_nPts 1000, Real_nPts 999") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Data1 Throw: Fake_nPts 1000, "
+          "Real_nPts 999") {
   write_corrupt_sac(tmp_file, data_word, 1000, 999);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_data1_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Data1 Throw: Fake_nPts 10, Real_nPts 10") {
+TEST_CASE(
+    "Trace: I/O: Corrupt SAC-File: Data1 Throw: Fake_nPts 10, Real_nPts 10") {
   write_corrupt_sac(tmp_file, data_word, 10, 10);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Data1 Throw: Fake_nPts 0, Real_nPts 0") {
+TEST_CASE(
+    "Trace: I/O: Corrupt SAC-File: Data1 Throw: Fake_nPts 0, Real_nPts 0") {
   write_corrupt_sac(tmp_file, data_word, 0, 0);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
 
 const std::string throw_data2_str{"Insufficient filesize for data2."};
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Data2 Throw: Fake_nPts 10, Real_nPts 0") {
+TEST_CASE(
+    "Trace: I/O: Corrupt SAC-File: Data2 Throw: Fake_nPts 10, Real_nPts 0") {
   write_corrupt_sac(tmp_file, data_word, 10, 10, true, 0);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_data2_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Data2 Throw: Fake_nPts 1, Real_nPts 0") {
+TEST_CASE(
+    "Trace: I/O: Corrupt SAC-File: Data2 Throw: Fake_nPts 1, Real_nPts 0") {
   write_corrupt_sac(tmp_file, data_word, 1, 1, true, 0);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_data2_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Data2 Throw: Fake_nPts 1000, Real_nPts 999") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Data2 Throw: Fake_nPts 1000, "
+          "Real_nPts 999") {
   write_corrupt_sac(tmp_file, data_word, 1000, 1000, true, 999);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_data2_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Data2 Throw: Fake_nPts 10, Real_nPts 10") {
+TEST_CASE(
+    "Trace: I/O: Corrupt SAC-File: Data2 Throw: Fake_nPts 10, Real_nPts 10") {
   write_corrupt_sac(tmp_file, data_word, 10, 10, true, 10);
   REQUIRE_NOTHROW(Trace(tmp_file), ContainsSubstring(throw_data2_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Data2 Throw: Fake_nPts 0, Real_nPts 0") {
+TEST_CASE(
+    "Trace: I/O: Corrupt SAC-File: Data2 Throw: Fake_nPts 0, Real_nPts 0") {
   write_corrupt_sac(tmp_file, data_word, 0, 0, true, 0);
   REQUIRE_NOTHROW(Trace(tmp_file), ContainsSubstring(throw_data2_str));
   fs::remove(tmp_file);
 }
 
 const std::string throw_footer_str{"Insufficient filesize for footer."};
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 0, Footer 0") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 0, "
+          "Footer 0") {
   write_corrupt_sac(tmp_file, data_word, 0, 0, false, 0, 7, 0);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 10, Footer 0") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 10, "
+          "Footer 0") {
   write_corrupt_sac(tmp_file, data_word, 10, 10, false, 0, 7, 0);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 0, Footer 10") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 0, "
+          "Footer 10") {
   write_corrupt_sac(tmp_file, data_word, 0, 0, false, 0, 7, 10);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 10, Footer 10") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 10, "
+          "Footer 10") {
   write_corrupt_sac(tmp_file, data_word, 10, 10, false, 0, 7, 10);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 10, Footer num_footer - 1") {
-  write_corrupt_sac(tmp_file, data_word, 10, 10, false, 0, 7,
-                    num_footer - 1);
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 10, "
+          "Footer num_footer - 1") {
+  write_corrupt_sac(tmp_file, data_word, 10, 10, false, 0, 7, num_footer - 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 1000, Footer num_footer - 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts "
+          "1000, Footer num_footer - 1") {
   write_corrupt_sac(tmp_file, data_word, 1000, 1000, false, 0, 7,
                     num_footer - 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 0, Footer num_footer") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 0, "
+          "Footer num_footer") {
   write_corrupt_sac(tmp_file, data_word, 0, 0, false, 0, 7, num_footer);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts 1000, Footer num_footer") {
-  write_corrupt_sac(tmp_file, data_word, 1000, 1000, false, 0, 7,
-                    num_footer);
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: Without Data2: Npts "
+          "1000, Footer num_footer") {
+  write_corrupt_sac(tmp_file, data_word, 1000, 1000, false, 0, 7, num_footer);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 0, Footer 0") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 0, "
+          "Footer 0") {
   write_corrupt_sac(tmp_file, data_word, 0, 0, true, 0, 7, 0);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 10, Footer 0") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 10, "
+          "Footer 0") {
   write_corrupt_sac(tmp_file, data_word, 10, 10, true, 10, 7, 0);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 10, Footer 10") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 10, "
+          "Footer 10") {
   write_corrupt_sac(tmp_file, data_word, 10, 10, true, 10, 7, 10);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 10, Footer num_footer -1") {
-  write_corrupt_sac(tmp_file, data_word, 10, 10, true, 10, 7,
-                    num_footer - 1);
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 10, "
+          "Footer num_footer -1") {
+  write_corrupt_sac(tmp_file, data_word, 10, 10, true, 10, 7, num_footer - 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 1000, Footer num_footer - 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 1000, "
+          "Footer num_footer - 1") {
   write_corrupt_sac(tmp_file, data_word, 1000, 1000, true, 1000, 7,
                     num_footer - 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_footer_str));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 1, Footer num_footer") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 1, "
+          "Footer num_footer") {
   write_corrupt_sac(tmp_file, data_word, 1, 1, true, 1, 7, num_footer);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 0, Footer num_footer") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 0, "
+          "Footer num_footer") {
   write_corrupt_sac(tmp_file, data_word, 0, 0, true, 0, 7, num_footer);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 100, Footer num_footers") {
-  write_corrupt_sac(tmp_file, data_word, 100, 100, true, 100, 7,
-                    num_footer);
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Footer Throw: With Data2: Npts 100, "
+          "Footer num_footers") {
+  write_corrupt_sac(tmp_file, data_word, 100, 100, true, 100, 7, num_footer);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
 
 const std::string throw_str1{"Filesize exceeds data specification with "};
 const std::string throw_str2{" bytes excess. Data corruption suspected."};
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: Without Footer: Npts 0, Excess Npts 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: "
+          "Without Footer: Npts 0, Excess Npts 1") {
   const int npts{0};
-  write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0,1);
+  write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0, 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: Without Footer: Npts 10, Excess Npts 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: "
+          "Without Footer: Npts 10, Excess Npts 1") {
   const int npts{10};
   write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0, 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: Without Footer: Npts 100, Excess Npts 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: "
+          "Without Footer: Npts 100, Excess Npts 1") {
   const int npts{100};
   write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0, 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: Without Footer: Npts 0, Excess Npts 100") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: "
+          "Without Footer: Npts 0, Excess Npts 100") {
   const int npts{0};
   write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0, 100);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: Without Footer: Npts 57, Excess Npts 0") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: "
+          "Without Footer: Npts 57, Excess Npts 0") {
   const int npts{57};
   write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 6, 0, 0);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: Without Footer: Npts 0, Excess Npts 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: "
+          "Without Footer: Npts 0, Excess Npts 1") {
   const int npts{0};
   write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 6, 0, 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: Without Footer: Npts 100, Excess Npts 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: "
+          "Without Footer: Npts 100, Excess Npts 1") {
   const int npts{100};
   write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 6, 0, 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: Without Footer: Npts 1000, Excess Npts 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: "
+          "Without Footer: Npts 1000, Excess Npts 1") {
   const int npts{1000};
   write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 6, 0, 1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: Without Footer: Npts 100, Excess Npts 0") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: "
+          "Without Footer: Npts 100, Excess Npts 0") {
   const int npts{1000};
   write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 6, 0, 0);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: With Footer: Npts 0, Excess Npts 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: "
+          "With Footer: Npts 0, Excess Npts 1") {
   const int npts{0};
-  write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7,
-                    num_footer, 1);
+  write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7, num_footer,
+                    1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: With Footer: Npts 100, Excess Npts 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: "
+          "With Footer: Npts 100, Excess Npts 1") {
   const int npts{100};
-  write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7,
-                    num_footer, 1);
+  write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7, num_footer,
+                    1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: With Footer: Npts 100, Excess Npts 101") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: "
+          "With Footer: Npts 100, Excess Npts 101") {
   const int npts{100};
-  write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7,
-                    num_footer, 101);
+  write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7, num_footer,
+                    101);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: With Footer: Npts 10, Excess Npts 0") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: Without Data2: "
+          "With Footer: Npts 10, Excess Npts 0") {
   const int npts{10};
-  write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7,
-                    num_footer, 0);
+  write_corrupt_sac(tmp_file, data_word, npts, npts, false, npts, 7, num_footer,
+                    0);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: With Footer: Npts 0, Excess Npts 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: With "
+          "Footer: Npts 0, Excess Npts 1") {
   const int npts{0};
-  write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7,
-                    num_footer, 1);
+  write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7, num_footer,
+                    1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: With Footer: Npts 100, Excess Npts 1") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: With "
+          "Footer: Npts 100, Excess Npts 1") {
   const int npts{100};
-  write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7,
-                    num_footer, 1);
+  write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7, num_footer,
+                    1);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: With Footer: Npts 100, Excess Npts 100") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: With "
+          "Footer: Npts 100, Excess Npts 100") {
   const int npts{100};
-  write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7,
-                    num_footer, 100);
+  write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7, num_footer,
+                    100);
   REQUIRE_THROWS_WITH(Trace(tmp_file), ContainsSubstring(throw_str1) &&
-                      ContainsSubstring(throw_str2));
+                                           ContainsSubstring(throw_str2));
   fs::remove(tmp_file);
 }
 
-TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: With Footer: Npts 100, Excess Npts 0") {
+TEST_CASE("Trace: I/O: Corrupt SAC-File: Excess Data Throw: With Data2: With "
+          "Footer: Npts 100, Excess Npts 0") {
   const int npts{100};
-  write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7,
-                    num_footer, 0);
+  write_corrupt_sac(tmp_file, data_word, npts, npts, true, npts, 7, num_footer,
+                    0);
   REQUIRE_NOTHROW(Trace(tmp_file));
   fs::remove(tmp_file);
 }
