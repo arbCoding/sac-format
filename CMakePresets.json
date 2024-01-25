@@ -103,7 +103,7 @@
             "displayName": "GCC-Clang Hardended Release",
             "description": "GCC-Clang release with security hardened options.",
             "cacheVariables": {
-                "CMAKE_CXX_FLAGS": "-O3 -DNDEBUG -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -fstack-clash-protection -fstack-protector-strong -Wl,-z,nodlopen -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -fPIE -pie -fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -Wno-unknown-warning-option -Wno-unused-command-line-argument"
+                "CMAKE_CXX_FLAGS": "-O3 -DNDEBUG -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -fstack-clash-protection -fstack-protector-strong -fPIE -pie -fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -Wno-unknown-warning-option -Wno-unused-command-line-argument"
             }
         },
         {
@@ -156,7 +156,7 @@
             "displayName": "GCC-Clang Hardened Debug",
             "description": "GCC-Clang Debug with Hardening options.",
             "cacheVariables": {
-                "CMAKE_CXX_FLAGS": "-O0 -ggdb -Werror -Wshadow -Wextra -Wconversion -Wsign-conversion -Wtrampolines -Wimplicit-fallthrough -Wall -pedantic-errors -Wformat=2 -fstack-clash-protection -fstack-protector-strong -fPIE -pie -fcf-protection=full -Wno-unknown-warning-option -Wno-unused-command-line-argument"
+                "CMAKE_CXX_FLAGS": "-O0 -ggdb -Werror -Wshadow -Wextra -Wconversion -Wsign-conversion -Wtrampolines -Wimplicit-fallthrough -Wall -pedantic-errors -Wformat=2 -fstack-clash-protection -fstack-protector-strong -fPIE -pie -Wno-unknown-warning-option -Wno-unused-command-line-argument"
             }
         },
         {
