@@ -240,7 +240,6 @@ TEST_CASE(
 }
 
 TEST_CASE("Geometric Operations: Calc Distance/Azimuth: Along Equator") {
-  constexpr double tol{1e-4};
   constexpr double lat{0};
   double lon1{0};
   double lon2{90};

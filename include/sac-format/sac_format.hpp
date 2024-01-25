@@ -3,11 +3,12 @@
 /*!
   \file sac_format.hpp
 
-  \brief Testing
+  \brief Interface of the sac-format library.
 
   \author Alexander R. Blanchette
 
-  This file is the main interface for sac-format
+  This file is the interface for sac-format library. Everything in this file
+  is targeted for testing coverage.
   */
 
 #ifndef SAC_FORMAT_HPP_20231115_0945
@@ -111,11 +112,11 @@ constexpr double earth_radius{6378.14};
 //--------------------------------------------------------------------------
 // Conversions
 //--------------------------------------------------------------------------
-//! Calculate position of word in SAC-file.
+// Calculate position of word in SAC-file.
 std::streamoff word_position(size_t word_number) noexcept;
-//! Convert integer to 32-bit (one word) binary bitset.
+// Convert integer to 32-bit (one word) binary bitset.
 word_one int_to_binary(int num) noexcept;
-//! Convert 32-bit (one word) binary bitset to integer.
+// Convert 32-bit (one word) binary bitset to integer.
 int binary_to_int(word_one bin) noexcept;
 //! bitset type-safety namespace.
 namespace bitset_type {
@@ -143,76 +144,66 @@ template <> struct uint<bytes * bits_per_byte> {
 template <class T>
 using unsigned_int =
     typename bitset_type::uint<sizeof(T) * bits_per_byte>::type;
-//! Convert floating-point value to 32-bit (one word) binary bitset.
+// Convert floating-point value to 32-bit (one word) binary bitset.
 word_one float_to_binary(float num) noexcept;
-//! Convert 32-bit (one word) binary bitset to floating-point value.
+// Convert 32-bit (one word) binary bitset to floating-point value.
 float binary_to_float(const word_one &bin) noexcept;
-//! Convert double-precision value to 64-bit (two words) binary bitset.
+// Convert double-precision value to 64-bit (two words) binary bitset.
 word_two double_to_binary(double num) noexcept;
-//! Convert 64-bit (two words) binary bitset to double-precision value.
+// Convert 64-bit (two words) binary bitset to double-precision value.
 double binary_to_double(const word_two &bin) noexcept;
-//! Remove leading spaces from string.
+// Remove leading spaces from string.
 void remove_leading_spaces(std::string *str) noexcept;
-//! Remove trailing spaces from string.
+// Remove trailing spaces from string.
 void remove_trailing_spaces(std::string *str) noexcept;
-//! Remove leading/trailing white-space and control characters from string.
+// Remove leading/trailing white-space and control characters from string.
 std::string string_cleaning(const std::string &str) noexcept;
-//! ?
+// Clean + truncate/pad string as necessary.
 void prep_string(std::string *str, size_t str_size) noexcept;
-//! ?
+// Template function to convert string into binary bitset.
 template <typename T>
 void string_bits(T *bits, const std::string &str, size_t str_size) noexcept;
-//! ?
+// Template function to convert binary bitset to string.
 template <typename T>
 std::string bits_string(const T &bits, size_t num_words) noexcept;
-/*! \brief Convert string to a 64-bit (two word) binary bitset.
-
-  If the string is longer than 8 characters, then only the first 8 characters
-  are kept. If the string is less than 8 characters long, it is right-padded
-  with spaces.
-  */
+// Convert string to a 64-bit (two word) binary bitset.
 word_two string_to_binary(std::string str) noexcept;
-//! Convert a 64-bit (two word) binary bitset to a string.
+// Convert a 64-bit (two word) binary bitset to a string.
 std::string binary_to_string(const word_two &str) noexcept;
-/*! \brief Convert a string to a 128-bit (four word) binary bitset.
-
-  If the string is longer than 16 characters, then only the first 16 charactesr
-  are kept. If the string is less than 16 characters long, it is right-padded
-  with spaces. Exclusively used to work with the kEvNm header.
-  */
+// Convert a string to a 128-bit (four word) binary bitset.
 word_four long_string_to_binary(std::string str) noexcept;
-//! Convert a 128-bit (four word) binary bitset to a string.
+// Convert a 128-bit (four word) binary bitset to a string.
 std::string binary_to_long_string(const word_four &str) noexcept;
-//! Convert a boolean to a 32-bit (one word) binary bitset.
+// Convert a boolean to a 32-bit (one word) binary bitset.
 word_one bool_to_binary(bool flag) noexcept;
-//! Convert a 32-bit (one word) binary bitset to a boolean.
+// Convert a 32-bit (one word) binary bitset to a boolean.
 bool binary_to_bool(const word_one &flag) noexcept;
-/*! Struct containing a pair of words.
+/*! \brief Struct containing a pair of words.
 
   Prevents bug-prone word-swapping in functions that use a pair of words.
 
   These are not necessarily single words, it could be a pair of ::word_one or
   a pair of ::word_two.
+
+  \struct word_pair
   */
 template <typename T> struct word_pair {
   T first{};   //!< First 'word' in the pair.
   T second{};  //!< Second 'word' in the pair.
 };
-// For some reason, template functions didn't want to work for these...
-/*! \brief Concatenate two ::word_one structs into a ::word_two struct.
-
-  Useful for reading strings from SAC-files.
-  */
+// Concatenate two one-word strings into a two-word string.
 word_two concat_words(const word_pair<word_one> &pair_words) noexcept;
-/*! \brief Concatenate two ::word_two structs into a ::word_four struct.
-
-  Useful for reading kEvNm string from SAC-files.
-  */
+// Concatenate two two-word strings into a four-word string.
 word_four concat_words(const word_pair<word_two> &pair_words) noexcept;
 //--------------------------------------------------------------------------
 // Reading
 //--------------------------------------------------------------------------
-/*! Struct that specifies parameters for reading.
+/*! \brief Struct that specifies parameters for reading.
+
+  Prevents bug-prone number-swapping in functions that use a reading
+  specification.
+
+  \struct read_spec
  */
 struct read_spec {
   // cppcheck-suppress unusedStructMember
@@ -230,27 +221,20 @@ void safe_to_read_footer(std::ifstream *sac);
 void safe_to_read_data(std::ifstream *sac, size_t n_words, bool data2 = false);
 //! Have we reached the end of the SAC-file or are there shenanigans?
 void safe_to_finish_reading(std::ifstream *sac);
-//! Read one word (32 bits, useful for non-strings) from a binary SAC-file.
+// Read one word (32 bits, useful for non-strings) from a binary SAC-file.
 word_one read_word(std::ifstream *sac);
-//! Read two words (64 bits, useful for strings) from a binary SAC-file.
+// Read two words (64 bits, useful for strings) from a binary SAC-file.
 word_two read_two_words(std::ifstream *sac);
-//! Read four words (128 bits, kEvNm only) from a binary SAC-file.
+// Read four words (128 bits, kEvNm only) from a binary SAC-file.
 word_four read_four_words(std::ifstream *sac);
-/*! \brief Read an arbitrary number of words from a binary SAC-file.
-
-  This is useful for reading data vectors.
-  */
+// Read arbitrary number of words (vectors) from a binary SAC-file.
 std::vector<double> read_data(std::ifstream *sac, const read_spec &spec);
 //--------------------------------------------------------------------------
 // Writing
 //--------------------------------------------------------------------------
-// The below writing functions all work, though they are a bit funky
-// Using std::vector because more flexible
-// Allows writing arbitrary amount of data to file
+// Write arbitrary number of words (vectors) to a binary SAC-file.
 void write_words(std::ofstream *sac_file, const std::vector<char> &input);
-// Template function to convert to a SAC word
-// handles float and int (not string or double)
-// Only single word
+// Template function to convert input value into a std::vector<char> for writing.
 template <typename T> std::vector<char> convert_to_word(T input) noexcept;
 // Special for double-precision numbers (2 words, not 1)
 std::vector<char> convert_to_word(double input) noexcept;
@@ -717,7 +701,6 @@ public:
   void yminimum(float input) noexcept;
   void ymaximum(float input) noexcept;
   // Doubles
-  // Doubles
   void delta(double input) noexcept;
   void b(double input) noexcept;
   void e(double input) noexcept;
@@ -801,12 +784,6 @@ public:
   void data2(const std::vector<double> &input) noexcept;
 
 private:
-  // Trying to reduce cognitive complexity down from 28
-  // according to clang-tidy (limit 25)
-  void read_header(std::ifstream *sac);
-  void read_data1() noexcept;
-  void read_data2() noexcept;
-  void read_footer() noexcept;
   // Convenience methods
   void calc_gcarc() noexcept;
   void calc_dist() noexcept;

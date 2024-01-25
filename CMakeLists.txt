@@ -2,7 +2,7 @@
 # Basic Setup
 #===============================================================================
 # CMake version
-cmake_minimum_required (VERSION 3.20)
+cmake_minimum_required (VERSION 3.25)
 # Build type
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -12,17 +12,26 @@ endif()
 #===============================================================================
 include(FetchContent)
 set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
-# Unit testing
-FetchContent_Declare(Catch2
-  GIT_REPOSITORY https://github.com/catchorg/Catch2
-  GIT_TAG v3.4.0)
 # Random number generation
 FetchContent_Declare(xoshiro
   GIT_REPOSITORY https://github.com/Reputeless/Xoshiro-cpp
-  GIT_TAG v1.1)
-FetchContent_MakeAvailable(Catch2 xoshiro)
+  GIT_TAG v1.1
+  SYSTEM)
+FetchContent_MakeAvailable(xoshiro)
 # Include Xoshiro since it doesn't have a CMakeLists.txt
 include_directories(SYSTEM ${xoshiro_SOURCE_DIR})
+# Provides location to search for Catch2 installation from source build
+# build via:
+# git clone https://github.com/catchorg/Catch2.git
+# mkdir build && cd build
+# cmake .. -DBUILD_TESTING=Off
+# make && sudo make install
+# Need to figure out how to get this working on Windows as well!
+list(APPEND CMAKE_PREFIX_PATH
+  "/usr/local/lib64/cmake" # Linux
+  "/usr/local/lib/cmake" # macOS
+)
+find_package(Catch2 3 CONFIG REQUIRED)
 #==============================================================================
 # sac-format
 #==============================================================================
@@ -106,6 +115,7 @@ endif()
 #===============================================================================
 # CPack Installation
 #===============================================================================
+include(CPack)
 # Setup components
 install(TARGETS sac-format COMPONENT library)
 install(TARGETS basic_tests trace_tests geometry_tests datetime_tests
@@ -183,4 +193,3 @@ set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Alexander R. Blanchette \
 set(CPACK_RPM_COMPONENT_INSTALL ON)
 # Don't strip binaries
 set(CPACK_RPM_SPEC_MORE_DEFINE "%define __spec_install_post /bin/true")
-include(CPack)

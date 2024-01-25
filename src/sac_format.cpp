@@ -3,9 +3,13 @@
 /*!
   \file sac_format.cpp
 
-  \brief Brief
+  \brief Implementation of the sac-format library.
 
-  This file is the implementation of the sac-format library
+  \author Alexander R. Blanchette
+
+  The full implementation of the entire sac-format library. Including
+  the Trace class, all methods, and all functions. Everything in this file
+  is targeted for testing coverage.
   */
 
 #include "sac-format/sac_format.hpp"
@@ -16,21 +20,25 @@ namespace sacfmt {
 // Conversions
 //-----------------------------------------------------------------------------
 /*!
-  Multiplies given word number by the length of a word defined by the SAC
-  format.
+  \brief Calculates position of word in SAC-file.
+  
+  Multiplies given word number by the word-length in bytes (defined by the SAC
+  format.)
 
   @param[in] word_number Number of desired word in file stream.
-  @returns stream offset, from beginning of stream, of desired word.
+  @returns std::streamoff Position in SAC-file of desired word (in bytes).
   */
 std::streamoff word_position(const size_t word_number) noexcept {
   return static_cast<std::streamoff>(word_number * word_length);
 }
 
 /*!
+  \brief Convert integer to 32-bit (one word) binary bitset.
+  
   Uses two's compliment to convert an integer into a binary value.
 
   @param[in] num Number to be converted.
-  @returns ::word_one (32-bit bitset).
+  @returns ::word_one Converted value.
   */
 word_one int_to_binary(const int num) noexcept {
   word_one bits{};
@@ -43,10 +51,12 @@ word_one int_to_binary(const int num) noexcept {
 }
 
 /*!
+  \brief Convert 32-bit (one word) binary bitset to integer.
+  
   Uses two's complement to convert a binary value into an integer.
 
   @param[in] bin Binary value to be converted.
-  @returns int value.
+  @returns int Converted value.
  */
 int binary_to_int(word_one bin) noexcept {
   int result{};
@@ -62,6 +72,15 @@ int binary_to_int(word_one bin) noexcept {
   return result;
 }
 
+
+/*!
+  \brief Convert floating-point value to 32-bit (one word) binary bitset.
+
+  Converts float to unsigned-integer of same size for storage in bitset.
+
+  @param[in] num Float value to be converted.
+  @returns ::word_one Converted value.
+ */
 word_one float_to_binary(const float num) noexcept {
   unsigned_int<float> num_as_uint{0};
   // flawfinder: ignore
@@ -70,6 +89,14 @@ word_one float_to_binary(const float num) noexcept {
   return result;
 }
 
+/*!
+  \brief Convert 32-bit (one word) binary bitset to a floating-point value.
+
+  Converts bitset to unsigned long then to float.
+
+  @param[in] bin ::word_one Binary value to be converted.
+  @returns float Converted value.
+  */
 float binary_to_float(const word_one &bin) noexcept {
   const auto val = bin.to_ulong();
   float result{};
@@ -78,6 +105,14 @@ float binary_to_float(const word_one &bin) noexcept {
   return result;
 }
 
+/*!
+  \brief Convert double-precision value to 64-bit (two words) binary bitset.
+
+  Converts double to unsigned-integer of same size for storage in bitset.
+
+  @param[in] num Double value to be converted.
+  @returns ::word_two Converted value.
+ */
 word_two double_to_binary(const double num) noexcept {
   unsigned_int<double> num_as_uint{0};
   // flawfinder: ignore
@@ -86,6 +121,14 @@ word_two double_to_binary(const double num) noexcept {
   return result;
 }
 
+/*!
+  \brief Convert 64-bit (two words) binary bitset to double-precision value.
+
+  Converts bitset to unsigned long long then to double.
+
+  @param[in] bin ::word_two Binary value to be converted.
+  @returns double Converted value.
+ */
 double binary_to_double(const word_two &bin) noexcept {
   const auto val = bin.to_ullong();
   double result{};
@@ -94,18 +137,38 @@ double binary_to_double(const word_two &bin) noexcept {
   return result;
 }
 
+/*!
+  \brief Remove all leading spaces from a string.
+
+  This edits the string in-place.
+
+  @param[in, out] str std::string* String to have spaces removed.
+ */
 void remove_leading_spaces(std::string *str) noexcept {
   while ((static_cast<int>(str->front()) <= ascii_space) && (!str->empty())) {
     str->erase(0, 1);
   }
 }
+
+/*!
+  \brief Remove all trailing spaces from a string.
+
+  This edits the string in-place.
+
+  @param[in, out] str std::string* String to have spaces removed.
+ */
 void remove_trailing_spaces(std::string *str) noexcept {
   while ((static_cast<int>(str->back()) <= ascii_space) && (!str->empty())) {
     str->pop_back();
   }
 }
 
-// Remove leading/trailing white-space and control characters
+/*!
+  \brief Remove leading/trailing spaces and control characters from a string.
+  
+  @param[in] str std::string String to be cleaned.
+  @returns std::string Cleaned string.
+ */
 std::string string_cleaning(const std::string &str) noexcept {
   std::string result{str};
   size_t null_position{str.find('\0')};
@@ -117,6 +180,14 @@ std::string string_cleaning(const std::string &str) noexcept {
   return result;
 }
 
+/*!
+  \brief Cleans string and then truncates/pads as necessary.
+
+  This edits the string in-place.
+
+  @param[in, out] str std::string* String to be prepared.
+  @param[in] str_size Desired string length.
+ */
 void prep_string(std::string *str, const size_t str_size) noexcept {
   *str = string_cleaning(*str);
   if (str->length() > str_size) {
@@ -126,6 +197,15 @@ void prep_string(std::string *str, const size_t str_size) noexcept {
   }
 }
 
+/*!
+  \brief Template function to convert string into binary bitset.
+
+  Note that this edits the bitset in place.
+
+  @param[out] bits Destintation bitset for the string (result).
+  @param[in] str String to undergo conversion.
+  @param[in] str_size Desired string size in words (4 chars = 1 word).
+ */
 template <typename T>
 void string_bits(T *bits, const std::string &str,
                  const size_t str_size) noexcept {
@@ -140,6 +220,13 @@ void string_bits(T *bits, const std::string &str,
   }
 }
 
+/*!
+  \brief Template function to convert binary bitset to string.
+
+  @param[in] bits Source bitset for the string.
+  @param[in] num_words Length of string in words (4 chars = 1 word)
+  @returns std::string String converted from bitset.
+ */
 template <typename T>
 std::string bits_string(const T &bits, const size_t num_words) noexcept {
   std::string result{};
@@ -155,6 +242,16 @@ std::string bits_string(const T &bits, const size_t num_words) noexcept {
   return result;
 }
 
+/*!
+  \brief Convert string to a 64-bit (two word) binary bitset
+
+  If the string is longer than 8 characters, the only the first 8 characters are
+  kept. If the string is less than 8 characters long, it is right-padded with
+  spaces.
+
+  @param[in] str String to be converted to a bitset.
+  @returns ::word_two Converted binary bitset.
+ */
 word_two string_to_binary(std::string str) noexcept {
   constexpr size_t string_size{static_cast<size_t>(2 * word_length)};
   // 1 byte per character
@@ -165,11 +262,29 @@ word_two string_to_binary(std::string str) noexcept {
   return bits;
 }
 
+/*!
+  \brief Convert a 64-bit (two word) binary bitset to a string.
+
+  @param[in] str ::word_two to be converted to a string.
+  @returns std::string Converted string.
+ */
 std::string binary_to_string(const word_two &str) noexcept {
   std::string result{bits_string(str, 2)};
   return string_cleaning(result);
 }
 
+/*!
+  \brief Convert a string to a 128-bit (four word) binary bitset.
+
+  If the string is longer than 16 characters, then only the first 16 characters
+  are kept. If the string is less than 16 characters long, it is right-padded
+  with spaces.
+
+  Exclusively used to work with the kEvNm header.
+
+  @param[in] str String to be converted to a bitset.
+  @returns ::word_four Converted binary bitset.
+ */
 word_four long_string_to_binary(std::string str) noexcept {
   constexpr size_t string_size{static_cast<size_t>(4 * word_length)};
   prep_string(&str, string_size);
@@ -179,19 +294,49 @@ word_four long_string_to_binary(std::string str) noexcept {
   return bits;
 }
 
+/*!
+  \brief Convert a 128-bit (four word) binary bitset to a string.
+
+  Exclusively used to work with the kEvNm header.
+
+  @param[in] str ::word_four to be converted to a string.
+  @returns std::string Converted string.
+ */
 std::string binary_to_long_string(const word_four &str) noexcept {
   std::string result{bits_string(str, 4)};
   return string_cleaning(result);
 }
 
+/*!
+  \brief Convert a boolean to a 32-bit (one word) binary bitset.
+
+  @param[in] flag Boolean value to be converted to a bitset (sets zeroth
+  element).
+  @returns ::word_one Converted binary bitset.
+ */
 word_one bool_to_binary(const bool flag) noexcept {
   word_one result{};
   result[0] = flag;
   return result;
 }
 
+/*!
+  \brief Convert a 32-bit (one word) binary bitset to a boolean.
+
+  @param[in] flag ::word_one binary bitset to be converted (takes zeroth
+  element).
+  @returns boolean Converted boolean value.
+ */
 bool binary_to_bool(const word_one &flag) noexcept { return flag[0]; }
 
+/*!
+  \brief Concatenate two ::word_one binary strings into a single ::word_two string.
+
+  Useful for reading strings from SAC-files.
+
+  @param[in] pair_words word_pair Words to be concatenated.
+  @returns ::word_two Concatenated words.
+ */
 word_two concat_words(const word_pair<word_one> &pair_words) noexcept {
   word_two result{};
   for (size_t i{0}; i < binary_word_size; ++i) [[likely]] {
@@ -201,6 +346,14 @@ word_two concat_words(const word_pair<word_one> &pair_words) noexcept {
   return result;
 }
 
+/*!
+  \brief Concatenate two ::word_two binary strings into a single ::word_four string.
+
+  Exclusively used to read kEvNm header from SAC-file.
+
+  @param[in] pair_words word_pair Words to be concatenated.
+  @returns ::word_four Concatenated words.
+ */
 word_four concat_words(const word_pair<word_two> &pair_words) noexcept {
   word_four result{};
   for (int i{0}; i < 2 * binary_word_size; ++i) [[likely]] {
@@ -212,6 +365,15 @@ word_four concat_words(const word_pair<word_two> &pair_words) noexcept {
 //-----------------------------------------------------------------------------
 // Reading
 //-----------------------------------------------------------------------------
+/*!
+  \brief Read one word (32 bits, useful for non-strings) from a binary SAC-File
+
+  Note that this modifies the position of the reader within the stream (to the
+  end of the read word).
+  
+  @param[in, out] sac std::ifstream* Input binary SAC-file.
+  @returns ::word_one Binary bitset representation of single word.
+ */
 word_one read_word(std::ifstream *sac) {
   word_one bits{};
   constexpr int char_size{bits_per_byte};
@@ -235,6 +397,15 @@ word_one read_word(std::ifstream *sac) {
   return bits;
 }
 
+/*!
+  \brief Read two words (64 bits, useful for most strings) from a binary SAC-file.
+
+  Note that this modifies the position of the reader within the stream (to the
+  end of the read words).
+
+  @param[in, out] sac std::ifstream* Input binary SAC-file.
+  @returns ::word_two Binary bitset representation of two words.
+ */
 word_two read_two_words(std::ifstream *sac) {
   const word_one first_word{read_word(sac)};
   const word_one second_word{read_word(sac)};
@@ -249,6 +420,15 @@ word_two read_two_words(std::ifstream *sac) {
   return concat_words(pair_words);
 }
 
+/*!
+  \brief Read four words (128 bits, kEvNm only) from a binary SAC-file.
+
+  Note that this modifies the position of the reader within the stream (to the
+  end of the read words).
+
+  @param[in, out] sac std::ifstream* Input binary SAC-file.
+  @returns ::word_four Binary bitset representation of four words.
+ */
 word_four read_four_words(std::ifstream *sac) {
   const word_two first_words{read_two_words(sac)};
   const word_two second_words{read_two_words(sac)};
@@ -263,6 +443,16 @@ word_four read_four_words(std::ifstream *sac) {
   return concat_words(pair_words);
 }
 
+/*!
+  \brief Reader arbitrary number of words (useful for vectors) from a binary SAC-file.
+
+  Note that this modifies the position of the reader within the stream (to the
+  end of the read words).
+
+  @param[in, out] sac std::ifstream* Input binary SAC-file.
+  @param[in] spec read_spec Reading specification.
+  @returns std::vector<double> Data vector read in.
+ */
 std::vector<double> read_data(std::ifstream *sac, const read_spec &spec) {
   sac->seekg(word_position(spec.start_word));
   std::vector<double> result{};
@@ -275,6 +465,16 @@ std::vector<double> read_data(std::ifstream *sac, const read_spec &spec) {
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
+/*!
+  \brief Write arbitrary number of words (useful for vectors) to a binary SAC-file.
+
+  Note that this modifies the position of the writer within the stream (to the
+  end of the written words).
+
+  @param[in, out] sac_file std::ofstream* Output binary SAC-file.
+  @param[in] input std::vector<char> Character vector representation of data for
+  writing.
+ */
 void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
   std::ofstream &sac = *sac_file;
   if (sac.is_open()) {
@@ -284,7 +484,12 @@ void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
   }
 }
 
-// Template on the typename to make possible to handle float or int
+/*!
+  \brief Template function to convert input value into a std::vector<char> for writing.
+
+  @param[in] input Input value (float or int) to convert.
+  @return std::vector<char> Prepared for writing to binary SAC-file.
+ */
 template <typename T>
 std::vector<char> convert_to_word(const T input) noexcept {
   std::array<char, word_length> tmp{};
@@ -303,6 +508,12 @@ std::vector<char> convert_to_word(const T input) noexcept {
 template std::vector<char> convert_to_word(const float input) noexcept;
 template std::vector<char> convert_to_word(const int x) noexcept;
 
+/*!
+  \brief Convert double value into a std::vector<char> for writing.
+
+  @param[in] input Input value to convert (double).
+  @return std::vector<char> Prepared for writing to binary SAC-file.
+ */
 std::vector<char> convert_to_word(const double input) noexcept {
   std::array<char, static_cast<size_t>(2) * word_length> tmp{};
   // Copy bytes from input into the tmp array
@@ -317,6 +528,13 @@ std::vector<char> convert_to_word(const double input) noexcept {
 }
 
 // Variable sized words for the 'K' headers
+/*!
+  \brief Template function to convert input string value into a std::array<char> for writing.
+
+  @param[in] str Input string to convert.
+  @param[in] n_words Number of words
+  @return std::array<char, N> Prepared for writing to a binary SAC-file.
+  */
 template <size_t N>
 std::array<char, N> convert_to_words(const std::string &str,
                                      int n_words) noexcept {
@@ -337,6 +555,12 @@ convert_to_words(const std::string &str, const int n_words) noexcept;
 template std::array<char, 4 * word_length>
 convert_to_words(const std::string &str, const int n_words) noexcept;
 
+/*!
+  \brief Convert boolean to a word for writing.
+
+  @param[in] flag Boolean to be converted.
+  @returns std::vector<char> Prepared value for writing.
+  */
 std::vector<char> bool_to_word(const bool flag) noexcept {
   std::vector<char> result;
   result.resize(word_length);
@@ -377,6 +601,18 @@ double radians_to_degrees(const double radians) noexcept {
   return deg_per_rad * radians;
 }
 
+/*!
+  \f$\color{orange}\phi\f$ is latitude.
+  \f$\color{orange}\lambda\f$ is longitude.
+  \f$\color{orange}\Delta\f$ is great circle arc distance (gcarc).
+
+  \f[\color{orange}
+  \Delta = cos^{-1}\left(
+  sin(\phi_{1})sin(\phi_{2}) + cos(\phi_{1})cos(\phi_{2})
+  cos(\lambda_{2}-\lambda_{1})
+  \right)
+  \f]
+ */
 double gcarc(const double latitude1, const double longitude1,
              const double latitude2, const double longitude2) noexcept {
   const double lat1{degrees_to_radians(latitude1)};
