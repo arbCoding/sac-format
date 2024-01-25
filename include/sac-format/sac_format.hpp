@@ -73,6 +73,7 @@ constexpr bool unset_bool{false};
 const std::string unset_word{"-12345"};
 //! Accuracy precision expected of SAC floating-point values.
 constexpr float f_eps{2.75e-6F};
+//! One binary character (useful for building strings).
 using char_bit = std::bitset<bits_per_byte>;
 //! One binary word (useful for non-strings).
 using word_one = std::bitset<binary_word_size>;
@@ -115,6 +116,7 @@ constexpr double earth_radius{6378.14};
 //--------------------------------------------------------------------------
 // Calculate position of word in SAC-file.
 std::streamoff word_position(size_t word_number) noexcept;
+// Convert unsigned integer to 32-bit (one word) binary bitset.
 word_one uint_to_binary(uint num) noexcept;
 // Convert integer to 32-bit (one word) binary bitset.
 word_one int_to_binary(int num) noexcept;
@@ -236,7 +238,8 @@ std::vector<double> read_data(std::ifstream *sac, const read_spec &spec);
 //--------------------------------------------------------------------------
 // Write arbitrary number of words (vectors) to a binary SAC-file.
 void write_words(std::ofstream *sac_file, const std::vector<char> &input);
-// Template function to convert input value into a std::vector<char> for writing.
+// Template function to convert input value into a std::vector<char> for
+// writing.
 template <typename T> std::vector<char> convert_to_word(T input) noexcept;
 // Special for double-precision numbers (2 words, not 1)
 std::vector<char> convert_to_word(double input) noexcept;

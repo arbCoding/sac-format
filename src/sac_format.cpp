@@ -21,7 +21,7 @@ namespace sacfmt {
 //-----------------------------------------------------------------------------
 /*!
   \brief Calculates position of word in SAC-file.
-  
+
   Multiplies given word number by the word-length in bytes (defined by the SAC
   format.)
 
@@ -32,21 +32,32 @@ std::streamoff word_position(const size_t word_number) noexcept {
   return static_cast<std::streamoff>(word_number * word_length);
 }
 
+/*!
+  \brief Convert unsigned integer to 32-bit (one word) binary bitset.
+
+  This sets the current bit using bitwise and, updates the bit to manipulate
+  and performs a right-shift (division by 2) until the number is zero.
+  
+  @param[in] num Number to be converted.
+  @returns ::word_one Converted value.
+ */
 word_one uint_to_binary(uint num) noexcept {
   word_one bits{};
   size_t pos{0};
   while (num > 0) {
-    bits.set(pos, num & 1);
+    bits.set(pos, static_cast<bool>(num & 1));
+    // Target next bit
     ++pos;
-    num /= 2;
+    // Right bit shift, same as division by 2
+    num >>= 1;
   }
   return bits;
 }
 
 /*!
   \brief Convert integer to 32-bit (one word) binary bitset.
-  
-  Uses two's compliment to convert an integer into a binary value.
+
+  Uses two's complement to convert an integer into a binary value.
 
   @param[in] num Number to be converted.
   @returns ::word_one Converted value.
@@ -55,21 +66,18 @@ word_one int_to_binary(int num) noexcept {
   word_one bits{};
   if (num >= 0) {
     bits = uint_to_binary(static_cast<uint>(num));
-    //bits = word_one(static_cast<size_t>(num));
-    //bits.set(static_cast<size_t>(num));
   } else {
     bits = uint_to_binary(static_cast<uint>(-num));
+    // Complement
     bits.flip();
     bits = bits.to_ulong() + 1;
-    //num = static_cast<int>(std::pow(2, binary_word_size) + num);
-    //bits.set(static_cast<size_t>(std::pow(2, binary_word_size) + num));
   }
   return bits;
 }
 
 /*!
   \brief Convert 32-bit (one word) binary bitset to integer.
-  
+
   Uses two's complement to convert a binary value into an integer.
 
   @param[in] bin Binary value to be converted.
@@ -78,7 +86,8 @@ word_one int_to_binary(int num) noexcept {
 int binary_to_int(word_one bin) noexcept {
   int result{};
   if (bin.test(binary_word_size - 1)) {
-    bin = ~bin;
+    // Complement
+    bin.flip();
     result = static_cast<int>(bin.to_ulong());
     result += 1;
     // Change sign to make it negative
@@ -88,7 +97,6 @@ int binary_to_int(word_one bin) noexcept {
   }
   return result;
 }
-
 
 /*!
   \brief Convert floating-point value to 32-bit (one word) binary bitset.
@@ -182,7 +190,7 @@ void remove_trailing_spaces(std::string *str) noexcept {
 
 /*!
   \brief Remove leading/trailing spaces and control characters from a string.
-  
+
   @param[in] str std::string String to be cleaned.
   @returns std::string Cleaned string.
  */
@@ -347,7 +355,8 @@ word_one bool_to_binary(const bool flag) noexcept {
 bool binary_to_bool(const word_one &flag) noexcept { return flag[0]; }
 
 /*!
-  \brief Concatenate two ::word_one binary strings into a single ::word_two string.
+  \brief Concatenate two ::word_one binary strings into a single ::word_two
+  string.
 
   Useful for reading strings from SAC-files.
 
@@ -364,7 +373,8 @@ word_two concat_words(const word_pair<word_one> &pair_words) noexcept {
 }
 
 /*!
-  \brief Concatenate two ::word_two binary strings into a single ::word_four string.
+  \brief Concatenate two ::word_two binary strings into a single ::word_four
+  string.
 
   Exclusively used to read kEvNm header from SAC-file.
 
@@ -388,7 +398,7 @@ word_four concat_words(const word_pair<word_two> &pair_words) noexcept {
 
   Note that this modifies the position of the reader within the stream (to the
   end of the read word).
-  
+
   @param[in, out] sac std::ifstream* Input binary SAC-file.
   @returns ::word_one Binary bitset representation of single word.
  */
@@ -415,7 +425,8 @@ word_one read_word(std::ifstream *sac) {
 }
 
 /*!
-  \brief Read two words (64 bits, useful for most strings) from a binary SAC-file.
+  \brief Read two words (64 bits, useful for most strings) from a binary
+  SAC-file.
 
   Note that this modifies the position of the reader within the stream (to the
   end of the read words).
@@ -461,7 +472,8 @@ word_four read_four_words(std::ifstream *sac) {
 }
 
 /*!
-  \brief Reader arbitrary number of words (useful for vectors) from a binary SAC-file.
+  \brief Reader arbitrary number of words (useful for vectors) from a binary
+  SAC-file.
 
   Note that this modifies the position of the reader within the stream (to the
   end of the read words).
@@ -483,7 +495,8 @@ std::vector<double> read_data(std::ifstream *sac, const read_spec &spec) {
 // Writing
 //-----------------------------------------------------------------------------
 /*!
-  \brief Write arbitrary number of words (useful for vectors) to a binary SAC-file.
+  \brief Write arbitrary number of words (useful for vectors) to a binary
+  SAC-file.
 
   Note that this modifies the position of the writer within the stream (to the
   end of the written words).
@@ -502,7 +515,8 @@ void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
 }
 
 /*!
-  \brief Template function to convert input value into a std::vector<char> for writing.
+  \brief Template function to convert input value into a std::vector<char> for
+  writing.
 
   @param[in] input Input value (float or int) to convert.
   @return std::vector<char> Prepared for writing to binary SAC-file.
@@ -546,7 +560,8 @@ std::vector<char> convert_to_word(const double input) noexcept {
 
 // Variable sized words for the 'K' headers
 /*!
-  \brief Template function to convert input string value into a std::array<char> for writing.
+  \brief Template function to convert input string value into a std::array<char>
+  for writing.
 
   @param[in] str Input string to convert.
   @param[in] n_words Number of words
