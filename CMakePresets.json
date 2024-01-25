@@ -149,7 +149,7 @@
             "displayName": "GCC-Clang Hardened Debug",
             "description": "GCC-Clang Debug with Hardening options.",
             "cacheVariables": {
-                "CMAKE_CXX_FLAGS": "-O0 -ggdb -Werror -Wshadow -Wextra -Wconversion -Wtrampolines -Wimplicit-fallthrough -Wall -pedantic-errors -Wformat=2 -fstack-clash-protection -fstack-protector-strong -Wl,-z,nodlopen -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -fPIE -pie -fcf-protection=full"
+                "CMAKE_CXX_FLAGS": "-O0 -ggdb -Werror -Wshadow -Wextra -Wconversion -Wsign-conversion -Wtrampolines -Wimplicit-fallthrough -Wall -pedantic-errors -Wformat=2 -fstack-clash-protection -fstack-protector-strong -Wl,-z,nodlopen -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -fPIE -pie -fcf-protection=full"
             }
         },
         {

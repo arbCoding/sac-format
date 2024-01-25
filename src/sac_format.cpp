@@ -32,6 +32,17 @@ std::streamoff word_position(const size_t word_number) noexcept {
   return static_cast<std::streamoff>(word_number * word_length);
 }
 
+word_one uint_to_binary(uint num) noexcept {
+  word_one bits{};
+  size_t pos{0};
+  while (num > 0) {
+    bits.set(pos, num & 1);
+    ++pos;
+    num /= 2;
+  }
+  return bits;
+}
+
 /*!
   \brief Convert integer to 32-bit (one word) binary bitset.
   
@@ -40,12 +51,18 @@ std::streamoff word_position(const size_t word_number) noexcept {
   @param[in] num Number to be converted.
   @returns ::word_one Converted value.
   */
-word_one int_to_binary(const int num) noexcept {
+word_one int_to_binary(int num) noexcept {
   word_one bits{};
   if (num >= 0) {
-    bits = word_one(static_cast<size_t>(num));
+    bits = uint_to_binary(static_cast<uint>(num));
+    //bits = word_one(static_cast<size_t>(num));
+    //bits.set(static_cast<size_t>(num));
   } else {
-    bits = word_one(static_cast<size_t>(std::pow(2, binary_word_size) + num));
+    bits = uint_to_binary(static_cast<uint>(-num));
+    bits.flip();
+    bits = bits.to_ulong() + 1;
+    //num = static_cast<int>(std::pow(2, binary_word_size) + num);
+    //bits.set(static_cast<size_t>(std::pow(2, binary_word_size) + num));
   }
   return bits;
 }
@@ -210,10 +227,10 @@ template <typename T>
 void string_bits(T *bits, const std::string &str,
                  const size_t str_size) noexcept {
   constexpr size_t char_size{bits_per_byte};
-  std::bitset<char_size> byte{};
+  char_bit byte{};
   for (size_t i{0}; i < str_size; ++i) {
     size_t character{static_cast<size_t>(str[i])};
-    byte = std::bitset<char_size>(character);
+    byte = char_bit(character);
     for (size_t j{0}; j < char_size; ++j) {
       (*bits)[(i * char_size) + j] = byte[j];
     }
@@ -232,7 +249,7 @@ std::string bits_string(const T &bits, const size_t num_words) noexcept {
   std::string result{};
   result.reserve(num_words * word_length);
   constexpr size_t char_size{bits_per_byte};
-  std::bitset<char_size> byte{};
+  char_bit byte{};
   for (size_t i{0}; i < num_words * binary_word_size; i += char_size) {
     for (size_t j{0}; j < char_size; ++j) [[likely]] {
       byte[j] = bits[i + j];
@@ -253,7 +270,7 @@ std::string bits_string(const T &bits, const size_t num_words) noexcept {
   @returns ::word_two Converted binary bitset.
  */
 word_two string_to_binary(std::string str) noexcept {
-  constexpr size_t string_size{static_cast<size_t>(2 * word_length)};
+  constexpr size_t string_size{2 * word_length};
   // 1 byte per character
   prep_string(&str, string_size);
   // Two words (8 characters)
@@ -286,7 +303,7 @@ std::string binary_to_string(const word_two &str) noexcept {
   @returns ::word_four Converted binary bitset.
  */
 word_four long_string_to_binary(std::string str) noexcept {
-  constexpr size_t string_size{static_cast<size_t>(4 * word_length)};
+  constexpr size_t string_size{4 * word_length};
   prep_string(&str, string_size);
   // Four words (16 characters)
   word_four bits{};
@@ -356,9 +373,10 @@ word_two concat_words(const word_pair<word_one> &pair_words) noexcept {
  */
 word_four concat_words(const word_pair<word_two> &pair_words) noexcept {
   word_four result{};
-  for (int i{0}; i < 2 * binary_word_size; ++i) [[likely]] {
+  constexpr size_t two_words{2 * binary_word_size};
+  for (size_t i{0}; i < two_words; ++i) [[likely]] {
     result[i] = pair_words.first[i];
-    result[i + (2 * binary_word_size)] = pair_words.second[i];
+    result[i + two_words] = pair_words.second[i];
   }
   return result;
 }
@@ -376,7 +394,7 @@ word_four concat_words(const word_pair<word_two> &pair_words) noexcept {
  */
 word_one read_word(std::ifstream *sac) {
   word_one bits{};
-  constexpr int char_size{bits_per_byte};
+  constexpr size_t char_size{bits_per_byte};
   // Where we will store the characters
   std::array<char, word_length> word{};
   // Read to our character array
@@ -384,12 +402,11 @@ word_one read_word(std::ifstream *sac) {
   // flawfinder: ignore
   if (sac->read(word.data(), word_length)) {
     // Take each character
-    std::bitset<char_size> byte{};
-    for (int i{0}; i < word_length; ++i) [[likely]] {
-      int character{word[i]};
-      byte = std::bitset<char_size>(character);
+    for (size_t i{0}; i < word_length; ++i) [[likely]] {
+      uint character{static_cast<uint>(word[i])};
+      char_bit byte{character};
       // bit-by-bit
-      for (int j{0}; j < char_size; ++j) [[likely]] {
+      for (size_t j{0}; j < char_size; ++j) [[likely]] {
         bits[(i * char_size) + j] = byte[j];
       }
     }
@@ -498,7 +515,7 @@ std::vector<char> convert_to_word(const T input) noexcept {
   std::memcpy(tmp.data(), &input, word_length);
   std::vector<char> word{};
   word.resize(word_length);
-  for (int i{0}; i < word_length; ++i) [[likely]] {
+  for (size_t i{0}; i < word_length; ++i) [[likely]] {
     word[i] = tmp[i];
   }
   return word;
@@ -521,8 +538,8 @@ std::vector<char> convert_to_word(const double input) noexcept {
   std::memcpy(tmp.data(), &input, static_cast<size_t>(2) * word_length);
   std::vector<char> word{};
   word.resize(static_cast<size_t>(2) * word_length);
-  for (int i{0}; i < 2 * word_length; ++i) {
-    word[static_cast<size_t>(i)] = tmp[i];
+  for (size_t i{0}; i < 2 * word_length; ++i) {
+    word[i] = tmp[i];
   }
   return word;
 }
@@ -541,8 +558,8 @@ std::array<char, N> convert_to_words(const std::string &str,
   std::array<char, N> all_words{};
   // String to null-terminated character array
   const char *c_str = str.c_str();
-  for (int i{0}; i < (n_words * word_length); ++i) {
-    all_words[static_cast<size_t>(i)] = c_str[i];
+  for (size_t i{0}; i < static_cast<size_t>(n_words) * word_length; ++i) {
+    all_words[i] = c_str[i];
   }
   return all_words;
 }
@@ -565,7 +582,7 @@ std::vector<char> bool_to_word(const bool flag) noexcept {
   std::vector<char> result;
   result.resize(word_length);
   result[0] = static_cast<char>(flag ? 1 : 0);
-  for (int i{1}; i < word_length; ++i) {
+  for (size_t i{1}; i < word_length; ++i) {
     result[i] = 0;
   }
   return result;
@@ -1218,7 +1235,7 @@ void Trace::nysize(const int input) noexcept {
 }
 void Trace::iftype(const int input) noexcept {
   ints[sac_map.at(name::iftype)] = input;
-  const int size{npts() >= 0 ? npts() : 0};
+  const size_t size{npts() >= 0 ? static_cast<size_t>(npts()) : 0};
   // Uneven 2D data not supported as not in specification
   if ((input > 1) && !leven()) {
     leven(true);
@@ -1261,7 +1278,7 @@ void Trace::ibody(const int input) noexcept {
 // Bools
 void Trace::leven(const bool input) noexcept {
   bools[sac_map.at(name::leven)] = input;
-  const int size{npts() >= 0 ? npts() : 0};
+  const size_t size{npts() >= 0 ? static_cast<size_t>(npts()) : 0};
   // Uneven 2D data not supported since not in specification
   if (!input && (iftype() > 1)) {
     iftype(unset_int);
@@ -1351,16 +1368,16 @@ void Trace::kinst(const std::string &input) noexcept {
 void Trace::data1(const std::vector<double> &input) noexcept {
   data[sac_map.at(name::data1)] = input;
   // Propagate change as needed
-  size_t size{data1().size()};
+  int size{static_cast<int>(data1().size())};
   size = (((size == 0) && (npts() == unset_int)) ? unset_int : size);
-  if (static_cast<int>(size) != npts()) {
-    npts(static_cast<int>(size));
+  if (size != npts()) {
+    npts(size);
   }
 }
 void Trace::data2(const std::vector<double> &input) noexcept {
   data[sac_map.at(name::data2)] = input;
   // Proagate change as needed
-  size_t size{data2().size()};
+  int size{static_cast<int>(data2().size())};
   size = (((size == 0) && (npts() == unset_int)) ? unset_int : size);
   // Need to make sure this is legal
   // If positive size and not-legal, make spectral
@@ -1370,8 +1387,8 @@ void Trace::data2(const std::vector<double> &input) noexcept {
       iftype(2);
     }
     // If legal and different from npts, update npts
-    if ((!leven() || (iftype() > 1)) && (static_cast<int>(size) != npts())) {
-      npts(static_cast<int>(size));
+    if ((!leven() || (iftype() > 1)) && (size != npts())) {
+      npts(size);
     }
   }
 }
@@ -1631,7 +1648,7 @@ Trace::Trace(const std::filesystem::path &path) {
   if (is_data && (!leven() || (iftype() > 1))) {
     // true flags for data2
     safe_to_read_data(&file, n_words, true);  // throws io_error if unsafe
-    const read_spec spec{n_words, static_cast<size_t>(data_word) + npts()};
+    const read_spec spec{n_words, data_word + static_cast<size_t>(npts())};
     data2(read_data(&file, spec));
   }
   //--------------------------------------------------------------------------

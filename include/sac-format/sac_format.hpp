@@ -54,11 +54,11 @@ namespace sacfmt {
 // Constants
 //--------------------------------------------------------------------------
 //! Size (bytes) of fundamental data-chunk.
-constexpr int word_length{4};
+constexpr size_t word_length{4};
 //! Size (bits) of binary character.
-constexpr int bits_per_byte{8};
+constexpr size_t bits_per_byte{8};
 //! Size (bits) of funamental data-chunk.
-constexpr int binary_word_size{word_length * bits_per_byte};
+constexpr size_t binary_word_size{word_length * bits_per_byte};
 //! First word of (first) data-section (stream offset).
 constexpr std::streamoff data_word{158};
 //! Integer unset value (SAC Magic).
@@ -73,6 +73,7 @@ constexpr bool unset_bool{false};
 const std::string unset_word{"-12345"};
 //! Accuracy precision expected of SAC floating-point values.
 constexpr float f_eps{2.75e-6F};
+using char_bit = std::bitset<bits_per_byte>;
 //! One binary word (useful for non-strings).
 using word_one = std::bitset<binary_word_size>;
 //! Two binary words (useful for strings).
@@ -114,6 +115,7 @@ constexpr double earth_radius{6378.14};
 //--------------------------------------------------------------------------
 // Calculate position of word in SAC-file.
 std::streamoff word_position(size_t word_number) noexcept;
+word_one uint_to_binary(uint num) noexcept;
 // Convert integer to 32-bit (one word) binary bitset.
 word_one int_to_binary(int num) noexcept;
 // Convert 32-bit (one word) binary bitset to integer.
@@ -395,7 +397,7 @@ enum class name {
   data2
 };
 // Lookup maps
-const std::unordered_map<name, const int> sac_map = {
+const std::unordered_map<name, const size_t> sac_map = {
     // Floats
     {name::depmin, 0},
     {name::depmax, 1},

@@ -1,4 +1,4 @@
-// Copyright 2023-2024 Alexander R. Blanchette
+// Copyright 2023 Alexander R. Blanchette
 
 #include "sac-format/sac_format.hpp"
 #include "sac-format/util.hpp"
@@ -216,14 +216,14 @@ TEST_CASE("Input/Output") {
     SECTION("Randomizing data") {
       BENCHMARK("Random vector generation.") {
         std::vector<double> data{};
-        data.resize(test_sac.npts());
+        data.resize(static_cast<size_t>(test_sac.npts()));
         random_vector(&data);
         return;
       };
     }
     SECTION("Comparison Between Out and In Random") {
       std::vector<double> data{};
-      data.resize(test_sac.npts());
+      data.resize(static_cast<size_t>(test_sac.npts()));
       random_vector(&data);
       test_sac.data1(data);
       if (!test_sac.leven() || test_sac.iftype() > 1) {

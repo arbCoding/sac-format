@@ -213,10 +213,10 @@ Trace gen_fake_trace() noexcept {
   sac.kinst("Not Real");
   if (sac.npts() > 0) {
     std::vector<double> data{};
-    data.resize(sac.npts(), 0.0);
+    data.resize(static_cast<size_t>(sac.npts()), 0.0);
     sac.data1(data);
     if (!sac.leven() || sac.iftype() > 1) {
-      data.resize(sac.npts(), 0.0);
+      data.resize(static_cast<size_t>(sac.npts()), 0.0);
       sac.data2(data);
     }
   }
