@@ -215,15 +215,15 @@ struct read_spec {
   // cppcheck-suppress unusedStructMember
   size_t start_word{};  //!< Word to start reading from.
 };
-//! Checks safety of reading N-more words from current position in file.
+// Checks safety of reading N-more words from current position in file.
 bool nwords_after_current(std::ifstream *sac, const read_spec &spec) noexcept;
-//! Is the SAC-file large enough to fit a proper header?
+// Is the SAC-file large enough to fit a proper header?
 void safe_to_read_header(std::ifstream *sac);
-//! Is the SAC-file large enough to fit a proper footer (if appropriate)?
+// Is the SAC-file large enough to fit a proper footer (if appropriate)?
 void safe_to_read_footer(std::ifstream *sac);
-//! Is the SAC-file large enough to fit a proper data vector?
+// Is the SAC-file large enough to fit a proper data vector?
 void safe_to_read_data(std::ifstream *sac, size_t n_words, bool data2 = false);
-//! Have we reached the end of the SAC-file or are there shenanigans?
+// Have we reached the end of the SAC-file or are there shenanigans?
 void safe_to_finish_reading(std::ifstream *sac);
 // Read one word (32 bits, useful for non-strings) from a binary SAC-file.
 word_one read_word(std::ifstream *sac);
@@ -275,131 +275,641 @@ double limit_90(double degrees) noexcept;
 //--------------------------------------------------------------------------
 // Trace Class
 //--------------------------------------------------------------------------
+/*! \enum name
+  \brief Enumeration of all SAC fields.
+
+  Additional information can be found at (link to org-documentation).
+  */
 enum class name {
   // Floats
-  depmin,  //!< Minimum value of dependent variable (x)
+  /*!
+    Float
+
+    Minimum value of the dependent variable
+    (displacement/velocity/acceleration/volts/counts).
+   */
+  depmin,
+  /*!
+    Float
+
+    Maximum value of the dependent variable.
+   */
   depmax,
+  /*!
+    Float
+
+    Modified (observational) value of delta.
+   */
   odelta,
+  /*!
+    Float
+
+    Instrument response parameter (poles, zeros, and a constant).
+
+    Not used by SAC - free for other purposes.
+   */
   resp0,
+  //! See resp0.
   resp1,
+  //! See resp0.
   resp2,
+  //! See resp0.
   resp3,
+  //! See resp0.
   resp4,
+  //! See resp0.
   resp5,
+  //! See resp0.
   resp6,
+  //! See resp0.
   resp7,
+  //! See resp0.
   resp8,
+  //! See resp0.
   resp9,
+  /*!
+    Float
+
+    Station elevation in meters above sea level (m.a.s.l.).
+
+    Not used by SAC - free for other purposes.
+   */
   stel,
+  /*!
+    Float
+
+    Station depth in meters below surface (borehole/buried vault).
+
+    Not used by SAC - free for other purposes.
+   */
   stdp,
+  /*!
+    Float
+
+    Event elevation m.a.s.l.
+
+    Not used by SAC - free for other purposes.
+   */
   evel,
+  /*!
+    Float
+
+    Event depth in kilometers (previous meters) below surface.
+   */
   evdp,
+  /*!
+    Float
+
+    Event magnitude.
+   */
   mag,
+  /*!
+    Float
+
+    Storage for user-defined values.
+   */
   user0,
+  //! See user0
   user1,
+  //! See user0
   user2,
+  //! See user0
   user3,
+  //! See user0
   user4,
+  //! See user0
   user5,
+  //! See user0
   user6,
+  //! See user0
   user7,
+  //! See user0
   user8,
+  //! See user0
   user9,
+  /*!
+    Float
+
+    Station-Event distance in kilometers.
+   */
   dist,
+  /*!
+    Float
+
+    Azimuth \f$\color{orange}Station\rightarrow Event\f$ in decimal degrees
+    from North.
+   */
   az,
+  /*!
+    Float
+
+    Back-Azimuth \f$\color{orange}Event\rightarrow Station\f$ in decimal degrees
+    from North.
+   */
   baz,
+  /*!
+    Float
+
+    Great-circle arc-distance between station and event in decimal degrees.
+   */
   gcarc,
+  /*!
+    Float
+
+    Mean value of dependent variable.
+   */
   depmen,
+  /*!
+    Float
+
+    Instrument measurement azimuth, decimal degrees from North.
+   */
   cmpaz,
+  /*!
+    Float
+
+    Instrument measurement incidence angle, decimal degrees from upward
+    vertical (incident 0 = dip -90).
+
+    Note: SEED/MINISEED use dip angle, decimal degrees from horizontal
+    (dip 0 = incident 90).
+   */
   cmpinc,
+  /*!
+    Float
+
+    Spectral-only equivalent of depmin (\f$\color{orange}f_{0}\f$ or
+    \f$\color{orange}\omega_{0}\f$).
+   */
   xminimum,
+  /*!
+    Float
+
+    Spectral-only equivalent of depman (\f$\color{orange}f_{max}\f$ or
+    \f$\color{orange}\omega_{max}\f$).
+   */
   xmaximum,
+  /*!
+    Float
+
+    Spectral-only equivalent of b.
+   */
   yminimum,
+  /*!
+    Float
+
+    Spectral-only equivalent of e.
+   */
   ymaximum,
   // Doubles
+  /*!
+    Double
+
+    Increment between evenly-spaced samples (
+    \f$\color{orange}\Delta t\f$ for timeseries,
+    \f$\color{orange}\Delta f\f$ or
+    \f$\color{orange}\Delta\omega\f$ for spectral).
+   */
   delta,
+  /*!
+    Double
+
+    First value (beginning) of independent variable (\f$\color{orange}t_{0}\f$).
+   */
   b,
+  /*!
+    Double
+
+    Final value (ending) of the independent variable
+    (\f$\color{orange}t_{max}\f$).
+   */
   e,
+  /*!
+    Double
+
+    Event origin time, in seconds relative to the reference time.
+   */
   o,
+  /*!
+    Double
+
+    Event first arrival time, in seconds relative to the reference time.
+   */
   a,
+  /*!
+    Double
+
+    User defined time value, in seconds relative to the reference time.
+   */
   t0,
+  //! See t0
   t1,
+  //! See t0
   t2,
+  //! See t0
   t3,
+  //! See t0
   t4,
+  //! See t0
   t5,
+  //! See t0
   t6,
+  //! See t0
   t7,
+  //! See t0
   t8,
+  //! See t0
   t9,
+  /*!
+    Double
+
+    Event end (fini) time, in seconds relative to the reference time.
+   */
   f,
+  /*!
+    Double
+
+    Station latitude in decimal degrees, N/S is positive/negative.
+
+    sac-format automatically enforces \f$\color{orange}\phi\in [-90,90]\f$.
+   */
   stla,
+  /*!
+    Double
+
+    Station longitude in decimal degrees, E/W is positive/negative.
+
+    sac-format automaticall enforces \f$\color{orange}\lambda\in [-180,180]\f$.
+   */
   stlo,
+  /*!
+    Double
+
+    Event latitude in decimal degrees, N/S is positive/negative.
+
+    sac-format automatically enforces \f$\color{orange}\phi\in [-90,90]\f$.
+   */
   evla,
+  /*!
+    Double
+
+    Event longitude in decimal degrees, E/W is positive/negative.
+
+    sac-format automatically enforces \f$\color{orange}\lambda\in [-180,180]\f$.
+   */
   evlo,
+  /*!
+    Double
+
+    Original (saved) value of b (beginning).
+   */
   sb,
+  /*!
+    Double
+
+    Original (saved) value of delta (sample-spacing).
+   */
   sdelta,
   // Ints
+  /*!
+    Integer
+
+    Reference time GMT year.
+   */
   nzyear,
+  /*!
+    Integer
+
+    Reference time GMT day-of-year (often called Julian Date).
+
+    1-366 Not enforced.
+   */
   nzjday,
+  /*!
+    Integer
+
+    Reference time GMT hour.
+
+    00-23 Not enforced.
+   */
   nzhour,
+  /*!
+    Integer
+
+    Reference time GMT minute.
+
+    00-59 Not enforced.
+   */
   nzmin,
+  /*!
+    Integer
+
+    Reference time GMT second.
+
+    00-59 Not enforced.
+   */
   nzsec,
+  /*!
+    Integer
+
+    Reference time GMT millisecond.
+
+    0-999 not enforced.
+   */
   nzmsec,
+  /*!
+    Integer
+
+    SAC-file version.
+
+    7 = 2020+, sac 102.0+, has a Footer.
+    6 = pre-2020, sac 101.6a-, no Footer.
+   */
   nvhdr,
+  /*!
+    Integer
+
+    Origin ID.
+   */
   norid,
+  /*!
+    Integer
+
+    Event ID.
+   */
   nevid,
+  /*!
+    Integer
+
+    Number of points in data.
+   */
   npts,
+  /*!
+    Integer
+
+    Original (saved) npts.
+   */
   nsnpts,
+  /*!
+    Integer
+
+    Waveform ID.
+   */
   nwfid,
+  /*!
+    Integer
+
+    Spectral-only equivalent of npts (length of spectrum).
+   */
   nxsize,
+  /*!
+    Integer
+
+    Spectral-only; width of spectrum.
+   */
   nysize,
+  /*!
+    Integer
+
+    File type.
+   */
   iftype,
+  /*!
+    Integer
+
+    Dependent variable type.
+   */
   idep,
+  /*!
+    Integer
+
+    Reference time equivalent.
+   */
   iztype,
+  /*!
+    Integer
+
+    Recording instrument type.
+
+    Not used by SAC - free for other purposes.
+   */
   iinst,
+  /*!
+    Integer
+
+    Station geographic region.
+
+    Not used by SAC - free for other purposes.
+   */
   istreg,
+  /*!
+    Integer
+
+    Event geographic region.
+
+    Not used by SAC - free for other purposes.
+   */
   ievreg,
+  /*!
+    Integer
+
+    Event type.
+
+    Not used by SAC - free for other purposes.
+   */
   ievtyp,
+  /*!
+    Integer
+
+    Quality of data.
+
+    Not used by SAC - free for other purposes.
+   */
   iqual,
+  /*!
+    Integer
+
+    Synthetic data flag.
+
+    Not used by SAC - free for other purposes.
+   */
   isynth,
+  /*!
+    Integer
+
+    Magnitude type.
+   */
   imagtyp,
+  /*!
+    Integer
+
+    Magnitude information source.
+   */
   imagsrc,
+  /*!
+    Integer
+
+    Body/spheroid definition used to calculate distances.
+
+    Not currently-used by sac-format (SAC does used it).
+   */
   ibody,
   // Bools
+  /*!
+    Boolean
+
+    REQUIRED
+
+    Evenly-spaced data flag. True = even.
+   */
   leven,
+  /*!
+    Boolean
+
+    Station polarity flag.
+
+    True = positive (left-handed, e.g. North-East-Up).
+   */
   lpspol,
+  /*!
+    Boolean
+
+    File overwrite flag.
+
+    If true, okay to overwrite file.
+
+    Not used by sac-format.
+   */
   lovrok,
+  /*!
+    Boolean
+
+    Calculate geometry flag.
+
+    Not used by sac-format.
+   */
   lcalda,
   // Strings
+  /*!
+    String (2 words)
+
+    Station name.
+   */
   kstnm,
+  /*!
+    String (4 words)
+
+    Event name.
+   */
   kevnm,
+  /*!
+    String (2 words)
+
+    Nuclear-Hole identifier.
+
+    Other-Location identifier (LOCID).
+   */
   khole,
+  /*!
+    String (2 words)
+
+    Text for o.
+   */
   ko,
+  /*!
+    String (2 words)
+
+    Text for a.
+   */
   ka,
+  /*!
+    String (2 words)
+
+    Text for t0
+   */
   kt0,
+  //! See kt0
   kt1,
+  //! See kt0
   kt2,
+  //! See kt0
   kt3,
+  //! See kt0
   kt4,
+  //! See kt0
   kt5,
+  //! See kt0
   kt6,
+  //! See kt0
   kt7,
+  //! See kt0
   kt8,
+  //! See kt0
   kt9,
+  /*!
+    String (2 words)
+
+    Text for f.
+   */
   kf,
+  /*!
+    String (2 words)
+
+    Text for user0.
+   */
   kuser0,
+  //! See kuser0.
   kuser1,
+  //! See kuser0.
   kuser2,
-  kcmpnm,
-  knetwk,
+  /*!
+    String (2 words)
+
+    Component name.
+   */
+  kcmpnm,  // missing in org documentation
+  /*!
+    String (2 words)
+
+    Network name.
+   */
+  knetwk,  // missing in org documentation
+  /*!
+    String (2 words)
+
+    Date the data was read onto a computer.
+   */
   kdatrd,
+  /*!
+    String (2 words)
+
+    Instrument name.
+   */
   kinst,
   // Data
+  /*!
+    std::vector<double>
+
+    First data vector. ALWAYS present, ALWAYS begins at word 158.
+   */
   data1,
+  /*!
+    std::vector<double>
+
+    Second data vector. CONDITIONAL present. IF PRESENT, begins at end of data1.
+
+    Required if leven is false (uneven sampling), or if iftype is
+    spectral/XY/XYZ.
+   */
   data2
 };
 // Lookup maps
+/*!
+\brief Lookup table for variable locations.
+
+Maps SAC variables (headers and data) to their internal locations in the
+Trace class.
+*/
 const std::unordered_map<name, const size_t> sac_map = {
     // Floats
     {name::depmin, 0},
@@ -523,13 +1033,20 @@ const std::unordered_map<name, const size_t> sac_map = {
     // Data
     {name::data1, 0},
     {name::data2, 1}};
-//! Trace class
-/*!
- This is the trace class.
+// Trace class
+/*! \class Trace
+ \brief The Trace class.
+
+ This class is the recommended way for reading/writing SAC-files.
+
+ It safely reads all data, provides automatic write support based upon
+ the nVHdr header value (determine if a footer should be included or not).
+
+ It provides getters and setters for all SAC headers and the data.
  */
 class Trace {
 public:
-  //! Default constructor
+  // Default constructor
   Trace() noexcept;
   // Parametric constructor (read file)
   explicit Trace(const std::filesystem::path &path);
@@ -800,25 +1317,47 @@ private:
   void resize_data(size_t size) noexcept;
   // Objects
   // cppcheck-suppress unusedStructMember
-  std::array<float, num_float> floats{};
+  std::array<float, num_float> floats{};  //!< Float storage array.
   // cppcheck-suppress unusedStructMember
-  std::array<double, num_double> doubles{};
+  std::array<double, num_double> doubles{};  //!< Double storage array.
   // cppcheck-suppress unusedStructMember
-  std::array<int, num_int> ints{};
+  std::array<int, num_int> ints{};  //!< Integer storage array.
   // cppcheck-suppress unusedStructMember
-  std::array<bool, num_bool> bools{};
+  std::array<bool, num_bool> bools{};  //!< Boolean storage array.
   // cppcheck-suppress unusedStructMember
-  std::array<std::string, num_string> strings{};
+  std::array<std::string, num_string> strings{};  //!< String storage array.
   // cppcheck-suppress unusedStructMember
-  std::array<std::vector<double>, num_data> data{};
+  std::array<std::vector<double>, num_data>
+      data{};  //!< std::vector<double> storage array.
 };
 
+/*! \class io_error
+  \brief Class for generic I/O exceptions.
+
+  These errors occur due to bad path, bad permissions, or otherwise corrupt
+  SAC-files.
+
+  I/O operations may raise other exceptions (disk failure, out of space, etc.),
+  but those are difficult to emulate for testing purposes (therefore I am unable
+  to reliably cover them); they also arise due to conditions that would render
+  how sac-format handles them moot.
+ */
 class io_error : public std::exception {
 private:
-  const std::string message{};
+  const std::string message{};  //!< Error message
 
 public:
+  /*!
+    \brief io_error Constructor
+
+    @param[in] msg std::string Error message.
+   */
   explicit io_error(std::string msg) : message(std::move(msg)) {}
+  /*!
+    \brief Error message delivery.
+
+    @returns what char* Error message.
+    */
   [[nodiscard]] const char *what() const noexcept override {
     return message.c_str();
   }

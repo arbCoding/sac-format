@@ -37,19 +37,20 @@ std::streamoff word_position(const size_t word_number) noexcept {
 
   This sets the current bit using bitwise and, updates the bit to manipulate
   and performs a right-shift (division by 2) until the number is zero.
-  
+
   @param[in] num Number to be converted.
   @returns ::word_one Converted value.
  */
 word_one uint_to_binary(uint num) noexcept {
   word_one bits{};
-  size_t pos{0};
-  while (num > 0) {
-    bits.set(pos, static_cast<bool>(num & 1));
-    // Target next bit
-    ++pos;
-    // Right bit shift, same as division by 2
-    num >>= 1;
+  for (size_t pos{0}; pos < bits.size(); ++pos) {
+    if (num > 0) {
+      bits.set(pos, static_cast<bool>(num & 1));
+      // Right-shift bits, same as division by 2
+      num >>= 1;
+    } else {
+      break;
+    }
   }
   return bits;
 }
@@ -394,7 +395,7 @@ word_four concat_words(const word_pair<word_two> &pair_words) noexcept {
 // Reading
 //-----------------------------------------------------------------------------
 /*!
-  \brief Read one word (32 bits, useful for non-strings) from a binary SAC-File
+  \brief Read one word (32 bits, useful for non-strings) from a binary SAC-File.
 
   Note that this modifies the position of the reader within the stream (to the
   end of the read word).
@@ -607,6 +608,16 @@ std::vector<char> bool_to_word(const bool flag) noexcept {
 // -----------------------------------------------------------------------------
 // Does not assume equal length, if not equal length then they're not equal
 // within tolerance
+/*!
+  \brief Check if two std::vector<double> are equal within a tolerance limit.
+
+  Default tolerance is f_eps.
+
+  @param[in] vector1 First data vector in comparison.
+  @param[in] vector2 Second data vector in comparison.
+  @param[in] tolerance Numerical equality tolerance (default f_eps).
+  @returns bool Boolean equality value.
+ */
 bool equal_within_tolerance(const std::vector<double> &vector1,
                             const std::vector<double> &vector2,
                             const double tolerance) noexcept {
@@ -620,20 +631,57 @@ bool equal_within_tolerance(const std::vector<double> &vector1,
   }
   return true;
 }
+
+/*!
+  \brief Check if  two double values are equal within a tolerance limit.
+
+  Default tolerance is f_eps.
+
+  @param[in] val1 First double in comparison.
+  @param[in] val2 Second double in comparison.
+  @param[in] tolerance Numerical equality tolerance (default f_eps).
+  @returns bool Boolean equality value.
+ */
 bool equal_within_tolerance(const double val1, const double val2,
                             const double tolerance) noexcept {
   return (std::abs(val1 - val2) < tolerance);
 }
 // Position methods
+/*!
+  \brief Convert decimal degrees to radians.
+
+  \f[\color{orange}
+  r=d\cdot\frac{\pi}{180^{\circ}}
+  \f]
+
+  @param[in] degrees Angle in decimal degrees to be converted.
+  @returns double Angle in radians.
+ */
 double degrees_to_radians(const double degrees) noexcept {
   return rad_per_deg * degrees;
 }
 
+/*!
+  \brief Convert radians to decimal degrees.
+
+  \f[\color{orange}
+  d=r\cdot\frac{180^{\circ}}{\pi}
+  \f]
+
+  @param[in] radians Angle in radians to be converted.
+  @returns double Angle in decimal degrees.
+ */
 double radians_to_degrees(const double radians) noexcept {
   return deg_per_rad * radians;
 }
 
 /*!
+  \brief Calculate great circle arc distance in decimal degrees between two
+  points.
+
+  Assumes spherical Earth (in future will include flatenning and adjustable
+  radius for other bodies/greater accuracy).
+
   \f$\color{orange}\phi\f$ is latitude.
   \f$\color{orange}\lambda\f$ is longitude.
   \f$\color{orange}\Delta\f$ is great circle arc distance (gcarc).
@@ -644,6 +692,12 @@ double radians_to_degrees(const double radians) noexcept {
   cos(\lambda_{2}-\lambda_{1})
   \right)
   \f]
+
+  @param[in] latitude1 Latitude of first location in decimal degrees.
+  @param[in] longitude1 Longitude of first location in decimal degrees.
+  @param[in] latitude2 Latitude of second location in decimal degrees.
+  @param[in] longitude2 Longitude of second location in decimal degrees.
+  @returns double The great circle arc distance in decimal degrees.
  */
 double gcarc(const double latitude1, const double longitude1,
              const double latitude2, const double longitude2) noexcept {
@@ -657,7 +711,29 @@ double gcarc(const double latitude1, const double longitude1,
   return result;
 }
 
-// I wonder if there is a way to do this with n-vectors
+/*!
+  \brief Calculate azimuth between two points.
+
+  Assumes spherical Earth (in future may update to solve on a more general
+  body).
+
+  \f$\color{orange}\phi\f$ is latitude.
+  \f$\color{orange}\lambda\f$ is longitude.
+  \f$\color{orange}\theta\f$ is azimuth.
+
+  \f[\color{orange}
+  \theta=tan^{-1}\left(
+  \frac{sin(\delta\lambda)cos(\phi_{2})}{cos(\phi_{1})sin(\phi_{2})
+  - sin(\phi_{1})cos(\phi_{2})cos(\delta\lambda)}
+  \right)
+  \f]
+
+  @param[in] latitude1 Latitude of first location in decimal degrees.
+  @param[in] longitude1 Longitude of first location in decimal degrees.
+  @param[in] latitude2 Latitude of second location in decimal degrees.
+  @param[in] longitude2 Longitude of second location in decimal degrees.
+  @returns double The azimuth from the first location to the second location.
+  */
 double azimuth(const double latitude1, const double longitude1,
                const double latitude2, const double longitude2) noexcept {
   const double lat1{degrees_to_radians(latitude1)};
@@ -675,6 +751,17 @@ double azimuth(const double latitude1, const double longitude1,
   return result;
 }
 
+/*!
+  \brief Takes a decimal degree value and constrains it to full circle using
+  symmetry.
+
+  \f[\color{orange}
+  \left[-\infty,\infty\right]\rightarrow\left[0, 360\right]
+  \f]
+
+  @param[in] degrees Decimal degrees to be constrained.
+  @returns double Value within limits.
+ */
 double limit_360(const double degrees) noexcept {
   double result{degrees};
   while (std::abs(result) > circle_deg) {
@@ -690,6 +777,17 @@ double limit_360(const double degrees) noexcept {
   return result;
 }
 
+/*!
+  \brief Takes a decimal degree value and constrains it to a half circle using
+  symmetry.
+
+  \f[\color{orange}
+  \left[-\infty,\infty\right]\rightarrow (-180,180]
+  \f]
+
+  @param[in] degrees Decimal degrees to be constrained.
+  @returns double Value within limits.
+ */
 double limit_180(const double degrees) noexcept {
   double result{limit_360(degrees)};
   constexpr double hemi{180.0};
@@ -699,6 +797,17 @@ double limit_180(const double degrees) noexcept {
   return result;
 }
 
+/*!
+  \brief Takes a decimal degree value and constrains it to a quarter circle
+  using symmetry.
+
+  \f[\color{orange}
+  \left[-\infty,\infty\right]\rightarrow\left[-90,90\right]
+  \f]
+
+  @param[in] degrees Decimal degrees to be constrained.
+  @returns double Value within limits.
+  */
 double limit_90(const double degrees) noexcept {
   double result{limit_180(degrees)};
   constexpr double quarter{90.0};
@@ -712,6 +821,14 @@ double limit_90(const double degrees) noexcept {
 //------------------------------------------------------------------------------
 // Trace
 //------------------------------------------------------------------------------
+/*!
+  \brief Trace default constructor.
+
+  Fills all values with their default (unset) values.
+  Data vectors are of size zero.
+
+  @returns Default created Trace object.
+ */
 Trace::Trace() noexcept {
   std::ranges::fill(floats.begin(), floats.end(), unset_float);
   std::ranges::fill(doubles.begin(), doubles.end(), unset_double);
@@ -720,6 +837,13 @@ Trace::Trace() noexcept {
   std::ranges::fill(strings.begin(), strings.end(), unset_word);
 }
 
+/*!
+  \brief Trace equality operator.
+
+  @param[in] this First Trace in comparison (LHS).
+  @param[in] other Second Trace in comparison (RHS).
+  @returns bool Truth value of equality.
+ */
 bool Trace::operator==(const Trace &other) const noexcept {
   if (floats != other.floats) {
     return false;
@@ -742,6 +866,9 @@ bool Trace::operator==(const Trace &other) const noexcept {
   return true;
 }
 // Convenience functions
+/*!
+  \brief Calculates gcarc, dist, az, and baz from stla, stlo, evla, and evlo.
+ */
 void Trace::calc_geometry() noexcept {
   if (geometry_set()) {
     calc_gcarc();
@@ -756,6 +883,15 @@ void Trace::calc_geometry() noexcept {
   }
 }
 
+/*!
+  \brief Calculate frequency from delta.
+
+  \f[\color{orange}
+  f=\frac{1}{\delta}
+  \f]
+
+  @returns double Frequency.
+*/
 double Trace::frequency() const noexcept {
   const double delta_val{delta()};
   if ((delta_val == unset_double) || (delta_val <= 0)) {
@@ -764,27 +900,65 @@ double Trace::frequency() const noexcept {
   return 1.0 / delta_val;
 }
 
+/*!
+  \brief Determine if locations are set for geometry calculation.
+
+  @returns bool True if able to calculate geometry.
+ */
 bool Trace::geometry_set() const noexcept {
   return ((stla() != unset_double) && (stlo() != unset_double) &&
           (evla() != unset_double) && (evlo() != unset_double));
 }
 
+/*!
+  \brief Calculate great-circle arc-distance (gcarc).
+ */
 void Trace::calc_gcarc() noexcept {
   Trace::gcarc(
       static_cast<float>(sacfmt::gcarc(stla(), stlo(), evla(), evlo())));
 }
 
+/*!
+  \brief Calculate distance (using gcarc).
+
+  Assumes spherical Earth (in future may update to include flattening
+  and different planteray bodies).
+
+  \f[\color{orange}
+  d=r_{E}\cdot\Delta
+  \f]
+ */
 void Trace::calc_dist() noexcept {
   dist(static_cast<float>(earth_radius * rad_per_deg * gcarc()));
 }
 
+/*!
+  \brief Calculate azimuth.
+
+  \f[\color{orange}
+  Station\rightarrow Event
+  \f]
+ */
 void Trace::calc_az() noexcept {
   az(static_cast<float>(azimuth(evla(), evlo(), stla(), stlo())));
 }
+
+/*!
+  \brief Calculate back-azimuth.
+
+  \f[\color{orange}
+  Event\rightarrow Station
+  \f]
+ */
 void Trace::calc_baz() noexcept {
   baz(static_cast<float>(azimuth(stla(), stlo(), evla(), evlo())));
 }
 
+/*!
+  \brief Get date string.
+
+  @returns std::string Date (YYYY-JJJ).
+ */
 std::string Trace::date() const noexcept {
   // Require all to be set
   if ((nzyear() == unset_int) || (nzjday() == unset_int)) {
@@ -797,6 +971,11 @@ std::string Trace::date() const noexcept {
   return oss.str();
 }
 
+/*!
+  \brief Get time string.
+
+  @returns sstd::string Time (HH::MM:SS.sss).
+ */
 std::string Trace::time() const noexcept {
   // Require all to be set
   if ((nzhour() == unset_int) || (nzmin() == unset_int) ||
@@ -1379,6 +1558,7 @@ void Trace::kdatrd(const std::string &input) noexcept {
 void Trace::kinst(const std::string &input) noexcept {
   strings[sac_map.at(name::kinst)] = input;
 }
+
 // Data
 void Trace::data1(const std::vector<double> &input) noexcept {
   data[sac_map.at(name::data1)] = input;
@@ -1389,6 +1569,7 @@ void Trace::data1(const std::vector<double> &input) noexcept {
     npts(size);
   }
 }
+
 void Trace::data2(const std::vector<double> &input) noexcept {
   data[sac_map.at(name::data2)] = input;
   // Proagate change as needed
@@ -1432,12 +1613,26 @@ void Trace::resize_data2(const size_t size) noexcept {
   }
 }
 
+/*!
+  \brief Resize data vectors (only if eligible).
+
+  Will always resize data1, data2 only resizes if it can have non-zero size.
+ */
 void Trace::resize_data(const size_t size) noexcept {
   resize_data1(size);
   resize_data2(size);
 }
 //------------------------------------------------------------------------------
 // Read
+//------------------------------------------------------------------------------
+/*!
+  \brief Determine if the SAC-file has enough remaining data to read the
+  requested amount of data.
+
+  @param[in] sac std::ifstream* SAC-file to read.
+  @param[in] spec read_spec reading specification.
+  @returns bool Truth value (true = safe to read).
+ */
 bool nwords_after_current(std::ifstream *sac, const read_spec &spec) noexcept {
   bool result{false};
   if (sac->good()) {
@@ -1452,6 +1647,15 @@ bool nwords_after_current(std::ifstream *sac, const read_spec &spec) noexcept {
   return result;
 }
 
+/*!
+  \brief Determine if the SAC-file is large enough to contain a complete header.
+
+  This must be run prior to reading the data vector(s) and footer (if
+  applicable), not after.
+
+  @param[in] sac std::ifstream* SAC-file to read.
+  @throw io_error If unsafe to read.
+ */
 void safe_to_read_header(std::ifstream *sac) {
   const read_spec spec{data_word, 0};
   if (!nwords_after_current(sac, spec)) {
@@ -1459,6 +1663,15 @@ void safe_to_read_header(std::ifstream *sac) {
   }
 }
 
+/*!
+  \brief Determines if the SAC-file has enough space remaining to contain a
+  complete footer.
+
+  This must be run after reading the header and data vector(s), not before.
+
+  @param[in] sac std::ifstream* SAC-file to read.
+  @throw io_error If unsafe to read.
+ */
 void safe_to_read_footer(std::ifstream *sac) {
   // doubles are two words long
   const read_spec spec{static_cast<size_t>(num_footer) * 2,
@@ -1468,6 +1681,18 @@ void safe_to_read_footer(std::ifstream *sac) {
   }
 }
 
+/*!
+  \brief Determines if the SAC-file has enough space remaining to contain a
+  complete data vector.
+
+  This must be run after reading the header (and first data vector if
+  applicable) and before the footer (if applicable).
+
+  @param[in] sac std::ifstream* SAC-file to read.
+  @param[in] n_words Number of values in data vector.
+  @param[in] data2 bool True if reading data2, false (default) if reading data1.
+  @throw io_error If unsafe to read.
+ */
 void safe_to_read_data(std::ifstream *sac, const size_t n_words,
                        const bool data2) {
   const std::string data{data2 ? "data2" : "data1"};
@@ -1477,6 +1702,17 @@ void safe_to_read_data(std::ifstream *sac, const size_t n_words,
   }
 }
 
+/*!
+  \brief Determines if the SAC-file is finished.
+
+  This must run after reading the header, data vector(s), and footer (if
+  applicable). This checks to ensure there is no additional data in the SAC-file
+  (there shouldn't be, and out of safety it throws an io_error to inform the
+  user if there are shenanigans).
+
+  @param[in] sac std::ifstream* SAC-file to be checked.
+  @throw io_error If the file is not finished.
+ */
 void safe_to_finish_reading(std::ifstream *sac) {
   const std::streamoff current_pos{sac->tellg()};
   sac->seekg(0, std::ios::end);
@@ -1494,6 +1730,14 @@ void safe_to_finish_reading(std::ifstream *sac) {
   }
 }
 
+/*!
+  \brief Binary SAC-file reader.
+
+  @param[in] path std::filesystem::path SAC-file to be read.
+  @returns Trace read in-file.
+  @throw io_error If the file is not safe to read for whatever reason.
+  @throw std::exception (disk failure).
+ */
 Trace::Trace(const std::filesystem::path &path) {
   std::ifstream file(path, std::ifstream::binary);
   if (!file) {
@@ -1698,6 +1942,16 @@ Trace::Trace(const std::filesystem::path &path) {
 }
 //------------------------------------------------------------------------------
 // Write
+//------------------------------------------------------------------------------
+/*!
+  \brief Binary SAC-file writer.
+
+  @param[in] path std::filesystem::path SAC-file to write.
+  @param[in] legacy bool Legacy-write flag (default false = v7, true = v6).
+  @throw io_error If the file cannot be written (bad path or bad permissions).
+  @throw std::exception Other unwritable issues (not enough space, disk failure,
+  etc.).
+ */
 void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   std::ofstream file(path, std::ios::binary | std::ios::out | std::ios::trunc);
   if (!file) {
@@ -1921,6 +2175,14 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   file.close();
 }
 
+/*!
+  \brief Binary SAC-file legacy-write convenience function.
+
+  @param[in] path std::filesystem::path SAC-file to be written.
+  @throw io_error If the file cannot be written (bad path or bad permissions).
+  @throw std::execption Other unwritable issues (not enough space, disk failure,
+  etc.).
+ */
 void Trace::legacy_write(const std::filesystem::path &path) const {
   write(path, true);
 }
