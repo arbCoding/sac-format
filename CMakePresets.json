@@ -110,7 +110,7 @@
             "name": "gh-ubuntu-release",
             "displayName": "GitHub Ubuntu Release",
             "description": "GitHub Ubuntu release options.",
-            "inherits": ["gh-release", "gcc-clang-release"],
+            "inherits": ["gh-release", "gcc-clang-hardened-release"],
             "binaryDir": "${sourceDir}/build/release/gh-ubuntu"
         },
         {

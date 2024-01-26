@@ -31,9 +31,6 @@ echo "Cleaning up past build!"
 rm -r "$base"/docs
 mkdir "$base"/docs
 
-#echo -e "\nCopying screenshots"
-#cp -r "$base"/src/docs/screenshots "$base"/docs/screenshots
-
 # Make doxygen
 echo -e "\nMaking Doxygen docs"
 cd "$base" || exit

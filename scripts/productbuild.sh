@@ -4,17 +4,17 @@ script=$(pwd)
 base=$(pwd)/..
 cd "$base" || exit
 # Cleanup
-if [ -e "$base/build/release/clang" ]; then
-    rm -rf "$base/build/release/clang"
+if [ -e "$base/build/hard/release/clang" ]; then
+    rm -rf "$base/build/hard/release/clang"
 fi
 cp "$base/LICENSE" "$base/License2.txt"
 fold -s "$base/LICENSE" > "$base/License.txt"
 # Prep the build
 cmake -DCPACK_GENERATOR=productbuild \
     -DCMAKE_INSTALL_PREFIX=/opt/sac-format \
-    --preset clang-release
+    --preset clang-hard-release
 # Build
-cd "$base/build/release/clang/" || exit
+cd "$base/build/hard/release/clang/" || exit
 cmake --build .
 # Package
 cpack -G productbuild

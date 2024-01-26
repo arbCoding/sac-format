@@ -13,7 +13,7 @@ cd ./build/debug/gcc || exit
 # Make sure it only captures the sac_format.hpp/.cpp pair for the library
 cov-configure --config cov-conf/cov.xml --compiler g++ --comptype g++ \
     --template --xml-option=skip_file:".*/_deps/.*" \
-    --xml-option=skip_file:".*/utests.cpp" \
+    --xml-option=skip_file:".*/tests/*.cpp" \
     --xml-option=skip_file:".*/benchmark.cpp" \
     --xml-option=skip_file:".*/list_sac.cpp"
 # Capture the ninja build

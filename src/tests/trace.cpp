@@ -683,6 +683,18 @@ TEST_CASE("Trace: Equality: Inequality") {
   REQUIRE(trace1 != trace2);
 }
 
+TEST_CASE("Trace: Equality: Inequality: Data2") {
+  Trace trace1{gen_fake_trace()};
+  if (trace1.data2().empty()) {
+    trace1.leven(false);
+  }
+  Trace trace2{trace1};
+  std::vector<double> new_data2{trace2.data2()};
+  new_data2[0] += 10.0;
+  trace2.data2(new_data2);
+  REQUIRE(trace1 != trace2);
+}
+
 // Constants for Trace I/O
 const fs::path tmp_dir{fs::temp_directory_path()};
 const fs::path tmp_file{tmp_dir / "test.sac"};

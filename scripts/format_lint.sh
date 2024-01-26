@@ -55,6 +55,6 @@ shellcheck "$scripts/"*.sh
 
 echo -e "\nLinting markdown"
 cd "$base"/src/docs || exit
-markdownlint-cli2 ./*.md
+markdownlint-cli2 --fix ./*.md
 
 cd "$scripts" || exit
