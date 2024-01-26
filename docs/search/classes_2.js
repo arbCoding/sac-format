@@ -1,0 +1,1 @@
+var searchData=[["trace_0",["Trace",["../classsacfmt_1_1Trace.html",1,"sacfmt"]]]]

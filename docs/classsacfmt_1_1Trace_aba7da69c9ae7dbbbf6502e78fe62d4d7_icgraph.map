@@ -1,0 +1,17 @@
+<map id="sacfmt::Trace::gcarc" name="sacfmt::Trace::gcarc">
+<area shape="rect" id="Node000001" title=" " alt="" coords="434,116,585,144"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aa692e8ff3222be97c3a435772d6cddca" title="Calculate distance (using gcarc)." alt="" coords="213,5,386,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="476,109,433,81,385,54,343,36,345,31,387,49,436,77,479,105"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#ac3623740a5bd0345d045b557ad34c77a" title="Calculates gcarc, dist, az, and baz from stla, stlo, evla, and evlo." alt="" coords="14,48,156,92"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="451,114,386,98,265,82,156,75,157,69,265,77,386,93,452,109"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#a454402a99fd1e6435df25a076e8ebb2c" title="Calculate great&#45;circle arc&#45;distance (gcarc)." alt="" coords="228,108,371,152"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="419,133,371,133,371,127,419,127"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="224,176,375,204"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="445,151,351,178,350,173,444,146"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#a5a16040cc0d19472325794b2db602aaf" title="Binary SAC&#45;file writer." alt="" coords="225,228,374,256"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="482,155,439,187,387,218,356,230,354,225,385,213,436,183,479,151"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="225,39,157,56,156,50,223,34"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="213,109,156,92,157,87,215,103"/>
+<area shape="rect" id="Node000007" href="$classsacfmt_1_1Trace.html#afdeafc868fa9a589497ccbff744523f7" title="Binary SAC&#45;file legacy&#45;write convenience function." alt="" coords="5,220,165,264"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="210,245,165,245,165,239,210,239"/>
+</map>

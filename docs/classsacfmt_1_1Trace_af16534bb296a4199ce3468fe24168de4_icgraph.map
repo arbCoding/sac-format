@@ -1,0 +1,11 @@
+<map id="sacfmt::Trace::nzmsec" name="sacfmt::Trace::nzmsec">
+<area shape="rect" id="Node000001" title=" " alt="" coords="411,57,577,85"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#ae66fa30ad620756f1aac558466f9653b" title="Get time string." alt="" coords="215,5,361,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="422,56,345,36,347,31,423,51"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="213,57,363,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="396,74,363,74,363,69,396,69"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#a5a16040cc0d19472325794b2db602aaf" title="Binary SAC&#45;file writer." alt="" coords="213,109,363,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="423,92,347,111,345,106,422,87"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#afdeafc868fa9a589497ccbff744523f7" title="Binary SAC&#45;file legacy&#45;write convenience function." alt="" coords="5,101,165,146"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="198,126,165,126,165,121,198,121"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="sacfmt::safe_to_read_data" name="sacfmt::safe_to_read_data">
+<area shape="rect" id="Node000001" title="Determines if the SAC&#45;file has enough space remaining to contain a complete data vector." alt="" coords="204,5,398,33"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,5,156,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,22,156,22,156,17,189,17"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="sacfmt::equal_within_tolerance" name="sacfmt::equal_within_tolerance">
+<area shape="rect" id="Node000001" title="Check if two std::vector&lt;double&gt; are equal within a tolerance limit." alt="" coords="247,29,404,74"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="362,17,349,10,325,8,305,10,292,15,286,21,288,28,283,29,281,19,289,10,303,5,325,3,350,5,364,12"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a5444ce815918ae944309afb7ead89c2a" title="Trace equality operator." alt="" coords="5,38,199,66"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="232,54,199,54,199,49,232,49"/>
+</map>

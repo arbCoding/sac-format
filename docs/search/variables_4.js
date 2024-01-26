@@ -1,0 +1,1 @@
+var searchData=[["earth_5fradius_0",["earth_radius",["../namespacesacfmt.html#a3afaec9013300d6b23aa34e497a80e68",1,"sacfmt"]]]]

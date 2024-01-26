@@ -1,0 +1,1 @@
+var searchData=[["o_0",["o",["../namespacesacfmt.html#aa519c4963e3863fdd55fad06655fad96ad95679752134a2d9eb61dbd7b91c4bcc",1,"sacfmt"]]],["odelta_1",["odelta",["../namespacesacfmt.html#aa519c4963e3863fdd55fad06655fad96a9c5f53bd09fc2a6705dbc848305c4e88",1,"sacfmt"]]]]

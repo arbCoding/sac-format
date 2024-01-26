@@ -1,0 +1,9 @@
+<map id="sacfmt::Trace::evla" name="sacfmt::Trace::evla">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,150,33"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#aa158c96f64f3f63d1c2c1c670b1ad8e9" title="Takes a decimal degree value and constrains it to a quarter circle using symmetry." alt="" coords="198,5,325,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,17,183,17,183,22,150,22"/>
+<area shape="rect" id="Node000003" href="$namespacesacfmt.html#a5408a7de5eb672b341de42e6804d82e1" title="Takes a decimal degree value and constrains it to a half circle using symmetry." alt="" coords="373,5,508,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="325,17,358,17,358,22,325,22"/>
+<area shape="rect" id="Node000004" href="$namespacesacfmt.html#a7ed2843f8d75e1179df0b235d5e39277" title="Takes a decimal degree value and constrains it to full circle using symmetry." alt="" coords="556,5,692,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="509,17,542,17,542,22,509,22"/>
+</map>

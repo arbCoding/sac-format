@@ -1,0 +1,1 @@
+var searchData=[["name_0",["name",["../namespacesacfmt.html#aa519c4963e3863fdd55fad06655fad96",1,"sacfmt"]]]]

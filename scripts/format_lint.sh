@@ -52,4 +52,9 @@ done
 
 echo "Running shellcheck on *.sh"
 shellcheck "$scripts/"*.sh
+
+echo -e "\nLinting markdown"
+cd "$base"/src/docs || exit
+markdownlint-cli2 ./*.md
+
 cd "$scripts" || exit

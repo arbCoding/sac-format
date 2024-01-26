@@ -1,0 +1,8 @@
+<map id="sacfmt::binary_to_float" name="sacfmt::binary_to_float">
+<area shape="rect" id="Node000001" title="Convert 32&#45;bit (one word) binary bitset to a floating&#45;point value." alt="" coords="391,31,562,58"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a42c4ad96f0e0e99f0e7c752d1fbf0076" title="Reader arbitrary number of words (useful for vectors) from a binary SAC&#45;file." alt="" coords="204,5,343,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="376,35,343,30,344,25,377,29"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,31,156,58"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="376,47,156,47,156,42,376,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="189,33,157,37,156,32,189,28"/>
+</map>

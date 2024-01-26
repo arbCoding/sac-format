@@ -1326,8 +1326,8 @@ private:
   std::array<bool, num_bool> bools{};  //!< Boolean storage array.
   // cppcheck-suppress unusedStructMember
   std::array<std::string, num_string> strings{};  //!< String storage array.
-  // cppcheck-suppress unusedStructMember
   std::array<std::vector<double>, num_data>
+      // cppcheck-suppress unusedStructMember
       data{};  //!< std::vector<double> storage array.
 };
 

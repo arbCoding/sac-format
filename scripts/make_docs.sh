@@ -1,24 +1,20 @@
 #!/bin/bash
-# Clean up old files
+# Directory structure
 scripts=$(pwd)
 base=$(pwd)/..
 cd "$base" || exit
 
-# Minify html files
-min_html () {
-    ls -1 | grep html | parallel 'minify {} -o {}.new; mv {}.new {}'
-}
-
+# Minify html, js, and css files
 min_web() {
     ls -1 | grep 'html\|js\|css' | parallel 'minify {} -o {}.new; mv {}.new {}'
 }
 
 # Compress pdf files
-
 compress_pdf () {
   echo -e "\nCompressing $1"
   orig_size=$(ls -l | grep "$1" | awk '{print $5}')
-  gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dBATCH -dPrinted=false -sOutputFile="$1".comp "$1"
+  gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dBATCH \
+    -dPrinted=false -sOutputFile="$1".comp "$1"
   mv "$1".comp "$1"
   new_size=$(ls -l | grep "$1" | awk '{print $5}')
   percent=$(echo 'scale=4; ('"$new_size"'/'"$orig_size"') * 100' | bc)
@@ -30,38 +26,30 @@ compress_pdf () {
   echo -e "\n($orig_size kB, $new_size kB, $percent%)\n"
 }
 
+# Clean up old files
 echo "Cleaning up past build!"
-rm -r ./docs/*
+rm -r "$base"/docs
+mkdir "$base"/docs
 
-# Build with emacs
-echo -e "\nBuilding with emacs!"
-emacs -Q --script "$scripts/make_docs.el"
-
-# Time to shrink the files!
-echo -e "\nMinify-ing files!"
-cd "$base/docs/" || exit
-min_html
-cd "$base" || exit
-
-# Cleanup
-echo -e "\nCleaning up latex/pdf"
-cd "$base/src/docs" || exit
-rm ./*.tex ./*.pdf
-
-# Compress and rename pdf
-cd "$base/docs" || exit
-compress_pdf index.pdf
-mv index.pdf sac-format_manual.pdf
-
-echo -e "($orig_size kB, $new_size kB, $percent%)\n"
+echo -e "\nCopying screenshots"
+cp -r "$base"/src/docs/screenshots "$base"/docs/screenshots
+echo -e "\nOptimizing screenshots"
+cd "$base"/docs/screenshots || exit
+for dir in ./*; do
+  if [ -d "$dir" ]; then
+    cd "$dir" || exit
+    optipng -quiet ./*.png
+    cd "$base"/docs/screenshots || exit
+  fi
+done
 
 # Make doxygen
 echo -e "\nMaking Doxygen docs"
 cd "$base" || exit
-doxygen Doxyfile
+doxygen ./Doxyfile
 # Minify doxygen files
 echo -e "\nMinify-ing Doxygen html docs"
-html_dox="$base"/docs/doxygen/html
+html_dox="$base"/docs/html
 dir_list=("$html_dox" "$html_dox/search")
 for dir in "${dir_list[@]}"; do
   cd "$dir" || exit
@@ -75,8 +63,17 @@ for dir in "${dir_list[@]}"; do
 done
 
 echo -e "\nMaking Doxygen pdf docs"
-cd "$base"/docs/doxygen/latex || exit
+cd "$base"/docs/latex || exit
 make
+
+# Prepare for deployment
+mkdir "$base"/docs/pdf
+# For some reason, attempting to shrink Doxygen pdf actually makes it larger!
 #compress_pdf refman.pdf
+mv refman.pdf "$base"/docs/pdf/sac-format_manual.pdf
+cd "$base"/docs || exit
+mv "$base"/docs/html/* "$base"/docs/
+rm -rf "$base"/docs/html
+rm -rf "$base"/docs/latex
 
 cd "$scripts" || exit

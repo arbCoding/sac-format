@@ -1,0 +1,18 @@
+<map id="sacfmt::remove_leading_spaces" name="sacfmt::remove_leading_spaces">
+<area shape="rect" id="Node000001" title="Remove all leading spaces from a string." alt="" coords="681,65,861,110"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#af8dabf448e6446cff66f98f7a39b9785" title="Remove leading/trailing spaces and control characters from a string." alt="" coords="460,74,633,102"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="666,90,634,90,634,85,666,85"/>
+<area shape="rect" id="Node000003" href="$namespacesacfmt.html#ab834d4178a181eae51090e2bbfc2ec77" title="Convert a 128&#45;bit (four word) binary bitset to a string." alt="" coords="237,5,408,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="477,72,407,53,409,48,479,67"/>
+<area shape="rect" id="Node000005" href="$namespacesacfmt.html#ac47953a20fbff537ca9314f9e737fea8" title="Convert a 64&#45;bit (two word) binary bitset to a string." alt="" coords="233,74,412,102"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="445,90,412,90,412,85,445,85"/>
+<area shape="rect" id="Node000006" href="$namespacesacfmt.html#a209205a594c0ab2fc8cf740ab4974d38" title="Cleans string and then truncates/pads as necessary." alt="" coords="249,126,396,154"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="470,108,386,128,385,123,469,103"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="20,27,170,55"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="222,36,171,39,171,34,222,31"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="237,73,166,58,167,53,238,68"/>
+<area shape="rect" id="Node000007" href="$namespacesacfmt.html#aa561d911c782afe814321e13eacf3494" title="Convert a string to a 128&#45;bit (four word) binary bitset." alt="" coords="22,104,168,149"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="233,137,168,133,169,128,234,132"/>
+<area shape="rect" id="Node000008" href="$namespacesacfmt.html#a9e62be10cbc389a820a4715791b83a60" title="Convert string to a 64&#45;bit (two word) binary bitset." alt="" coords="5,173,185,200"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="238,160,167,174,166,169,237,154"/>
+</map>

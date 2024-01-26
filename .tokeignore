@@ -14,4 +14,7 @@ benchmark.cpp
 *.txt
 *.org
 *.md
+*.js
+*.css
+*.svg
 list_sac.cpp

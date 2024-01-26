@@ -1,0 +1,14 @@
+<map id="sacfmt::Trace::az" name="sacfmt::Trace::az">
+<area shape="rect" id="Node000001" title=" " alt="" coords="425,81,556,109"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#ac72a7903e8d1f68c39c5b4d254212d98" title="Calculate azimuth." alt="" coords="213,5,377,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="438,78,332,36,334,31,440,73"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#ac3623740a5bd0345d045b557ad34c77a" title="Calculates gcarc, dist, az, and baz from stla, stlo, evla, and evlo." alt="" coords="14,22,156,67"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="410,88,156,56,157,51,411,83"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="220,107,370,134"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="410,108,371,113,370,108,410,103"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#a5a16040cc0d19472325794b2db602aaf" title="Binary SAC&#45;file writer." alt="" coords="220,159,370,186"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="448,118,378,148,344,161,342,156,376,143,446,113"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="198,34,157,39,156,33,198,28"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#afdeafc868fa9a589497ccbff744523f7" title="Binary SAC&#45;file legacy&#45;write convenience function." alt="" coords="5,150,165,195"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="205,175,165,175,165,170,205,170"/>
+</map>

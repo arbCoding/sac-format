@@ -1,0 +1,1 @@
+var searchData=[["point_2039_0",["Floating-point (39)",["../index.html#autotoc_md60",1,""]]],["prep_5fstring_1",["prep_string",["../namespacesacfmt.html#a209205a594c0ab2fc8cf740ab4974d38",1,"sacfmt"]]],["programs_2",["programs",["../index.html#autotoc_md31",1,"Example Programs"],["../index.html#autotoc_md56",1,"Example programs"]]]]

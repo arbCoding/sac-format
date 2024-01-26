@@ -1,0 +1,5 @@
+<map id="sacfmt::uint_to_binary" name="sacfmt::uint_to_binary">
+<area shape="rect" id="Node000001" title="Convert unsigned integer to 32&#45;bit (one word) binary bitset." alt="" coords="213,5,380,33"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a4f9abce8af2b81b8c5b1d132c1c024cb" title="Convert integer to 32&#45;bit (one word) binary bitset." alt="" coords="5,5,165,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,22,165,22,165,17,198,17"/>
+</map>

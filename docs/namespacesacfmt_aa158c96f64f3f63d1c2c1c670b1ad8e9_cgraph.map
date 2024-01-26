@@ -1,0 +1,7 @@
+<map id="sacfmt::limit_90" name="sacfmt::limit_90">
+<area shape="rect" id="Node000001" title="Takes a decimal degree value and constrains it to a quarter circle using symmetry." alt="" coords="5,5,133,33"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a5408a7de5eb672b341de42e6804d82e1" title="Takes a decimal degree value and constrains it to a half circle using symmetry." alt="" coords="181,5,316,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,17,166,17,166,22,133,22"/>
+<area shape="rect" id="Node000003" href="$namespacesacfmt.html#a7ed2843f8d75e1179df0b235d5e39277" title="Takes a decimal degree value and constrains it to full circle using symmetry." alt="" coords="364,5,499,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="316,17,349,17,349,22,316,22"/>
+</map>

@@ -1,0 +1,1 @@
+var searchData=[["ascii_5fspace_0",["ascii_space",["../namespacesacfmt.html#a677d0e63f832e5f358d983b5c7267723",1,"sacfmt"]]]]

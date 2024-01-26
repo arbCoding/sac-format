@@ -45,8 +45,9 @@ word_one uint_to_binary(uint num) noexcept {
   word_one bits{};
   for (size_t pos{0}; pos < bits.size(); ++pos) {
     if (num > 0) {
+      // Bitwise and to set flag.
       bits.set(pos, static_cast<bool>(num & 1));
-      // Right-shift bits, same as division by 2
+      // Right-shift bits by 1, same as division by 2
       num >>= 1;
     } else {
       break;

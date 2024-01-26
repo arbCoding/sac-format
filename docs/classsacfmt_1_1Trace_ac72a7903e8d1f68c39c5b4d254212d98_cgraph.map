@@ -1,0 +1,19 @@
+<map id="sacfmt::Trace::calc_az" name="sacfmt::Trace::calc_az">
+<area shape="rect" id="Node000001" title="Calculate azimuth." alt="" coords="5,136,170,164"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#ac1747dbf31418c1a185df40b3527425e" title=" " alt="" coords="224,5,356,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,134,150,90,216,44,229,37,232,42,219,48,153,94,105,138"/>
+<area shape="rect" id="Node000003" href="$namespacesacfmt.html#abdb7402edd555c08b782e210fb42b367" title="Calculate azimuth between two points." alt="" coords="226,57,354,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="123,133,217,95,235,88,237,93,219,100,125,138"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#a364fc1f1bcbf2df0adab99419da75105" title=" " alt="" coords="218,109,362,137"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="170,136,203,132,204,137,170,142"/>
+<area shape="rect" id="Node000007" href="$classsacfmt_1_1Trace.html#a013651fd879d140af713415ab5236d79" title=" " alt="" coords="218,161,362,189"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="170,157,204,162,203,167,170,163"/>
+<area shape="rect" id="Node000008" href="$classsacfmt_1_1Trace.html#aa63683eea3ce4c74089c8b5d99c87766" title=" " alt="" coords="220,213,360,241"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="126,162,219,198,237,205,235,210,217,203,124,167"/>
+<area shape="rect" id="Node000009" href="$classsacfmt_1_1Trace.html#a8b01c09cf706de4e3f263d402c02882d" title=" " alt="" coords="220,265,360,293"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="105,162,154,205,219,250,232,257,229,261,216,255,151,209,102,166"/>
+<area shape="rect" id="Node000004" href="$namespacesacfmt.html#a00d680406a083cec842eb0700ea0dad4" title="Convert decimal degrees to radians." alt="" coords="410,14,556,59"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="354,57,395,50,396,55,355,62"/>
+<area shape="rect" id="Node000005" href="$namespacesacfmt.html#a99b9d2001e973091998a61286d0fdf1b" title="Convert radians to decimal degrees." alt="" coords="412,84,554,128"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="355,80,398,88,397,93,354,85"/>
+</map>

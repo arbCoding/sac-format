@@ -1,0 +1,10 @@
+<map id="sacfmt::read_four_words" name="sacfmt::read_four_words">
+<area shape="rect" id="Node000001" title="Read four words (128 bits, kEvNm only) from a binary SAC&#45;file." alt="" coords="5,31,188,58"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a8dc35b87c6418f9df9556173ed8a5a2e" title="Concatenate two word_one binary strings into a single word_two string." alt="" coords="464,5,627,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,37,449,22,449,27,188,42"/>
+<area shape="rect" id="Node000003" href="$namespacesacfmt.html#a8ba31d67bec9f3b43ed2a46f2ef7612c" title="Read two words (64 bits, useful for most strings) from a binary SAC&#45;file." alt="" coords="236,56,416,84"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,52,221,56,221,61,188,57"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="388,53,468,34,469,39,389,58"/>
+<area shape="rect" id="Node000004" href="$namespacesacfmt.html#a2a31dc3af3ab8c15a93694caee80354a" title="Read one word (32 bits, useful for non&#45;strings) from a binary SAC&#45;File." alt="" coords="475,57,617,85"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="416,68,460,68,460,73,416,73"/>
+</map>

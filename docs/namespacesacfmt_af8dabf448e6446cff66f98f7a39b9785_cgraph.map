@@ -1,0 +1,7 @@
+<map id="sacfmt::string_cleaning" name="sacfmt::string_cleaning">
+<area shape="rect" id="Node000001" title="Remove leading/trailing spaces and control characters from a string." alt="" coords="5,49,179,76"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a398d90bdb7796083992c0a85b9fbdbeb" title="Remove all leading spaces from a string." alt="" coords="227,5,406,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,46,211,41,212,46,179,52"/>
+<area shape="rect" id="Node000003" href="$namespacesacfmt.html#aabb91290ce3df9a4911f530d86f149c2" title="Remove all trailing spaces from a string." alt="" coords="228,75,405,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,73,213,78,213,84,179,78"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="sacfmt::Trace::calc_dist" name="sacfmt::Trace::calc_dist">
+<area shape="rect" id="Node000001" title="Calculate distance (using gcarc)." alt="" coords="5,32,179,60"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#acb29b9cc548cf844d528a10bee3ba789" title=" " alt="" coords="232,5,373,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,32,217,27,218,32,179,37"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aba7da69c9ae7dbbbf6502e78fe62d4d7" title=" " alt="" coords="227,57,378,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,54,212,58,212,63,179,59"/>
+</map>

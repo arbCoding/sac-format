@@ -81,11 +81,3 @@ DART*.tcl
 _deps/*
 CMakeCache.txt
 *.pkg
-
-# minted
-**/_minted-index/*
-
-# Doxygen
-docs/doxygen/latex/*
-# Can comment out later to add doxygen docs when finished
-docs/doxygen/html/*
