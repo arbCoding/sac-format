@@ -9,8 +9,7 @@ on Windows) and include `sac_format.hpp`.
 
 `list_sac` is a command line program that takes a single SAC-file as its input
 argument. It reads the SAC-file and outputs the header/footer information, as
-well as the true size of the [`data1`](#%3Ddata1%3D) and [`data2`](#%3Ddata2%3D)
-vectors.
+well as the true size of the `data1` and `data2` vectors.
 
 ## CMake Integration
 

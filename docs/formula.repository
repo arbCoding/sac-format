@@ -54,3 +54,19 @@ Station\rightarrow Event
 \_form#27=173x18:\[\color{orange}
 Event\rightarrow Station
 \]
+\_form#28=178x25:$\color{orange}\mathrm{\left(Event \to Station\right)}$
+\_form#29=180x25:$\color{orange}\mathrm{\left(Station \to Event\right)}$
+\_form#30=149x25:$\color{orange}\mathrm{stla}\in[-90, 90]$
+\_form#31=171x25:$\color{orange}\mathrm{stlo}\in[-180,
+180]$
+\_form#32=153x25:$\color{orange}\mathrm{evla}\in[-90, 90]$
+\_form#33=176x25:$\color{orange}\mathrm{evlo}\in[-180,
+180]$
+\_form#34=45x29:$\color{orange}\mathrm{\left(\frac{nm}{s}\right)}$
+\_form#35=45x29:$\color{orange}\mathrm{\left(\frac{nm}{s^{2}}\right)}$
+\_form#36=29x23:$\color{orange}M_{b}$
+\_form#37=29x23:$\color{orange}M_{s}$
+\_form#38=27x23:$\color{orange}M_{l}$
+\_form#39=34x23:$\color{orange}M_{w}$
+\_form#40=32x23:$\color{orange}M_{d}$
+\_form#41=32x23:$\color{orange}M_{x}$

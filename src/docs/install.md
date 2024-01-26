@@ -11,7 +11,7 @@ corresponds to `sac-format.pkg.sha512`).
 
 sac-format provides a graphical installer on Windows (`sac-format.exe`).
 
-Always check the sha512 checksum value of the installer (`sac-format.exe`; 
+Always check the sha512 checksum value of the installer (`sac-format.exe`;
 [more info here](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7.4))
 against `sac-format.exe.sha512`.
 
@@ -20,8 +20,8 @@ one below:
 
 ![Windows Warning 1](./screenshots/Windows/warning_1_install.png)
 
-To continue the install, click on the &rsquo;More Info&rsquo; link and then the
-&rsquo;Run anyway&rsquo; button as seen in the following image:
+To continue the install, click on the "More Info" link and then the "Run anyway"
+button as seen in the following image:
 
 ![Windows Warning 2](./screenshots/Windows/warning_2_install.png)
 
@@ -58,8 +58,7 @@ on `sac-format.pkg` and select open. A warning will pop up that looks like:
 
 ![macOS Warning](./screenshots/macOS/warning_install.png)
 
-Simply click &rsquo;Open&rsquo; and the installer will begin from the first
-screen:
+Simply click "Open" and the installer will begin from the first screen:
 
 ![macOS Intro Install](./screenshots/macOS/intro_install.png)
 

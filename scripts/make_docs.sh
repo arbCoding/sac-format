@@ -31,17 +31,8 @@ echo "Cleaning up past build!"
 rm -r "$base"/docs
 mkdir "$base"/docs
 
-echo -e "\nCopying screenshots"
-cp -r "$base"/src/docs/screenshots "$base"/docs/screenshots
-echo -e "\nOptimizing screenshots"
-cd "$base"/docs/screenshots || exit
-for dir in ./*; do
-  if [ -d "$dir" ]; then
-    cd "$dir" || exit
-    optipng -quiet ./*.png
-    cd "$base"/docs/screenshots || exit
-  fi
-done
+#echo -e "\nCopying screenshots"
+#cp -r "$base"/src/docs/screenshots "$base"/docs/screenshots
 
 # Make doxygen
 echo -e "\nMaking Doxygen docs"

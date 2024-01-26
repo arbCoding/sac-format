@@ -6,8 +6,7 @@ with binary
 easy as possible. Written in C++20, it follows a modern and easy to read
 programming-style while providing the high performance brought by C++.
 
-sac-format&rsquo;s developed on
-[GitHub](https://github.com/arbCoding/sac-format)!
+sac-format's developed on [GitHub](https://github.com/arbCoding/sac-format)!
 
 Download [sac-format](https://github.com/arbCoding/sac-format/releases) from the
 GitHub release page.

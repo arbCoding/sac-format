@@ -27,7 +27,6 @@ int main() {
 }
 ```
 
-
 ### Writing SAC
 
 Writing SAC files can be done using one of two write functions.
@@ -42,8 +41,7 @@ Use `legacy_write` (for example `trace.legacy_write(filename)`).
 
 ### Getters and Setters
 
-Every [SAC variable](#SAC-file%20format) is accessed via getters and setters of
-the same name.
+Every SAC variable is accessed via getters and setters of the same name.
 
 #### Example Getters
 
@@ -65,7 +63,9 @@ constrained by additional rules.
 
 ##### Required for sanity
 
-Rules here are required because the sac-format library assumes them (not strictly required by the SAC format standard). For instance, the geometric functions assume certain bounds on latitudes and longitudes.
+Rules here are required because the sac-format library assumes them (not
+strictly required by the SAC format standard). For instance, the geometric
+functions assume certain bounds on latitudes and longitudes.
 
 sac-format automatically imposes these rules.
 
@@ -133,25 +133,25 @@ also potentially affects the value of `leven`.
 If leven is `false`, then iftype must be either 1 or unset. Therefore, changing
 iftype to have a value >1 requires that leven becomes `true` (evenly sampled
 data).
-            
+
 If changing iftype makes data2 legal&lowast;, then data2 is resized to have
 `npts` zeros.
-            
+
 &lowast; If data2 was already legal, then it is unaffected.
-        
+
 ###### `data1(input)`
-        
+
 If the size of `data1` is changed, then `npts` must change to reflect the new
 size. If `data2` is legal, this adjusts its size to match as well.
-        
+
 ###### `data2(input)`
-        
+
 If the size of `data2` is changed to be larger than 0 and it is illegal, it is
 made legal by setting `iftype(2)` (spectral-data).
-            
+
 When the size of data2 changes, `npts` is updated to the new size and `data1` is
 resized to match.
-            
+
 If `data2` is made illegal, its size is reduced to 0 while `npts` and `data1`
 are unaffected.
 
@@ -401,8 +401,8 @@ results of all tests.
 
 ### Compact output
 
-The [full output](#Full%20output) is verbose, using the compact reporter will
-condense the test results (`utests --reporter=compact --success`).
+The full output is verbose, using the compact reporter will condense the test
+results (`utests --reporter=compact --success`).
 
 ### Additional options
 
@@ -427,25 +427,25 @@ To view available optional flags, run `becnhmark -?`.
 The two core files are split in the standard interface (hpp)/implementation
 (cpp) format.
 
-1.  `sac_format.hpp`
+#### sac_format.hpp
 
-    Interface: function declarations and constants.
+Interface: function declarations and constants.
 
-2.  `sac_format.cpp`
+#### sac_format.cpp
 
-    Implementation: function details.
+Implementation: function details.
 
 ### Testing and Benchmarking
 
-1.  `util.hpp`
+#### util.hpp
 
-    Utility functions and constants exclusive to testing and benchmarking. Not
-    split into interface/implementation.
+Utility functions and constants exclusive to testing and benchmarking. Not split
+into interface/implementation.
 
-2.  `utests.cpp`
+#### utests.cpp
 
-3.  `benchmark.cpp`
+#### benchmark.cpp
 
 ### Example programs
 
-1.  `list_sac.cpp`
+#### list_sac.cpp

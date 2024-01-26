@@ -1,1 +1,1 @@
-var searchData=[["4_0",["Boolean (4)",["../SacFileFormat.html#autotoc_md82",1,""]]]]
+var searchData=[["39_0",["Floating-point (39)",["../SacFileFormat.html#autotoc_md85",1,""]]]]
