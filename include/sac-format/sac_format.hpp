@@ -278,7 +278,7 @@ double limit_90(double degrees) noexcept;
 /*! \enum name
   \brief Enumeration of all SAC fields.
 
-  Additional information can be found at (link to org-documentation).
+  Additional information can be found at @ref SacFileFormat
   */
 enum class name {
   // Floats
