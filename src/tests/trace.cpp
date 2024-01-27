@@ -1099,12 +1099,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Resize Data") {
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
-  Trace in2{};
-  in2 = in;
-  std::vector<double> tmp{in2.data1()};
+  std::vector<double> tmp{in.data1()};
   tmp.resize(10);
-  in2.data1(tmp);
-  REQUIRE(!equal_within_tolerance(trace.data1(), in2.data1()));
+  in.data1(tmp);
+  REQUIRE(!equal_within_tolerance(trace.data1(), in.data1()));
 }
 
 TEST_CASE("Trace: I/O: Random Data Vectors: Modify Header: EvDp") {
@@ -1120,10 +1118,8 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Modify Header: EvDp") {
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
-  Trace in2{};
-  in2 = in;
-  in2.evdp(in.evdp() - 1.0f);
-  REQUIRE(trace != in2);
+  in.evdp(in.evdp() - 1.0f);
+  REQUIRE(trace != in);
 }
 
 TEST_CASE("Trace: I/O: Random Data Vectors: Modify Data") {
@@ -1139,12 +1135,10 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Modify Data") {
   trace.write(tmp_file);
   Trace in = Trace(tmp_file);
   fs::remove(tmp_file);
-  Trace in2{};
-  in2 = in;
-  std::vector<double> tmp{in2.data1()};
+  std::vector<double> tmp{in.data1()};
   tmp[0] -= 1.0;
-  in2.data1(tmp);
-  REQUIRE(trace != in2);
+  in.data1(tmp);
+  REQUIRE(trace != in);
 }
 
 TEST_CASE("Trace: I/O: Legacy Format: nVHdr Conversions") {
