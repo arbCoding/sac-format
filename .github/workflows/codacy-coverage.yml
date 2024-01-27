@@ -10,39 +10,47 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Install lcov
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y lcov
+      - name: Install lcov
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lcov
 
-    - name: Configure CMake
-      run: cmake --preset gh-coverage
+      - name: Install Catch2 v3 from source
+        run: |
+          git clone https://github.com/catchorg/Catch2.git
+          cd Catch2
+          git checkout v3.5.2
+          cmake -Bbuild -S. -DBUILD_TESTING=OFF
+          sudo cmake --build build/ --target install
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build/debug/gh-coverage
+      - name: Configure CMake
+        run: cmake --preset gh-coverage
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build/debug/gh-coverage
-      run: ctest
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build/debug/gh-coverage
 
-    - name: Generate Coverage
-      working-directory: ${{github.workspace}}/build/debug/gh-coverage
-      run: |
-        lcov -c -d ./CMakeFiles/sac-format.dir/ -o sac-format.lcov
-        lcov -r sac-format.lcov "/usr*" -o sac-format.lcov
+      - name: Test
+        working-directory: ${{github.workspace}}/build/debug/gh-coverage
+        run: ctest
 
-    - name: Upload Coverage Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ${{github.workspace}}/build/debug/gh-coverage/sac-format.lcov
-        name: sac-format-coverage
-        verbose: true
+      - name: Generate Coverage
+        working-directory: ${{github.workspace}}/build/debug/gh-coverage
+        run: |
+          lcov -c -d ./CMakeFiles/sac-format.dir/ -o sac-format.lcov
+          lcov -r sac-format.lcov "/usr*" -o sac-format.lcov
 
-    - name: Upload Coverage Codacy
-      working-directory: ${{github.workspace}}/build/debug/gh-coverage
-      run: |
-        export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
-        bash <(curl -Ls https://coverage.codacy.com/get.sh)
+      - name: Upload Coverage Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ${{github.workspace}}/build/debug/gh-coverage/sac-format.lcov
+          name: sac-format-coverage
+          verbose: true
+
+      - name: Upload Coverage Codacy
+        working-directory: ${{github.workspace}}/build/debug/gh-coverage
+        run: |
+          export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
+          bash <(curl -Ls https://coverage.codacy.com/get.sh)
