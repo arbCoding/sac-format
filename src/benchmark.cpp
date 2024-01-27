@@ -176,12 +176,12 @@ TEST_CASE("Input/Output") {
     }
     SECTION("In") {
       test_sac.write(tmp_file);
-      BENCHMARK("Reading") { Trace in_sac = Trace(tmp_file); };
+      BENCHMARK("Reading") { Trace in_sac{tmp_file}; };
       fs::remove(tmp_file);
     }
     SECTION("Comparison Between Out and In") {
       test_sac.write(tmp_file);
-      Trace in_sac = Trace(tmp_file);
+      Trace in_sac{tmp_file};
       BENCHMARK("Out vs In") { (void)(in_sac == test_sac); };
       fs::remove(tmp_file);
     }
@@ -202,14 +202,14 @@ TEST_CASE("Input/Output") {
     SECTION("In") {
       test_sac.write(tmp_file);
       BENCHMARK("Reading") {
-        Trace in_sac = Trace(tmp_file);
+        Trace in_sac{tmp_file};
         return;
       };
       fs::remove(tmp_file);
     }
     SECTION("Comparison Between Out and In Zeros") {
       test_sac.write(tmp_file);
-      Trace in_sac = Trace(tmp_file);
+      Trace in_sac{tmp_file};
       BENCHMARK("Trace Comparison") { (void)(test_sac == in_sac); };
       fs::remove(tmp_file);
     }
@@ -232,7 +232,7 @@ TEST_CASE("Input/Output") {
         test_sac.data2(data);
       }
       test_sac.write(tmp_file);
-      Trace in_sac = Trace(tmp_file);
+      Trace in_sac{tmp_file};
       // Note that this equality tests to equality within tolerance of
       // what can be handled via a float this is because binary SAC files
       // use floats for the data values, not doubles

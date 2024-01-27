@@ -22,7 +22,7 @@ For example:
 
 int main() {
   std::filesystem::path my_file{"/home/user/data/ANMO.SAC"};
-  sacfmt::Trace anmo{sacfmt::Trace(my_file)};
+  sacfmt::Trace anmo{my_file};
   return EXIT_SUCCESS;
 }
 ```
