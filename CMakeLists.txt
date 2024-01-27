@@ -38,21 +38,32 @@ FetchContent_Declare(xoshiro
   GIT_REPOSITORY https://github.com/Reputeless/Xoshiro-cpp
   GIT_TAG v1.1
   SYSTEM)
-FetchContent_MakeAvailable(xoshiro)
+if (WIN32)
+  # Windows
+  FetchContent_Declare(Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2
+    GIT_TAG v3.5.2
+    SYSTEM)
+  FetchContent_MakeAvailable(xoshiro Catch2)
+else()
+  # Unix & macOS
+  FetchContent_MakeAvailable(xoshiro)
+  # Provides location to search for Catch2 installation from source build
+  # build via:
+  # git clone https://github.com/catchorg/Catch2.git
+  # mkdir build && cd build
+  # cmake .. -DBUILD_TESTING=Off
+  # make && sudo make install
+  # Need to figure out how to get this working on Windows as well!
+  list(APPEND CMAKE_PREFIX_PATH
+    "/usr/local/lib64/cmake" # Linux
+    "/usr/local/lib/cmake" # macOS
+    "C:/Program Files (x86)/Catch2" # Windows
+  )
+endif()
+  
 # Include Xoshiro since it doesn't have a CMakeLists.txt
 include_directories(SYSTEM ${xoshiro_SOURCE_DIR})
-# Provides location to search for Catch2 installation from source build
-# build via:
-# git clone https://github.com/catchorg/Catch2.git
-# mkdir build && cd build
-# cmake .. -DBUILD_TESTING=Off
-# make && sudo make install
-# Need to figure out how to get this working on Windows as well!
-list(APPEND CMAKE_PREFIX_PATH
-  "/usr/local/lib64/cmake" # Linux
-  "/usr/local/lib/cmake" # macOS
-  "C:/Program Files (x86)/Catch2" # Windows
-)
 find_package(Catch2 3 CONFIG REQUIRED)
 #==============================================================================
 # sac-format

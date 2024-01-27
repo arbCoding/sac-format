@@ -1,10 +1,5 @@
 // Copyright 2023-2024 Alexander R. Blanchette
 
-// Required for Catch2 compatibility on Windows
-#if defined(_MSC_VER) || defined(__MINW32__)
-#define _ITERATOR_DEBUG_LEVEL 2
-#endif
-
 #include "sac-format/sac_format.hpp"
 #include "sac-format/util.hpp"
 // Catch2 https://github.com/catchorg/Catch2/tree/v3.4.0
