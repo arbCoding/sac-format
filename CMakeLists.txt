@@ -60,11 +60,11 @@ else()
     "/usr/local/lib/cmake" # macOS
     "C:/Program Files (x86)/Catch2" # Windows
   )
+  find_package(Catch2 3 CONFIG REQUIRED)
 endif()
   
 # Include Xoshiro since it doesn't have a CMakeLists.txt
 include_directories(SYSTEM ${xoshiro_SOURCE_DIR})
-find_package(Catch2 3 CONFIG REQUIRED)
 #==============================================================================
 # sac-format
 #==============================================================================
