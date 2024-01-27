@@ -1,30 +1,95 @@
-// Copyright 2023 Alexander R. Blanchette
+// Copyright 2023-2024 Alexander R. Blanchette
 
-#include <sac_format.hpp>
+/*!
+  \file sac_format.cpp
+
+  \brief Implementation of the sac-format library.
+
+  \author Alexander R. Blanchette
+
+  The full implementation of the entire sac-format library. Including
+  the Trace class, all methods, and all functions. Everything in this file
+  is targeted for testing coverage.
+  */
+
+#include "sac-format/sac_format.hpp"
 
 // Implementation of the interface in sac_format.hpp
 namespace sacfmt {
 //-----------------------------------------------------------------------------
 // Conversions
 //-----------------------------------------------------------------------------
+/*!
+  \brief Calculates position of word in SAC-file.
+
+  Multiplies given word number by the word-length in bytes (defined by the SAC
+  format.)
+
+  @param[in] word_number Number of desired word in file stream.
+  @returns std::streamoff Position in SAC-file of desired word (in bytes).
+  */
 std::streamoff word_position(const size_t word_number) noexcept {
   return static_cast<std::streamoff>(word_number * word_length);
 }
 
-word_one int_to_binary(const int num) noexcept {
+/*!
+  \brief Convert unsigned integer to 32-bit (one word) binary bitset.
+
+  This sets the current bit using bitwise and, updates the bit to manipulate
+  and performs a right-shift (division by 2) until the number is zero.
+
+  @param[in] num Number to be converted.
+  @returns ::word_one Converted value.
+ */
+word_one uint_to_binary(uint num) noexcept {
   word_one bits{};
-  if (num >= 0) {
-    bits = word_one(static_cast<size_t>(num));
-  } else {
-    bits = word_one(static_cast<size_t>(std::pow(2, binary_word_size) + num));
+  for (size_t pos{0}; pos < bits.size(); ++pos) {
+    if (num > 0) {
+      // Bitwise and to set flag.
+      bits.set(pos, static_cast<bool>(num & 1));
+      // Right-shift bits by 1, same as division by 2
+      num >>= 1;
+    } else {
+      break;
+    }
   }
   return bits;
 }
 
+/*!
+  \brief Convert integer to 32-bit (one word) binary bitset.
+
+  Uses two's complement to convert an integer into a binary value.
+
+  @param[in] num Number to be converted.
+  @returns ::word_one Converted value.
+  */
+word_one int_to_binary(int num) noexcept {
+  word_one bits{};
+  if (num >= 0) {
+    bits = uint_to_binary(static_cast<uint>(num));
+  } else {
+    bits = uint_to_binary(static_cast<uint>(-num));
+    // Complement
+    bits.flip();
+    bits = bits.to_ulong() + 1;
+  }
+  return bits;
+}
+
+/*!
+  \brief Convert 32-bit (one word) binary bitset to integer.
+
+  Uses two's complement to convert a binary value into an integer.
+
+  @param[in] bin Binary value to be converted.
+  @returns int Converted value.
+ */
 int binary_to_int(word_one bin) noexcept {
   int result{};
   if (bin.test(binary_word_size - 1)) {
-    bin = ~bin;
+    // Complement
+    bin.flip();
     result = static_cast<int>(bin.to_ulong());
     result += 1;
     // Change sign to make it negative
@@ -35,6 +100,14 @@ int binary_to_int(word_one bin) noexcept {
   return result;
 }
 
+/*!
+  \brief Convert floating-point value to 32-bit (one word) binary bitset.
+
+  Converts float to unsigned-integer of same size for storage in bitset.
+
+  @param[in] num Float value to be converted.
+  @returns ::word_one Converted value.
+ */
 word_one float_to_binary(const float num) noexcept {
   unsigned_int<float> num_as_uint{0};
   // flawfinder: ignore
@@ -43,6 +116,14 @@ word_one float_to_binary(const float num) noexcept {
   return result;
 }
 
+/*!
+  \brief Convert 32-bit (one word) binary bitset to a floating-point value.
+
+  Converts bitset to unsigned long then to float.
+
+  @param[in] bin ::word_one Binary value to be converted.
+  @returns float Converted value.
+  */
 float binary_to_float(const word_one &bin) noexcept {
   const auto val = bin.to_ulong();
   float result{};
@@ -51,6 +132,14 @@ float binary_to_float(const word_one &bin) noexcept {
   return result;
 }
 
+/*!
+  \brief Convert double-precision value to 64-bit (two words) binary bitset.
+
+  Converts double to unsigned-integer of same size for storage in bitset.
+
+  @param[in] num Double value to be converted.
+  @returns ::word_two Converted value.
+ */
 word_two double_to_binary(const double num) noexcept {
   unsigned_int<double> num_as_uint{0};
   // flawfinder: ignore
@@ -59,6 +148,14 @@ word_two double_to_binary(const double num) noexcept {
   return result;
 }
 
+/*!
+  \brief Convert 64-bit (two words) binary bitset to double-precision value.
+
+  Converts bitset to unsigned long long then to double.
+
+  @param[in] bin ::word_two Binary value to be converted.
+  @returns double Converted value.
+ */
 double binary_to_double(const word_two &bin) noexcept {
   const auto val = bin.to_ullong();
   double result{};
@@ -67,18 +164,38 @@ double binary_to_double(const word_two &bin) noexcept {
   return result;
 }
 
+/*!
+  \brief Remove all leading spaces from a string.
+
+  This edits the string in-place.
+
+  @param[in, out] str std::string* String to have spaces removed.
+ */
 void remove_leading_spaces(std::string *str) noexcept {
   while ((static_cast<int>(str->front()) <= ascii_space) && (!str->empty())) {
     str->erase(0, 1);
   }
 }
+
+/*!
+  \brief Remove all trailing spaces from a string.
+
+  This edits the string in-place.
+
+  @param[in, out] str std::string* String to have spaces removed.
+ */
 void remove_trailing_spaces(std::string *str) noexcept {
   while ((static_cast<int>(str->back()) <= ascii_space) && (!str->empty())) {
     str->pop_back();
   }
 }
 
-// Remove leading/trailing white-space and control characters
+/*!
+  \brief Remove leading/trailing spaces and control characters from a string.
+
+  @param[in] str std::string String to be cleaned.
+  @returns std::string Cleaned string.
+ */
 std::string string_cleaning(const std::string &str) noexcept {
   std::string result{str};
   size_t null_position{str.find('\0')};
@@ -90,6 +207,14 @@ std::string string_cleaning(const std::string &str) noexcept {
   return result;
 }
 
+/*!
+  \brief Cleans string and then truncates/pads as necessary.
+
+  This edits the string in-place.
+
+  @param[in, out] str std::string* String to be prepared.
+  @param[in] str_size Desired string length.
+ */
 void prep_string(std::string *str, const size_t str_size) noexcept {
   *str = string_cleaning(*str);
   if (str->length() > str_size) {
@@ -99,26 +224,42 @@ void prep_string(std::string *str, const size_t str_size) noexcept {
   }
 }
 
+/*!
+  \brief Template function to convert string into binary bitset.
+
+  Note that this edits the bitset in place.
+
+  @param[out] bits Destintation bitset for the string (result).
+  @param[in] str String to undergo conversion.
+  @param[in] str_size Desired string size in words (4 chars = 1 word).
+ */
 template <typename T>
 void string_bits(T *bits, const std::string &str,
                  const size_t str_size) noexcept {
   constexpr size_t char_size{bits_per_byte};
-  std::bitset<char_size> byte{};
+  char_bit byte{};
   for (size_t i{0}; i < str_size; ++i) {
     size_t character{static_cast<size_t>(str[i])};
-    byte = std::bitset<char_size>(character);
+    byte = char_bit(character);
     for (size_t j{0}; j < char_size; ++j) {
       (*bits)[(i * char_size) + j] = byte[j];
     }
   }
 }
 
+/*!
+  \brief Template function to convert binary bitset to string.
+
+  @param[in] bits Source bitset for the string.
+  @param[in] num_words Length of string in words (4 chars = 1 word)
+  @returns std::string String converted from bitset.
+ */
 template <typename T>
 std::string bits_string(const T &bits, const size_t num_words) noexcept {
   std::string result{};
   result.reserve(num_words * word_length);
   constexpr size_t char_size{bits_per_byte};
-  std::bitset<char_size> byte{};
+  char_bit byte{};
   for (size_t i{0}; i < num_words * binary_word_size; i += char_size) {
     for (size_t j{0}; j < char_size; ++j) [[likely]] {
       byte[j] = bits[i + j];
@@ -128,8 +269,18 @@ std::string bits_string(const T &bits, const size_t num_words) noexcept {
   return result;
 }
 
+/*!
+  \brief Convert string to a 64-bit (two word) binary bitset
+
+  If the string is longer than 8 characters, the only the first 8 characters are
+  kept. If the string is less than 8 characters long, it is right-padded with
+  spaces.
+
+  @param[in] str String to be converted to a bitset.
+  @returns ::word_two Converted binary bitset.
+ */
 word_two string_to_binary(std::string str) noexcept {
-  constexpr size_t string_size{static_cast<size_t>(2 * word_length)};
+  constexpr size_t string_size{2 * word_length};
   // 1 byte per character
   prep_string(&str, string_size);
   // Two words (8 characters)
@@ -138,13 +289,31 @@ word_two string_to_binary(std::string str) noexcept {
   return bits;
 }
 
+/*!
+  \brief Convert a 64-bit (two word) binary bitset to a string.
+
+  @param[in] str ::word_two to be converted to a string.
+  @returns std::string Converted string.
+ */
 std::string binary_to_string(const word_two &str) noexcept {
   std::string result{bits_string(str, 2)};
   return string_cleaning(result);
 }
 
+/*!
+  \brief Convert a string to a 128-bit (four word) binary bitset.
+
+  If the string is longer than 16 characters, then only the first 16 characters
+  are kept. If the string is less than 16 characters long, it is right-padded
+  with spaces.
+
+  Exclusively used to work with the kEvNm header.
+
+  @param[in] str String to be converted to a bitset.
+  @returns ::word_four Converted binary bitset.
+ */
 word_four long_string_to_binary(std::string str) noexcept {
-  constexpr size_t string_size{static_cast<size_t>(4 * word_length)};
+  constexpr size_t string_size{4 * word_length};
   prep_string(&str, string_size);
   // Four words (16 characters)
   word_four bits{};
@@ -152,19 +321,50 @@ word_four long_string_to_binary(std::string str) noexcept {
   return bits;
 }
 
+/*!
+  \brief Convert a 128-bit (four word) binary bitset to a string.
+
+  Exclusively used to work with the kEvNm header.
+
+  @param[in] str ::word_four to be converted to a string.
+  @returns std::string Converted string.
+ */
 std::string binary_to_long_string(const word_four &str) noexcept {
   std::string result{bits_string(str, 4)};
   return string_cleaning(result);
 }
 
+/*!
+  \brief Convert a boolean to a 32-bit (one word) binary bitset.
+
+  @param[in] flag Boolean value to be converted to a bitset (sets zeroth
+  element).
+  @returns ::word_one Converted binary bitset.
+ */
 word_one bool_to_binary(const bool flag) noexcept {
   word_one result{};
   result[0] = flag;
   return result;
 }
 
+/*!
+  \brief Convert a 32-bit (one word) binary bitset to a boolean.
+
+  @param[in] flag ::word_one binary bitset to be converted (takes zeroth
+  element).
+  @returns boolean Converted boolean value.
+ */
 bool binary_to_bool(const word_one &flag) noexcept { return flag[0]; }
 
+/*!
+  \brief Concatenate two ::word_one binary strings into a single ::word_two
+  string.
+
+  Useful for reading strings from SAC-files.
+
+  @param[in] pair_words word_pair Words to be concatenated.
+  @returns ::word_two Concatenated words.
+ */
 word_two concat_words(const word_pair<word_one> &pair_words) noexcept {
   word_two result{};
   for (size_t i{0}; i < binary_word_size; ++i) [[likely]] {
@@ -174,20 +374,39 @@ word_two concat_words(const word_pair<word_one> &pair_words) noexcept {
   return result;
 }
 
+/*!
+  \brief Concatenate two ::word_two binary strings into a single ::word_four
+  string.
+
+  Exclusively used to read kEvNm header from SAC-file.
+
+  @param[in] pair_words word_pair Words to be concatenated.
+  @returns ::word_four Concatenated words.
+ */
 word_four concat_words(const word_pair<word_two> &pair_words) noexcept {
   word_four result{};
-  for (int i{0}; i < 2 * binary_word_size; ++i) [[likely]] {
+  constexpr size_t two_words{2 * binary_word_size};
+  for (size_t i{0}; i < two_words; ++i) [[likely]] {
     result[i] = pair_words.first[i];
-    result[i + (2 * binary_word_size)] = pair_words.second[i];
+    result[i + two_words] = pair_words.second[i];
   }
   return result;
 }
 //-----------------------------------------------------------------------------
 // Reading
 //-----------------------------------------------------------------------------
+/*!
+  \brief Read one word (32 bits, useful for non-strings) from a binary SAC-File.
+
+  Note that this modifies the position of the reader within the stream (to the
+  end of the read word).
+
+  @param[in, out] sac std::ifstream* Input binary SAC-file.
+  @returns ::word_one Binary bitset representation of single word.
+ */
 word_one read_word(std::ifstream *sac) {
   word_one bits{};
-  constexpr int char_size{bits_per_byte};
+  constexpr size_t char_size{bits_per_byte};
   // Where we will store the characters
   std::array<char, word_length> word{};
   // Read to our character array
@@ -195,12 +414,11 @@ word_one read_word(std::ifstream *sac) {
   // flawfinder: ignore
   if (sac->read(word.data(), word_length)) {
     // Take each character
-    std::bitset<char_size> byte{};
-    for (int i{0}; i < word_length; ++i) [[likely]] {
-      int character{word[i]};
-      byte = std::bitset<char_size>(character);
+    for (size_t i{0}; i < word_length; ++i) [[likely]] {
+      uint character{static_cast<uint>(word[i])};
+      char_bit byte{character};
       // bit-by-bit
-      for (int j{0}; j < char_size; ++j) [[likely]] {
+      for (size_t j{0}; j < char_size; ++j) [[likely]] {
         bits[(i * char_size) + j] = byte[j];
       }
     }
@@ -208,6 +426,16 @@ word_one read_word(std::ifstream *sac) {
   return bits;
 }
 
+/*!
+  \brief Read two words (64 bits, useful for most strings) from a binary
+  SAC-file.
+
+  Note that this modifies the position of the reader within the stream (to the
+  end of the read words).
+
+  @param[in, out] sac std::ifstream* Input binary SAC-file.
+  @returns ::word_two Binary bitset representation of two words.
+ */
 word_two read_two_words(std::ifstream *sac) {
   const word_one first_word{read_word(sac)};
   const word_one second_word{read_word(sac)};
@@ -222,6 +450,15 @@ word_two read_two_words(std::ifstream *sac) {
   return concat_words(pair_words);
 }
 
+/*!
+  \brief Read four words (128 bits, kEvNm only) from a binary SAC-file.
+
+  Note that this modifies the position of the reader within the stream (to the
+  end of the read words).
+
+  @param[in, out] sac std::ifstream* Input binary SAC-file.
+  @returns ::word_four Binary bitset representation of four words.
+ */
 word_four read_four_words(std::ifstream *sac) {
   const word_two first_words{read_two_words(sac)};
   const word_two second_words{read_two_words(sac)};
@@ -236,6 +473,17 @@ word_four read_four_words(std::ifstream *sac) {
   return concat_words(pair_words);
 }
 
+/*!
+  \brief Reader arbitrary number of words (useful for vectors) from a binary
+  SAC-file.
+
+  Note that this modifies the position of the reader within the stream (to the
+  end of the read words).
+
+  @param[in, out] sac std::ifstream* Input binary SAC-file.
+  @param[in] spec read_spec Reading specification.
+  @returns std::vector<double> Data vector read in.
+ */
 std::vector<double> read_data(std::ifstream *sac, const read_spec &spec) {
   sac->seekg(word_position(spec.start_word));
   std::vector<double> result{};
@@ -248,6 +496,17 @@ std::vector<double> read_data(std::ifstream *sac, const read_spec &spec) {
 //-----------------------------------------------------------------------------
 // Writing
 //-----------------------------------------------------------------------------
+/*!
+  \brief Write arbitrary number of words (useful for vectors) to a binary
+  SAC-file.
+
+  Note that this modifies the position of the writer within the stream (to the
+  end of the written words).
+
+  @param[in, out] sac_file std::ofstream* Output binary SAC-file.
+  @param[in] input std::vector<char> Character vector representation of data for
+  writing.
+ */
 void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
   std::ofstream &sac = *sac_file;
   if (sac.is_open()) {
@@ -257,7 +516,13 @@ void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
   }
 }
 
-// Template on the typename to make possible to handle float or int
+/*!
+  \brief Template function to convert input value into a std::vector<char> for
+  writing.
+
+  @param[in] input Input value (float or int) to convert.
+  @return std::vector<char> Prepared for writing to binary SAC-file.
+ */
 template <typename T>
 std::vector<char> convert_to_word(const T input) noexcept {
   std::array<char, word_length> tmp{};
@@ -266,7 +531,7 @@ std::vector<char> convert_to_word(const T input) noexcept {
   std::memcpy(tmp.data(), &input, word_length);
   std::vector<char> word{};
   word.resize(word_length);
-  for (int i{0}; i < word_length; ++i) [[likely]] {
+  for (size_t i{0}; i < word_length; ++i) [[likely]] {
     word[i] = tmp[i];
   }
   return word;
@@ -276,6 +541,12 @@ std::vector<char> convert_to_word(const T input) noexcept {
 template std::vector<char> convert_to_word(const float input) noexcept;
 template std::vector<char> convert_to_word(const int x) noexcept;
 
+/*!
+  \brief Convert double value into a std::vector<char> for writing.
+
+  @param[in] input Input value to convert (double).
+  @return std::vector<char> Prepared for writing to binary SAC-file.
+ */
 std::vector<char> convert_to_word(const double input) noexcept {
   std::array<char, static_cast<size_t>(2) * word_length> tmp{};
   // Copy bytes from input into the tmp array
@@ -283,21 +554,29 @@ std::vector<char> convert_to_word(const double input) noexcept {
   std::memcpy(tmp.data(), &input, static_cast<size_t>(2) * word_length);
   std::vector<char> word{};
   word.resize(static_cast<size_t>(2) * word_length);
-  for (int i{0}; i < 2 * word_length; ++i) {
-    word[static_cast<size_t>(i)] = tmp[i];
+  for (size_t i{0}; i < 2 * word_length; ++i) {
+    word[i] = tmp[i];
   }
   return word;
 }
 
 // Variable sized words for the 'K' headers
+/*!
+  \brief Template function to convert input string value into a std::array<char>
+  for writing.
+
+  @param[in] str Input string to convert.
+  @param[in] n_words Number of words
+  @return std::array<char, N> Prepared for writing to a binary SAC-file.
+  */
 template <size_t N>
 std::array<char, N> convert_to_words(const std::string &str,
                                      int n_words) noexcept {
   std::array<char, N> all_words{};
   // String to null-terminated character array
   const char *c_str = str.c_str();
-  for (int i{0}; i < (n_words * word_length); ++i) {
-    all_words[static_cast<size_t>(i)] = c_str[i];
+  for (size_t i{0}; i < static_cast<size_t>(n_words) * word_length; ++i) {
+    all_words[i] = c_str[i];
   }
   return all_words;
 }
@@ -310,11 +589,17 @@ convert_to_words(const std::string &str, const int n_words) noexcept;
 template std::array<char, 4 * word_length>
 convert_to_words(const std::string &str, const int n_words) noexcept;
 
+/*!
+  \brief Convert boolean to a word for writing.
+
+  @param[in] flag Boolean to be converted.
+  @returns std::vector<char> Prepared value for writing.
+  */
 std::vector<char> bool_to_word(const bool flag) noexcept {
   std::vector<char> result;
   result.resize(word_length);
   result[0] = static_cast<char>(flag ? 1 : 0);
-  for (int i{1}; i < word_length; ++i) {
+  for (size_t i{1}; i < word_length; ++i) {
     result[i] = 0;
   }
   return result;
@@ -324,6 +609,16 @@ std::vector<char> bool_to_word(const bool flag) noexcept {
 // -----------------------------------------------------------------------------
 // Does not assume equal length, if not equal length then they're not equal
 // within tolerance
+/*!
+  \brief Check if two std::vector<double> are equal within a tolerance limit.
+
+  Default tolerance is f_eps.
+
+  @param[in] vector1 First data vector in comparison.
+  @param[in] vector2 Second data vector in comparison.
+  @param[in] tolerance Numerical equality tolerance (default f_eps).
+  @returns bool Boolean equality value.
+ */
 bool equal_within_tolerance(const std::vector<double> &vector1,
                             const std::vector<double> &vector2,
                             const double tolerance) noexcept {
@@ -337,19 +632,74 @@ bool equal_within_tolerance(const std::vector<double> &vector1,
   }
   return true;
 }
+
+/*!
+  \brief Check if  two double values are equal within a tolerance limit.
+
+  Default tolerance is f_eps.
+
+  @param[in] val1 First double in comparison.
+  @param[in] val2 Second double in comparison.
+  @param[in] tolerance Numerical equality tolerance (default f_eps).
+  @returns bool Boolean equality value.
+ */
 bool equal_within_tolerance(const double val1, const double val2,
                             const double tolerance) noexcept {
   return (std::abs(val1 - val2) < tolerance);
 }
 // Position methods
+/*!
+  \brief Convert decimal degrees to radians.
+
+  \f[\color{orange}
+  r=d\cdot\frac{\pi}{180^{\circ}}
+  \f]
+
+  @param[in] degrees Angle in decimal degrees to be converted.
+  @returns double Angle in radians.
+ */
 double degrees_to_radians(const double degrees) noexcept {
   return rad_per_deg * degrees;
 }
 
+/*!
+  \brief Convert radians to decimal degrees.
+
+  \f[\color{orange}
+  d=r\cdot\frac{180^{\circ}}{\pi}
+  \f]
+
+  @param[in] radians Angle in radians to be converted.
+  @returns double Angle in decimal degrees.
+ */
 double radians_to_degrees(const double radians) noexcept {
   return deg_per_rad * radians;
 }
 
+/*!
+  \brief Calculate great circle arc distance in decimal degrees between two
+  points.
+
+  Assumes spherical Earth (in future will include flatenning and adjustable
+  radius for other bodies/greater accuracy).
+
+  \f$\color{orange}\phi\f$ is latitude.
+  \f$\color{orange}\lambda\f$ is longitude.
+  \f$\color{orange}\Delta\f$ is great circle arc distance (gcarc).
+
+  \f[\color{orange}
+  \Delta = cos^{-1}\left(
+  sin(\phi_{1})sin(\phi_{2}) + cos(\phi_{1})cos(\phi_{2})
+  cos(\lambda_{2}-\lambda_{1})
+  \right)
+  \f]
+
+  @param[in] latitude1 Latitude of first location in decimal degrees.
+  @param[in] longitude1 Longitude of first location in decimal degrees.
+  @param[in] latitude2 Latitude of second location in decimal degrees.
+  @param[in] longitude2 Longitude of second location in decimal degrees.
+  @returns double The great circle arc distance in decimal degrees.
+ */
 double gcarc(const double latitude1, const double longitude1,
              const double latitude2, const double longitude2) noexcept {
   const double lat1{degrees_to_radians(latitude1)};
@@ -362,7 +712,29 @@ double gcarc(const double latitude1, const double longitude1,
   return result;
 }
 
-// I wonder if there is a way to do this with n-vectors
+/*!
+  \brief Calculate azimuth between two points.
+
+  Assumes spherical Earth (in future may update to solve on a more general
+  body).
+
+  \f$\color{orange}\phi\f$ is latitude.
+  \f$\color{orange}\lambda\f$ is longitude.
+  \f$\color{orange}\theta\f$ is azimuth.
+
+  \f[\color{orange}
+  \theta=tan^{-1}\left(
+  \frac{sin(\delta\lambda)cos(\phi_{2})}{cos(\phi_{1})sin(\phi_{2})
+  - sin(\phi_{1})cos(\phi_{2})cos(\delta\lambda)}
+  \right)
+  \f]
+
+  @param[in] latitude1 Latitude of first location in decimal degrees.
+  @param[in] longitude1 Longitude of first location in decimal degrees.
+  @param[in] latitude2 Latitude of second location in decimal degrees.
+  @param[in] longitude2 Longitude of second location in decimal degrees.
+  @returns double The azimuth from the first location to the second location.
+  */
 double azimuth(const double latitude1, const double longitude1,
                const double latitude2, const double longitude2) noexcept {
   const double lat1{degrees_to_radians(latitude1)};
@@ -380,6 +752,17 @@ double azimuth(const double latitude1, const double longitude1,
   return result;
 }
 
+/*!
+  \brief Takes a decimal degree value and constrains it to full circle using
+  symmetry.
+
+  \f[\color{orange}
+  \left[-\infty,\infty\right]\rightarrow\left[0, 360\right]
+  \f]
+
+  @param[in] degrees Decimal degrees to be constrained.
+  @returns double Value within limits.
+ */
 double limit_360(const double degrees) noexcept {
   double result{degrees};
   while (std::abs(result) > circle_deg) {
@@ -395,6 +778,17 @@ double limit_360(const double degrees) noexcept {
   return result;
 }
 
+/*!
+  \brief Takes a decimal degree value and constrains it to a half circle using
+  symmetry.
+
+  \f[\color{orange}
+  \left[-\infty,\infty\right]\rightarrow (-180,180]
+  \f]
+
+  @param[in] degrees Decimal degrees to be constrained.
+  @returns double Value within limits.
+ */
 double limit_180(const double degrees) noexcept {
   double result{limit_360(degrees)};
   constexpr double hemi{180.0};
@@ -404,6 +798,17 @@ double limit_180(const double degrees) noexcept {
   return result;
 }
 
+/*!
+  \brief Takes a decimal degree value and constrains it to a quarter circle
+  using symmetry.
+
+  \f[\color{orange}
+  \left[-\infty,\infty\right]\rightarrow\left[-90,90\right]
+  \f]
+
+  @param[in] degrees Decimal degrees to be constrained.
+  @returns double Value within limits.
+  */
 double limit_90(const double degrees) noexcept {
   double result{limit_180(degrees)};
   constexpr double quarter{90.0};
@@ -417,6 +822,14 @@ double limit_90(const double degrees) noexcept {
 //------------------------------------------------------------------------------
 // Trace
 //------------------------------------------------------------------------------
+/*!
+  \brief Trace default constructor.
+
+  Fills all values with their default (unset) values.
+  Data vectors are of size zero.
+
+  @returns Default created Trace object.
+ */
 Trace::Trace() noexcept {
   std::ranges::fill(floats.begin(), floats.end(), unset_float);
   std::ranges::fill(doubles.begin(), doubles.end(), unset_double);
@@ -425,6 +838,13 @@ Trace::Trace() noexcept {
   std::ranges::fill(strings.begin(), strings.end(), unset_word);
 }
 
+/*!
+  \brief Trace equality operator.
+
+  @param[in] this First Trace in comparison (LHS).
+  @param[in] other Second Trace in comparison (RHS).
+  @returns bool Truth value of equality.
+ */
 bool Trace::operator==(const Trace &other) const noexcept {
   if (floats != other.floats) {
     return false;
@@ -447,6 +867,9 @@ bool Trace::operator==(const Trace &other) const noexcept {
   return true;
 }
 // Convenience functions
+/*!
+  \brief Calculates gcarc, dist, az, and baz from stla, stlo, evla, and evlo.
+ */
 void Trace::calc_geometry() noexcept {
   if (geometry_set()) {
     calc_gcarc();
@@ -461,6 +884,15 @@ void Trace::calc_geometry() noexcept {
   }
 }
 
+/*!
+  \brief Calculate frequency from delta.
+
+  \f[\color{orange}
+  f=\frac{1}{\delta}
+  \f]
+
+  @returns double Frequency.
+*/
 double Trace::frequency() const noexcept {
   const double delta_val{delta()};
   if ((delta_val == unset_double) || (delta_val <= 0)) {
@@ -469,27 +901,65 @@ double Trace::frequency() const noexcept {
   return 1.0 / delta_val;
 }
 
+/*!
+  \brief Determine if locations are set for geometry calculation.
+
+  @returns bool True if able to calculate geometry.
+ */
 bool Trace::geometry_set() const noexcept {
   return ((stla() != unset_double) && (stlo() != unset_double) &&
           (evla() != unset_double) && (evlo() != unset_double));
 }
 
+/*!
+  \brief Calculate great-circle arc-distance (gcarc).
+ */
 void Trace::calc_gcarc() noexcept {
   Trace::gcarc(
       static_cast<float>(sacfmt::gcarc(stla(), stlo(), evla(), evlo())));
 }
 
+/*!
+  \brief Calculate distance (using gcarc).
+
+  Assumes spherical Earth (in future may update to include flattening
+  and different planteray bodies).
+
+  \f[\color{orange}
+  d=r_{E}\cdot\Delta
+  \f]
+ */
 void Trace::calc_dist() noexcept {
   dist(static_cast<float>(earth_radius * rad_per_deg * gcarc()));
 }
 
+/*!
+  \brief Calculate azimuth.
+
+  \f[\color{orange}
+  Station\rightarrow Event
+  \f]
+ */
 void Trace::calc_az() noexcept {
   az(static_cast<float>(azimuth(evla(), evlo(), stla(), stlo())));
 }
+
+/*!
+  \brief Calculate back-azimuth.
+
+  \f[\color{orange}
+  Event\rightarrow Station
+  \f]
+ */
 void Trace::calc_baz() noexcept {
   baz(static_cast<float>(azimuth(stla(), stlo(), evla(), evlo())));
 }
 
+/*!
+  \brief Get date string.
+
+  @returns std::string Date (YYYY-JJJ).
+ */
 std::string Trace::date() const noexcept {
   // Require all to be set
   if ((nzyear() == unset_int) || (nzjday() == unset_int)) {
@@ -502,6 +972,11 @@ std::string Trace::date() const noexcept {
   return oss.str();
 }
 
+/*!
+  \brief Get time string.
+
+  @returns sstd::string Time (HH::MM:SS.sss).
+ */
 std::string Trace::time() const noexcept {
   // Require all to be set
   if ((nzhour() == unset_int) || (nzmin() == unset_int) ||
@@ -955,7 +1430,7 @@ void Trace::nysize(const int input) noexcept {
 }
 void Trace::iftype(const int input) noexcept {
   ints[sac_map.at(name::iftype)] = input;
-  const int size{npts() >= 0 ? npts() : 0};
+  const size_t size{npts() >= 0 ? static_cast<size_t>(npts()) : 0};
   // Uneven 2D data not supported as not in specification
   if ((input > 1) && !leven()) {
     leven(true);
@@ -998,7 +1473,7 @@ void Trace::ibody(const int input) noexcept {
 // Bools
 void Trace::leven(const bool input) noexcept {
   bools[sac_map.at(name::leven)] = input;
-  const int size{npts() >= 0 ? npts() : 0};
+  const size_t size{npts() >= 0 ? static_cast<size_t>(npts()) : 0};
   // Uneven 2D data not supported since not in specification
   if (!input && (iftype() > 1)) {
     iftype(unset_int);
@@ -1084,20 +1559,22 @@ void Trace::kdatrd(const std::string &input) noexcept {
 void Trace::kinst(const std::string &input) noexcept {
   strings[sac_map.at(name::kinst)] = input;
 }
+
 // Data
 void Trace::data1(const std::vector<double> &input) noexcept {
   data[sac_map.at(name::data1)] = input;
   // Propagate change as needed
-  size_t size{data1().size()};
+  int size{static_cast<int>(data1().size())};
   size = (((size == 0) && (npts() == unset_int)) ? unset_int : size);
-  if (static_cast<int>(size) != npts()) {
-    npts(static_cast<int>(size));
+  if (size != npts()) {
+    npts(size);
   }
 }
+
 void Trace::data2(const std::vector<double> &input) noexcept {
   data[sac_map.at(name::data2)] = input;
   // Proagate change as needed
-  size_t size{data2().size()};
+  int size{static_cast<int>(data2().size())};
   size = (((size == 0) && (npts() == unset_int)) ? unset_int : size);
   // Need to make sure this is legal
   // If positive size and not-legal, make spectral
@@ -1107,8 +1584,8 @@ void Trace::data2(const std::vector<double> &input) noexcept {
       iftype(2);
     }
     // If legal and different from npts, update npts
-    if ((!leven() || (iftype() > 1)) && (static_cast<int>(size) != npts())) {
-      npts(static_cast<int>(size));
+    if ((!leven() || (iftype() > 1)) && (size != npts())) {
+      npts(size);
     }
   }
 }
@@ -1137,12 +1614,26 @@ void Trace::resize_data2(const size_t size) noexcept {
   }
 }
 
+/*!
+  \brief Resize data vectors (only if eligible).
+
+  Will always resize data1, data2 only resizes if it can have non-zero size.
+ */
 void Trace::resize_data(const size_t size) noexcept {
   resize_data1(size);
   resize_data2(size);
 }
 //------------------------------------------------------------------------------
 // Read
+//------------------------------------------------------------------------------
+/*!
+  \brief Determine if the SAC-file has enough remaining data to read the
+  requested amount of data.
+
+  @param[in] sac std::ifstream* SAC-file to read.
+  @param[in] spec read_spec reading specification.
+  @returns bool Truth value (true = safe to read).
+ */
 bool nwords_after_current(std::ifstream *sac, const read_spec &spec) noexcept {
   bool result{false};
   if (sac->good()) {
@@ -1157,6 +1648,15 @@ bool nwords_after_current(std::ifstream *sac, const read_spec &spec) noexcept {
   return result;
 }
 
+/*!
+  \brief Determine if the SAC-file is large enough to contain a complete header.
+
+  This must be run prior to reading the data vector(s) and footer (if
+  applicable), not after.
+
+  @param[in] sac std::ifstream* SAC-file to read.
+  @throw io_error If unsafe to read.
+ */
 void safe_to_read_header(std::ifstream *sac) {
   const read_spec spec{data_word, 0};
   if (!nwords_after_current(sac, spec)) {
@@ -1164,6 +1664,15 @@ void safe_to_read_header(std::ifstream *sac) {
   }
 }
 
+/*!
+  \brief Determines if the SAC-file has enough space remaining to contain a
+  complete footer.
+
+  This must be run after reading the header and data vector(s), not before.
+
+  @param[in] sac std::ifstream* SAC-file to read.
+  @throw io_error If unsafe to read.
+ */
 void safe_to_read_footer(std::ifstream *sac) {
   // doubles are two words long
   const read_spec spec{static_cast<size_t>(num_footer) * 2,
@@ -1173,6 +1682,18 @@ void safe_to_read_footer(std::ifstream *sac) {
   }
 }
 
+/*!
+  \brief Determines if the SAC-file has enough space remaining to contain a
+  complete data vector.
+
+  This must be run after reading the header (and first data vector if
+  applicable) and before the footer (if applicable).
+
+  @param[in] sac std::ifstream* SAC-file to read.
+  @param[in] n_words Number of values in data vector.
+  @param[in] data2 bool True if reading data2, false (default) if reading data1.
+  @throw io_error If unsafe to read.
+ */
 void safe_to_read_data(std::ifstream *sac, const size_t n_words,
                        const bool data2) {
   const std::string data{data2 ? "data2" : "data1"};
@@ -1182,6 +1703,17 @@ void safe_to_read_data(std::ifstream *sac, const size_t n_words,
   }
 }
 
+/*!
+  \brief Determines if the SAC-file is finished.
+
+  This must run after reading the header, data vector(s), and footer (if
+  applicable). This checks to ensure there is no additional data in the SAC-file
+  (there shouldn't be, and out of safety it throws an io_error to inform the
+  user if there are shenanigans).
+
+  @param[in] sac std::ifstream* SAC-file to be checked.
+  @throw io_error If the file is not finished.
+ */
 void safe_to_finish_reading(std::ifstream *sac) {
   const std::streamoff current_pos{sac->tellg()};
   sac->seekg(0, std::ios::end);
@@ -1199,6 +1731,14 @@ void safe_to_finish_reading(std::ifstream *sac) {
   }
 }
 
+/*!
+  \brief Binary SAC-file reader.
+
+  @param[in] path std::filesystem::path SAC-file to be read.
+  @returns Trace read in-file.
+  @throw io_error If the file is not safe to read for whatever reason.
+  @throw std::exception (disk failure).
+ */
 Trace::Trace(const std::filesystem::path &path) {
   std::ifstream file(path, std::ifstream::binary);
   if (!file) {
@@ -1368,7 +1908,7 @@ Trace::Trace(const std::filesystem::path &path) {
   if (is_data && (!leven() || (iftype() > 1))) {
     // true flags for data2
     safe_to_read_data(&file, n_words, true);  // throws io_error if unsafe
-    const read_spec spec{n_words, static_cast<size_t>(data_word) + npts()};
+    const read_spec spec{n_words, data_word + static_cast<size_t>(npts())};
     data2(read_data(&file, spec));
   }
   //--------------------------------------------------------------------------
@@ -1403,6 +1943,16 @@ Trace::Trace(const std::filesystem::path &path) {
 }
 //------------------------------------------------------------------------------
 // Write
+//------------------------------------------------------------------------------
+/*!
+  \brief Binary SAC-file writer.
+
+  @param[in] path std::filesystem::path SAC-file to write.
+  @param[in] legacy bool Legacy-write flag (default false = v7, true = v6).
+  @throw io_error If the file cannot be written (bad path or bad permissions).
+  @throw std::exception Other unwritable issues (not enough space, disk failure,
+  etc.).
+ */
 void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   std::ofstream file(path, std::ios::binary | std::ios::out | std::ios::trunc);
   if (!file) {
@@ -1626,6 +2176,14 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   file.close();
 }
 
+/*!
+  \brief Binary SAC-file legacy-write convenience function.
+
+  @param[in] path std::filesystem::path SAC-file to be written.
+  @throw io_error If the file cannot be written (bad path or bad permissions).
+  @throw std::execption Other unwritable issues (not enough space, disk failure,
+  etc.).
+ */
 void Trace::legacy_write(const std::filesystem::path &path) const {
   write(path, true);
 }

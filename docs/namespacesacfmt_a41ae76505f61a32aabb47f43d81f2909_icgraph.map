@@ -1,0 +1,5 @@
+<map id="sacfmt::safe_to_finish_reading" name="sacfmt::safe_to_finish_reading">
+<area shape="rect" id="Node000001" title="Determines if the SAC&#45;file is finished." alt="" coords="204,5,368,50"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,14,156,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,30,156,30,156,25,189,25"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="sacfmt::binary_to_long_string" name="sacfmt::binary_to_long_string">
+<area shape="rect" id="Node000001" title="Convert a 128&#45;bit (four word) binary bitset to a string." alt="" coords="5,24,176,68"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#af58aaa947802c453b878b869bf45312e" title="Template function to convert binary bitset to string." alt="" coords="239,5,382,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,33,224,27,225,32,176,38"/>
+<area shape="rect" id="Node000003" href="$namespacesacfmt.html#af8dabf448e6446cff66f98f7a39b9785" title="Remove leading/trailing spaces and control characters from a string." alt="" coords="224,57,397,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="176,53,209,57,208,62,175,58"/>
+<area shape="rect" id="Node000004" href="$namespacesacfmt.html#a398d90bdb7796083992c0a85b9fbdbeb" title="Remove all leading spaces from a string." alt="" coords="445,14,624,59"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="397,55,430,50,431,55,398,60"/>
+<area shape="rect" id="Node000005" href="$namespacesacfmt.html#aabb91290ce3df9a4911f530d86f149c2" title="Remove all trailing spaces from a string." alt="" coords="446,84,623,128"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="398,82,432,87,431,93,397,87"/>
+</map>

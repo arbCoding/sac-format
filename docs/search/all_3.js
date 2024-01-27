@@ -1,0 +1,1 @@
+var searchData=[["4_0",["Boolean (4)",["../SacFileFormat.html#autotoc_md148",1,""]]]]

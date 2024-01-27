@@ -1,6 +1,8 @@
 name: Windows Release Package
 
 on:
+  pull_request:
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -8,29 +10,29 @@ jobs:
     runs-on: windows-2022
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-    - name: Prep License File for Distribution
-      run: cp LICENSE License.txt
+      - name: Prep License File for Distribution
+        run: cp LICENSE License.txt
 
-    - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=ON -DCMAKE_CXX_EXTENSIONS=OFF -DCMAKE_CXX_FLAGS="/O2 /DNDEBUG /EHsc"
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=ON -DCMAKE_CXX_EXTENSIONS=OFF -DCMAKE_CXX_FLAGS="/O2 /EHsc /Gs /guard:cf"
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build --config Release
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config Release
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      run: ctest -C Release
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest -C Release
 
-    - name: Package
-      working-directory: ${{github.workspace}}/build/
-      run: cpack
+      - name: Package
+        working-directory: ${{github.workspace}}/build/
+        run: cpack
 
-    - name: Archive Build Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: windows-2022
-        path: |
-          ${{github.workspace}}/build/sac-format.exe*
-        retention-days: 1
+      - name: Archive Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-2022
+          path: |
+            ${{github.workspace}}/build/sac-format.exe*
+            retention-days: 1

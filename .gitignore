@@ -81,6 +81,3 @@ DART*.tcl
 _deps/*
 CMakeCache.txt
 *.pkg
-
-# minted
-**/_minted-index/*

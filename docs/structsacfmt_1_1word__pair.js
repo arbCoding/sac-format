@@ -1,0 +1,1 @@
+var structsacfmt_1_1word__pair=[["first","structsacfmt_1_1word__pair.html#a25754e88d01e9b99dbf7b2e22f1ac45e",null],["second","structsacfmt_1_1word__pair.html#a9eb8d80cda96fb939f20b2b329fe3dfd",null]]

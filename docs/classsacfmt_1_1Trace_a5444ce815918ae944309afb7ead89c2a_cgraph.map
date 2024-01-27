@@ -1,0 +1,6 @@
+<map id="sacfmt::Trace::operator==" name="sacfmt::Trace::operator==">
+<area shape="rect" id="Node000001" title="Trace equality operator." alt="" coords="5,38,199,66"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a8344c2fcedbd815ce91da47ed4d90d20" title="Check if two std::vector&lt;double&gt; are equal within a tolerance limit." alt="" coords="247,29,404,74"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,49,232,49,232,54,199,54"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="283,29,281,19,289,10,303,5,325,3,350,5,364,12,362,17,349,10,325,8,305,10,292,15,286,21,288,28"/>
+</map>

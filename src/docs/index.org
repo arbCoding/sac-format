@@ -137,7 +137,7 @@ confirmed working---they're used to build the =Trace= class!
 
 The easiest way to use sac-format is to install it via the automatic installers.
 Installers for the latest release are located [[https://github.com/arbCoding/sac-format/releases/latest][here]]. Be sure to check the sha512
-checksum of the installer against its correspondingly named =.sha515= file to
+checksum of the installer against its correspondingly named =.sha512= file to
 ensure the file is safe (for example: =sac-format.pkg= corresponds to
 =sac-format.pkg.sha512=).
 

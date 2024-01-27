@@ -1,6 +1,8 @@
 name: Ubuntu Release Package
 
 on:
+  pull_request:
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -8,46 +10,54 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-    - name: Prep License File for Distribution
-      run: |
-        fold -s LICENSE > LICENSE2
-        mv LICENSE2 LICENSE
+      - name: Install Catch2 v3 from source
+        run: |
+          git clone https://github.com/catchorg/Catch2.git
+          cd Catch2
+          git checkout v3.5.2
+          cmake -Bbuild -S. -DBUILD_TESTING=OFF
+          sudo cmake --build build/ --target install
 
-    - name: Configure CMake
-      run: cmake --preset gh-ubuntu-release
+      - name: Prep License File for Distribution
+        run: |
+          fold -s LICENSE > LICENSE2
+          mv LICENSE2 LICENSE
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build/release/gh-ubuntu
+      - name: Configure CMake
+        run: cmake --preset gh-ubuntu-release
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
-      run: ctest
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build/release/gh-ubuntu
 
-    - name: Package tar.gz
-      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
-      run: cpack
+      - name: Test
+        working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+        run: ctest
 
-    - name: Package .deb
-      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
-      run: |
-        cmake -DCPACK_GENERATOR=DEB .
-        cpack -G DEB
+      - name: Package tar.gz
+        working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+        run: cpack
 
-    - name: Package .rpm
-      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
-      run: |
-        cmake -DCPACK_GENERATOR=RPM .
-        sudo cpack -G RPM
+      - name: Package .deb
+        working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+        run: |
+          cmake -DCPACK_GENERATOR=DEB .
+          cpack -G DEB
 
-    - name: Archive Build Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: ubuntu-22.04
-        path: |
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.tar.gz*
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.sh*
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format.deb*
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format.rpm*
-        retention-days: 1
+      - name: Package .rpm
+        working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+        run: |
+          cmake -DCPACK_GENERATOR=RPM .
+          sudo cpack -G RPM
+
+      - name: Archive Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ubuntu-22.04
+          path: |
+            ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.tar.gz*
+            ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Linux-*.sh*
+            ${{github.workspace}}/build/release/gh-ubuntu/sac-format.deb*
+            ${{github.workspace}}/build/release/gh-ubuntu/sac-format.rpm*
+          retention-days: 1

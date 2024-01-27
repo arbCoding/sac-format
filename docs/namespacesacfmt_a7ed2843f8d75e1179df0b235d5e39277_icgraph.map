@@ -1,0 +1,15 @@
+<map id="sacfmt::limit_360" name="sacfmt::limit_360">
+<area shape="rect" id="Node000001" title="Takes a decimal degree value and constrains it to full circle using symmetry." alt="" coords="573,57,709,85"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a5408a7de5eb672b341de42e6804d82e1" title="Takes a decimal degree value and constrains it to a half circle using symmetry." alt="" coords="390,57,525,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="559,74,525,74,525,69,559,69"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a55d087fdbd5e29e62bac2ad5ef4c46c0" title=" " alt="" coords="198,5,342,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,55,322,36,323,31,392,50"/>
+<area shape="rect" id="Node000004" href="$namespacesacfmt.html#aa158c96f64f3f63d1c2c1c670b1ad8e9" title="Takes a decimal degree value and constrains it to a quarter circle using symmetry." alt="" coords="206,57,334,85"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="375,74,334,74,334,69,375,69"/>
+<area shape="rect" id="Node000007" href="$classsacfmt_1_1Trace.html#aaf682569a43367bd9303fc2c911678c3" title=" " alt="" coords="200,109,340,137"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="392,92,323,111,322,106,390,87"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#aa26107c02ca79f2485180de63e81f8ef" title=" " alt="" coords="5,31,150,58"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="191,63,150,57,150,52,192,58"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#a46005c4ddea58c9969a815df231fa600" title=" " alt="" coords="7,83,148,110"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="192,84,148,90,148,85,191,79"/>
+</map>

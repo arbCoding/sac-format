@@ -1,0 +1,5 @@
+<map id="sacfmt::binary_to_int" name="sacfmt::binary_to_int">
+<area shape="rect" id="Node000001" title="Convert 32&#45;bit (one word) binary bitset to integer." alt="" coords="204,5,363,33"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,5,156,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,22,156,22,156,17,189,17"/>
+</map>

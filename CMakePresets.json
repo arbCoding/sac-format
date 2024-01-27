@@ -98,10 +98,19 @@
             }
         },
         {
+            "hidden": true,
+            "name": "gcc-clang-hardened-release",
+            "displayName": "GCC-Clang Hardended Release",
+            "description": "GCC-Clang release with security hardened options.",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-O3 -DNDEBUG -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -fstack-clash-protection -fstack-protector-strong -fPIE -pie -fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -Wno-unknown-warning-option -Wno-unused-command-line-argument"
+            }
+        },
+        {
             "name": "gh-ubuntu-release",
             "displayName": "GitHub Ubuntu Release",
             "description": "GitHub Ubuntu release options.",
-            "inherits": ["gh-release", "gcc-clang-release"],
+            "inherits": ["gh-release", "gcc-clang-hardened-release"],
             "binaryDir": "${sourceDir}/build/release/gh-ubuntu"
         },
         {
@@ -110,6 +119,20 @@
             "description": "GCC release options.",
             "inherits": ["gcc", "release", "gcc-clang-release"],
             "binaryDir": "${sourceDir}/build/release/gcc"
+        },
+        {
+            "name": "gcc-hard-release",
+            "displayName": "GCC Release Hardened",
+            "description": "GCC release with hardening.",
+            "inherits": ["gcc", "release", "gcc-clang-hardened-release"],
+            "binaryDir": "${sourceDir}/build/hard/release/gcc"
+        },
+        {
+            "name": "clang-hard-release",
+            "displayName": "Clang Release Hardened",
+            "description": "Clang release with hardening.",
+            "inherits": ["clang", "release", "gcc-clang-hardened-release"],
+            "binaryDir": "${sourceDir}/build/hard/release/clang"
         },
         {
             "name": "clang-release",
@@ -128,11 +151,34 @@
             }
         },
         {
+            "hidden": true,
+            "name": "gcc-clang-hardened-debug",
+            "displayName": "GCC-Clang Hardened Debug",
+            "description": "GCC-Clang Debug with Hardening options.",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-O0 -ggdb -Werror -Wshadow -Wextra -Wconversion -Wsign-conversion -Wtrampolines -Wimplicit-fallthrough -Wall -pedantic-errors -Wformat=2 -fstack-clash-protection -fstack-protector-strong -fPIE -pie -Wno-unknown-warning-option -Wno-unused-command-line-argument"
+            }
+        },
+        {
             "name": "gcc-debug",
             "displayName": "GCC Debug",
             "description": "GCC debug options.",
             "inherits": ["gcc", "debug", "gcc-clang-debug"],
             "binaryDir": "${sourceDir}/build/debug/gcc"
+        },
+        {
+            "name": "gcc-hard-debug",
+            "displayName": "GCC Hardened Debug",
+            "description": "GCC debug with hardening options.",
+            "inherits": ["gcc", "debug", "gcc-clang-hardened-debug"],
+            "binaryDir": "${sourceDir}/build/hard/debug/gcc"
+        },
+        {
+            "name": "clang-hard-debug",
+            "displayName": "Clang Hardened Debug",
+            "description": "Clang debug with hardening options.",
+            "inherits": ["clang", "debug", "gcc-clang-hardened-debug"],
+            "binaryDir": "${sourceDir}/build/hard/debug/clang"
         },
         {
             "name": "clang-debug",

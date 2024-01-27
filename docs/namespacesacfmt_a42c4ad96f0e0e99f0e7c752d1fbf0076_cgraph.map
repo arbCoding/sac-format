@@ -1,0 +1,9 @@
+<map id="sacfmt::read_data" name="sacfmt::read_data">
+<area shape="rect" id="Node000001" title="Reader arbitrary number of words (useful for vectors) from a binary SAC&#45;file." alt="" coords="5,57,145,85"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#ac112734df4871952d3d85f9c8abd9632" title="Convert 32&#45;bit (one word) binary bitset to a floating&#45;point value." alt="" coords="193,5,364,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,54,206,35,208,40,133,59"/>
+<area shape="rect" id="Node000003" href="$namespacesacfmt.html#a2a31dc3af3ab8c15a93694caee80354a" title="Read one word (32 bits, useful for non&#45;strings) from a binary SAC&#45;File." alt="" coords="207,57,350,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,69,192,69,192,74,145,74"/>
+<area shape="rect" id="Node000004" href="$namespacesacfmt.html#a6c162459e5270cf5a32cd054c1b858a4" title="Calculates position of word in SAC&#45;file." alt="" coords="196,109,361,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="133,83,208,102,206,108,132,88"/>
+</map>

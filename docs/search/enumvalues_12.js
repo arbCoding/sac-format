@@ -1,0 +1,1 @@
+var searchData=[["ymaximum_0",["ymaximum",["../namespacesacfmt.html#aa519c4963e3863fdd55fad06655fad96a8ae39a4076ee6673d7664b2c512bbb20",1,"sacfmt"]]],["yminimum_1",["yminimum",["../namespacesacfmt.html#aa519c4963e3863fdd55fad06655fad96abff300c7d747a1c833d65d3b69cb3a1e",1,"sacfmt"]]]]

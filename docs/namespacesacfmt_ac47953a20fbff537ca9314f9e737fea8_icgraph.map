@@ -1,0 +1,5 @@
+<map id="sacfmt::binary_to_string" name="sacfmt::binary_to_string">
+<area shape="rect" id="Node000001" title="Convert a 64&#45;bit (two word) binary bitset to a string." alt="" coords="204,5,383,33"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,5,156,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,22,156,22,156,17,189,17"/>
+</map>

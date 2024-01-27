@@ -1,7 +1,13 @@
-#!/bin/dash
+#!/bin/bash
 scripts=$(pwd)
 base=$(pwd)/..
 cd "$base" || exit
+# Excluded checks:
+#   modernize-use-trailing-return-type
+#   Because I don't like that style
+#       float my_function(int number) {}
+#   is better than
+#       auto my_function(int number) -> float {}
 ct_cmd () {
     clang-tidy --checks="bugprone-*,performance-*,readability-*,portability-*,\
         clang-analyzer-*,cpp-coreguidelines-*,modernize-a*,modernize-c*,\
@@ -11,53 +17,44 @@ ct_cmd () {
         modernize-use-n*,modernize-use-o*,modernize-use-s*,modernize-use-tran*,\
         modernize-use-u*" --extra-arg="-std=c++20" -p \
         "$base/compile_commands.json" "$1"
+    echo ""
 }
 
-echo "Formatting files..."
-echo "Formatting HPP files"
-clang-format -style=file -i "$base/src/"*.hpp
-# dash doesn't support echo -e "\nDone\n"
-echo ""
-echo "Done"
-echo ""
-echo "Formatting CPP files"
-clang-format -style=file -i "$base/src/"*.cpp
-echo ""
-echo "Done"
-echo ""
-echo "Formatting Example CPP files"
-clang-format -style=file -i "$base/src/examples/"*.cpp
-echo ""
-echo "Done"
-echo ""
-echo "Running clang-tidy on sac-format.?pp"
-# Excluded checks:
-#   modernize-use-trailing-return-type
-#   Because I don't like that style
-#       float my_function(int number) {}
-#   is better than
-#       auto my_function(int number) -> float {}
-ct_cmd "$base/src/"sac_format.?pp
-echo ""
-echo "Done"
-echo ""
-echo "Running cpplint on sac-format.?pp"
-cpplint "$base/src/"sac_format.?pp
-echo ""
-echo "Done"
-echo ""
-echo "Running clang-tidy on examples"
-ct_cmd "$base/src/examples/"*.cpp
-echo ""
-echo "Done"
-echo ""
-echo "Running cpplint on examples"
-cpplint "$base/src/examples/"*.cpp
-echo ""
-echo "Done"
-echo ""
+cf_cmd() {
+    clang-format -style=file -i "$1"
+    echo ""
+}
+
+cl_cmd() {
+    cpplint "$1"
+    echo ""
+}
+
+format_lint_dir() {
+    for file in "$1"/*.?pp; do
+        echo "Formatting file: $file"
+        cf_cmd "$file"
+        echo "clang-tidy: $file"
+        ct_cmd "$file"
+        echo "cpplint: $file"
+        cl_cmd "$file"
+        echo ""
+    done
+}
+
+dir_list=("$base/src" "$base/src/examples" "$base/src/tests" \
+    "$base/include/sac-format")
+
+for dir in "${dir_list[@]}"; do
+    echo -e "Scanning $dir\n"
+    format_lint_dir "$dir"
+done
+
 echo "Running shellcheck on *.sh"
 shellcheck "$scripts/"*.sh
-echo ""
-echo "Done"
+
+echo -e "\nLinting markdown"
+cd "$base"/src/docs || exit
+markdownlint-cli2 --fix ./*.md
+
 cd "$scripts" || exit

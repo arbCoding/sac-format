@@ -1,0 +1,1 @@
+var structsacfmt_1_1read__spec=[["num_words","structsacfmt_1_1read__spec.html#a0761da009d8a74b91e3a45cf69950168",null],["start_word","structsacfmt_1_1read__spec.html#ac41ef380d631dd08d4982934365890bb",null]]

@@ -1,0 +1,1 @@
+var searchData=[["circle_5fdeg_0",["circle_deg",["../namespacesacfmt.html#a7d8d1e50369510e6b20f1876852d7eb4",1,"sacfmt"]]],["common_5fskip_5fnum_1",["common_skip_num",["../namespacesacfmt.html#a54f8085d0a0d93a9ac40e8531b475fe6",1,"sacfmt"]]]]

@@ -1,0 +1,5 @@
+<map id="sacfmt::safe_to_read_data" name="sacfmt::safe_to_read_data">
+<area shape="rect" id="Node000001" title="Determines if the SAC&#45;file has enough space remaining to contain a complete data vector." alt="" coords="5,14,200,42"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#aaa57ec11cc623fd08c0ed678ef742ccb" title="Determine if the SAC&#45;file has enough remaining data to read the requested amount of data." alt="" coords="248,5,406,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,25,233,25,233,30,200,30"/>
+</map>

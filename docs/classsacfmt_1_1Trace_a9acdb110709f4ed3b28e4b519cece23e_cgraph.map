@@ -1,0 +1,11 @@
+<map id="sacfmt::Trace::geometry_set" name="sacfmt::Trace::geometry_set">
+<area shape="rect" id="Node000001" title="Determine if locations are set for geometry calculation." alt="" coords="5,84,212,112"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a364fc1f1bcbf2df0adab99419da75105" title=" " alt="" coords="260,5,404,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,81,275,36,277,41,151,86"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a013651fd879d140af713415ab5236d79" title=" " alt="" coords="260,57,404,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,83,244,79,245,84,212,88"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#aa63683eea3ce4c74089c8b5d99c87766" title=" " alt="" coords="262,109,402,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="212,107,247,111,247,116,211,112"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#a8b01c09cf706de4e3f263d402c02882d" title=" " alt="" coords="262,161,402,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="152,110,277,153,275,158,150,115"/>
+</map>

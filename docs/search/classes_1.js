@@ -1,0 +1,1 @@
+var searchData=[["read_5fspec_0",["read_spec",["../structsacfmt_1_1read__spec.html",1,"sacfmt"]]]]

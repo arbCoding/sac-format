@@ -1,0 +1,72 @@
+\_form#0=171x18:$\color{orange}Station\rightarrow Event$
+\_form#1=171x18:$\color{orange}Event\rightarrow Station$
+\_form#2=20x23:$\color{orange}f_{0}$
+\_form#3=25x16:$\color{orange}\omega_{0}$
+\_form#4=47x23:$\color{orange}f_{max}$
+\_form#5=52x16:$\color{orange}\omega_{max}$
+\_form#6=27x18:$\color{orange}\Delta t$
+\_form#7=32x23:$\color{orange}\Delta f$
+\_form#8=32x18:$\color{orange}\Delta\omega$
+\_form#9=18x20:$\color{orange}t_{0}$
+\_form#10=45x20:$\color{orange}t_{max}$
+\_form#11=124x25:$\color{orange}\phi\in [-90,90]$
+\_form#12=146x25:$\color{orange}\lambda\in [-180,180]$
+\_form#13=117x43:\[\color{orange}
+r=d\cdot\frac{\pi}{180^{\circ}}
+\]
+\_form#14=117x50:\[\color{orange}
+d=r\cdot\frac{180^{\circ}}{\pi}
+\]
+\_form#15=14x23:$\color{orange}\phi$
+\_form#16=14x18:$\color{orange}\lambda$
+\_form#17=18x18:$\color{orange}\Delta$
+\_form#18=563x29:\[\color{orange}
+\Delta = cos^{-1}\left(
+sin(\phi_{1})sin(\phi_{2}) + cos(\phi_{1})cos(\phi_{2})
+cos(\lambda_{2}-\lambda_{1})
+\right)
+\]
+\_form#19=11x18:$\color{orange}\theta$
+\_form#20=527x56:\[\color{orange}
+\theta=tan^{-1}\left(
+\frac{sin(\delta\lambda)cos(\phi_{2})}{cos(\phi_{1})sin(\phi_{2})
+- sin(\phi_{1})cos(\phi_{2})cos(\delta\lambda)}
+\right)
+\]
+\_form#21=185x25:\[\color{orange}
+\left[-\infty,\infty\right]\rightarrow\left[0, 360\right]
+\]
+\_form#22=227x25:\[\color{orange}
+\left[-\infty,\infty\right]\rightarrow (-180,180]
+\]
+\_form#23=203x25:\[\color{orange}
+\left[-\infty,\infty\right]\rightarrow\left[-90,90\right]
+\]
+\_form#24=59x47:\[\color{orange}
+f=\frac{1}{\delta}
+\]
+\_form#25=101x23:\[\color{orange}
+d=r_{E}\cdot\Delta
+\]
+\_form#26=171x18:\[\color{orange}
+Station\rightarrow Event
+\]
+\_form#27=173x18:\[\color{orange}
+Event\rightarrow Station
+\]
+\_form#28=178x25:$\color{orange}\mathrm{\left(Event \to Station\right)}$
+\_form#29=180x25:$\color{orange}\mathrm{\left(Station \to Event\right)}$
+\_form#30=149x25:$\color{orange}\mathrm{stla}\in[-90, 90]$
+\_form#31=171x25:$\color{orange}\mathrm{stlo}\in[-180,
+180]$
+\_form#32=153x25:$\color{orange}\mathrm{evla}\in[-90, 90]$
+\_form#33=176x25:$\color{orange}\mathrm{evlo}\in[-180,
+180]$
+\_form#34=45x29:$\color{orange}\mathrm{\left(\frac{nm}{s}\right)}$
+\_form#35=45x29:$\color{orange}\mathrm{\left(\frac{nm}{s^{2}}\right)}$
+\_form#36=29x23:$\color{orange}M_{b}$
+\_form#37=29x23:$\color{orange}M_{s}$
+\_form#38=27x23:$\color{orange}M_{l}$
+\_form#39=34x23:$\color{orange}M_{w}$
+\_form#40=32x23:$\color{orange}M_{d}$
+\_form#41=32x23:$\color{orange}M_{x}$

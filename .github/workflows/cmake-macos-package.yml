@@ -1,6 +1,8 @@
 name: macOS Release Package
 
 on:
+  pull_request:
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -8,39 +10,47 @@ jobs:
     runs-on: macos-13
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-    - name: Prep License file
-      run: |
-        cp LICENSE License2.txt
-        fold -s LICENSE > License.txt
+      - name: Install Catch2 v3 from source
+        run: |
+          git clone https://github.com/catchorg/Catch2.git
+          cd Catch2
+          git checkout v3.5.2
+          cmake -Bbuild -S. -DBUILD_TESTING=OFF
+          sudo cmake --build build/ --target install
 
-    - name: Configure CMake
-      run: cmake --preset gh-ubuntu-release
+      - name: Prep License file
+        run: |
+          cp LICENSE License2.txt
+          fold -s LICENSE > License.txt
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build/release/gh-ubuntu
+      - name: Configure CMake
+        run: cmake --preset gh-ubuntu-release
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
-      run: ctest
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build/release/gh-ubuntu
 
-    - name: Package CLI Installers
-      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
-      run: cpack
+      - name: Test
+        working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+        run: ctest
 
-    - name: Package GUI Installer
-      working-directory: ${{github.workspace}}/build/release/gh-ubuntu
-      run: |
-        cmake -DCPACK_GENERATOR=productbuild -DCMAKE_INSTALL_PREFIX=/opt/sac-format .
-        cpack -G productbuild
+      - name: Package CLI Installers
+        working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+        run: cpack
 
-    - name: Archive Build Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: macos-13
-        path: |
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.tar.gz*
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.sh*
-          ${{github.workspace}}/build/release/gh-ubuntu/sac-format.pkg*
-        retention-days: 1
+      - name: Package GUI Installer
+        working-directory: ${{github.workspace}}/build/release/gh-ubuntu
+        run: |
+          cmake -DCPACK_GENERATOR=productbuild -DCMAKE_INSTALL_PREFIX=/opt/sac-format .
+          cpack -G productbuild
+
+      - name: Archive Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-13
+          path: |
+            ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.tar.gz*
+            ${{github.workspace}}/build/release/gh-ubuntu/sac-format-?.?.?-Darwin-*.sh*
+            ${{github.workspace}}/build/release/gh-ubuntu/sac-format.pkg*
+          retention-days: 1

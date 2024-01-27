@@ -1,0 +1,1 @@
+var searchData=[["sacfmt_0",["sacfmt",["../namespacesacfmt.html",1,""]]],["sacfmt_3a_3abitset_5ftype_1",["bitset_type",["../namespacesacfmt_1_1bitset__type.html",1,"sacfmt"]]]]

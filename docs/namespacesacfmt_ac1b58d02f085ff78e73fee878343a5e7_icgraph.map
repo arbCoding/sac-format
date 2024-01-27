@@ -1,0 +1,7 @@
+<map id="sacfmt::string_bits" name="sacfmt::string_bits">
+<area shape="rect" id="Node000001" title="Template function to convert string into binary bitset." alt="" coords="233,45,375,72"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#aa561d911c782afe814321e13eacf3494" title="Convert a string to a 128&#45;bit (four word) binary bitset." alt="" coords="22,5,168,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,48,168,41,169,36,218,43"/>
+<area shape="rect" id="Node000003" href="$namespacesacfmt.html#a9e62be10cbc389a820a4715791b83a60" title="Convert string to a 64&#45;bit (two word) binary bitset." alt="" coords="5,74,185,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,73,185,78,185,72,217,68"/>
+</map>

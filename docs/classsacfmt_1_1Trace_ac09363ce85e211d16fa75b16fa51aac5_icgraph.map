@@ -1,0 +1,11 @@
+<map id="sacfmt::Trace::delta" name="sacfmt::Trace::delta">
+<area shape="rect" id="Node000001" title=" " alt="" coords="442,57,591,85"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aaccf847b26b998afdb34548168623c30" title="Calculate frequency from delta." alt="" coords="213,5,394,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="442,56,363,36,364,31,443,51"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="228,57,379,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="427,74,379,74,379,69,427,69"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#a5a16040cc0d19472325794b2db602aaf" title="Binary SAC&#45;file writer." alt="" coords="229,109,378,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="443,92,364,111,363,106,442,87"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#afdeafc868fa9a589497ccbff744523f7" title="Binary SAC&#45;file legacy&#45;write convenience function." alt="" coords="5,101,165,146"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="214,126,165,126,165,121,214,121"/>
+</map>

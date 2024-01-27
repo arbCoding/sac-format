@@ -1,0 +1,7 @@
+<map id="sacfmt::read_two_words" name="sacfmt::read_two_words">
+<area shape="rect" id="Node000001" title="Read two words (64 bits, useful for most strings) from a binary SAC&#45;file." alt="" coords="5,32,186,60"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a8dc35b87c6418f9df9556173ed8a5a2e" title="Concatenate two word_one binary strings into a single word_two string." alt="" coords="234,5,397,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="185,32,219,28,219,33,186,38"/>
+<area shape="rect" id="Node000003" href="$namespacesacfmt.html#a2a31dc3af3ab8c15a93694caee80354a" title="Read one word (32 bits, useful for non&#45;strings) from a binary SAC&#45;File." alt="" coords="244,57,387,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="186,54,230,59,229,64,185,59"/>
+</map>

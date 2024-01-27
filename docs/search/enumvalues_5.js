@@ -1,0 +1,1 @@
+var searchData=[["f_0",["f",["../namespacesacfmt.html#aa519c4963e3863fdd55fad06655fad96a8fa14cdd754f91cc6554c9e71929cce7",1,"sacfmt"]]]]

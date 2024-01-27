@@ -1,0 +1,1 @@
+var searchData=[["mag_0",["mag",["../namespacesacfmt.html#aa519c4963e3863fdd55fad06655fad96a741f63d12d767bb3fd2b0251ed839499",1,"sacfmt"]]]]

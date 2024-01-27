@@ -1,0 +1,14 @@
+<map id="sacfmt::read_word" name="sacfmt::read_word">
+<area shape="rect" id="Node000001" title="Read one word (32 bits, useful for non&#45;strings) from a binary SAC&#45;File." alt="" coords="662,56,805,84"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a42c4ad96f0e0e99f0e7c752d1fbf0076" title="Reader arbitrary number of words (useful for vectors) from a binary SAC&#45;file." alt="" coords="225,5,365,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="647,58,614,54,364,28,365,22,615,49,648,53"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,81,156,109"/>
+<area shape="poly" id="edge7_Node000001_Node000003" title=" " alt="" coords="648,76,204,92,156,95,156,89,204,87,648,70"/>
+<area shape="rect" id="Node000004" href="$namespacesacfmt.html#a8ba31d67bec9f3b43ed2a46f2ef7612c" title="Read two words (64 bits, useful for most strings) from a binary SAC&#45;file." alt="" coords="434,107,614,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="660,90,585,109,584,103,659,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="240,41,205,54,122,83,120,78,203,49,238,36"/>
+<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="419,117,156,102,156,97,420,112"/>
+<area shape="rect" id="Node000005" href="$namespacesacfmt.html#aaef6781fd78aa7d2941f9308523f2895" title="Read four words (128 bits, kEvNm only) from a binary SAC&#45;file." alt="" coords="204,157,386,185"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="445,141,361,159,360,154,444,135"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="238,154,203,142,120,112,122,107,205,137,240,149"/>
+</map>

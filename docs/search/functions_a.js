@@ -1,0 +1,1 @@
+var searchData=[["mag_0",["mag",["../classsacfmt_1_1Trace.html#a1d4a8a5219518cefb341b1fc1c3730f4",1,"sacfmt::Trace::mag() const noexcept"],["../classsacfmt_1_1Trace.html#af8f10d6b5db5b9284d991818a3090618",1,"sacfmt::Trace::mag(float input) noexcept"]]]]
