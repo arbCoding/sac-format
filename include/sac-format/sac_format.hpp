@@ -48,6 +48,11 @@
 // std::vector
 #include <vector>
 
+// Apparently MSVC doesn't have uint defined.
+#if defined(_MSC_VER) || define(__MINW32__)
+typedef unsigned int uint;
+#endif
+
 //! sac-format namespace
 namespace sacfmt {
 //--------------------------------------------------------------------------

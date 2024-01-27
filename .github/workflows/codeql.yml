@@ -24,19 +24,26 @@ jobs:
         language: ['c-cpp']
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    # Initializes the CodeQL tools for scanning.
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
-    - run: |
-        cmake --preset gh-coverage
-        cmake --build ${{github.workspace}}/build/debug/gh-coverage
+      - name: Install Catch2 v3 from source
+        run: |
+          git clone https://github.com/catchorg/Catch2.git
+          cd Catch2
+          git checkout v3.5.2
+          cmake -Bbuild -S. -DBUILD_TESTING=OFF
+          sudo cmake --build build/ --target install
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-      with:
-        category: "/language:${{matrix.language}}"
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+      - run: |
+          cmake --preset gh-coverage
+          cmake --build ${{github.workspace}}/build/debug/gh-coverage
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"
