@@ -30,7 +30,7 @@ include_directories(SYSTEM ${xoshiro_SOURCE_DIR})
 list(APPEND CMAKE_PREFIX_PATH
   "/usr/local/lib64/cmake" # Linux
   "/usr/local/lib/cmake" # macOS
-  "C:\Program Files (x86)\Catch2" # Windows
+  "C:/Program Files (x86)/Catch2" # Windows
 )
 find_package(Catch2 3 CONFIG REQUIRED)
 #==============================================================================
