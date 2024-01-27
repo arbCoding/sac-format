@@ -1,5 +1,10 @@
 // Copyright 2023-2024 Alexander R. Blanchette
 
+// Required for Catch2 compatibility on Windows
+#if defined(_MSC_VER) || defined(__MINW32__)
+#define _ITERATOR_DEBUG_LEVEL 2
+#endif
+
 // sac-format
 #include "sac-format/sac_format.hpp"
 // Standard Library
