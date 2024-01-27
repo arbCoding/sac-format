@@ -19,6 +19,25 @@ set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set(CPACK_RPM_COMPONENT_INSTALL ON)
 # Don't strip binaries
 set(CPACK_RPM_SPEC_MORE_DEFINE "%define __spec_install_post /bin/true")
+# General CPack settings
+set(CPACK_COMPONENT_license_HIDDEN TRUE)
+set(CPACK_COMPONENT_license_REQUIRED TRUE)
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "sac-format")
+set(CPACK_PACKAGE_VENDOR "Alexander R. Blanchette <arbCoding@gmail.com>")
+# Allow separating components instead of monolithic
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+# Meta-data
+set(CPACK_PACKAGE_NAME "sac-format")
+set(CPACK_PACKAGE_VENDER "https://arbCoding.github.io/sac-format/")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://arbCoding.github.io/sac-format/")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
+  "C++20 Single-Header SAC File library")
+# Filename/installation directory
+set(CPACK_PACKAGE_FILE_NAME "sac-format")
+# Make checksum
+set(CPACK_PACKAGE_CHECKSUM SHA512)
+# Only one installer, not separate for each group
+set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 #===============================================================================
 # Basic Setup
 #===============================================================================
@@ -148,6 +167,10 @@ endif()
 #===============================================================================
 # CPack Installation
 #===============================================================================
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+# Archive filename
+set(CPACK_ARCHIVE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-\
+${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 include(CPack)
 # Setup components
 install(TARGETS sac-format COMPONENT library)
@@ -185,26 +208,5 @@ cpack_add_component(list_sac DISPLAY_NAME "list_sac" GROUP programs
 header information from an input SAC file.")
 cpack_add_component(license DISPLAY_NAME "license"
   DESCRIPTION "sac-format license file.")
-set(CPACK_COMPONENT_license_HIDDEN TRUE)
-set(CPACK_COMPONENT_license_REQUIRED TRUE)
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "sac-format")
-set(CPACK_PACKAGE_VENDOR "Alexander R. Blanchette <arbCoding@gmail.com>")
-# Allow separating components instead of monolithic
-set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
-# Meta-data
-set(CPACK_PACKAGE_NAME "sac-format")
-set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-set(CPACK_PACKAGE_VENDER "https://arbCoding.github.io/sac-format/")
-set(CPACK_PACKAGE_HOMEPAGE_URL "https://arbCoding.github.io/sac-format/")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
-  "C++20 Single-Header SAC File library")
-# Filename/installation directory
-set(CPACK_PACKAGE_FILE_NAME "sac-format")
-# Archive filename
-set(CPACK_ARCHIVE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-\
-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
-# Make checksum
-set(CPACK_PACKAGE_CHECKSUM SHA512)
 # Only specified components (exclude catch2)
 set(CPACK_COMPONENTS_ALL library tests benchmarks list_sac license)
-set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
