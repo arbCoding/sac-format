@@ -10,6 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Install Catch2 v3 from source
+        run: |
+          git clone https://github.com/catchorg/Catch2.git
+          cd Catch2
+          git checkout v3.5.2
+          cmake -Bbuild -S. -DBUILD_TESTING=OFF
+          sudo cmake --build build/ --target install
+
       - name: Make compile_commands.json
         run: |
           cmake --preset gh-coverage

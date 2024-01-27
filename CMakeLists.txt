@@ -1,4 +1,25 @@
 #===============================================================================
+# Required installer settings (at beginning now)
+#===============================================================================
+# Debian Specific
+# Installs into /usr (tests go into /usr/bin/tests)
+# libsac-format.a goes into /usr/lib64
+# sac-format.hpp goes into /usr/include
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
+set(CPACK_DEB_COMPONENT_INSTALL ON)
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Alexander R. Blanchette \
+<arbCoding@gmail.com>")
+# Windows Specific NSIS installer
+set(CPACK_NSIS_HELP_LINK "https://arbCoding.github.io/sac-format/")
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+# RedHat Specific
+# Installs into /usr (tests go into /usr/bin/tests)
+# libsac-format.a goes into /usr/lib64
+# sac-format.hpp goes into /usr/include
+set(CPACK_RPM_COMPONENT_INSTALL ON)
+# Don't strip binaries
+set(CPACK_RPM_SPEC_MORE_DEFINE "%define __spec_install_post /bin/true")
+#===============================================================================
 # Basic Setup
 #===============================================================================
 # CMake version
@@ -176,21 +197,3 @@ set(CPACK_PACKAGE_CHECKSUM SHA512)
 # Only specified components (exclude catch2)
 set(CPACK_COMPONENTS_ALL library tests benchmarks list_sac license)
 set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
-# Windows Specific NSIS installer
-set(CPACK_NSIS_HELP_LINK "https://arbCoding.github.io/sac-format/")
-set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
-# Debian Specific
-# Installs into /usr (tests go into /usr/bin/tests)
-# libsac-format.a goes into /usr/lib64
-# sac-format.hpp goes into /usr/include
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
-set(CPACK_DEB_COMPONENT_INSTALL ON)
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Alexander R. Blanchette \
-<arbCoding@gmail.com>")
-# RedHat Specific
-# Installs into /usr (tests go into /usr/bin/tests)
-# libsac-format.a goes into /usr/lib64
-# sac-format.hpp goes into /usr/include
-set(CPACK_RPM_COMPONENT_INSTALL ON)
-# Don't strip binaries
-set(CPACK_RPM_SPEC_MORE_DEFINE "%define __spec_install_post /bin/true")
