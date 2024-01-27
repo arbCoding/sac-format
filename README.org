@@ -34,10 +34,3 @@ View the [[https://arbcoding.github.io/sac-format/][documentation]] for more det
 3) Low-level I/O
 4) Tested and benchmarked
 5) Easy to use
-
-* Download and build
-#+begin_src bash :returns code :eval no
-git clone https://github.com/arbCoding/sac-format.git
-cmake --preset gcc-release
-cmake --build ./build/release/gcc
-#+end_src
