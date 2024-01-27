@@ -24,7 +24,7 @@ namespace sacfmt {
 void quick_io_check(const fs::path &tmp_file, const Trace &trace) {
   // Write/load and check
   trace.write(tmp_file);
-  Trace input = Trace(tmp_file);
+  Trace input{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(input == trace);
 }  // namespace sacfmt
@@ -702,7 +702,7 @@ const fs::path tmp_file{tmp_dir / "test.sac"};
 TEST_CASE("Trace: I/O: Default Construction: Float") {
   Trace trace = gen_fake_trace();
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.depmin() == in.depmin());
   REQUIRE(trace.depmax() == in.depmax());
@@ -747,7 +747,7 @@ TEST_CASE("Trace: I/O: Default Construction: Float") {
 TEST_CASE("Trace: I/O: Default Construction: Doubles") {
   Trace trace = gen_fake_trace();
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.delta() == in.delta());
   REQUIRE(trace.b() == in.b());
@@ -776,7 +776,7 @@ TEST_CASE("Trace: I/O: Default Construction: Doubles") {
 TEST_CASE("Trace: I/O: Default Construction: Integers") {
   Trace trace = gen_fake_trace();
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.nzyear() == in.nzyear());
   REQUIRE(trace.nzjday() == in.nzjday());
@@ -809,7 +809,7 @@ TEST_CASE("Trace: I/O: Default Construction: Integers") {
 TEST_CASE("Trace: I/O: Default Construction: Booleans") {
   Trace trace = gen_fake_trace();
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.leven() == in.leven());
   REQUIRE(trace.lpspol() == in.lpspol());
@@ -820,7 +820,7 @@ TEST_CASE("Trace: I/O: Default Construction: Booleans") {
 TEST_CASE("Trace: I/O: Default Construction: Strings") {
   Trace trace = gen_fake_trace();
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.kstnm() == in.kstnm());
   REQUIRE(trace.kevnm() == in.kevnm());
@@ -850,7 +850,7 @@ TEST_CASE("Trace: I/O: Default Construction: Strings") {
 TEST_CASE("Trace: I/O: Default Construction: Data Vectors") {
   Trace trace = gen_fake_trace();
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(equal_within_tolerance(trace.data1(), in.data1()));
   REQUIRE(equal_within_tolerance(trace.data2(), in.data2()));
@@ -859,7 +859,7 @@ TEST_CASE("Trace: I/O: Default Construction: Data Vectors") {
 TEST_CASE("Trace: I/O: Default Construction: Everything") {
   Trace trace = gen_fake_trace();
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace == in);
 }
@@ -875,7 +875,7 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Floats") {
     trace.data2(data);
   }
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.depmin() == in.depmin());
   REQUIRE(trace.depmax() == in.depmax());
@@ -929,7 +929,7 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Doubles") {
     trace.data2(data);
   }
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.delta() == in.delta());
   REQUIRE(trace.b() == in.b());
@@ -966,7 +966,7 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Integers") {
     trace.data2(data);
   }
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.nzyear() == in.nzyear());
   REQUIRE(trace.nzjday() == in.nzjday());
@@ -1007,7 +1007,7 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Booleans") {
     trace.data2(data);
   }
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.leven() == in.leven());
   REQUIRE(trace.lpspol() == in.lpspol());
@@ -1026,7 +1026,7 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Strings") {
     trace.data2(data);
   }
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.kstnm() == in.kstnm());
   REQUIRE(trace.kevnm() == in.kevnm());
@@ -1064,7 +1064,7 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Data Vectors") {
     trace.data2(data);
   }
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(equal_within_tolerance(trace.data1(), in.data1()));
   REQUIRE(equal_within_tolerance(trace.data2(), in.data2()));
@@ -1081,7 +1081,7 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Everything") {
     trace.data2(data);
   }
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace == in);
 }
@@ -1097,7 +1097,7 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Resize Data") {
     trace.data2(data);
   }
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   std::vector<double> tmp{in.data1()};
   tmp.resize(10);
@@ -1116,7 +1116,7 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Modify Header: EvDp") {
     trace.data2(data);
   }
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   in.evdp(in.evdp() - 1.0f);
   REQUIRE(trace != in);
@@ -1133,7 +1133,7 @@ TEST_CASE("Trace: I/O: Random Data Vectors: Modify Data") {
     trace.data2(data);
   }
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   std::vector<double> tmp{in.data1()};
   tmp[0] -= 1.0;
@@ -1145,7 +1145,7 @@ TEST_CASE("Trace: I/O: Legacy Format: nVHdr Conversions") {
   Trace trace = gen_fake_trace();
   trace.nvhdr(6);
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(in.nvhdr() == 7);
   // Make sure we didn't change the original trace
@@ -1156,7 +1156,7 @@ TEST_CASE("Trace: I/O: Legacy Format: Floats") {
   Trace trace = gen_fake_trace();
   trace.nvhdr(6);
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.depmin() == in.depmin());
   REQUIRE(trace.depmax() == in.depmax());
@@ -1203,7 +1203,7 @@ TEST_CASE("Trace: I/O: Legacy Format: Doubles") {
   Trace trace = gen_fake_trace();
   trace.nvhdr(6);
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE_THAT(trace.delta(), WithinAbs(in.delta(), f_eps));
   REQUIRE_THAT(trace.b(), WithinAbs(in.b(), f_eps));
@@ -1233,7 +1233,7 @@ TEST_CASE("Trace: I/O: Legacy Format: Integers") {
   Trace trace = gen_fake_trace();
   trace.nvhdr(6);
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.nzyear() == in.nzyear());
   REQUIRE(trace.nzjday() == in.nzjday());
@@ -1267,7 +1267,7 @@ TEST_CASE("Trace: I/O: Legacy Format: Booleans") {
   Trace trace = gen_fake_trace();
   trace.nvhdr(6);
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.leven() == in.leven());
   REQUIRE(trace.lpspol() == in.lpspol());
@@ -1279,7 +1279,7 @@ TEST_CASE("Trace: I/O: Legacy Format: Strings") {
   Trace trace = gen_fake_trace();
   trace.nvhdr(6);
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace.kstnm() == in.kstnm());
   REQUIRE(trace.kevnm() == in.kevnm());
@@ -1310,7 +1310,7 @@ TEST_CASE("Trace: I/O: Legacy Format: Data") {
   Trace trace = gen_fake_trace();
   trace.nvhdr(6);
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(equal_within_tolerance(trace.data1(), in.data1()));
   REQUIRE(equal_within_tolerance(trace.data2(), in.data2()));
@@ -1320,7 +1320,7 @@ TEST_CASE("Trace: I/O: Legacy Format: Everything") {
   Trace trace = gen_fake_trace();
   trace.nvhdr(6);
   trace.write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(trace != in);
 }
@@ -1762,7 +1762,7 @@ TEST_CASE("Trace: I/O: Legacy Write") {
   Trace trace = gen_fake_trace();
   trace.nvhdr(7);
   trace.legacy_write(tmp_file);
-  Trace in = Trace(tmp_file);
+  Trace in{tmp_file};
   fs::remove(tmp_file);
   REQUIRE(in.nvhdr() == 6);
   // Make sure we didn't change the original trace

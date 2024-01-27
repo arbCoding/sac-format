@@ -171,13 +171,6 @@ set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 # Archive filename
 set(CPACK_ARCHIVE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-\
 ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
-include(CPack)
-# Setup components
-install(TARGETS sac-format COMPONENT library)
-install(TARGETS basic_tests trace_tests geometry_tests datetime_tests
-  RUNTIME DESTINATION bin/tests COMPONENT tests)
-install(TARGETS benchmark RUNTIME DESTINATION bin/tests COMPONENT benchmarks)
-install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
 if(CPACK_GENERATOR MATCHES "productbuild")
   # macOS
   set(CPACK_RESOURCE_FILE_README
@@ -194,6 +187,14 @@ else()
     COMPONENT license)
   set(CPACK_RESOURCE_FILE_LICENSE ${sac-format_SOURCE_DIR}/LICENSE)
 endif()
+# For some reason, order seems to matter more than it should...
+include(CPack)
+# Setup components
+install(TARGETS sac-format COMPONENT library)
+install(TARGETS basic_tests trace_tests geometry_tests datetime_tests
+  RUNTIME DESTINATION bin/tests COMPONENT tests)
+install(TARGETS benchmark RUNTIME DESTINATION bin/tests COMPONENT benchmarks)
+install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
 # Group components
 cpack_add_component(library DISPLAY_NAME "sac-format" GROUP development
   DESCRIPTION "sac-format library to use in your own programs.")

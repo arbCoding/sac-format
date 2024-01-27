@@ -44,7 +44,7 @@ int main(const int arg_count, const char *arg_array[]) {
     std::cout << "WARNING: " << file << " does not have a SAC extension.\n";
   }
   // Okay, now we assume it is a SAC-file, let's go.
-  sacfmt::Trace trace = sacfmt::Trace(file);
+  sacfmt::Trace trace{file};
   // Time to spit out the information
   std::cout << "\033[1;36;40m=========================="
             << "=============================\n";

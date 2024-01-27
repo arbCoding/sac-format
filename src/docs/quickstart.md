@@ -56,7 +56,7 @@ int main() {
     // Write
     trace1.write(file);
     // Read
-    Trace trace2 = Trace(file);
+    Trace trace2{file};
     // Confirm equality
     std::cout << (trace1 == trace2) << '\n';
     fs::remove(file);
