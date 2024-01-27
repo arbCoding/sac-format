@@ -5,11 +5,12 @@
 ### Automatic (CMake)
 
 [Xoshiro-cpp v1.12.0](https://github.com/Reputeless/Xoshiro-cpp) (testing and
-benchmarking)
+benchmarking).
 
 ### Manual
 
-[Catch2 v3.4.0](https://github.com/catchorg/Catch2) (testing and benchmarking)
+[Catch2 v3.4.0](https://github.com/catchorg/Catch2) (testing and benchmarking).
+Note that this is automatic on Windows (not Linux nor macOS).
 
 ## Building
 

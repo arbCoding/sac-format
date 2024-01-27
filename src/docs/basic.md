@@ -383,30 +383,47 @@ Floating-point/double-precision equality within a provided tolerance (default is
 
 ## Testing
 
-`utests.cpp` contains the unit- and integration-tests, using Catch2. Test
-coverage details are visible on
+Unit- and integration-tests (using Catch2) are contained in the `tests` folder.
+They include:
+
+- `binary_conversions.cpp` confirms that conversion to/from binary functions
+  correctly.
+- `constants.cpp` confirms constant values (e.g. SAC magic numbers) are correct.
+- `datetime.cpp` confirms date and time functions work correctly.
+- `geometry.cpp` confirms that geometric calculations are correct (azimuth,
+  greater-circle arc-length, etc.).
+- `trace.cpp` confirms that the trace class is functioning correctly (I/O,
+  exceptions, bounded headers, etc.).
+
+The tests compile to the following programs:
+
+- `basic_tests` (binary conversions and constants).
+- `datetime_tests`
+- `geometry_tests`
+- `trace_tests`
+
+Test coverage details are visible on
 [CodeCov.io](https://app.codecov.io/gh/arbCoding/sac-format) and
 [Codacy.com](https://app.codacy.com/gh/arbCoding/sac-format/dashboard). All
 tests can be locally-run to ensure full functionality and compliance.
 
 ### Errors only
 
-By default `utests` prints out a pass summary, without details unless an error
+By default each test prints out a pass summary, without details unless an error
 is encountered.
 
 ### Full output
 
-By passing the `--success` flag (`utests --success`) you can see the full
-results of all tests.
+By passing the `--success` flag you can see the full results of all tests.
 
 ### Compact output
 
 The full output is verbose, using the compact reporter will condense the test
-results (`utests --reporter=compact --success`).
+results (`--reporter=compact`).
 
 ### Additional options
 
-To see additional options, run `utests -?`.
+To see additional options, run `-?`.
 
 ### Using ctest
 
