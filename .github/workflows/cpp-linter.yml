@@ -34,7 +34,7 @@ jobs:
           files-changed-only: false
           tidy-checks: "bugprone-*,performance-*,readability-*,portability-*,clang-analyzer-*,cpp-coreguidelines-*,modernize-a*,modernize-c*,modernize-d*,modernize-l*,modernize-m*,modernize-p*,modernize-r*,modernize-s*,modernize-t*,modernize-un*,modernize-use-a*,modernize-use-b*,modernize-use-c*,modernize-use-d*,modernize-use-e*,modernize-use-n*,modernize-use-o*,modernize-use-s*,modernize-use-tran*,modernize-use-u*"
           database: "build/debug/gh-coverage/compile_commands.json"
-          ignore: "build/debug/gh-coverage/_deps | build/debug/gh-coverage/CMakeFiles | src/tests/ | Catch2/ | src/benchmark.cpp | src/util.hpp | .github | "
+          ignore: "build/debug/gh-coverage/_deps | build/debug/gh-coverage/CMakeFiles | src/tests/ | Catch2/ | src/benchmark.cpp | src/util.hpp | .github | !src/ | !include/ "
           extra-args: "-std=c++20"
           thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
 
