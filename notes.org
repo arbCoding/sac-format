@@ -1,6 +1,3 @@
 * Inbox
 ** Fix installers
-macOS installer does not install to the correct location
-The License doesn't show, none of the information shows
-correctly (probably needs all the cpack setup to occur
-super early in the CMakeLists.txt).
+Installers include Catch2, don't want to include it.
