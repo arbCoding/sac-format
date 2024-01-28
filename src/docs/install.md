@@ -1,5 +1,7 @@
 # Installation {#Install}
 
+@brief This section provides installation instructions.
+
 The easiest way to use sac-format is to install it via the automatic installers.
 Installers for the latest release are located
 [here](https://github.com/arbCoding/sac-format/releases/latest). Be sure to

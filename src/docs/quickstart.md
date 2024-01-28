@@ -1,5 +1,7 @@
 # Quickstart {#Quickstart}
 
+@brief This section provides information to incorporate into a project.
+
 To use link to the library (`libsac-format.a` on Linux/macOS, `sac-format.lib`
 on Windows) and include `sac_format.hpp`.
 

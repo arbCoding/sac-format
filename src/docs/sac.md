@@ -1,5 +1,7 @@
 # SAC-file format {#SacFileFormat}
 
+@brief This section provides a centralized description of the SAC file format.
+
 The official and up-to-date documentation for the SAC-file format is available
 from the EarthScope Consortium (formerly IRIS/UNAVCO)
 [here](https://ds.iris.edu/files/sac-manual/manual/file_format.html). The

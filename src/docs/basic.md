@@ -1,5 +1,7 @@
 # Basic Documentation {#BasicDocumentation}
 
+@brief This section provides a brief overview of functionality and usage.
+
 ## Trace class
 
 The `Trace` class provides easy access to SAC-files in C++. Each SAC-file is a

@@ -135,8 +135,8 @@ template <unsigned nbits> struct uint {};
 template <> struct uint<4 * bits_per_byte> {
   using type = uint32_t;
 };
-//! Two-words (doubles)
 constexpr int bytes{8};
+//! Two-words (doubles)
 template <> struct uint<bytes * bits_per_byte> {
   using type = uint64_t;
 };

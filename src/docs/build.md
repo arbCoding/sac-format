@@ -1,5 +1,7 @@
 # Build Instructions {#BuildInstructions}
 
+@brief This section provides instructions to build from source.
+
 ## Dependencies
 
 ### Automatic (CMake)
