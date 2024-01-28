@@ -272,9 +272,9 @@ std::string bits_string(const T &bits, const size_t num_words) noexcept {
 /*!
   \brief Convert string to a 64-bit (two word) binary bitset
 
-  If the string is longer than 8 characters, the only the first 8 characters are
-  kept. If the string is less than 8 characters long, it is right-padded with
-  spaces.
+  If the string is longer than 8 characters, then only the first 8 characters
+  are kept. If the string is less than 8 characters long, it is right-padded
+  with spaces.
 
   @param[in] str String to be converted to a bitset.
   @returns ::word_two Converted binary bitset.

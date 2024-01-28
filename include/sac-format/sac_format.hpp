@@ -131,19 +131,11 @@ int binary_to_int(word_one bin) noexcept;
 namespace bitset_type {
 //! Ensure type-safety for conversions between floats/doubles and bitsets.
 template <unsigned nbits> struct uint {};
-//! Single-word type-safety (non-strings).
-template <> struct uint<bits_per_byte> {
-  using type = uint8_t;
-};
-//! Two-word type-safety (strings).
-template <> struct uint<2 * bits_per_byte> {
-  using type = uint16_t;
-};
-//! Four-word type-safety (kEvNm).
+//! One-word (floats).
 template <> struct uint<4 * bits_per_byte> {
   using type = uint32_t;
 };
-//! ? type-safety?
+//! Two-words (doubles)
 constexpr int bytes{8};
 template <> struct uint<bytes * bits_per_byte> {
   using type = uint64_t;
