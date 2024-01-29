@@ -28,7 +28,10 @@ compress_pdf () {
 
 # Clean up old files
 echo "Cleaning up past build!"
-rm -r "$base"/docs
+if [ -e "$base"/docs ]; then
+    rm -r "$base"/docs
+fi
+
 mkdir "$base"/docs
 
 # Make doxygen

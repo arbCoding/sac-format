@@ -3,13 +3,13 @@ script=$(pwd)
 base=$(pwd)/..
 cd "$base" || exit
 # Cleanup
-if [ -e "$base/build/debug/gcc" ]; then
-    rm -rf "$base/build/debug/gcc"
+if [ -e "$base/build/hard/debug/gcc" ]; then
+    rm -rf "$base/build/hard/debug/gcc"
 fi
 # Prepare to build
-cmake --preset gcc-debug
+cmake --preset gcc-hard-debug
 # Prepare coverity scan
-cd ./build/debug/gcc || exit
+cd ./build/hard/debug/gcc || exit
 # Make sure it only captures the sac_format.hpp/.cpp pair for the library
 cov-configure --config cov-conf/cov.xml --compiler g++ --comptype g++ \
     --template --xml-option=skip_file:".*/_deps/.*" \
