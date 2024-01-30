@@ -57,10 +57,10 @@ TEST_CASE("Geometric Operations: Coordinates: Getters") {
 }
 
 TEST_CASE("Geometric Operations: Points") {
-  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.latitude.degrees()
-          == 90.0);
-  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.latitude.radians()
-          == std::numbers::pi_v<double> / 2.0);
+  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.latitude.degrees() ==
+          90.0);
+  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.latitude.radians() ==
+          std::numbers::pi_v<double> / 2.0);
   REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.longitude.degrees() == 0);
   REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.longitude.radians() == 0);
 }
