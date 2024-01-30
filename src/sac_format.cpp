@@ -677,6 +677,42 @@ double radians_to_degrees(const double radians) noexcept {
 }
 
 /*!
+  \brief Coordinate constructor
+
+  @param[in] value Double value of coordinate
+  @param[in] degrees Boolean value, true if degrees (false = radians).
+  */
+coord::coord(const double value, const bool degrees) noexcept {
+  if (degrees) {
+    deg = value;
+    rad = degrees_to_radians(value);
+  } else {
+    rad = value;
+    deg = radians_to_degrees(value);
+  }
+}
+
+/*!
+  \brief Set coordinate value using decimal degrees.
+
+  @param[in] value double coordinate in decimal degrees.
+ */
+void coord::degrees(const double value) noexcept {
+  deg = value;
+  rad = degrees_to_radians(value);
+}
+
+/*!
+  \brief Set coordainate value using radians.
+
+  @param[in] value double coordinate in radians.
+ */
+void coord::radians(const double value) noexcept {
+  rad = value;
+  deg = radians_to_degrees(value);
+}
+
+/*!
   \brief Calculate great circle arc distance in decimal degrees between two
   points.
 
@@ -694,21 +730,18 @@ double radians_to_degrees(const double radians) noexcept {
   \right)
   \f]
 
-  @param[in] latitude1 Latitude of first location in decimal degrees.
-  @param[in] longitude1 Longitude of first location in decimal degrees.
-  @param[in] latitude2 Latitude of second location in decimal degrees.
-  @param[in] longitude2 Longitude of second location in decimal degrees.
+  @param[in] location1 point of first location.
+  @param[in] location2 point of second location
   @returns double The great circle arc distance in decimal degrees.
  */
-double gcarc(const double latitude1, const double longitude1,
-             const double latitude2, const double longitude2) noexcept {
-  const double lat1{degrees_to_radians(latitude1)};
-  const double lon1{degrees_to_radians(longitude1)};
-  const double lat2{degrees_to_radians(latitude2)};
-  const double lon2{degrees_to_radians(longitude2)};
+double gcarc(const point location1, const point location2) noexcept {
   return radians_to_degrees(
-      std::acos(std::sin(lat1) * std::sin(lat2) +
-                std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)));
+      std::acos(std::sin(location1.latitude.radians()) *
+                    std::sin(location2.latitude.radians()) +
+                std::cos(location1.latitude.radians()) *
+                    std::cos(location2.latitude.radians()) *
+                    std::cos(location2.longitude.radians() -
+                             location1.longitude.radians())));
 }
 
 /*!
@@ -728,22 +761,20 @@ double gcarc(const double latitude1, const double longitude1,
   \right)
   \f]
 
-  @param[in] latitude1 Latitude of first location in decimal degrees.
-  @param[in] longitude1 Longitude of first location in decimal degrees.
-  @param[in] latitude2 Latitude of second location in decimal degrees.
-  @param[in] longitude2 Longitude of second location in decimal degrees.
+  @param[in] location1 point of first location.
+  @param[in] location2 point of second location.
   @returns double The azimuth from the first location to the second location.
   */
-double azimuth(const double latitude1, const double longitude1,
-               const double latitude2, const double longitude2) noexcept {
-  const double lat1{degrees_to_radians(latitude1)};
-  const double lon1{degrees_to_radians(longitude1)};
-  const double lat2{degrees_to_radians(latitude2)};
-  const double lon2{degrees_to_radians(longitude2)};
-  const double dlon{lon2 - lon1};
-  const double numerator{std::sin(dlon) * std::cos(lat2)};
-  const double denominator{(std::cos(lat1) * std::sin(lat2)) -
-                           (std::sin(lat1) * std::cos(lat2) * std::cos(dlon))};
+double azimuth(const point location1, const point location2) noexcept {
+  const double numerator{
+      std::sin(location2.longitude.radians() - location1.longitude.radians()) *
+      std::cos(location2.latitude.radians())};
+  const double denominator{(std::cos(location1.latitude.radians()) *
+                            std::sin(location2.latitude.radians())) -
+                           (std::sin(location1.latitude.radians()) *
+                            std::cos(location2.latitude.radians()) *
+                            std::cos(location2.longitude.radians() -
+                                     location1.longitude.radians()))};
   double result{radians_to_degrees(std::atan2(numerator, denominator))};
   while (result < 0.0) {
     result += circle_deg;
@@ -915,7 +946,7 @@ bool Trace::geometry_set() const noexcept {
  */
 void Trace::calc_gcarc() noexcept {
   Trace::gcarc(
-      static_cast<float>(sacfmt::gcarc(stla(), stlo(), evla(), evlo())));
+      static_cast<float>(sacfmt::gcarc(station_location(), event_location())));
 }
 
 /*!
@@ -940,7 +971,7 @@ void Trace::calc_dist() noexcept {
   \f]
  */
 void Trace::calc_az() noexcept {
-  az(static_cast<float>(azimuth(evla(), evlo(), stla(), stlo())));
+  az(static_cast<float>(azimuth(event_location(), station_location())));
 }
 
 /*!
@@ -951,7 +982,7 @@ void Trace::calc_az() noexcept {
   \f]
  */
 void Trace::calc_baz() noexcept {
-  baz(static_cast<float>(azimuth(stla(), stlo(), evla(), evlo())));
+  baz(static_cast<float>(azimuth(station_location(), event_location())));
 }
 
 /*!

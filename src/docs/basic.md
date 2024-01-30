@@ -229,7 +229,9 @@ double degrees{sacfmt::radians_to_degrees(radians)};
 Calculate great-circle arc distance (spherical planet).
 
 ```cpp
-double gcarc{sacfmt::gcarc(latitude1, longitude1, latitude2, longitude2)};
+const point location1{coord{latitude1}, coord{longitude1}};
+const point location2{coord{latitude2}, coord{longitude2}};
+double gcarc{sacfmt::gcarc(location1, location2)};
 ```
 
 ### azimuth
@@ -237,8 +239,10 @@ double gcarc{sacfmt::gcarc(latitude1, longitude1, latitude2, longitude2)};
 Calculate azimuth between two points (spherical planet).
 
 ```cpp
-double azimuth{sacfmt::azimuth(latitude2, longitude2, latitude1, longitude1)};
-double back_azimuth{sacfmt::azimuth(latitude1, longitude1, latitude2, longitude2)};
+const point location1{coord{latitude1}, coord{longitude1}};
+const point location2{coord{latitude2}, coord{longitude2}};
+double azimuth{sacfmt::azimuth(location2, location1)};
+double back_azimuth{sacfmt::azimuth(location1, location2)};
 ```
 
 ### limit_360

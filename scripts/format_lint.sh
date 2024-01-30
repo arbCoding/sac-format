@@ -85,6 +85,9 @@ oclint "$base"/include/sac-format/sac_format.hpp \
 
 echo "Running PMD CPD (Copy-Paste Detection)"
 pmd cpd --minimum-tokens 45 \
+    --ignore-sequences \
+    --ignore-identifiers \
+    --no-skip-blocks \
     --dir "$base"/src \
     --dir "$base"/include \
     --language cpp \

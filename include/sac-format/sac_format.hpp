@@ -256,12 +256,48 @@ bool equal_within_tolerance(double val1, double val2,
 //--------------------------------------------------------------------------
 double degrees_to_radians(double degrees) noexcept;
 double radians_to_degrees(double radians) noexcept;
+/*! \class coord
+  \brief Defines a geographic coordinant (degrees/radians)
+  */
+class coord {
+public:
+  //! \brief Default coordinate constructor
+  coord() noexcept;
+  explicit coord(double value, bool degrees = true) noexcept;
+  // Getters
+  //! \brief Get coordinate value in decimal degrees.
+  [[nodiscard]] double degrees() const noexcept { return deg; };
+  //! \brief Get coordinate value in radians.
+  [[nodiscard]] double radians() const noexcept { return rad; };
+  // Setters
+  void degrees(double value) noexcept;
+  void radians(double value) noexcept;
+
+private:
+  // cppcheck-suppress unusedStructMember
+  double deg{};  //!< coordinate value in decimal degrees.
+  // cppcheck-suppress unusedStructMember
+  double rad{};  //!< coordinate value in radians.
+};
+/*! \struct point
+  \brief Defines a geographic point (latitude, longitude)
+ */
+struct point {
+  coord latitude{};   //!< Latitude of point
+  coord longitude{};  //!< Longitude of point
+  /*!
+    \brief Construct point from latitude and longitude.
+
+    @param[in] lat coord latitude of point.
+    @param[in] lon coord longitude of point.
+    */
+  // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+  point(coord lat, coord lon) noexcept : latitude(lat), longitude(lon) {}
+};
 // gcarc
-double gcarc(double latitude1, double longitude1, double latitude2,
-             double longitude2) noexcept;
+double gcarc(point location1, point location2) noexcept;
 // azimuth
-double azimuth(double latitude1, double longitude1, double latitude2,
-               double longitude2) noexcept;
+double azimuth(point location1, point location2) noexcept;
 // Bounds
 // [-inf, inf] -> [0, 360]
 double limit_360(double degrees) noexcept;
@@ -1309,6 +1345,14 @@ private:
   void calc_az() noexcept;
   void calc_baz() noexcept;
   [[nodiscard]] bool geometry_set() const noexcept;
+  //! \brief Return station location as a point.
+  [[nodiscard]] point station_location() const noexcept {
+    return point{coord{stla(), true}, coord{stlo(), true}};
+  }
+  //! \brief Return even location as a point.
+  [[nodiscard]] point event_location() const noexcept {
+    return point{coord{evla(), true}, coord{evlo(), true}};
+  }
   void resize_data1(size_t size) noexcept;
   void resize_data2(size_t size) noexcept;
   void resize_data(size_t size) noexcept;

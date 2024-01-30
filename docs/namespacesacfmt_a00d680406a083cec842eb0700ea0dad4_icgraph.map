@@ -1,14 +1,7 @@
 <map id="sacfmt::degrees_to_radians" name="sacfmt::degrees_to_radians">
-<area shape="rect" id="Node000001" title="Convert decimal degrees to radians." alt="" coords="591,49,738,94"/>
-<area shape="rect" id="Node000002" href="$namespacesacfmt.html#abdb7402edd555c08b782e210fb42b367" title="Calculate azimuth between two points." alt="" coords="416,31,543,58"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="577,61,543,56,544,51,577,56"/>
-<area shape="rect" id="Node000006" href="$namespacesacfmt.html#a6963072553d34711eedf4ffdc1b5950e" title="Calculate great circle arc distance in decimal degrees between two points." alt="" coords="425,83,534,110"/>
-<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="577,86,535,92,534,86,576,81"/>
-<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#ac72a7903e8d1f68c39c5b4d254212d98" title="Calculate azimuth." alt="" coords="200,5,364,33"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="401,37,364,32,365,27,401,32"/>
-<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#aa2863cd71e9d5196a7f6d7d7b0e47dcd" title="Calculate back&#45;azimuth." alt="" coords="196,57,368,85"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="402,58,369,62,368,57,401,52"/>
-<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#ac3623740a5bd0345d045b557ad34c77a" title="Calculates gcarc, dist, az, and baz from stla, stlo, evla, and evlo." alt="" coords="5,24,148,68"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="185,34,148,39,148,34,184,29"/>
-<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="180,61,147,57,148,52,181,56"/>
+<area shape="rect" id="Node000001" title="Convert decimal degrees to radians." alt="" coords="224,24,370,68"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1coord.html#a4a457e785ffb8746ea587206ba57860c" title="Coordinate constructor." alt="" coords="13,5,168,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,37,168,32,168,27,209,32"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1coord.html#adcb9dfb2f763e3e1196b00bf185fbd8e" title="Set coordinate value using decimal degrees." alt="" coords="5,57,176,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,59,176,63,176,58,208,54"/>
 </map>

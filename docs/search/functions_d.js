@@ -1,1 +1,1 @@
-var searchData=[["prep_5fstring_0",["prep_string",["../namespacesacfmt.html#a209205a594c0ab2fc8cf740ab4974d38",1,"sacfmt"]]]]
+var searchData=[["point_0",["point",["../structsacfmt_1_1point.html#a0e50839b029f03feba7431bc5793170f",1,"sacfmt::point"]]],["prep_5fstring_1",["prep_string",["../namespacesacfmt.html#a209205a594c0ab2fc8cf740ab4974d38",1,"sacfmt"]]]]

@@ -1,53 +1,51 @@
 <map id="sacfmt::Trace::calc_geometry" name="sacfmt::Trace::calc_geometry">
-<area shape="rect" id="Node000001" title="Calculates gcarc, dist, az, and baz from stla, stlo, evla, and evlo." alt="" coords="5,205,148,250"/>
-<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#ac1747dbf31418c1a185df40b3527425e" title=" " alt="" coords="460,5,591,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,203,100,170,124,130,155,90,194,58,224,43,256,31,322,16,387,9,445,9,445,15,387,15,323,21,257,36,226,48,197,63,159,94,128,133,105,172,89,205"/>
-<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a8429a1b78f5b54dfbc325510249520e9" title=" " alt="" coords="456,57,595,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="89,203,130,147,160,118,194,95,256,73,321,61,385,57,441,59,441,64,385,63,322,67,258,78,197,100,163,122,134,150,93,206"/>
-<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#ac72a7903e8d1f68c39c5b4d254212d98" title="Calculate azimuth." alt="" coords="217,109,381,137"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="105,202,146,174,195,147,215,139,217,144,197,152,149,178,108,206"/>
-<area shape="rect" id="Node000012" href="$classsacfmt_1_1Trace.html#aa2863cd71e9d5196a7f6d7d7b0e47dcd" title="Calculate back&#45;azimuth." alt="" coords="213,161,385,189"/>
-<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="147,208,222,190,223,196,149,213"/>
-<area shape="rect" id="Node000013" href="$classsacfmt_1_1Trace.html#aa692e8ff3222be97c3a435772d6cddca" title="Calculate distance (using gcarc)." alt="" coords="212,384,386,412"/>
-<area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="93,248,135,306,164,337,197,364,221,376,218,381,194,368,161,341,131,309,89,251"/>
-<area shape="rect" id="Node000014" href="$classsacfmt_1_1Trace.html#acb29b9cc548cf844d528a10bee3ba789" title=" " alt="" coords="456,428,596,456"/>
-<area shape="poly" id="edge28_Node000001_Node000014" title=" " alt="" coords="86,249,100,288,122,336,154,384,174,404,197,421,226,435,256,446,320,458,383,459,441,455,441,460,384,465,319,463,255,451,224,440,194,425,171,408,150,387,118,339,95,290,81,251"/>
-<area shape="rect" id="Node000015" href="$classsacfmt_1_1Trace.html#aba7da69c9ae7dbbbf6502e78fe62d4d7" title=" " alt="" coords="450,369,601,397"/>
-<area shape="poly" id="edge29_Node000001_Node000015" title=" " alt="" coords="101,248,143,286,169,304,197,319,240,333,301,347,435,369,435,374,300,352,238,339,195,324,166,309,140,290,98,252"/>
-<area shape="rect" id="Node000016" href="$classsacfmt_1_1Trace.html#a454402a99fd1e6435df25a076e8ebb2c" title="Calculate great&#45;circle arc&#45;distance (gcarc)." alt="" coords="228,265,370,310"/>
-<area shape="poly" id="edge22_Node000001_Node000016" title=" " alt="" coords="149,244,214,262,213,267,147,249"/>
-<area shape="rect" id="Node000017" href="$classsacfmt_1_1Trace.html#a9acdb110709f4ed3b28e4b519cece23e" title="Determine if locations are set for geometry calculation." alt="" coords="196,213,402,241"/>
-<area shape="poly" id="edge30_Node000001_Node000017" title=" " alt="" coords="148,225,181,225,181,230,148,230"/>
-<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="324,106,381,76,449,43,466,36,468,41,451,48,383,81,327,111"/>
-<area shape="rect" id="Node000005" href="$namespacesacfmt.html#abdb7402edd555c08b782e210fb42b367" title="Calculate azimuth between two points." alt="" coords="462,109,589,137"/>
-<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="381,121,447,121,447,126,381,126"/>
-<area shape="rect" id="Node000008" href="$classsacfmt_1_1Trace.html#a364fc1f1bcbf2df0adab99419da75105" title=" " alt="" coords="454,161,598,189"/>
-<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="363,135,448,155,447,160,362,140"/>
-<area shape="rect" id="Node000009" href="$classsacfmt_1_1Trace.html#a013651fd879d140af713415ab5236d79" title=" " alt="" coords="454,213,598,241"/>
-<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="376,135,403,148,419,160,428,173,437,186,452,198,462,204,460,209,448,203,433,189,424,176,415,164,401,152,374,140"/>
-<area shape="rect" id="Node000010" href="$classsacfmt_1_1Trace.html#aa63683eea3ce4c74089c8b5d99c87766" title=" " alt="" coords="456,265,596,293"/>
-<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="383,135,404,148,416,161,423,174,429,200,435,226,441,238,452,251,458,255,454,259,448,254,437,241,430,228,424,201,418,176,411,164,400,152,380,139"/>
-<area shape="rect" id="Node000011" href="$classsacfmt_1_1Trace.html#a8b01c09cf706de4e3f263d402c02882d" title=" " alt="" coords="456,317,596,345"/>
-<area shape="poly" id="edge11_Node000004_Node000011" title=" " alt="" coords="383,134,404,148,419,167,427,187,430,226,431,265,438,284,452,303,457,307,453,311,448,306,433,286,426,266,424,226,422,188,415,170,400,152,380,138"/>
-<area shape="rect" id="Node000006" href="$namespacesacfmt.html#a00d680406a083cec842eb0700ea0dad4" title="Convert decimal degrees to radians." alt="" coords="649,66,796,111"/>
-<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="589,109,634,101,635,107,590,115"/>
-<area shape="rect" id="Node000007" href="$namespacesacfmt.html#a99b9d2001e973091998a61286d0fdf1b" title="Convert radians to decimal degrees." alt="" coords="651,136,794,180"/>
-<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="590,132,637,140,636,145,589,137"/>
-<area shape="poly" id="edge14_Node000012_Node000003" title=" " alt="" coords="374,158,401,146,415,134,424,122,433,109,448,96,460,89,462,94,452,100,437,112,428,125,419,138,403,151,376,163"/>
-<area shape="poly" id="edge13_Node000012_Node000005" title=" " alt="" coords="362,158,447,138,448,144,363,163"/>
-<area shape="poly" id="edge15_Node000012_Node000008" title=" " alt="" coords="386,173,439,173,439,178,386,178"/>
-<area shape="poly" id="edge16_Node000012_Node000009" title=" " alt="" coords="363,187,448,207,447,212,362,192"/>
-<area shape="poly" id="edge17_Node000012_Node000010" title=" " alt="" coords="376,187,403,200,419,212,428,225,437,238,452,250,462,256,460,261,448,255,433,241,424,228,415,216,401,204,374,192"/>
-<area shape="poly" id="edge18_Node000012_Node000011" title=" " alt="" coords="384,187,404,200,416,213,423,226,429,252,435,278,441,290,452,303,458,307,454,311,448,306,437,293,430,280,424,253,418,228,411,216,400,204,381,192"/>
-<area shape="poly" id="edge20_Node000013_Node000014" title=" " alt="" coords="374,410,441,423,440,428,373,415"/>
-<area shape="poly" id="edge21_Node000013_Node000015" title=" " alt="" coords="385,390,435,386,435,392,386,395"/>
-<area shape="poly" id="edge23_Node000016_Node000008" title=" " alt="" coords="369,266,401,250,415,238,424,226,433,213,448,200,460,193,462,198,452,204,437,216,428,229,419,242,403,255,371,271"/>
-<area shape="poly" id="edge24_Node000016_Node000009" title=" " alt="" coords="370,266,456,243,457,248,371,271"/>
-<area shape="poly" id="edge26_Node000016_Node000010" title=" " alt="" coords="370,282,441,279,441,285,371,287"/>
-<area shape="poly" id="edge27_Node000016_Node000011" title=" " alt="" coords="371,298,441,312,440,317,370,304"/>
-<area shape="poly" id="edge25_Node000016_Node000015" title=" " alt="" coords="362,308,403,326,451,354,467,361,465,366,449,359,401,331,359,312"/>
-<area shape="poly" id="edge31_Node000017_Node000008" title=" " alt="" coords="362,210,447,190,448,196,363,215"/>
-<area shape="poly" id="edge32_Node000017_Node000009" title=" " alt="" coords="402,225,438,225,438,230,402,230"/>
-<area shape="poly" id="edge33_Node000017_Node000010" title=" " alt="" coords="363,239,448,259,447,264,362,244"/>
-<area shape="poly" id="edge34_Node000017_Node000011" title=" " alt="" coords="379,239,403,250,419,263,429,276,437,290,452,302,462,308,459,313,448,307,433,293,424,280,415,267,401,255,377,244"/>
+<area shape="rect" id="Node000001" title="Calculates gcarc, dist, az, and baz from stla, stlo, evla, and evlo." alt="" coords="5,208,148,252"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#ac1747dbf31418c1a185df40b3527425e" title=" " alt="" coords="455,5,586,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,206,100,173,124,133,155,94,194,62,255,35,319,19,383,12,440,11,440,16,383,17,320,24,256,40,197,67,159,98,128,136,105,175,89,208"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a8429a1b78f5b54dfbc325510249520e9" title=" " alt="" coords="451,57,590,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="89,205,131,150,160,122,194,99,255,77,318,65,380,60,436,61,436,66,380,65,319,70,256,82,197,104,164,126,135,154,93,209"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#ac72a7903e8d1f68c39c5b4d254212d98" title="Calculate azimuth." alt="" coords="200,113,365,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="107,205,147,178,195,151,212,144,215,149,197,156,150,182,109,209"/>
+<area shape="rect" id="Node000013" href="$classsacfmt_1_1Trace.html#aa2863cd71e9d5196a7f6d7d7b0e47dcd" title="Calculate back&#45;azimuth." alt="" coords="196,165,369,193"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="148,210,209,194,210,200,149,215"/>
+<area shape="rect" id="Node000014" href="$classsacfmt_1_1Trace.html#aa692e8ff3222be97c3a435772d6cddca" title="Calculate distance (using gcarc)." alt="" coords="196,387,369,414"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="94,251,136,308,165,339,197,366,218,378,215,383,194,371,161,343,132,312,90,254"/>
+<area shape="rect" id="Node000015" href="$classsacfmt_1_1Trace.html#acb29b9cc548cf844d528a10bee3ba789" title=" " alt="" coords="450,417,590,445"/>
+<area shape="poly" id="edge25_Node000001_Node000015" title=" " alt="" coords="86,252,100,291,122,340,154,387,174,407,197,424,227,438,259,447,326,456,391,454,449,446,449,451,391,459,325,462,258,453,225,443,194,428,171,411,150,390,117,342,95,293,81,253"/>
+<area shape="rect" id="Node000016" href="$classsacfmt_1_1Trace.html#aba7da69c9ae7dbbbf6502e78fe62d4d7" title=" " alt="" coords="445,349,596,377"/>
+<area shape="poly" id="edge26_Node000001_Node000016" title=" " alt="" coords="100,251,142,289,168,307,197,322,255,341,316,354,376,360,430,363,430,368,375,366,315,359,254,347,195,327,166,312,139,293,97,254"/>
+<area shape="rect" id="Node000017" href="$classsacfmt_1_1Trace.html#a454402a99fd1e6435df25a076e8ebb2c" title="Calculate great&#45;circle arc&#45;distance (gcarc)." alt="" coords="211,268,354,312"/>
+<area shape="poly" id="edge21_Node000001_Node000017" title=" " alt="" coords="149,248,197,262,196,267,148,253"/>
+<area shape="rect" id="Node000018" href="$classsacfmt_1_1Trace.html#a9acdb110709f4ed3b28e4b519cece23e" title="Determine if locations are set for geometry calculation." alt="" coords="417,229,623,257"/>
+<area shape="poly" id="edge27_Node000001_Node000018" title=" " alt="" coords="148,229,402,237,402,242,148,235"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="302,111,352,77,416,43,440,35,442,40,418,48,355,82,304,115"/>
+<area shape="rect" id="Node000005" href="$namespacesacfmt.html#a8a212ae42c7b5ca5ad7def340347bb86" title="Calculate azimuth between two points." alt="" coords="457,109,584,137"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="365,123,441,122,441,127,365,128"/>
+<area shape="rect" id="Node000007" href="$classsacfmt_1_1Trace.html#a4954ab0c93ba1beef164308e6f6d0cc4" title="Return even location as a point." alt="" coords="444,161,597,206"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="345,139,429,159,428,164,344,144"/>
+<area shape="rect" id="Node000010" href="$classsacfmt_1_1Trace.html#a18988036bc9bd5a68b8319771612b5cb" title="Return station location as a point." alt="" coords="440,281,601,326"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="352,139,371,152,383,166,391,181,396,211,401,239,407,253,419,267,428,274,425,278,415,270,403,256,396,241,391,211,386,183,379,169,367,156,349,144"/>
+<area shape="rect" id="Node000006" href="$namespacesacfmt.html#a99b9d2001e973091998a61286d0fdf1b" title="Convert radians to decimal degrees." alt="" coords="672,101,815,146"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="584,121,657,121,657,126,584,126"/>
+<area shape="rect" id="Node000008" href="$classsacfmt_1_1Trace.html#a364fc1f1bcbf2df0adab99419da75105" title=" " alt="" coords="671,169,816,197"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="597,181,656,181,656,186,597,186"/>
+<area shape="rect" id="Node000009" href="$classsacfmt_1_1Trace.html#a013651fd879d140af713415ab5236d79" title=" " alt="" coords="671,221,816,249"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="598,198,668,215,666,220,597,204"/>
+<area shape="rect" id="Node000011" href="$classsacfmt_1_1Trace.html#aa63683eea3ce4c74089c8b5d99c87766" title=" " alt="" coords="673,273,814,301"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="601,295,658,291,659,296,601,300"/>
+<area shape="rect" id="Node000012" href="$classsacfmt_1_1Trace.html#a8b01c09cf706de4e3f263d402c02882d" title=" " alt="" coords="673,325,814,353"/>
+<area shape="poly" id="edge12_Node000010_Node000012" title=" " alt="" coords="602,314,659,323,658,328,601,319"/>
+<area shape="poly" id="edge15_Node000013_Node000003" title=" " alt="" coords="343,162,367,150,382,137,391,124,400,109,416,96,436,86,438,90,418,100,404,113,395,126,386,141,371,155,345,167"/>
+<area shape="poly" id="edge14_Node000013_Node000005" title=" " alt="" coords="344,162,444,138,445,144,345,167"/>
+<area shape="poly" id="edge16_Node000013_Node000007" title=" " alt="" coords="369,178,429,179,429,184,369,183"/>
+<area shape="poly" id="edge17_Node000013_Node000010" title=" " alt="" coords="303,191,354,228,418,266,432,272,430,277,416,271,351,232,300,196"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="370,409,435,418,435,423,369,414"/>
+<area shape="poly" id="edge20_Node000014_Node000016" title=" " alt="" coords="369,384,430,375,430,380,370,390"/>
+<area shape="poly" id="edge22_Node000017_Node000007" title=" " alt="" coords="321,265,416,215,432,209,434,214,418,220,323,269"/>
+<area shape="poly" id="edge24_Node000017_Node000010" title=" " alt="" coords="354,291,424,295,424,300,353,296"/>
+<area shape="poly" id="edge23_Node000017_Node000016" title=" " alt="" coords="344,310,418,335,444,343,442,348,416,340,342,315"/>
+<area shape="poly" id="edge28_Node000018_Node000008" title=" " alt="" coords="581,226,623,215,680,199,681,204,624,220,582,231"/>
+<area shape="poly" id="edge29_Node000018_Node000009" title=" " alt="" coords="623,237,656,236,657,241,624,242"/>
+<area shape="poly" id="edge30_Node000018_Node000011" title=" " alt="" coords="594,255,659,268,658,273,593,260"/>
+<area shape="poly" id="edge31_Node000018_Node000012" title=" " alt="" coords="599,255,625,266,640,277,650,288,659,299,673,310,684,317,682,321,670,315,655,303,646,292,636,281,622,271,597,260"/>
 </map>

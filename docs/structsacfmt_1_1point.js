@@ -1,0 +1,1 @@
+var structsacfmt_1_1point=[["point","structsacfmt_1_1point.html#a0e50839b029f03feba7431bc5793170f",null],["latitude","structsacfmt_1_1point.html#a9b1db3fbae16422324c26a0453b84230",null],["longitude","structsacfmt_1_1point.html#a1cec32d89b628f8b4370ca02fe35a5d4",null]]

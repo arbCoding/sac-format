@@ -1,1 +1,1 @@
-var searchData=[["io_5ferror_0",["io_error",["../classsacfmt_1_1io__error.html",1,"sacfmt"]]]]
+var searchData=[["coord_0",["coord",["../classsacfmt_1_1coord.html",1,"sacfmt"]]]]
