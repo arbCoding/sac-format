@@ -1,1 +1,1 @@
-var searchData=[["trace_0",["Trace",["../classsacfmt_1_1Trace.html",1,"sacfmt"]]]]
+var searchData=[["point_0",["point",["../structsacfmt_1_1point.html",1,"sacfmt"]]]]

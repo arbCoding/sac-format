@@ -1,0 +1,7 @@
+<map id="sacfmt::Trace::station_location" name="sacfmt::Trace::station_location">
+<area shape="rect" id="Node000001" title="Return station location as a point." alt="" coords="5,24,167,68"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aa63683eea3ce4c74089c8b5d99c87766" title=" " alt="" coords="215,5,355,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,32,200,28,201,33,167,38"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a8b01c09cf706de4e3f263d402c02882d" title=" " alt="" coords="215,57,355,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,53,201,58,200,63,167,59"/>
+</map>

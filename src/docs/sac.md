@@ -1,5 +1,7 @@
 # SAC-file format {#SacFileFormat}
 
+@brief This section provides a centralized description of the SAC file format.
+
 The official and up-to-date documentation for the SAC-file format is available
 from the EarthScope Consortium (formerly IRIS/UNAVCO)
 [here](https://ds.iris.edu/files/sac-manual/manual/file_format.html). The
@@ -284,6 +286,7 @@ File type.
 
 Dependent variable type.
 
+<!-- markdownlint-disable line-length -->
 | Value | Type   | Description                                                             |
 |-------|--------|-------------------------------------------------------------------------|
 | 05    | IUNKN  | Unknown                                                                 |
@@ -291,6 +294,7 @@ Dependent variable type.
 | 07 | IVEL | Velocity \f$\color{orange}\mathrm{\left(\frac{nm}{s}\right)}\f$ |
 | 08 | IACC | Acceleration \f$\color{orange}\mathrm{\left(\frac{nm}{s^{2}}\right)}\f$ |
 | 50    | IVOLTS | Velocity (volts)                                                        |
+<!-- markdownlint-enable line-length -->
 
 ### iztype
 

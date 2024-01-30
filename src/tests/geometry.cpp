@@ -19,6 +19,52 @@ using Catch::Matchers::WithinAbs;
 
 namespace sacfmt {
 // NOLINTBEGIN(readability-magic-numbers)
+TEST_CASE("Geometric Operations: Coordinates: Degrees In") {
+  REQUIRE(coord{0.0, true}.degrees() == 0.0);
+  REQUIRE(coord{90.0, true}.degrees() == 90.0);
+  REQUIRE(coord{0.0, true}.radians() == 0.0);
+  REQUIRE(coord{90.0, false}.radians() == 90.0);
+  REQUIRE(coord{90.0, true}.radians() == std::numbers::pi_v<double> / 2.0);
+  REQUIRE(coord{180.0, true}.radians() == std::numbers::pi_v<double>);
+  REQUIRE(coord{-90.0, true}.radians() == -std::numbers::pi_v<double> / 2.0);
+  REQUIRE(coord{-180.0, true}.radians() == -std::numbers::pi_v<double>);
+}
+
+TEST_CASE("Geometric Operations: Coordiantes: Radians In") {
+  REQUIRE(coord{std::numbers::pi_v<double>, false}.degrees() == 180.0);
+  REQUIRE(coord{std::numbers::pi_v<double> / 2.0, false}.degrees() == 90.0);
+  REQUIRE(coord{-std::numbers::pi_v<double>, false}.degrees() == -180.0);
+  REQUIRE(coord{-std::numbers::pi_v<double> / 2.0, false}.degrees() == -90.0);
+}
+
+TEST_CASE("Geometric Operations: Coordinates: Setters") {
+  coord test_coord{0.0, true};
+  REQUIRE(test_coord.degrees() == 0.0);
+  test_coord.degrees(90.0);
+  REQUIRE(test_coord.degrees() == 90.0);
+  REQUIRE(test_coord.radians() == std::numbers::pi_v<double> / 2.0);
+  test_coord.radians(std::numbers::pi_v<double>);
+  REQUIRE(test_coord.radians() == std::numbers::pi_v<double>);
+  REQUIRE(test_coord.degrees() == 180.0);
+}
+
+TEST_CASE("Geometric Operations: Coordinates: Getters") {
+  coord test_coord{180.0, true};
+  double degrees{test_coord.degrees()};
+  REQUIRE(degrees == 180.0);
+  double radians{test_coord.radians()};
+  REQUIRE(radians == std::numbers::pi_v<double>);
+}
+
+TEST_CASE("Geometric Operations: Points") {
+  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.latitude.degrees() ==
+          90.0);
+  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.latitude.radians() ==
+          std::numbers::pi_v<double> / 2.0);
+  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.longitude.degrees() == 0);
+  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.longitude.radians() == 0);
+}
+
 TEST_CASE("Geometric Operations: Helper Functions: Limit 360 [0, 360]: No "
           "Adjustment") {
   REQUIRE(limit_360(0) == 0);
@@ -124,162 +170,155 @@ TEST_CASE("Geometric Operations: Helper Functions: Limit 90 [-90, 90]: "
 
 constexpr double tol{1e-4};
 TEST_CASE("Geometric Operations: Calc Distance/Azimuth: Same: Lat 0, Long 0") {
-  constexpr double lat{0};
-  constexpr double lon{0};
-  const double est_gcarc{gcarc(lat, lon, lat, lon)};
+  const point loc{coord{0.0, true}, coord{0.0, true}};
+  const double est_gcarc{gcarc(loc, loc)};
   REQUIRE_THAT(est_gcarc, WithinAbs(0, tol));
-  const double est_az{azimuth(lat, lon, lat, lon)};
+  const double est_az{azimuth(loc, loc)};
   REQUIRE_THAT(est_az, WithinAbs(0, tol));
 }
 
 TEST_CASE("Geometric Operations: Calc Distance/Azimuth: Same: Lat 90, Long 0") {
-  constexpr double lat{90};
-  constexpr double lon{0};
-  const double est_gcarc{gcarc(lat, lon, lat, lon)};
+  const point loc{coord{90.0, true}, coord{0.0, true}};
+  const double est_gcarc{gcarc(loc, loc)};
   REQUIRE_THAT(est_gcarc, WithinAbs(0, tol));
-  const double est_az{azimuth(lat, lon, lat, lon)};
+  const double est_az{azimuth(loc, loc)};
   REQUIRE_THAT(est_az, WithinAbs(0, tol));
 }
 
 TEST_CASE(
     "Geometric Operations: Calc Distance/Azimuth: Same: Lat -90, Long 0") {
-  constexpr double lat{-90};
-  constexpr double lon{0};
-  const double est_gcarc{gcarc(lat, lon, lat, lon)};
+  const point loc{coord{-90.0, true}, coord{0.0, true}};
+  const double est_gcarc{gcarc(loc, loc)};
   REQUIRE_THAT(est_gcarc, WithinAbs(0, tol));
-  const double est_az{azimuth(lat, lon, lat, lon)};
+  const double est_az{azimuth(loc, loc)};
   REQUIRE_THAT(est_az, WithinAbs(0, tol));
 }
 
 TEST_CASE(
     "Geometric Operations: Calc Distance/Azimuth: Same: Lat 0, Long 180") {
-  constexpr double lat{0};
-  constexpr double lon{180};
-  const double est_gcarc{gcarc(lat, lon, lat, lon)};
+  const point loc{coord{0.0, true}, coord{180, true}};
+  const double est_gcarc{gcarc(loc, loc)};
   REQUIRE_THAT(est_gcarc, WithinAbs(0, tol));
-  const double est_az{azimuth(lat, lon, lat, lon)};
+  const double est_az{azimuth(loc, loc)};
   REQUIRE_THAT(est_az, WithinAbs(0, tol));
 }
 
 TEST_CASE(
     "Geometric Operations: Calc Distance/Azimuth: Same: Lat 0, Long -180") {
-  constexpr double lat{0};
-  constexpr double lon{-180};
-  const double est_gcarc{gcarc(lat, lon, lat, lon)};
+  const point loc{coord{0.0, true}, coord{-180.0, true}};
+  const double est_gcarc{gcarc(loc, loc)};
   REQUIRE_THAT(est_gcarc, WithinAbs(0, tol));
-  const double est_az{azimuth(lat, lon, lat, lon)};
+  const double est_az{azimuth(loc, loc)};
   REQUIRE_THAT(est_az, WithinAbs(0, tol));
 }
 
-constexpr double eqla{0};
-constexpr double npla{90};
-constexpr double spla{-90};
-constexpr double lon{0};
+const point equator{coord{0.0, true}, coord{0.0, true}};
+const point n_pole{coord{90.0, true}, coord{0.0, true}};
+const point s_pole{coord{-90.0, true}, coord{0.0, true}};
 TEST_CASE("Geometric Operations: Calc Distance/Azimuth: Equator vs. Pole: "
           "North Pole") {
-  const double est_gcarc{gcarc(eqla, lon, npla, lon)};
+  const double est_gcarc{gcarc(equator, n_pole)};
   REQUIRE_THAT(est_gcarc, WithinAbs(90, tol));
-  const double est_az{azimuth(eqla, lon, npla, lon)};
+  const double est_az{azimuth(equator, n_pole)};
   REQUIRE_THAT(est_az, WithinAbs(0, tol));
-  const double est_baz{azimuth(npla, lon, eqla, lon)};
+  const double est_baz{azimuth(n_pole, equator)};
   REQUIRE_THAT(est_baz, WithinAbs(180, tol));
 }
 
 TEST_CASE("Geometric Operations: Calc Distance/Azimuth: Equator vs. Pole: "
           "South Pole") {
-  const double est_gcarc{gcarc(eqla, lon, spla, lon)};
+  const double est_gcarc{gcarc(equator, s_pole)};
   REQUIRE_THAT(est_gcarc, WithinAbs(90, tol));
-  const double est_az{azimuth(eqla, lon, spla, lon)};
+  const double est_az{azimuth(equator, s_pole)};
   REQUIRE_THAT(est_az, WithinAbs(180, tol));
-  const double est_baz{azimuth(spla, lon, eqla, lon)};
+  const double est_baz{azimuth(s_pole, equator)};
   REQUIRE_THAT(est_baz, WithinAbs(0, tol));
 }
 
 TEST_CASE("Geometric Operations: Calc Distance/Azimuth: Equator vs. Pole: "
           "North Pole to South Pole") {
-  const double est_gcarc{gcarc(npla, lon, spla, lon)};
+  const double est_gcarc{gcarc(n_pole, s_pole)};
   REQUIRE_THAT(est_gcarc, WithinAbs(180, tol));
-  const double est_az{azimuth(npla, lon, spla, lon)};
+  const double est_az{azimuth(n_pole, s_pole)};
   REQUIRE_THAT(est_az, WithinAbs(180, tol));
-  const double est_baz{azimuth(spla, lon, npla, lon)};
+  const double est_baz{azimuth(s_pole, n_pole)};
   REQUIRE_THAT(est_baz, WithinAbs(0, tol));
 }
 
 TEST_CASE("Geometric Operations: Calc Distance/Azimuth: Equator vs. Pole: "
           "South Pole to North Pole") {
-  const double est_gcarc{gcarc(spla, lon, npla, lon)};
+  const double est_gcarc{gcarc(s_pole, n_pole)};
   REQUIRE_THAT(est_gcarc, WithinAbs(180, tol));
 }
 
 TEST_CASE(
     "Geometric Operations: Calc Distance/Azimuth: Over Pole: North Pole") {
-  constexpr double lat{70};
-  constexpr double lon1{0};
-  constexpr double lon2{180};
-  constexpr double exp_gcarc{2 * (90 - lat)};
-  const double est_gcarc{gcarc(lat, lon1, lat, lon2)};
+  const point loc1{coord{70.0, true}, coord{0.0, true}};
+  const point loc2{coord{70.0, true}, coord{180.0, true}};
+  const double exp_gcarc{2 * (90 - loc1.latitude.degrees())};
+  const double est_gcarc{gcarc(loc1, loc2)};
   REQUIRE_THAT(est_gcarc, WithinAbs(exp_gcarc, tol));
-  const double est_az{azimuth(lat, lon1, lat, lon2)};
+  const double est_az{azimuth(loc1, loc2)};
   REQUIRE_THAT(est_az, WithinAbs(0, tol));
-  const double est_baz{azimuth(lat, lon2, lat, lon1)};
+  const double est_baz{azimuth(loc2, loc1)};
   REQUIRE_THAT(est_baz, WithinAbs(360, tol));
 }
 
 TEST_CASE(
     "Geometric Operations: Calc Distance/Azimuth: Over Pole: South Pole") {
-  constexpr double lat{-65};
-  constexpr double lon1{90};
-  constexpr double lon2{-90};
-  constexpr double exp_gcarc{2 * (lat + 90)};
-  const double est_gcarc{gcarc(lat, lon1, lat, lon2)};
+  const point loc1{coord{-65.0, true}, coord{90.0, true}};
+  const point loc2{coord{-65.0, true}, coord{-90.0, true}};
+  const double exp_gcarc{2 * (loc1.latitude.degrees() + 90)};
+  const double est_gcarc{gcarc(loc1, loc2)};
   REQUIRE_THAT(est_gcarc, WithinAbs(exp_gcarc, tol));
-  const double est_az{azimuth(lat, lon1, lat, lon2)};
+  const double est_az{azimuth(loc1, loc2)};
   REQUIRE_THAT(est_az, WithinAbs(180, tol));
-  const double est_baz{azimuth(lat, lon2, lat, lon1)};
+  const double est_baz{azimuth(loc2, loc1)};
   REQUIRE_THAT(est_baz, WithinAbs(180, tol));
 }
 
 TEST_CASE("Geometric Operations: Calc Distance/Azimuth: Along Equator") {
-  constexpr double lat{0};
-  double lon1{0};
-  double lon2{90};
-  double est_gcarc{gcarc(lat, lon1, lat, lon2)};
+  point loc1{coord{0.0, true}, coord{0.0, true}};
+  point loc2{coord{0.0, true}, coord{90.0, true}};
+  double est_gcarc{gcarc(loc1, loc2)};
   REQUIRE_THAT(est_gcarc, WithinAbs(90, tol));
-  double est_az{azimuth(lat, lon1, lat, lon2)};
+  double est_az{azimuth(loc1, loc2)};
   REQUIRE_THAT(est_az, WithinAbs(90, tol));
-  double est_baz{azimuth(lat, lon2, lat, lon1)};
+  double est_baz{azimuth(loc2, loc1)};
   REQUIRE_THAT(est_baz, WithinAbs(270, tol));
-  lon1 = 30;
-  lon2 = 70;
-  est_gcarc = gcarc(lat, lon1, lat, lon2);
-  REQUIRE_THAT(est_gcarc, WithinAbs(lon2 - lon1, tol));
-  est_az = azimuth(lat, lon1, lat, lon2);
+  loc1.longitude = coord{30.0, true};
+  loc2.longitude = coord{70.0, true};
+  est_gcarc = gcarc(loc1, loc2);
+  REQUIRE_THAT(
+      est_gcarc,
+      WithinAbs(loc2.longitude.degrees() - loc1.longitude.degrees(), tol));
+  est_az = azimuth(loc1, loc2);
   REQUIRE_THAT(est_az, WithinAbs(90, tol));
-  est_baz = azimuth(lat, lon2, lat, lon1);
+  est_baz = azimuth(loc2, loc1);
   REQUIRE_THAT(est_baz, WithinAbs(270, tol));
-  lon1 = 90;
-  lon2 = -90;
-  est_gcarc = gcarc(lat, lon1, lat, lon2);
-  REQUIRE_THAT(est_gcarc, WithinAbs(lon1 - lon2, tol));
-  est_az = azimuth(lat, lon1, lat, lon2);
+  loc1.longitude = coord{90.0, true};
+  loc2.longitude = coord{-90.0, true};
+  est_gcarc = gcarc(loc1, loc2);
+  REQUIRE_THAT(
+      est_gcarc,
+      WithinAbs(loc1.longitude.degrees() - loc2.longitude.degrees(), tol));
+  est_az = azimuth(loc1, loc2);
   REQUIRE_THAT(est_az, WithinAbs(270, tol));
-  est_baz = azimuth(lat, lon2, lat, lon1);
+  est_baz = azimuth(loc2, loc1);
   REQUIRE_THAT(est_baz, WithinAbs(90, tol));
 }
 
 TEST_CASE(
     "Geometric Operations: Calc Distance/Azimuth: Taken From Real SAC File") {
-  constexpr double lat1{38.4328};
-  constexpr double lon1{-118.155};
-  constexpr double lat2{36.801};
-  constexpr double lon2{-121.323};
+  const point loc1{coord{38.4328, true}, coord{-118.155, true}};
+  const point loc2{coord{36.801, true}, coord{-121.323, true}};
   constexpr double expected_gcarc{2.99645};
   constexpr double expected_az{56.1169};
   constexpr double expected_baz{238.043};
-  const double test_gcarc{gcarc(lat1, lon1, lat2, lon2)};
+  const double test_gcarc{gcarc(loc1, loc2)};
   REQUIRE_THAT(test_gcarc, WithinAbs(expected_gcarc, 5e-3));
-  const double test_az{azimuth(lat2, lon2, lat1, lon1)};
-  const double test_baz{azimuth(lat1, lon1, lat2, lon2)};
+  const double test_az{azimuth(loc2, loc1)};
+  const double test_baz{azimuth(loc1, loc2)};
   REQUIRE_THAT(test_az, WithinAbs(expected_az, 0.2));
   REQUIRE_THAT(test_baz, WithinAbs(expected_baz, 0.2));
 }

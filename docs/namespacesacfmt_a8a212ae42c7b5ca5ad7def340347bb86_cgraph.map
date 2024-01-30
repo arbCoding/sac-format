@@ -1,0 +1,5 @@
+<map id="sacfmt::azimuth" name="sacfmt::azimuth">
+<area shape="rect" id="Node000001" title="Calculate azimuth between two points." alt="" coords="5,14,133,42"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a99b9d2001e973091998a61286d0fdf1b" title="Convert radians to decimal degrees." alt="" coords="181,5,323,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,25,166,25,166,30,133,30"/>
+</map>

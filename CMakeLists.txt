@@ -195,6 +195,8 @@ install(TARGETS basic_tests trace_tests geometry_tests datetime_tests
   RUNTIME DESTINATION bin/tests COMPONENT tests)
 install(TARGETS benchmark RUNTIME DESTINATION bin/tests COMPONENT benchmarks)
 install(TARGETS list_sac RUNTIME DESTINATION bin COMPONENT list_sac)
+# Only specified components (exclude catch2)
+set(CPACK_COMPONENTS_ALL library tests benchmarks list_sac license)
 # Group components
 cpack_add_component(library DISPLAY_NAME "sac-format" GROUP development
   DESCRIPTION "sac-format library to use in your own programs.")
@@ -209,5 +211,3 @@ cpack_add_component(list_sac DISPLAY_NAME "list_sac" GROUP programs
 header information from an input SAC file.")
 cpack_add_component(license DISPLAY_NAME "license"
   DESCRIPTION "sac-format license file.")
-# Only specified components (exclude catch2)
-set(CPACK_COMPONENTS_ALL library tests benchmarks list_sac license)

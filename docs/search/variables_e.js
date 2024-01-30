@@ -1,0 +1,1 @@
+var searchData=[["word_5flength_0",["word_length",["../namespacesacfmt.html#a781878dcbc18ad519a98956d23449295",1,"sacfmt"]]]]

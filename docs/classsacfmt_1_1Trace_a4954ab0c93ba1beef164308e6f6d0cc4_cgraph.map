@@ -1,0 +1,7 @@
+<map id="sacfmt::Trace::event_location" name="sacfmt::Trace::event_location">
+<area shape="rect" id="Node000001" title="Return even location as a point." alt="" coords="5,24,159,68"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a364fc1f1bcbf2df0adab99419da75105" title=" " alt="" coords="207,5,351,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,33,192,28,192,34,159,38"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a013651fd879d140af713415ab5236d79" title=" " alt="" coords="207,57,351,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,53,192,57,192,63,159,58"/>
+</map>

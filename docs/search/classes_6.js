@@ -1,0 +1,1 @@
+var searchData=[["word_5fpair_0",["word_pair",["../structsacfmt_1_1word__pair.html",1,"sacfmt"]]]]

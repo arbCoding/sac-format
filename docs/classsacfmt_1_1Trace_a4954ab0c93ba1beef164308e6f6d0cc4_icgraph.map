@@ -1,0 +1,13 @@
+<map id="sacfmt::Trace::event_location" name="sacfmt::Trace::event_location">
+<area shape="rect" id="Node000001" title="Return even location as a point." alt="" coords="416,49,569,94"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#ac72a7903e8d1f68c39c5b4d254212d98" title="Calculate azimuth." alt="" coords="200,5,364,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="401,51,340,36,342,31,402,46"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#aa2863cd71e9d5196a7f6d7d7b0e47dcd" title="Calculate back&#45;azimuth." alt="" coords="196,57,368,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="401,74,368,74,368,69,401,69"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#a454402a99fd1e6435df25a076e8ebb2c" title="Calculate great&#45;circle arc&#45;distance (gcarc)." alt="" coords="211,109,353,154"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="402,100,354,113,353,108,401,94"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#ac3623740a5bd0345d045b557ad34c77a" title="Calculates gcarc, dist, az, and baz from stla, stlo, evla, and evlo." alt="" coords="5,49,148,94"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="211,40,149,56,147,51,210,35"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="181,74,148,74,148,69,181,69"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="196,109,147,95,149,89,197,104"/>
+</map>

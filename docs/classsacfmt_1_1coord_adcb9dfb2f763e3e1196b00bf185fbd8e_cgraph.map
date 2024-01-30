@@ -1,0 +1,5 @@
+<map id="sacfmt::coord::degrees" name="sacfmt::coord::degrees">
+<area shape="rect" id="Node000001" title="Set coordinate value using decimal degrees." alt="" coords="5,14,176,42"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a00d680406a083cec842eb0700ea0dad4" title="Convert decimal degrees to radians." alt="" coords="224,5,370,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,25,209,25,209,30,176,30"/>
+</map>

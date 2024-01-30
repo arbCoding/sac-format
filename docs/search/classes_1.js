@@ -1,1 +1,1 @@
-var searchData=[["read_5fspec_0",["read_spec",["../structsacfmt_1_1read__spec.html",1,"sacfmt"]]]]
+var searchData=[["io_5ferror_0",["io_error",["../classsacfmt_1_1io__error.html",1,"sacfmt"]]]]
