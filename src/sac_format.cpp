@@ -645,7 +645,7 @@ bool equal_within_tolerance(const std::vector<double> &vector1,
  */
 bool equal_within_tolerance(const double val1, const double val2,
                             const double tolerance) noexcept {
-  return (std::abs(val1 - val2) < tolerance);
+  return std::abs(val1 - val2) < tolerance;
 }
 // Position methods
 /*!
@@ -706,10 +706,9 @@ double gcarc(const double latitude1, const double longitude1,
   const double lon1{degrees_to_radians(longitude1)};
   const double lat2{degrees_to_radians(latitude2)};
   const double lon2{degrees_to_radians(longitude2)};
-  double result{radians_to_degrees(
+  return radians_to_degrees(
       std::acos(std::sin(lat1) * std::sin(lat2) +
-                std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)))};
-  return result;
+                std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)));
 }
 
 /*!
@@ -907,8 +906,8 @@ double Trace::frequency() const noexcept {
   @returns bool True if able to calculate geometry.
  */
 bool Trace::geometry_set() const noexcept {
-  return ((stla() != unset_double) && (stlo() != unset_double) &&
-          (evla() != unset_double) && (evlo() != unset_double));
+  return (stla() != unset_double) && (stlo() != unset_double) &&
+         (evla() != unset_double) && (evlo() != unset_double);
 }
 
 /*!
@@ -1351,29 +1350,33 @@ void Trace::t9(const double input) noexcept {
 void Trace::f(const double input) noexcept {
   doubles[sac_map.at(name::f)] = input;
 }
-void Trace::stla(double input) noexcept {
-  if (input != unset_double) {
-    input = limit_90(input);
+void Trace::stla(const double input) noexcept {
+  double clean_input{input};
+  if (clean_input != unset_double) {
+    clean_input = limit_90(clean_input);
   }
-  doubles[sac_map.at(name::stla)] = input;
+  doubles[sac_map.at(name::stla)] = clean_input;
 }
-void Trace::stlo(double input) noexcept {
-  if (input != unset_double) {
-    input = limit_180(input);
+void Trace::stlo(const double input) noexcept {
+  double clean_input{input};
+  if (clean_input != unset_double) {
+    clean_input = limit_180(clean_input);
   }
-  doubles[sac_map.at(name::stlo)] = input;
+  doubles[sac_map.at(name::stlo)] = clean_input;
 }
-void Trace::evla(double input) noexcept {
-  if (input != unset_double) {
-    input = limit_90(input);
+void Trace::evla(const double input) noexcept {
+  double clean_input{input};
+  if (clean_input != unset_double) {
+    clean_input = limit_90(clean_input);
   }
-  doubles[sac_map.at(name::evla)] = input;
+  doubles[sac_map.at(name::evla)] = clean_input;
 }
-void Trace::evlo(double input) noexcept {
-  if (input != unset_double) {
-    input = limit_180(input);
+void Trace::evlo(const double input) noexcept {
+  double clean_input{input};
+  if (clean_input != unset_double) {
+    clean_input = limit_180(clean_input);
   }
-  doubles[sac_map.at(name::evlo)] = input;
+  doubles[sac_map.at(name::evlo)] = clean_input;
 }
 void Trace::sb(const double input) noexcept {
   doubles[sac_map.at(name::sb)] = input;

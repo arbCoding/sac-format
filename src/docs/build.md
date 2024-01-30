@@ -48,8 +48,11 @@ cmake --build ./build/hard/release/clang
 ```
 
 ### MSVC
-```
+
+```bash
 git clone https://github.com/arbCoding/sac-format.git
 cd sac-format
-cmake -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=ON -DCMAKE_CXX_EXTENSIONS=OFF -DCMAKE_CXX_FLAGS="/O2 /EHsc /Gs /guard:cf"
+cmake -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=20 `
+-DCMAKE_CXX_STANDARD_REQUIRED=ON -DCMAKE_CXX_EXTENSIONS=OFF `
+-DCMAKE_CXX_FLAGS="/O2 /EHsc /Gs /guard:cf"
 ```

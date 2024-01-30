@@ -286,6 +286,7 @@ File type.
 
 Dependent variable type.
 
+<!-- markdownlint-disable line-length -->
 | Value | Type   | Description                                                             |
 |-------|--------|-------------------------------------------------------------------------|
 | 05    | IUNKN  | Unknown                                                                 |
@@ -293,6 +294,7 @@ Dependent variable type.
 | 07 | IVEL | Velocity \f$\color{orange}\mathrm{\left(\frac{nm}{s}\right)}\f$ |
 | 08 | IACC | Acceleration \f$\color{orange}\mathrm{\left(\frac{nm}{s^{2}}\right)}\f$ |
 | 50    | IVOLTS | Velocity (volts)                                                        |
+<!-- markdownlint-enable line-length -->
 
 ### iztype
 

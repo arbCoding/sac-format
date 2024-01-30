@@ -135,6 +135,7 @@ sha512sum -c sac-format-<version>-Linux-<arch>.sh.sha512
 bash sac-format-<version>-Linux-<arch>.sh
 ```
 
+<!-- markdownlint-disable-next-line no-duplicate-heading -->
 ### Gzipped Tar Archive
 
 ```bash
