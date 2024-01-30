@@ -19,6 +19,52 @@ using Catch::Matchers::WithinAbs;
 
 namespace sacfmt {
 // NOLINTBEGIN(readability-magic-numbers)
+TEST_CASE("Geometric Operations: Coordinates: Degrees In") {
+  REQUIRE(coord{0.0, true}.degrees() == 0.0);
+  REQUIRE(coord{90.0, true}.degrees() == 90.0);
+  REQUIRE(coord{0.0, true}.radians() == 0.0);
+  REQUIRE(coord{90.0, false}.radians() == 90.0);
+  REQUIRE(coord{90.0, true}.radians() == std::numbers::pi_v<double> / 2.0);
+  REQUIRE(coord{180.0, true}.radians() == std::numbers::pi_v<double>);
+  REQUIRE(coord{-90.0, true}.radians() == -std::numbers::pi_v<double> / 2.0);
+  REQUIRE(coord{-180.0, true}.radians() == -std::numbers::pi_v<double>);
+}
+
+TEST_CASE("Geometric Operations: Coordiantes: Radians In") {
+  REQUIRE(coord{std::numbers::pi_v<double>, false}.degrees() == 180.0);
+  REQUIRE(coord{std::numbers::pi_v<double> / 2.0, false}.degrees() == 90.0);
+  REQUIRE(coord{-std::numbers::pi_v<double>, false}.degrees() == -180.0);
+  REQUIRE(coord{-std::numbers::pi_v<double> / 2.0, false}.degrees() == -90.0);
+}
+
+TEST_CASE("Geometric Operations: Coordinates: Setters") {
+  coord test_coord{0.0, true};
+  REQUIRE(test_coord.degrees() == 0.0);
+  test_coord.degrees(90.0);
+  REQUIRE(test_coord.degrees() == 90.0);
+  REQUIRE(test_coord.radians() == std::numbers::pi_v<double> / 2.0);
+  test_coord.radians(std::numbers::pi_v<double>);
+  REQUIRE(test_coord.radians() == std::numbers::pi_v<double>);
+  REQUIRE(test_coord.degrees() == 180.0);
+}
+
+TEST_CASE("Geometric Operations: Coordinates: Getters") {
+  coord test_coord{180.0, true};
+  double degrees{test_coord.degrees()};
+  REQUIRE(degrees == 180.0);
+  double radians{test_coord.radians()};
+  REQUIRE(radians == std::numbers::pi_v<double>);
+}
+
+TEST_CASE("Geometric Operations: Points") {
+  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.latitude.degrees()
+          == 90.0);
+  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.latitude.radians()
+          == std::numbers::pi_v<double> / 2.0);
+  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.longitude.degrees() == 0);
+  REQUIRE(point{coord{90.0, true}, coord{0.0, true}}.longitude.radians() == 0);
+}
+
 TEST_CASE("Geometric Operations: Helper Functions: Limit 360 [0, 360]: No "
           "Adjustment") {
   REQUIRE(limit_360(0) == 0);
