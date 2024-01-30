@@ -42,7 +42,7 @@ jobs:
           lcov -r sac-format.lcov "/usr*" -o sac-format.lcov
 
       - name: Upload Coverage Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ${{github.workspace}}/build/debug/gh-coverage/sac-format.lcov
