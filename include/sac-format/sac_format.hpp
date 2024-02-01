@@ -243,7 +243,7 @@ std::vector<char> convert_to_word(double input) noexcept;
 // Template function to convert string to SAC word(s)
 template <size_t N>
 std::array<char, N> convert_to_words(const std::string &str,
-                                     int n_words) noexcept;
+                                     size_t n_words) noexcept;
 // Convert a bool value to a word
 std::vector<char> bool_to_word(bool flag) noexcept;
 bool equal_within_tolerance(const std::vector<double> &vector1,
@@ -1337,6 +1337,8 @@ public:
   // Data
   void data1(const std::vector<double> &input) noexcept;
   void data2(const std::vector<double> &input) noexcept;
+  static void write_data(std::ofstream *sac_file,
+                         const std::vector<double> &data_vec);
 
 private:
   // Convenience methods
@@ -1344,6 +1346,43 @@ private:
   void calc_dist() noexcept;
   void calc_az() noexcept;
   void calc_baz() noexcept;
+  // Readers
+  // Floats
+  void read_float_headers_starter(std::ifstream *sac_file);
+  void read_float_headers_t(std::ifstream *sac_file);
+  void read_float_headers_resp(std::ifstream *sac_file);
+  void read_float_headers_station_event(std::ifstream *sac_file);
+  void read_float_headers_user(std::ifstream *sac_file);
+  void read_float_headers_geometry(std::ifstream *sac_file);
+  void read_float_headers_meta(std::ifstream *sac_file);
+  void read_float_headers(std::ifstream *sac_file);
+  // Integers
+  void read_int_headers_datetime(std::ifstream *sac_file);
+  void read_int_headers_meta(std::ifstream *sac_file);
+  void read_int_headers(std::ifstream *sac_file);
+  // Others
+  void read_bool_headers(std::ifstream *sac_file);
+  void read_string_headers(std::ifstream *sac_file);
+  void read_datas(std::ifstream *sac_file);
+  void read_footers(std::ifstream *sac_file);
+  // Writers
+  // Floats
+  void write_float_headers_starter(std::ofstream *sac_file) const;
+  void write_float_headers_t(std::ofstream *sac_file) const;
+  void write_float_headers_resp(std::ofstream *sac_file) const;
+  void write_float_headers_station_event(std::ofstream *sac_file) const;
+  void write_float_headers_user(std::ofstream *sac_file) const;
+  void write_float_headers_geometry(std::ofstream *sac_file) const;
+  void write_float_headers_meta(std::ofstream *sac_file) const;
+  void write_float_headers(std::ofstream *sac_file) const;
+  // Integers
+  void write_int_headers_datetime(std::ofstream *sac_file) const;
+  void write_int_headers_meta(std::ofstream *sac_file, int hdr_ver) const;
+  void write_int_headers(std::ofstream *sac_file, int hdr_ver) const;
+  // Others
+  void write_bool_headers(std::ofstream *sac_file) const;
+  void write_string_headers(std::ofstream *sac_file) const;
+  void write_footers(std::ofstream *sac_file) const;
   [[nodiscard]] bool geometry_set() const noexcept;
   //! \brief Return station location as a point.
   [[nodiscard]] point station_location() const noexcept {

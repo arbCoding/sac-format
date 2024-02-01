@@ -102,7 +102,7 @@ oclint "$base"/include/sac-format/sac_format.hpp \
     "$base"/src/examples/list_sac.cpp \
     -disable-rule ConstantIfExpression \
     -rc NCSS_METHOD=300 \
-    -rc LONG_METHOD=300 \
+    -rc LONG_METHOD=75 \
     -rc NPATH_COMPLEXITY=300 \
     -rc TOO_MANY_METHODS=300
 
