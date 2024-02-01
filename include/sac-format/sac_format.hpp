@@ -316,52 +316,52 @@ double limit_90(double degrees) noexcept;
 enum class name {
   // Floats
   /*!
-    Float
+    Float, pre-data word 001.
 
     Minimum value of the dependent variable
     (displacement/velocity/acceleration/volts/counts).
    */
   depmin,
   /*!
-    Float
+    Float, pre-data word 002.
 
     Maximum value of the dependent variable.
    */
   depmax,
   /*!
-    Float
+    Float, pre-data word 004.
 
     Modified (observational) value of delta.
    */
   odelta,
   /*!
-    Float
+    Float, pre-data word 021.
 
     Instrument response parameter (poles, zeros, and a constant).
 
     Not used by SAC - free for other purposes.
    */
   resp0,
-  //! See resp0.
+  //! See resp0, pre-data word 022.
   resp1,
-  //! See resp0.
+  //! See resp0, pre-data word 023.
   resp2,
-  //! See resp0.
+  //! See resp0, pre-data word 024.
   resp3,
-  //! See resp0.
+  //! See resp0, pre-data word 025.
   resp4,
-  //! See resp0.
+  //! See resp0, pre-data word 026.
   resp5,
-  //! See resp0.
+  //! See resp0, pre-data word 027.
   resp6,
-  //! See resp0.
+  //! See resp0, pre-data word 028.
   resp7,
-  //! See resp0.
+  //! See resp0, pre-data word 029.
   resp8,
-  //! See resp0.
+  //! See resp0, pre-data word 030.
   resp9,
   /*!
-    Float
+    Float, pre-data word 033.
 
     Station elevation in meters above sea level (m.a.s.l.).
 
@@ -369,7 +369,7 @@ enum class name {
    */
   stel,
   /*!
-    Float
+    Float, pre-data word 034.
 
     Station depth in meters below surface (borehole/buried vault).
 
@@ -377,7 +377,7 @@ enum class name {
    */
   stdp,
   /*!
-    Float
+    Float, pre-data word 037.
 
     Event elevation m.a.s.l.
 
@@ -385,81 +385,81 @@ enum class name {
    */
   evel,
   /*!
-    Float
+    Float, pre-data word 038.
 
     Event depth in kilometers (previous meters) below surface.
    */
   evdp,
   /*!
-    Float
+    Float, pre-data word 039.
 
     Event magnitude.
    */
   mag,
   /*!
-    Float
+    Float, pre-data word 040.
 
     Storage for user-defined values.
    */
   user0,
-  //! See user0
+  //! See user0, pre-data word 041.
   user1,
-  //! See user0
+  //! See user0, pre-data word 042.
   user2,
-  //! See user0
+  //! See user0, pre-data word 043.
   user3,
-  //! See user0
+  //! See user0, pre-data word 044.
   user4,
-  //! See user0
+  //! See user0, pre-data word 045.
   user5,
-  //! See user0
+  //! See user0, pre-data word 046.
   user6,
-  //! See user0
+  //! See user0, pre-data word 047.
   user7,
-  //! See user0
+  //! See user0, pre-data word 048.
   user8,
-  //! See user0
+  //! See user0, pre-data word 049.
   user9,
   /*!
-    Float
+    Float, pre-data word 050.
 
     Station-Event distance in kilometers.
    */
   dist,
   /*!
-    Float
+    Float, pre-data word 051.
 
     Azimuth \f$\color{orange}Station\rightarrow Event\f$ in decimal degrees
     from North.
    */
   az,
   /*!
-    Float
+    Float, pre-data word 052.
 
     Back-Azimuth \f$\color{orange}Event\rightarrow Station\f$ in decimal degrees
     from North.
    */
   baz,
   /*!
-    Float
+    Float, pre-data word 053.
 
     Great-circle arc-distance between station and event in decimal degrees.
    */
   gcarc,
   /*!
-    Float
+    Float, pre-data word 056.
 
     Mean value of dependent variable.
    */
   depmen,
   /*!
-    Float
+    Float, pre-data word 057.
 
     Instrument measurement azimuth, decimal degrees from North.
    */
   cmpaz,
   /*!
-    Float
+    Float, pre-data word 058.
 
     Instrument measurement incidence angle, decimal degrees from upward
     vertical (incident 0 = dip -90).
@@ -469,34 +469,34 @@ enum class name {
    */
   cmpinc,
   /*!
-    Float
+    Float, pre-data word 059.
 
     Spectral-only equivalent of depmin (\f$\color{orange}f_{0}\f$ or
     \f$\color{orange}\omega_{0}\f$).
    */
   xminimum,
   /*!
-    Float
+    Float, pre-data word 060.
 
     Spectral-only equivalent of depman (\f$\color{orange}f_{max}\f$ or
     \f$\color{orange}\omega_{max}\f$).
    */
   xmaximum,
   /*!
-    Float
+    Float, pre-data word 061.
 
     Spectral-only equivalent of b.
    */
   yminimum,
   /*!
-    Float
+    Float, pre-data word 062.
 
     Spectral-only equivalent of e.
    */
   ymaximum,
   // Doubles
   /*!
-    Double
+    Double, pre-data word 000; post-data words 00-01.
 
     Increment between evenly-spaced samples (
     \f$\color{orange}\Delta t\f$ for timeseries,
@@ -505,62 +505,62 @@ enum class name {
    */
   delta,
   /*!
-    Double
+    Double, pre-data word 005; post-data words 02-03.
 
     First value (beginning) of independent variable (\f$\color{orange}t_{0}\f$).
    */
   b,
   /*!
-    Double
+    Double, pre-data word 006; post-data words 04-05.
 
     Final value (ending) of the independent variable
     (\f$\color{orange}t_{max}\f$).
    */
   e,
   /*!
-    Double
+    Double, pre-data word 007; post-data words 06-07.
 
     Event origin time, in seconds relative to the reference time.
    */
   o,
   /*!
-    Double
+    Double, pre-data word 008; post-data words 08-09.
 
     Event first arrival time, in seconds relative to the reference time.
    */
   a,
   /*!
-    Double
+    Double, pre-data word 010; post-data words 10-11.
 
     User defined time value, in seconds relative to the reference time.
    */
   t0,
-  //! See t0
+  //! See t0, pre-data word 011; post-data words 12-13.
   t1,
-  //! See t0
+  //! See t0, pre-data word 012; post-data words 14-15.
   t2,
-  //! See t0
+  //! See t0, pre-data word 013; post-data words 16-17.
   t3,
-  //! See t0
+  //! See t0, pre-data word 014; post-data words 18-19.
   t4,
-  //! See t0
+  //! See t0, pre-data word 015; post-data words 20-21.
   t5,
-  //! See t0
+  //! See t0, pre-data word 016; post-data words 22-23.
   t6,
-  //! See t0
+  //! See t0, pre-data word 017; post-data words 24-25.
   t7,
-  //! See t0
+  //! See t0, pre-data word 018; post-data words 26-27.
   t8,
-  //! See t0
+  //! See t0, pre-data word 019; post-data words 28-29.
   t9,
   /*!
-    Double
+    Double, pre-data word 020; post-data words 30-31.
 
     Event end (fini) time, in seconds relative to the reference time.
    */
   f,
   /*!
-    Double
+    Double, pre-data word 031; post-data words 36-37.
 
     Station latitude in decimal degrees, N/S is positive/negative.
 
@@ -568,7 +568,7 @@ enum class name {
    */
   stla,
   /*!
-    Double
+    Double, pre-data word 032; post-data words 38-39.
 
     Station longitude in decimal degrees, E/W is positive/negative.
 
@@ -576,7 +576,7 @@ enum class name {
    */
   stlo,
   /*!
-    Double
+    Double, pre-data word 035; post-data words 32-33.
 
     Event latitude in decimal degrees, N/S is positive/negative.
 
@@ -584,7 +584,7 @@ enum class name {
    */
   evla,
   /*!
-    Double
+    Double, pre-data word 036; post-data words 34-35.
 
     Event longitude in decimal degrees, E/W is positive/negative.
 
@@ -592,26 +592,26 @@ enum class name {
    */
   evlo,
   /*!
-    Double
+    Double, pre-data word 054; post-data words 40-41.
 
     Original (saved) value of b (beginning).
    */
   sb,
   /*!
-    Double
+    Double, pre-data word 055; post-data words 42-43.
 
     Original (saved) value of delta (sample-spacing).
    */
   sdelta,
   // Ints
   /*!
-    Integer
+    Integer, pre-data word 070.
 
     Reference time GMT year.
    */
   nzyear,
   /*!
-    Integer
+    Integer, pre-data word 071.
 
     Reference time GMT day-of-year (often called Julian Date).
 
@@ -619,7 +619,7 @@ enum class name {
    */
   nzjday,
   /*!
-    Integer
+    Integer, pre-data word 072.
 
     Reference time GMT hour.
 
@@ -627,7 +627,7 @@ enum class name {
    */
   nzhour,
   /*!
-    Integer
+    Integer, pre-data word 073.
 
     Reference time GMT minute.
 
@@ -635,7 +635,7 @@ enum class name {
    */
   nzmin,
   /*!
-    Integer
+    Integer, pre-data word 074.
 
     Reference time GMT second.
 
@@ -643,7 +643,7 @@ enum class name {
    */
   nzsec,
   /*!
-    Integer
+    Integer, pre-data word 075.
 
     Reference time GMT millisecond.
 
@@ -651,7 +651,7 @@ enum class name {
    */
   nzmsec,
   /*!
-    Integer
+    Integer, pre-data word 076.
 
     SAC-file version.
 
@@ -660,67 +660,67 @@ enum class name {
    */
   nvhdr,
   /*!
-    Integer
+    Integer, pre-data word 077.
 
     Origin ID.
    */
   norid,
   /*!
-    Integer
+    Integer, pre-data word 078.
 
     Event ID.
    */
   nevid,
   /*!
-    Integer
+    Integer, pre-data word 079.
 
     Number of points in data.
    */
   npts,
   /*!
-    Integer
+    Integer, pre-data word 080.
 
     Original (saved) npts.
    */
   nsnpts,
   /*!
-    Integer
+    Integer, pre-data word 081.
 
     Waveform ID.
    */
   nwfid,
   /*!
-    Integer
+    Integer, pre-data word 082.
 
     Spectral-only equivalent of npts (length of spectrum).
    */
   nxsize,
   /*!
-    Integer
+    Integer, pre-data word 083.
 
     Spectral-only; width of spectrum.
    */
   nysize,
   /*!
-    Integer
+    Integer, pre-data word 085.
 
     File type.
    */
   iftype,
   /*!
-    Integer
+    Integer, pre-data word 086.
 
     Dependent variable type.
    */
   idep,
   /*!
-    Integer
+    Integer, pre-data word 087.
 
     Reference time equivalent.
    */
   iztype,
   /*!
-    Integer
+    Integer, pre-data word 089.
 
     Recording instrument type.
 
@@ -728,7 +728,7 @@ enum class name {
    */
   iinst,
   /*!
-    Integer
+    Integer, pre-data word 090.
 
     Station geographic region.
 
@@ -736,7 +736,7 @@ enum class name {
    */
   istreg,
   /*!
-    Integer
+    Integer, pre-data word 091.
 
     Event geographic region.
 
@@ -744,7 +744,7 @@ enum class name {
    */
   ievreg,
   /*!
-    Integer
+    Integer, pre-data word 092.
 
     Event type.
 
@@ -752,7 +752,7 @@ enum class name {
    */
   ievtyp,
   /*!
-    Integer
+    Integer, pre-data word 093.
 
     Quality of data.
 
@@ -760,7 +760,7 @@ enum class name {
    */
   iqual,
   /*!
-    Integer
+    Integer, pre-data word 094.
 
     Synthetic data flag.
 
@@ -768,19 +768,19 @@ enum class name {
    */
   isynth,
   /*!
-    Integer
+    Integer, pre-data word 095.
 
     Magnitude type.
    */
   imagtyp,
   /*!
-    Integer
+    Integer, pre-data word 096.
 
     Magnitude information source.
    */
   imagsrc,
   /*!
-    Integer
+    Integer, pre-data word 097.
 
     Body/spheroid definition used to calculate distances.
 
@@ -789,7 +789,7 @@ enum class name {
   ibody,
   // Bools
   /*!
-    Boolean
+    Boolean, pre-data word 105.
 
     REQUIRED
 
@@ -797,7 +797,7 @@ enum class name {
    */
   leven,
   /*!
-    Boolean
+    Boolean, pre-data word 106.
 
     Station polarity flag.
 
@@ -805,7 +805,7 @@ enum class name {
    */
   lpspol,
   /*!
-    Boolean
+    Boolean, pre-data word 107.
 
     File overwrite flag.
 
@@ -815,7 +815,7 @@ enum class name {
    */
   lovrok,
   /*!
-    Boolean
+    Boolean, pre-data word 108.
 
     Calculate geometry flag.
 
@@ -824,19 +824,19 @@ enum class name {
   lcalda,
   // Strings
   /*!
-    String (2 words)
+    String (2 words), pre-data words 110--111.
 
     Station name.
    */
   kstnm,
   /*!
-    String (4 words)
+    String (4 words), pre-data words 112--115.
 
     Event name.
    */
   kevnm,
   /*!
-    String (2 words)
+    String (2 words), pre-data words 116--117.
 
     Nuclear-Hole identifier.
 
@@ -844,90 +844,90 @@ enum class name {
    */
   khole,
   /*!
-    String (2 words)
+    String (2 words), pre-data words 118--119.
 
     Text for o.
    */
   ko,
   /*!
-    String (2 words)
+    String (2 words), pre-data words 120--121.
 
     Text for a.
    */
   ka,
   /*!
-    String (2 words)
+    String (2 words), pre-data words 122--123.
 
     Text for t0
    */
   kt0,
-  //! See kt0
+  //! See kt0, pre-data words 124--125.
   kt1,
-  //! See kt0
+  //! See kt0, pre-data words 126--127.
   kt2,
-  //! See kt0
+  //! See kt0, pre-data words 128--129.
   kt3,
-  //! See kt0
+  //! See kt0, pre-data words 130--131.
   kt4,
-  //! See kt0
+  //! See kt0, pre-data words 132--133.
   kt5,
-  //! See kt0
+  //! See kt0, pre-data words 134--135.
   kt6,
-  //! See kt0
+  //! See kt0, pre-data words 136--137.
   kt7,
-  //! See kt0
+  //! See kt0, pre-data words 138--139.
   kt8,
-  //! See kt0
+  //! See kt0, pre-data words 140--141.
   kt9,
   /*!
-    String (2 words)
+    String (2 words), pre-data words 142--143.
 
     Text for f.
    */
   kf,
   /*!
-    String (2 words)
+    String (2 words), pre-data words 144--145.
 
     Text for user0.
    */
   kuser0,
-  //! See kuser0.
+  //! See kuser0, pre-data words 146--147.
   kuser1,
-  //! See kuser0.
+  //! See kuser0, pre-data words 148--149.
   kuser2,
   /*!
-    String (2 words)
+    String (2 words), pre-data words 150-151.
 
     Component name.
    */
-  kcmpnm,  // missing in org documentation
+  kcmpnm,
   /*!
-    String (2 words)
+    String (2 words), pre-data words 152-153.
 
     Network name.
    */
-  knetwk,  // missing in org documentation
+  knetwk,
   /*!
-    String (2 words)
+    String (2 words), pre-data words 154-155.
 
     Date the data was read onto a computer.
    */
   kdatrd,
   /*!
-    String (2 words)
+    String (2 words), pre-data words 156-157.
 
     Instrument name.
    */
   kinst,
   // Data
   /*!
-    std::vector<double>
+    std::vector<double>, words 158--(158 + npts)
 
     First data vector. ALWAYS present, ALWAYS begins at word 158.
    */
   data1,
   /*!
-    std::vector<double>
+    std::vector<double>, words (158 + 1 + npts)--(159 + (2 * npts))
 
     Second data vector. CONDITIONAL present. IF PRESENT, begins at end of data1.
 

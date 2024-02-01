@@ -1763,192 +1763,365 @@ void safe_to_finish_reading(std::ifstream *sac) {
   }
 }
 
+/*!
+  \brief Reads SAC-headers from words 000--009.
+
+  Note that this expects the position of the reader to be the beginning of word
+  000.
+
+  Note that this modifies the position of the reader to the end of word 009.
+
+  Headers loaded: delta, depmin, depmax, odelta, b, e, o, and a.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_float_headers_starter(std::ifstream *sac_file) {
-  delta(binary_to_float(read_word(sac_file)));
-  depmin(binary_to_float(read_word(sac_file)));
-  depmax(binary_to_float(read_word(sac_file)));
+  delta(binary_to_float(read_word(sac_file)));   // 000
+  depmin(binary_to_float(read_word(sac_file)));  // 001
+  depmax(binary_to_float(read_word(sac_file)));  // 002
   // Skip 'unused'
-  read_word(sac_file);
-  odelta(binary_to_float(read_word(sac_file)));
-  b(binary_to_float(read_word(sac_file)));
-  e(binary_to_float(read_word(sac_file)));
-  o(binary_to_float(read_word(sac_file)));
-  a(binary_to_float(read_word(sac_file)));
+  read_word(sac_file);                           // 003
+  odelta(binary_to_float(read_word(sac_file)));  // 004
+  b(binary_to_float(read_word(sac_file)));       // 005
+  e(binary_to_float(read_word(sac_file)));       // 006
+  o(binary_to_float(read_word(sac_file)));       // 007
+  a(binary_to_float(read_word(sac_file)));       // 008
   // Skip 'internal'
-  read_word(sac_file);
+  read_word(sac_file);  // 009
 }
 
+/*!
+  \brief Reads SAC-headers from words 010--020.
+
+  Note that this expects the position of the reader to be the beginning of word
+  010.
+
+  Note that this modifies the position of the reader to the end of word 020.
+
+  Headers loaded: t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, and f.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_float_headers_t(std::ifstream *sac_file) {
-  t0(binary_to_float(read_word(sac_file)));
-  t1(binary_to_float(read_word(sac_file)));
-  t2(binary_to_float(read_word(sac_file)));
-  t3(binary_to_float(read_word(sac_file)));
-  t4(binary_to_float(read_word(sac_file)));
-  t5(binary_to_float(read_word(sac_file)));
-  t6(binary_to_float(read_word(sac_file)));
-  t7(binary_to_float(read_word(sac_file)));
-  t8(binary_to_float(read_word(sac_file)));
-  t9(binary_to_float(read_word(sac_file)));
-  f(binary_to_float(read_word(sac_file)));
+  t0(binary_to_float(read_word(sac_file)));  // 010
+  t1(binary_to_float(read_word(sac_file)));  // 011
+  t2(binary_to_float(read_word(sac_file)));  // 012
+  t3(binary_to_float(read_word(sac_file)));  // 013
+  t4(binary_to_float(read_word(sac_file)));  // 014
+  t5(binary_to_float(read_word(sac_file)));  // 015
+  t6(binary_to_float(read_word(sac_file)));  // 016
+  t7(binary_to_float(read_word(sac_file)));  // 017
+  t8(binary_to_float(read_word(sac_file)));  // 018
+  t9(binary_to_float(read_word(sac_file)));  // 019
+  f(binary_to_float(read_word(sac_file)));   // 020
 }
 
+/*!
+  \brief Reads SAC-headers from words 021--030.
+
+  Note that this expects the position of the reader to be the beginning of word
+  021.
+
+  Note that this modifies the position of the reader to the end of word 030.
+
+  Headers loaded: resp0, resp1, resp2, resp3, resp4, resp5, resp6, resp7, resp8,
+  and resp9.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_float_headers_resp(std::ifstream *sac_file) {
-  resp0(binary_to_float(read_word(sac_file)));
-  resp1(binary_to_float(read_word(sac_file)));
-  resp2(binary_to_float(read_word(sac_file)));
-  resp3(binary_to_float(read_word(sac_file)));
-  resp4(binary_to_float(read_word(sac_file)));
-  resp5(binary_to_float(read_word(sac_file)));
-  resp6(binary_to_float(read_word(sac_file)));
-  resp7(binary_to_float(read_word(sac_file)));
-  resp8(binary_to_float(read_word(sac_file)));
-  resp9(binary_to_float(read_word(sac_file)));
+  resp0(binary_to_float(read_word(sac_file)));  // 021
+  resp1(binary_to_float(read_word(sac_file)));  // 022
+  resp2(binary_to_float(read_word(sac_file)));  // 023
+  resp3(binary_to_float(read_word(sac_file)));  // 024
+  resp4(binary_to_float(read_word(sac_file)));  // 025
+  resp5(binary_to_float(read_word(sac_file)));  // 026
+  resp6(binary_to_float(read_word(sac_file)));  // 027
+  resp7(binary_to_float(read_word(sac_file)));  // 028
+  resp8(binary_to_float(read_word(sac_file)));  // 029
+  resp9(binary_to_float(read_word(sac_file)));  // 030
 }
 
+/*!
+  \brief Reads SAC-headers from words 031--039.
+
+  Note that this expects the position of the reader to be the beginning of word
+  031.
+
+  Note that this modifies the position of the reader to the end of word 039.
+
+  Headers loaded: stla, stlo, stel, stdp, evla, evlo, evel, evdp, and mag.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_float_headers_station_event(std::ifstream *sac_file) {
   // Station headers
-  stla(binary_to_float(read_word(sac_file)));
-  stlo(binary_to_float(read_word(sac_file)));
-  stel(binary_to_float(read_word(sac_file)));
-  stdp(binary_to_float(read_word(sac_file)));
+  stla(binary_to_float(read_word(sac_file)));  // 031
+  stlo(binary_to_float(read_word(sac_file)));  // 032
+  stel(binary_to_float(read_word(sac_file)));  // 033
+  stdp(binary_to_float(read_word(sac_file)));  // 034
   // Event headers
-  evla(binary_to_float(read_word(sac_file)));
-  evlo(binary_to_float(read_word(sac_file)));
-  evel(binary_to_float(read_word(sac_file)));
-  evdp(binary_to_float(read_word(sac_file)));
-  mag(binary_to_float(read_word(sac_file)));
+  evla(binary_to_float(read_word(sac_file)));  // 035
+  evlo(binary_to_float(read_word(sac_file)));  // 036
+  evel(binary_to_float(read_word(sac_file)));  // 037
+  evdp(binary_to_float(read_word(sac_file)));  // 038
+  mag(binary_to_float(read_word(sac_file)));   // 039
 }
 
+/*!
+  \brief Reads SAC-headers from words 040--049.
+
+  Note that this expects the position of the reader to be the beginning of word
+  040.
+
+  Note that this modifies the position of the reader to the end of word 049.
+
+  Headers loaded: user0, user1, user2, user3, user4, user5, user6, user7, user8,
+  and user9.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_float_headers_user(std::ifstream *sac_file) {
-  user0(binary_to_float(read_word(sac_file)));
-  user1(binary_to_float(read_word(sac_file)));
-  user2(binary_to_float(read_word(sac_file)));
-  user3(binary_to_float(read_word(sac_file)));
-  user4(binary_to_float(read_word(sac_file)));
-  user5(binary_to_float(read_word(sac_file)));
-  user6(binary_to_float(read_word(sac_file)));
-  user7(binary_to_float(read_word(sac_file)));
-  user8(binary_to_float(read_word(sac_file)));
-  user9(binary_to_float(read_word(sac_file)));
+  user0(binary_to_float(read_word(sac_file)));  // 040
+  user1(binary_to_float(read_word(sac_file)));  // 041
+  user2(binary_to_float(read_word(sac_file)));  // 042
+  user3(binary_to_float(read_word(sac_file)));  // 043
+  user4(binary_to_float(read_word(sac_file)));  // 044
+  user5(binary_to_float(read_word(sac_file)));  // 045
+  user6(binary_to_float(read_word(sac_file)));  // 046
+  user7(binary_to_float(read_word(sac_file)));  // 047
+  user8(binary_to_float(read_word(sac_file)));  // 048
+  user9(binary_to_float(read_word(sac_file)));  // 049
 }
 
+/*!
+  \brief Reads SAC-headers from words 050--053.
+
+  Note that this expects the position of the reader to be the beginning of word
+  050.
+
+  Note that this modifies the position of the reader to the end of word 053.
+
+  Headers loaded: dist, az, baz, and gcarc.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_float_headers_geometry(std::ifstream *sac_file) {
-  dist(binary_to_float(read_word(sac_file)));
-  az(binary_to_float(read_word(sac_file)));
-  baz(binary_to_float(read_word(sac_file)));
-  gcarc(binary_to_float(read_word(sac_file)));
+  dist(binary_to_float(read_word(sac_file)));   // 050
+  az(binary_to_float(read_word(sac_file)));     // 051
+  baz(binary_to_float(read_word(sac_file)));    // 052
+  gcarc(binary_to_float(read_word(sac_file)));  // 053
 }
 
+/*!
+  \brief Reads SAC-headers from words 054--069.
+
+  Note that this expects the position of the reader to be the beginning of word
+  054.
+
+  Note that this modifies the position of the reader to the end of word 069.
+
+  Headers loaded: sb, sdelta, depmen, cmpaz, cmpinc, xminimum, xmaximum,
+  yminimum, and ymaximum.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_float_headers_meta(std::ifstream *sac_file) {
-  sb(binary_to_float(read_word(sac_file)));
-  sdelta(binary_to_float(read_word(sac_file)));
-  depmen(binary_to_float(read_word(sac_file)));
-  cmpaz(binary_to_float(read_word(sac_file)));
-  cmpinc(binary_to_float(read_word(sac_file)));
-  xminimum(binary_to_float(read_word(sac_file)));
-  xmaximum(binary_to_float(read_word(sac_file)));
-  yminimum(binary_to_float(read_word(sac_file)));
-  ymaximum(binary_to_float(read_word(sac_file)));
+  sb(binary_to_float(read_word(sac_file)));        // 054
+  sdelta(binary_to_float(read_word(sac_file)));    // 055
+  depmen(binary_to_float(read_word(sac_file)));    // 056
+  cmpaz(binary_to_float(read_word(sac_file)));     // 057
+  cmpinc(binary_to_float(read_word(sac_file)));    // 058
+  xminimum(binary_to_float(read_word(sac_file)));  // 059
+  xmaximum(binary_to_float(read_word(sac_file)));  // 060
+  yminimum(binary_to_float(read_word(sac_file)));  // 061
+  ymaximum(binary_to_float(read_word(sac_file)));  // 062
   // Skip 'unused' (xcommon_skip_num)
-  for (int i{0}; i < common_skip_num; ++i) {
+  for (int i{0}; i < common_skip_num; ++i) {  // 063--069
     read_word(sac_file);
   }
 }
 
+/*!
+  \brief Reads SAC-headers from words 000--069.
+
+  Note that this expects the position of the reader to be the beginning of word
+  000.
+
+  Note that this modifies the position of the reader to the end of word 069.
+
+  Loads all the float headers.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+  */
 void Trace::read_float_headers(std::ifstream *sac_file) {
-  read_float_headers_starter(sac_file);
-  read_float_headers_t(sac_file);
-  read_float_headers_resp(sac_file);
-  read_float_headers_station_event(sac_file);
-  read_float_headers_user(sac_file);
-  read_float_headers_geometry(sac_file);
-  read_float_headers_meta(sac_file);
+  read_float_headers_starter(sac_file);        // 000-009
+  read_float_headers_t(sac_file);              // 010-020
+  read_float_headers_resp(sac_file);           // 021-030
+  read_float_headers_station_event(sac_file);  // 031-039
+  read_float_headers_user(sac_file);           // 040-049
+  read_float_headers_geometry(sac_file);       // 050-053
+  read_float_headers_meta(sac_file);           // 054-069
 }
 
+/*!
+  \brief Reads SAC-headers from words 070--075.
+
+  Note that this expects the position of the reader to be the beginning of word
+  070.
+
+  Note that this modifies the position of the reader to the end of word 075.
+
+  Headers loaded: nzyear, nzjday, nzhour, nzmin, nzsec, and nzmsec.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_int_headers_datetime(std::ifstream *sac_file) {
-  nzyear(binary_to_int(read_word(sac_file)));
-  nzjday(binary_to_int(read_word(sac_file)));
-  nzhour(binary_to_int(read_word(sac_file)));
-  nzmin(binary_to_int(read_word(sac_file)));
-  nzsec(binary_to_int(read_word(sac_file)));
-  nzmsec(binary_to_int(read_word(sac_file)));
+  nzyear(binary_to_int(read_word(sac_file)));  // 070
+  nzjday(binary_to_int(read_word(sac_file)));  // 071
+  nzhour(binary_to_int(read_word(sac_file)));  // 072
+  nzmin(binary_to_int(read_word(sac_file)));   // 073
+  nzsec(binary_to_int(read_word(sac_file)));   // 074
+  nzmsec(binary_to_int(read_word(sac_file)));  // 075
 }
 
+/*!
+  \brief Reads SAC-headers from words 076--104.
+
+  Note that this expects the position of the reader to be the beginning of word
+  076.
+
+  Note that this modifies the position of the reader to the end of word 104.
+
+  Headers loaded: nvhdr, norid, nevid, npts, nsnpts, nwfid, nxsize, nysize,
+  iftype, idep, iztype, iinst, istreg, ievreg, ievtyp, iqual, isynth, imagtyp,
+  imagsrc, and ibody.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_int_headers_meta(std::ifstream *sac_file) {
-  nvhdr(binary_to_int(read_word(sac_file)));
-  norid(binary_to_int(read_word(sac_file)));
-  nevid(binary_to_int(read_word(sac_file)));
-  npts(binary_to_int(read_word(sac_file)));
-  nsnpts(binary_to_int(read_word(sac_file)));
-  nwfid(binary_to_int(read_word(sac_file)));
-  nxsize(binary_to_int(read_word(sac_file)));
-  nysize(binary_to_int(read_word(sac_file)));
+  nvhdr(binary_to_int(read_word(sac_file)));   // 076
+  norid(binary_to_int(read_word(sac_file)));   // 077
+  nevid(binary_to_int(read_word(sac_file)));   // 078
+  npts(binary_to_int(read_word(sac_file)));    // 079
+  nsnpts(binary_to_int(read_word(sac_file)));  // 080
+  nwfid(binary_to_int(read_word(sac_file)));   // 081
+  nxsize(binary_to_int(read_word(sac_file)));  // 082
+  nysize(binary_to_int(read_word(sac_file)));  // 083
   // Skip 'unused'
-  read_word(sac_file);
-  iftype(binary_to_int(read_word(sac_file)));
-  idep(binary_to_int(read_word(sac_file)));
-  iztype(binary_to_int(read_word(sac_file)));
+  read_word(sac_file);                         // 084
+  iftype(binary_to_int(read_word(sac_file)));  // 085
+  idep(binary_to_int(read_word(sac_file)));    // 086
+  iztype(binary_to_int(read_word(sac_file)));  // 087
   // Skip 'unused'
-  read_word(sac_file);
-  iinst(binary_to_int(read_word(sac_file)));
-  istreg(binary_to_int(read_word(sac_file)));
-  ievreg(binary_to_int(read_word(sac_file)));
-  ievtyp(binary_to_int(read_word(sac_file)));
-  iqual(binary_to_int(read_word(sac_file)));
-  isynth(binary_to_int(read_word(sac_file)));
-  imagtyp(binary_to_int(read_word(sac_file)));
-  imagsrc(binary_to_int(read_word(sac_file)));
-  ibody(binary_to_int(read_word(sac_file)));
+  read_word(sac_file);                          // 088
+  iinst(binary_to_int(read_word(sac_file)));    // 089
+  istreg(binary_to_int(read_word(sac_file)));   // 090
+  ievreg(binary_to_int(read_word(sac_file)));   // 091
+  ievtyp(binary_to_int(read_word(sac_file)));   // 092
+  iqual(binary_to_int(read_word(sac_file)));    // 093
+  isynth(binary_to_int(read_word(sac_file)));   // 094
+  imagtyp(binary_to_int(read_word(sac_file)));  // 095
+  imagsrc(binary_to_int(read_word(sac_file)));  // 096
+  ibody(binary_to_int(read_word(sac_file)));    // 097
   // Skip 'unused' (xcommon_skip_num)
-  for (int i{0}; i < common_skip_num; ++i) {
+  for (int i{0}; i < common_skip_num; ++i) {  // 098--104
     read_word(sac_file);
   }
 }
 
+/*!
+  \brief Reads SAC-headers from words 070--104.
+
+  Note that this expects the position of the reader to be the beginning of word
+  070.
+
+  Note that this modifies the position of the reader to the end of word 104.
+
+  Loads all integer headers.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_int_headers(std::ifstream *sac_file) {
-  read_int_headers_datetime(sac_file);
-  read_int_headers_meta(sac_file);
+  read_int_headers_datetime(sac_file);  // 070--075
+  read_int_headers_meta(sac_file);      // 076--104
 }
 
+/*!
+  \brief Reads SAC-headers from words 105--109.
+
+  Note that this expects the position of the reader to be the beginning of word
+  105.
+
+  Note that this modifies the position of the reader to the end of word 109.
+
+  Loads all boolean headers.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_bool_headers(std::ifstream *sac_file) {
   // Logical headers
-  leven(binary_to_bool(read_word(sac_file)));
-  lpspol(binary_to_bool(read_word(sac_file)));
-  lovrok(binary_to_bool(read_word(sac_file)));
-  lcalda(binary_to_bool(read_word(sac_file)));
+  leven(binary_to_bool(read_word(sac_file)));   // 105
+  lpspol(binary_to_bool(read_word(sac_file)));  // 106
+  lovrok(binary_to_bool(read_word(sac_file)));  // 107
+  lcalda(binary_to_bool(read_word(sac_file)));  // 108
   // Skip 'unused'
-  read_word(sac_file);
+  read_word(sac_file);  // 109
 }
 
+/*!
+  \brief Reads SAC-headers from words 110--157.
+
+  Note that this expects the position of the reader to be the beginning of word
+  110.
+
+  Note that this modifies the position of the reader to the end of word 157.
+
+  Loads all string headers.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_string_headers(std::ifstream *sac_file) {
   // KSTNM is 2 words (normal)
-  kstnm(binary_to_string(read_two_words(sac_file)));
+  kstnm(binary_to_string(read_two_words(sac_file)));  // 110-111
   // KEVNM is 4 words long (unique!)
-  kevnm(binary_to_long_string(read_four_words(sac_file)));
+  kevnm(binary_to_long_string(read_four_words(sac_file)));  // 112-115
   // All other 'K' headers are 2 words
-  khole(binary_to_string(read_two_words(sac_file)));
-  ko(binary_to_string(read_two_words(sac_file)));
-  ka(binary_to_string(read_two_words(sac_file)));
-  kt0(binary_to_string(read_two_words(sac_file)));
-  kt1(binary_to_string(read_two_words(sac_file)));
-  kt2(binary_to_string(read_two_words(sac_file)));
-  kt3(binary_to_string(read_two_words(sac_file)));
-  kt4(binary_to_string(read_two_words(sac_file)));
-  kt5(binary_to_string(read_two_words(sac_file)));
-  kt6(binary_to_string(read_two_words(sac_file)));
-  kt7(binary_to_string(read_two_words(sac_file)));
-  kt8(binary_to_string(read_two_words(sac_file)));
-  kt9(binary_to_string(read_two_words(sac_file)));
-  kf(binary_to_string(read_two_words(sac_file)));
-  kuser0(binary_to_string(read_two_words(sac_file)));
-  kuser1(binary_to_string(read_two_words(sac_file)));
-  kuser2(binary_to_string(read_two_words(sac_file)));
-  kcmpnm(binary_to_string(read_two_words(sac_file)));
-  knetwk(binary_to_string(read_two_words(sac_file)));
-  kdatrd(binary_to_string(read_two_words(sac_file)));
-  kinst(binary_to_string(read_two_words(sac_file)));
+  khole(binary_to_string(read_two_words(sac_file)));   // 116-117
+  ko(binary_to_string(read_two_words(sac_file)));      // 118-119
+  ka(binary_to_string(read_two_words(sac_file)));      // 120-121
+  kt0(binary_to_string(read_two_words(sac_file)));     // 122-123
+  kt1(binary_to_string(read_two_words(sac_file)));     // 124-125
+  kt2(binary_to_string(read_two_words(sac_file)));     // 126-127
+  kt3(binary_to_string(read_two_words(sac_file)));     // 128-129
+  kt4(binary_to_string(read_two_words(sac_file)));     // 130-131
+  kt5(binary_to_string(read_two_words(sac_file)));     // 132-133
+  kt6(binary_to_string(read_two_words(sac_file)));     // 134-135
+  kt7(binary_to_string(read_two_words(sac_file)));     // 136-137
+  kt8(binary_to_string(read_two_words(sac_file)));     // 138-139
+  kt9(binary_to_string(read_two_words(sac_file)));     // 140-141
+  kf(binary_to_string(read_two_words(sac_file)));      // 142-143
+  kuser0(binary_to_string(read_two_words(sac_file)));  // 144-145
+  kuser1(binary_to_string(read_two_words(sac_file)));  // 146-147
+  kuser2(binary_to_string(read_two_words(sac_file)));  // 148-149
+  kcmpnm(binary_to_string(read_two_words(sac_file)));  // 150-151
+  knetwk(binary_to_string(read_two_words(sac_file)));  // 152-153
+  kdatrd(binary_to_string(read_two_words(sac_file)));  // 154-155
+  kinst(binary_to_string(read_two_words(sac_file)));   // 156-157
 }
 
+/*!
+  \brief Reads data vectors.
+
+  Note that this modifies the position of the reader to the end of the data
+  section(s).
+
+  For data1 reads words 158--(158 + npts).
+
+  For data2 reads words (158 + 1 + npts)--(159 + (2 * npts))
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_datas(std::ifstream *sac_file) {
   const bool is_data{npts() != unset_int};
   // data1
@@ -1969,29 +2142,37 @@ void Trace::read_datas(std::ifstream *sac_file) {
   }
 }
 
+/*!
+  \brief Reads SAC-footers (post-data words 00--43).
+
+  Note that this modifies the position of the reader to the end of the footer
+  section.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
 void Trace::read_footers(std::ifstream *sac_file) {
-  delta(binary_to_double(read_two_words(sac_file)));
-  b(binary_to_double(read_two_words(sac_file)));
-  e(binary_to_double(read_two_words(sac_file)));
-  o(binary_to_double(read_two_words(sac_file)));
-  a(binary_to_double(read_two_words(sac_file)));
-  t0(binary_to_double(read_two_words(sac_file)));
-  t1(binary_to_double(read_two_words(sac_file)));
-  t2(binary_to_double(read_two_words(sac_file)));
-  t3(binary_to_double(read_two_words(sac_file)));
-  t4(binary_to_double(read_two_words(sac_file)));
-  t5(binary_to_double(read_two_words(sac_file)));
-  t6(binary_to_double(read_two_words(sac_file)));
-  t7(binary_to_double(read_two_words(sac_file)));
-  t8(binary_to_double(read_two_words(sac_file)));
-  t9(binary_to_double(read_two_words(sac_file)));
-  f(binary_to_double(read_two_words(sac_file)));
-  evlo(binary_to_double(read_two_words(sac_file)));
-  evla(binary_to_double(read_two_words(sac_file)));
-  stlo(binary_to_double(read_two_words(sac_file)));
-  stla(binary_to_double(read_two_words(sac_file)));
-  sb(binary_to_double(read_two_words(sac_file)));
-  sdelta(binary_to_double(read_two_words(sac_file)));
+  delta(binary_to_double(read_two_words(sac_file)));   // 00-01
+  b(binary_to_double(read_two_words(sac_file)));       // 02-03
+  e(binary_to_double(read_two_words(sac_file)));       // 04-05
+  o(binary_to_double(read_two_words(sac_file)));       // 06-07
+  a(binary_to_double(read_two_words(sac_file)));       // 08-09
+  t0(binary_to_double(read_two_words(sac_file)));      // 10-11
+  t1(binary_to_double(read_two_words(sac_file)));      // 12-13
+  t2(binary_to_double(read_two_words(sac_file)));      // 14-15
+  t3(binary_to_double(read_two_words(sac_file)));      // 16-17
+  t4(binary_to_double(read_two_words(sac_file)));      // 18-19
+  t5(binary_to_double(read_two_words(sac_file)));      // 20-21
+  t6(binary_to_double(read_two_words(sac_file)));      // 22-23
+  t7(binary_to_double(read_two_words(sac_file)));      // 24-25
+  t8(binary_to_double(read_two_words(sac_file)));      // 26-27
+  t9(binary_to_double(read_two_words(sac_file)));      // 28-29
+  f(binary_to_double(read_two_words(sac_file)));       // 30-31
+  evlo(binary_to_double(read_two_words(sac_file)));    // 32-33
+  evla(binary_to_double(read_two_words(sac_file)));    // 34-35
+  stlo(binary_to_double(read_two_words(sac_file)));    // 36-37
+  stla(binary_to_double(read_two_words(sac_file)));    // 38-39
+  sb(binary_to_double(read_two_words(sac_file)));      // 40-41
+  sdelta(binary_to_double(read_two_words(sac_file)));  // 42-43
 }
 
 /*!
