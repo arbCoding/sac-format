@@ -488,9 +488,9 @@ std::vector<double> read_data(std::ifstream *sac, const read_spec &spec) {
   sac->seekg(word_position(spec.start_word));
   std::vector<double> result{};
   result.resize(spec.num_words);
-  for (size_t i{0}; i < spec.num_words; ++i) [[likely]] {
-    result[i] = static_cast<double>(binary_to_float(read_word(sac)));
-  }
+  std::for_each(result.begin(), result.end(), [&sac](double &value) {
+    value = static_cast<double>(binary_to_float(read_word(sac)));
+  });
   return result;
 }
 //-----------------------------------------------------------------------------
@@ -510,9 +510,9 @@ std::vector<double> read_data(std::ifstream *sac, const read_spec &spec) {
 void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
   std::ofstream &sac = *sac_file;
   if (sac.is_open()) {
-    for (char character : input) [[likely]] {
+    std::for_each(input.begin(), input.end(), [&sac](const char &character) {
       sac.write(&character, sizeof(char));
-    }
+    });
   }
 }
 
@@ -530,10 +530,9 @@ std::vector<char> convert_to_word(const T input) noexcept {
   // flawfinder: ignore
   std::memcpy(tmp.data(), &input, word_length);
   std::vector<char> word{};
-  word.resize(word_length);
-  for (size_t i{0}; i < word_length; ++i) [[likely]] {
-    word[i] = tmp[i];
-  }
+  word.reserve(word_length);
+  std::for_each(tmp.begin(), tmp.end(),
+                [&word](const char &character) { word.push_back(character); });
   return word;
 }
 
@@ -548,15 +547,15 @@ template std::vector<char> convert_to_word(const int x) noexcept;
   @return std::vector<char> Prepared for writing to binary SAC-file.
  */
 std::vector<char> convert_to_word(const double input) noexcept {
-  std::array<char, static_cast<size_t>(2) * word_length> tmp{};
+  constexpr size_t n_words{static_cast<size_t>(2) * word_length};
+  std::array<char, n_words> tmp{};
   // Copy bytes from input into the tmp array
   // flawfinder: ignore
-  std::memcpy(tmp.data(), &input, static_cast<size_t>(2) * word_length);
+  std::memcpy(tmp.data(), &input, n_words);
   std::vector<char> word{};
-  word.resize(static_cast<size_t>(2) * word_length);
-  for (size_t i{0}; i < 2 * word_length; ++i) {
-    word[i] = tmp[i];
-  }
+  word.reserve(n_words);
+  std::for_each(tmp.begin(), tmp.end(),
+                [&word](const char &character) { word.push_back(character); });
   return word;
 }
 
@@ -571,23 +570,24 @@ std::vector<char> convert_to_word(const double input) noexcept {
   */
 template <size_t N>
 std::array<char, N> convert_to_words(const std::string &str,
-                                     int n_words) noexcept {
+                                     const size_t n_words) noexcept {
+  std::vector<char> tmp{};
+  tmp.reserve(n_words);
+  std::for_each(str.begin(), str.end(),
+                [&tmp](const char &character) { tmp.push_back(character); });
   std::array<char, N> all_words{};
-  // String to null-terminated character array
-  const char *c_str = str.c_str();
-  for (size_t i{0}; i < static_cast<size_t>(n_words) * word_length; ++i) {
-    all_words[i] = c_str[i];
-  }
+  // Move vector to array
+  std::move(tmp.begin(), tmp.end(), all_words.begin());
   return all_words;
 }
 
 // Explicit instantiation
 template std::array<char, word_length>
-convert_to_words(const std::string &str, const int n_words) noexcept;
+convert_to_words(const std::string &str, const size_t n_words) noexcept;
 template std::array<char, 2 * word_length>
-convert_to_words(const std::string &str, const int n_words) noexcept;
+convert_to_words(const std::string &str, const size_t n_words) noexcept;
 template std::array<char, 4 * word_length>
-convert_to_words(const std::string &str, const int n_words) noexcept;
+convert_to_words(const std::string &str, const size_t n_words) noexcept;
 
 /*!
   \brief Convert boolean to a word for writing.
@@ -598,10 +598,8 @@ convert_to_words(const std::string &str, const int n_words) noexcept;
 std::vector<char> bool_to_word(const bool flag) noexcept {
   std::vector<char> result;
   result.resize(word_length);
+  std::fill(result.begin() + 1, result.end(), 0);
   result[0] = static_cast<char>(flag ? 1 : 0);
-  for (size_t i{1}; i < word_length; ++i) {
-    result[i] = 0;
-  }
   return result;
 }
 //-----------------------------------------------------------------------------
@@ -861,11 +859,11 @@ double limit_90(const double degrees) noexcept {
   @returns Default created Trace object.
  */
 Trace::Trace() noexcept {
-  std::ranges::fill(floats.begin(), floats.end(), unset_float);
-  std::ranges::fill(doubles.begin(), doubles.end(), unset_double);
-  std::ranges::fill(ints.begin(), ints.end(), unset_int);
-  std::ranges::fill(bools.begin(), bools.end(), unset_bool);
-  std::ranges::fill(strings.begin(), strings.end(), unset_word);
+  std::fill(floats.begin(), floats.end(), unset_float);
+  std::fill(doubles.begin(), doubles.end(), unset_double);
+  std::fill(ints.begin(), ints.end(), unset_int);
+  std::fill(bools.begin(), bools.end(), unset_bool);
+  std::fill(strings.begin(), strings.end(), unset_word);
 }
 
 /*!
@@ -1766,6 +1764,418 @@ void safe_to_finish_reading(std::ifstream *sac) {
 }
 
 /*!
+  \brief Reads SAC-headers from words 000--009.
+
+  Note that this expects the position of the reader to be the beginning of word
+  000.
+
+  Note that this modifies the position of the reader to the end of word 009.
+
+  Headers loaded: delta, depmin, depmax, odelta, b, e, o, and a.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_float_headers_starter(std::ifstream *sac_file) {
+  delta(binary_to_float(read_word(sac_file)));   // 000
+  depmin(binary_to_float(read_word(sac_file)));  // 001
+  depmax(binary_to_float(read_word(sac_file)));  // 002
+  // Skip 'unused'
+  read_word(sac_file);                           // 003
+  odelta(binary_to_float(read_word(sac_file)));  // 004
+  b(binary_to_float(read_word(sac_file)));       // 005
+  e(binary_to_float(read_word(sac_file)));       // 006
+  o(binary_to_float(read_word(sac_file)));       // 007
+  a(binary_to_float(read_word(sac_file)));       // 008
+  // Skip 'internal'
+  read_word(sac_file);  // 009
+}
+
+/*!
+  \brief Reads SAC-headers from words 010--020.
+
+  Note that this expects the position of the reader to be the beginning of word
+  010.
+
+  Note that this modifies the position of the reader to the end of word 020.
+
+  Headers loaded: t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, and f.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_float_headers_t(std::ifstream *sac_file) {
+  t0(binary_to_float(read_word(sac_file)));  // 010
+  t1(binary_to_float(read_word(sac_file)));  // 011
+  t2(binary_to_float(read_word(sac_file)));  // 012
+  t3(binary_to_float(read_word(sac_file)));  // 013
+  t4(binary_to_float(read_word(sac_file)));  // 014
+  t5(binary_to_float(read_word(sac_file)));  // 015
+  t6(binary_to_float(read_word(sac_file)));  // 016
+  t7(binary_to_float(read_word(sac_file)));  // 017
+  t8(binary_to_float(read_word(sac_file)));  // 018
+  t9(binary_to_float(read_word(sac_file)));  // 019
+  f(binary_to_float(read_word(sac_file)));   // 020
+}
+
+/*!
+  \brief Reads SAC-headers from words 021--030.
+
+  Note that this expects the position of the reader to be the beginning of word
+  021.
+
+  Note that this modifies the position of the reader to the end of word 030.
+
+  Headers loaded: resp0, resp1, resp2, resp3, resp4, resp5, resp6, resp7, resp8,
+  and resp9.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_float_headers_resp(std::ifstream *sac_file) {
+  resp0(binary_to_float(read_word(sac_file)));  // 021
+  resp1(binary_to_float(read_word(sac_file)));  // 022
+  resp2(binary_to_float(read_word(sac_file)));  // 023
+  resp3(binary_to_float(read_word(sac_file)));  // 024
+  resp4(binary_to_float(read_word(sac_file)));  // 025
+  resp5(binary_to_float(read_word(sac_file)));  // 026
+  resp6(binary_to_float(read_word(sac_file)));  // 027
+  resp7(binary_to_float(read_word(sac_file)));  // 028
+  resp8(binary_to_float(read_word(sac_file)));  // 029
+  resp9(binary_to_float(read_word(sac_file)));  // 030
+}
+
+/*!
+  \brief Reads SAC-headers from words 031--039.
+
+  Note that this expects the position of the reader to be the beginning of word
+  031.
+
+  Note that this modifies the position of the reader to the end of word 039.
+
+  Headers loaded: stla, stlo, stel, stdp, evla, evlo, evel, evdp, and mag.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_float_headers_station_event(std::ifstream *sac_file) {
+  // Station headers
+  stla(binary_to_float(read_word(sac_file)));  // 031
+  stlo(binary_to_float(read_word(sac_file)));  // 032
+  stel(binary_to_float(read_word(sac_file)));  // 033
+  stdp(binary_to_float(read_word(sac_file)));  // 034
+  // Event headers
+  evla(binary_to_float(read_word(sac_file)));  // 035
+  evlo(binary_to_float(read_word(sac_file)));  // 036
+  evel(binary_to_float(read_word(sac_file)));  // 037
+  evdp(binary_to_float(read_word(sac_file)));  // 038
+  mag(binary_to_float(read_word(sac_file)));   // 039
+}
+
+/*!
+  \brief Reads SAC-headers from words 040--049.
+
+  Note that this expects the position of the reader to be the beginning of word
+  040.
+
+  Note that this modifies the position of the reader to the end of word 049.
+
+  Headers loaded: user0, user1, user2, user3, user4, user5, user6, user7, user8,
+  and user9.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_float_headers_user(std::ifstream *sac_file) {
+  user0(binary_to_float(read_word(sac_file)));  // 040
+  user1(binary_to_float(read_word(sac_file)));  // 041
+  user2(binary_to_float(read_word(sac_file)));  // 042
+  user3(binary_to_float(read_word(sac_file)));  // 043
+  user4(binary_to_float(read_word(sac_file)));  // 044
+  user5(binary_to_float(read_word(sac_file)));  // 045
+  user6(binary_to_float(read_word(sac_file)));  // 046
+  user7(binary_to_float(read_word(sac_file)));  // 047
+  user8(binary_to_float(read_word(sac_file)));  // 048
+  user9(binary_to_float(read_word(sac_file)));  // 049
+}
+
+/*!
+  \brief Reads SAC-headers from words 050--053.
+
+  Note that this expects the position of the reader to be the beginning of word
+  050.
+
+  Note that this modifies the position of the reader to the end of word 053.
+
+  Headers loaded: dist, az, baz, and gcarc.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_float_headers_geometry(std::ifstream *sac_file) {
+  dist(binary_to_float(read_word(sac_file)));   // 050
+  az(binary_to_float(read_word(sac_file)));     // 051
+  baz(binary_to_float(read_word(sac_file)));    // 052
+  gcarc(binary_to_float(read_word(sac_file)));  // 053
+}
+
+/*!
+  \brief Reads SAC-headers from words 054--069.
+
+  Note that this expects the position of the reader to be the beginning of word
+  054.
+
+  Note that this modifies the position of the reader to the end of word 069.
+
+  Headers loaded: sb, sdelta, depmen, cmpaz, cmpinc, xminimum, xmaximum,
+  yminimum, and ymaximum.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_float_headers_meta(std::ifstream *sac_file) {
+  sb(binary_to_float(read_word(sac_file)));        // 054
+  sdelta(binary_to_float(read_word(sac_file)));    // 055
+  depmen(binary_to_float(read_word(sac_file)));    // 056
+  cmpaz(binary_to_float(read_word(sac_file)));     // 057
+  cmpinc(binary_to_float(read_word(sac_file)));    // 058
+  xminimum(binary_to_float(read_word(sac_file)));  // 059
+  xmaximum(binary_to_float(read_word(sac_file)));  // 060
+  yminimum(binary_to_float(read_word(sac_file)));  // 061
+  ymaximum(binary_to_float(read_word(sac_file)));  // 062
+  // Skip 'unused' (xcommon_skip_num)
+  for (int i{0}; i < common_skip_num; ++i) {  // 063--069
+    read_word(sac_file);
+  }
+}
+
+/*!
+  \brief Reads SAC-headers from words 000--069.
+
+  Note that this expects the position of the reader to be the beginning of word
+  000.
+
+  Note that this modifies the position of the reader to the end of word 069.
+
+  Loads all the float headers.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+  */
+void Trace::read_float_headers(std::ifstream *sac_file) {
+  read_float_headers_starter(sac_file);        // 000-009
+  read_float_headers_t(sac_file);              // 010-020
+  read_float_headers_resp(sac_file);           // 021-030
+  read_float_headers_station_event(sac_file);  // 031-039
+  read_float_headers_user(sac_file);           // 040-049
+  read_float_headers_geometry(sac_file);       // 050-053
+  read_float_headers_meta(sac_file);           // 054-069
+}
+
+/*!
+  \brief Reads SAC-headers from words 070--075.
+
+  Note that this expects the position of the reader to be the beginning of word
+  070.
+
+  Note that this modifies the position of the reader to the end of word 075.
+
+  Headers loaded: nzyear, nzjday, nzhour, nzmin, nzsec, and nzmsec.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_int_headers_datetime(std::ifstream *sac_file) {
+  nzyear(binary_to_int(read_word(sac_file)));  // 070
+  nzjday(binary_to_int(read_word(sac_file)));  // 071
+  nzhour(binary_to_int(read_word(sac_file)));  // 072
+  nzmin(binary_to_int(read_word(sac_file)));   // 073
+  nzsec(binary_to_int(read_word(sac_file)));   // 074
+  nzmsec(binary_to_int(read_word(sac_file)));  // 075
+}
+
+/*!
+  \brief Reads SAC-headers from words 076--104.
+
+  Note that this expects the position of the reader to be the beginning of word
+  076.
+
+  Note that this modifies the position of the reader to the end of word 104.
+
+  Headers loaded: nvhdr, norid, nevid, npts, nsnpts, nwfid, nxsize, nysize,
+  iftype, idep, iztype, iinst, istreg, ievreg, ievtyp, iqual, isynth, imagtyp,
+  imagsrc, and ibody.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_int_headers_meta(std::ifstream *sac_file) {
+  nvhdr(binary_to_int(read_word(sac_file)));   // 076
+  norid(binary_to_int(read_word(sac_file)));   // 077
+  nevid(binary_to_int(read_word(sac_file)));   // 078
+  npts(binary_to_int(read_word(sac_file)));    // 079
+  nsnpts(binary_to_int(read_word(sac_file)));  // 080
+  nwfid(binary_to_int(read_word(sac_file)));   // 081
+  nxsize(binary_to_int(read_word(sac_file)));  // 082
+  nysize(binary_to_int(read_word(sac_file)));  // 083
+  // Skip 'unused'
+  read_word(sac_file);                         // 084
+  iftype(binary_to_int(read_word(sac_file)));  // 085
+  idep(binary_to_int(read_word(sac_file)));    // 086
+  iztype(binary_to_int(read_word(sac_file)));  // 087
+  // Skip 'unused'
+  read_word(sac_file);                          // 088
+  iinst(binary_to_int(read_word(sac_file)));    // 089
+  istreg(binary_to_int(read_word(sac_file)));   // 090
+  ievreg(binary_to_int(read_word(sac_file)));   // 091
+  ievtyp(binary_to_int(read_word(sac_file)));   // 092
+  iqual(binary_to_int(read_word(sac_file)));    // 093
+  isynth(binary_to_int(read_word(sac_file)));   // 094
+  imagtyp(binary_to_int(read_word(sac_file)));  // 095
+  imagsrc(binary_to_int(read_word(sac_file)));  // 096
+  ibody(binary_to_int(read_word(sac_file)));    // 097
+  // Skip 'unused' (xcommon_skip_num)
+  for (int i{0}; i < common_skip_num; ++i) {  // 098--104
+    read_word(sac_file);
+  }
+}
+
+/*!
+  \brief Reads SAC-headers from words 070--104.
+
+  Note that this expects the position of the reader to be the beginning of word
+  070.
+
+  Note that this modifies the position of the reader to the end of word 104.
+
+  Loads all integer headers.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_int_headers(std::ifstream *sac_file) {
+  read_int_headers_datetime(sac_file);  // 070--075
+  read_int_headers_meta(sac_file);      // 076--104
+}
+
+/*!
+  \brief Reads SAC-headers from words 105--109.
+
+  Note that this expects the position of the reader to be the beginning of word
+  105.
+
+  Note that this modifies the position of the reader to the end of word 109.
+
+  Loads all boolean headers.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_bool_headers(std::ifstream *sac_file) {
+  // Logical headers
+  leven(binary_to_bool(read_word(sac_file)));   // 105
+  lpspol(binary_to_bool(read_word(sac_file)));  // 106
+  lovrok(binary_to_bool(read_word(sac_file)));  // 107
+  lcalda(binary_to_bool(read_word(sac_file)));  // 108
+  // Skip 'unused'
+  read_word(sac_file);  // 109
+}
+
+/*!
+  \brief Reads SAC-headers from words 110--157.
+
+  Note that this expects the position of the reader to be the beginning of word
+  110.
+
+  Note that this modifies the position of the reader to the end of word 157.
+
+  Loads all string headers.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_string_headers(std::ifstream *sac_file) {
+  // KSTNM is 2 words (normal)
+  kstnm(binary_to_string(read_two_words(sac_file)));  // 110-111
+  // KEVNM is 4 words long (unique!)
+  kevnm(binary_to_long_string(read_four_words(sac_file)));  // 112-115
+  // All other 'K' headers are 2 words
+  khole(binary_to_string(read_two_words(sac_file)));   // 116-117
+  ko(binary_to_string(read_two_words(sac_file)));      // 118-119
+  ka(binary_to_string(read_two_words(sac_file)));      // 120-121
+  kt0(binary_to_string(read_two_words(sac_file)));     // 122-123
+  kt1(binary_to_string(read_two_words(sac_file)));     // 124-125
+  kt2(binary_to_string(read_two_words(sac_file)));     // 126-127
+  kt3(binary_to_string(read_two_words(sac_file)));     // 128-129
+  kt4(binary_to_string(read_two_words(sac_file)));     // 130-131
+  kt5(binary_to_string(read_two_words(sac_file)));     // 132-133
+  kt6(binary_to_string(read_two_words(sac_file)));     // 134-135
+  kt7(binary_to_string(read_two_words(sac_file)));     // 136-137
+  kt8(binary_to_string(read_two_words(sac_file)));     // 138-139
+  kt9(binary_to_string(read_two_words(sac_file)));     // 140-141
+  kf(binary_to_string(read_two_words(sac_file)));      // 142-143
+  kuser0(binary_to_string(read_two_words(sac_file)));  // 144-145
+  kuser1(binary_to_string(read_two_words(sac_file)));  // 146-147
+  kuser2(binary_to_string(read_two_words(sac_file)));  // 148-149
+  kcmpnm(binary_to_string(read_two_words(sac_file)));  // 150-151
+  knetwk(binary_to_string(read_two_words(sac_file)));  // 152-153
+  kdatrd(binary_to_string(read_two_words(sac_file)));  // 154-155
+  kinst(binary_to_string(read_two_words(sac_file)));   // 156-157
+}
+
+/*!
+  \brief Reads data vectors.
+
+  Note that this modifies the position of the reader to the end of the data
+  section(s).
+
+  For data1 reads words 158--(158 + npts).
+
+  For data2 reads words (158 + 1 + npts)--(159 + (2 * npts))
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_datas(std::ifstream *sac_file) {
+  const bool is_data{npts() != unset_int};
+  // data1
+  const size_t n_words{static_cast<size_t>(npts())};
+  if (is_data) {
+    // false flags for data1
+    safe_to_read_data(sac_file, n_words, false);  // throws io_error if unsafe
+    const read_spec spec{n_words, data_word};
+    // Originally floats, read as doubles
+    data1(read_data(sac_file, spec));
+  }
+  // data2 (uneven or spectral data)
+  if (is_data && (!leven() || (iftype() > 1))) {
+    // true flags for data2
+    safe_to_read_data(sac_file, n_words, true);  // throws io_error if unsafe
+    const read_spec spec{n_words, data_word + static_cast<size_t>(npts())};
+    data2(read_data(sac_file, spec));
+  }
+}
+
+/*!
+  \brief Reads SAC-footers (post-data words 00--43).
+
+  Note that this modifies the position of the reader to the end of the footer
+  section.
+
+  @param[in,out] sac_file std::ifstream* SAC-file to be read.
+ */
+void Trace::read_footers(std::ifstream *sac_file) {
+  delta(binary_to_double(read_two_words(sac_file)));   // 00-01
+  b(binary_to_double(read_two_words(sac_file)));       // 02-03
+  e(binary_to_double(read_two_words(sac_file)));       // 04-05
+  o(binary_to_double(read_two_words(sac_file)));       // 06-07
+  a(binary_to_double(read_two_words(sac_file)));       // 08-09
+  t0(binary_to_double(read_two_words(sac_file)));      // 10-11
+  t1(binary_to_double(read_two_words(sac_file)));      // 12-13
+  t2(binary_to_double(read_two_words(sac_file)));      // 14-15
+  t3(binary_to_double(read_two_words(sac_file)));      // 16-17
+  t4(binary_to_double(read_two_words(sac_file)));      // 18-19
+  t5(binary_to_double(read_two_words(sac_file)));      // 20-21
+  t6(binary_to_double(read_two_words(sac_file)));      // 22-23
+  t7(binary_to_double(read_two_words(sac_file)));      // 24-25
+  t8(binary_to_double(read_two_words(sac_file)));      // 26-27
+  t9(binary_to_double(read_two_words(sac_file)));      // 28-29
+  f(binary_to_double(read_two_words(sac_file)));       // 30-31
+  evlo(binary_to_double(read_two_words(sac_file)));    // 32-33
+  evla(binary_to_double(read_two_words(sac_file)));    // 34-35
+  stlo(binary_to_double(read_two_words(sac_file)));    // 36-37
+  stla(binary_to_double(read_two_words(sac_file)));    // 38-39
+  sb(binary_to_double(read_two_words(sac_file)));      // 40-41
+  sdelta(binary_to_double(read_two_words(sac_file)));  // 42-43
+}
+
+/*!
   \brief Binary SAC-file reader.
 
   @param[in] path std::filesystem::path SAC-file to be read.
@@ -1779,198 +2189,14 @@ Trace::Trace(const std::filesystem::path &path) {
     throw io_error(path.string() + " cannot be opened to read.");
   }
   safe_to_read_header(&file);  // throws io_error if not safe
-  //--------------------------------------------------------------------------
-  // Header
-  delta(binary_to_float(read_word(&file)));
-  depmin(binary_to_float(read_word(&file)));
-  depmax(binary_to_float(read_word(&file)));
-  // Skip 'unused'
-  read_word(&file);
-  odelta(binary_to_float(read_word(&file)));
-  b(binary_to_float(read_word(&file)));
-  e(binary_to_float(read_word(&file)));
-  o(binary_to_float(read_word(&file)));
-  a(binary_to_float(read_word(&file)));
-  // Skip 'internal'
-  read_word(&file);
-  // T# pick headers
-  t0(binary_to_float(read_word(&file)));
-  t1(binary_to_float(read_word(&file)));
-  t2(binary_to_float(read_word(&file)));
-  t3(binary_to_float(read_word(&file)));
-  t4(binary_to_float(read_word(&file)));
-  t5(binary_to_float(read_word(&file)));
-  t6(binary_to_float(read_word(&file)));
-  t7(binary_to_float(read_word(&file)));
-  t8(binary_to_float(read_word(&file)));
-  t9(binary_to_float(read_word(&file)));
-  f(binary_to_float(read_word(&file)));
-  // Response headers
-  resp0(binary_to_float(read_word(&file)));
-  resp1(binary_to_float(read_word(&file)));
-  resp2(binary_to_float(read_word(&file)));
-  resp3(binary_to_float(read_word(&file)));
-  resp4(binary_to_float(read_word(&file)));
-  resp5(binary_to_float(read_word(&file)));
-  resp6(binary_to_float(read_word(&file)));
-  resp7(binary_to_float(read_word(&file)));
-  resp8(binary_to_float(read_word(&file)));
-  resp9(binary_to_float(read_word(&file)));
-  // Station headers
-  stla(binary_to_float(read_word(&file)));
-  stlo(binary_to_float(read_word(&file)));
-  stel(binary_to_float(read_word(&file)));
-  stdp(binary_to_float(read_word(&file)));
-  // Event headers
-  evla(binary_to_float(read_word(&file)));
-  evlo(binary_to_float(read_word(&file)));
-  evel(binary_to_float(read_word(&file)));
-  evdp(binary_to_float(read_word(&file)));
-  mag(binary_to_float(read_word(&file)));
-  // User misc headers
-  user0(binary_to_float(read_word(&file)));
-  user1(binary_to_float(read_word(&file)));
-  user2(binary_to_float(read_word(&file)));
-  user3(binary_to_float(read_word(&file)));
-  user4(binary_to_float(read_word(&file)));
-  user5(binary_to_float(read_word(&file)));
-  user6(binary_to_float(read_word(&file)));
-  user7(binary_to_float(read_word(&file)));
-  user8(binary_to_float(read_word(&file)));
-  user9(binary_to_float(read_word(&file)));
-  // Geometry headers
-  dist(binary_to_float(read_word(&file)));
-  az(binary_to_float(read_word(&file)));
-  baz(binary_to_float(read_word(&file)));
-  gcarc(binary_to_float(read_word(&file)));
-  // Metadata headers
-  sb(binary_to_float(read_word(&file)));
-  sdelta(binary_to_float(read_word(&file)));
-  depmen(binary_to_float(read_word(&file)));
-  cmpaz(binary_to_float(read_word(&file)));
-  cmpinc(binary_to_float(read_word(&file)));
-  xminimum(binary_to_float(read_word(&file)));
-  xmaximum(binary_to_float(read_word(&file)));
-  yminimum(binary_to_float(read_word(&file)));
-  ymaximum(binary_to_float(read_word(&file)));
-  // Skip 'unused' (xcommon_skip_num)
-  for (int i{0}; i < common_skip_num; ++i) {
-    read_word(&file);
-  }
-  // Date/time headers
-  nzyear(binary_to_int(read_word(&file)));
-  nzjday(binary_to_int(read_word(&file)));
-  nzhour(binary_to_int(read_word(&file)));
-  nzmin(binary_to_int(read_word(&file)));
-  nzsec(binary_to_int(read_word(&file)));
-  nzmsec(binary_to_int(read_word(&file)));
-  // More metadata headers
-  nvhdr(binary_to_int(read_word(&file)));
-  norid(binary_to_int(read_word(&file)));
-  nevid(binary_to_int(read_word(&file)));
-  npts(binary_to_int(read_word(&file)));
-  nsnpts(binary_to_int(read_word(&file)));
-  nwfid(binary_to_int(read_word(&file)));
-  nxsize(binary_to_int(read_word(&file)));
-  nysize(binary_to_int(read_word(&file)));
-  // Skip 'unused'
-  read_word(&file);
-  iftype(binary_to_int(read_word(&file)));
-  idep(binary_to_int(read_word(&file)));
-  iztype(binary_to_int(read_word(&file)));
-  // Skip 'unused'
-  read_word(&file);
-  iinst(binary_to_int(read_word(&file)));
-  istreg(binary_to_int(read_word(&file)));
-  ievreg(binary_to_int(read_word(&file)));
-  ievtyp(binary_to_int(read_word(&file)));
-  iqual(binary_to_int(read_word(&file)));
-  isynth(binary_to_int(read_word(&file)));
-  imagtyp(binary_to_int(read_word(&file)));
-  imagsrc(binary_to_int(read_word(&file)));
-  ibody(binary_to_int(read_word(&file)));
-  // Skip 'unused' (xcommon_skip_num)
-  for (int i{0}; i < common_skip_num; ++i) {
-    read_word(&file);
-  }
-  // Logical headers
-  leven(binary_to_bool(read_word(&file)));
-  lpspol(binary_to_bool(read_word(&file)));
-  lovrok(binary_to_bool(read_word(&file)));
-  lcalda(binary_to_bool(read_word(&file)));
-  // Skip 'unused'
-  read_word(&file);
-  // KSTNM is 2 words (normal)
-  kstnm(binary_to_string(read_two_words(&file)));
-  // KEVNM is 4 words long (unique!)
-  kevnm(binary_to_long_string(read_four_words(&file)));
-  // All other 'K' headers are 2 words
-  khole(binary_to_string(read_two_words(&file)));
-  ko(binary_to_string(read_two_words(&file)));
-  ka(binary_to_string(read_two_words(&file)));
-  kt0(binary_to_string(read_two_words(&file)));
-  kt1(binary_to_string(read_two_words(&file)));
-  kt2(binary_to_string(read_two_words(&file)));
-  kt3(binary_to_string(read_two_words(&file)));
-  kt4(binary_to_string(read_two_words(&file)));
-  kt5(binary_to_string(read_two_words(&file)));
-  kt6(binary_to_string(read_two_words(&file)));
-  kt7(binary_to_string(read_two_words(&file)));
-  kt8(binary_to_string(read_two_words(&file)));
-  kt9(binary_to_string(read_two_words(&file)));
-  kf(binary_to_string(read_two_words(&file)));
-  kuser0(binary_to_string(read_two_words(&file)));
-  kuser1(binary_to_string(read_two_words(&file)));
-  kuser2(binary_to_string(read_two_words(&file)));
-  kcmpnm(binary_to_string(read_two_words(&file)));
-  knetwk(binary_to_string(read_two_words(&file)));
-  kdatrd(binary_to_string(read_two_words(&file)));
-  kinst(binary_to_string(read_two_words(&file)));
-  //--------------------------------------------------------------------------
-  // DATA
-  const bool is_data{npts() != unset_int};
-  // data1
-  const size_t n_words{static_cast<size_t>(npts())};
-  if (is_data) {
-    // false flags for data1
-    safe_to_read_data(&file, n_words, false);  // throws io_error if unsafe
-    const read_spec spec{n_words, data_word};
-    // Originally floats, read as doubles
-    data1(read_data(&file, spec));
-  }
-  // data2 (uneven or spectral data)
-  if (is_data && (!leven() || (iftype() > 1))) {
-    // true flags for data2
-    safe_to_read_data(&file, n_words, true);  // throws io_error if unsafe
-    const read_spec spec{n_words, data_word + static_cast<size_t>(npts())};
-    data2(read_data(&file, spec));
-  }
-  //--------------------------------------------------------------------------
-  // Footer
+  read_float_headers(&file);
+  read_int_headers(&file);
+  read_bool_headers(&file);
+  read_string_headers(&file);
+  read_datas(&file);
   if (nvhdr() == modern_hdr_version) {
     safe_to_read_footer(&file);  // throws io_error if not safe
-    delta(binary_to_double(read_two_words(&file)));
-    b(binary_to_double(read_two_words(&file)));
-    e(binary_to_double(read_two_words(&file)));
-    o(binary_to_double(read_two_words(&file)));
-    a(binary_to_double(read_two_words(&file)));
-    t0(binary_to_double(read_two_words(&file)));
-    t1(binary_to_double(read_two_words(&file)));
-    t2(binary_to_double(read_two_words(&file)));
-    t3(binary_to_double(read_two_words(&file)));
-    t4(binary_to_double(read_two_words(&file)));
-    t5(binary_to_double(read_two_words(&file)));
-    t6(binary_to_double(read_two_words(&file)));
-    t7(binary_to_double(read_two_words(&file)));
-    t8(binary_to_double(read_two_words(&file)));
-    t9(binary_to_double(read_two_words(&file)));
-    f(binary_to_double(read_two_words(&file)));
-    evlo(binary_to_double(read_two_words(&file)));
-    evla(binary_to_double(read_two_words(&file)));
-    stlo(binary_to_double(read_two_words(&file)));
-    stla(binary_to_double(read_two_words(&file)));
-    sb(binary_to_double(read_two_words(&file)));
-    sdelta(binary_to_double(read_two_words(&file)));
+    read_footers(&file);
   }
   safe_to_finish_reading(&file);  // throws io_error if the file isn't finished
   file.close();
@@ -1978,6 +2204,476 @@ Trace::Trace(const std::filesystem::path &path) {
 //------------------------------------------------------------------------------
 // Write
 //------------------------------------------------------------------------------
+/*!
+  \brief Writes data vectors.
+
+  Note that this modifies the position of the writer to the end of the data
+  section wriitten.
+
+  For data1 writes words 158--(158 + npts).
+
+  For data2 writess words (158 + 1 + npts)--(159 + (2 * npts))
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+  @param[in] data_vec std::vector<double> Data-vector to write.
+ */
+void Trace::write_data(std::ofstream *sac_file,
+                       const std::vector<double> &data_vec) {
+  std::for_each(
+      data_vec.begin(), data_vec.end(), [&sac_file](const auto &value) {
+        write_words(sac_file, convert_to_word(static_cast<float>(value)));
+      });
+}
+
+/*!
+  \brief Writes SAC-headers from words 000--009.
+
+  Note that this expects the position of the writer to be the beginning of word
+  000.
+
+  Note that this modifies the position of the writer to the end of word 009.
+
+  Headers written: delta, depmin, depmax, odelta, b, e, o, and a.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_float_headers_starter(std::ofstream *sac_file) const {
+  write_words(sac_file, convert_to_word(static_cast<float>(delta())));  // 000
+  write_words(sac_file, convert_to_word(depmin()));                     // 001
+  write_words(sac_file, convert_to_word(depmax()));                     // 002
+  // Fill 'unused'
+  write_words(sac_file, convert_to_word(depmax()));                 // 003
+  write_words(sac_file, convert_to_word(odelta()));                 // 004
+  write_words(sac_file, convert_to_word(static_cast<float>(b())));  // 005
+  write_words(sac_file, convert_to_word(static_cast<float>(e())));  // 006
+  write_words(sac_file, convert_to_word(static_cast<float>(o())));  // 007
+  write_words(sac_file, convert_to_word(static_cast<float>(a())));  // 008
+  // Fill 'internal'
+  write_words(sac_file, convert_to_word(depmin()));  // 009
+}
+
+/*!
+  \brief Writes SAC-headers from words 010--020.
+
+  Note that this expects the position of the writer to be the beginning of word
+  010.
+
+  Note that this modifies the position of the writer to the end of word 020.
+
+  Headers written: t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, and f.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_float_headers_t(std::ofstream *sac_file) const {
+  write_words(sac_file, convert_to_word(static_cast<float>(t0())));  // 010
+  write_words(sac_file, convert_to_word(static_cast<float>(t1())));  // 011
+  write_words(sac_file, convert_to_word(static_cast<float>(t2())));  // 012
+  write_words(sac_file, convert_to_word(static_cast<float>(t3())));  // 013
+  write_words(sac_file, convert_to_word(static_cast<float>(t4())));  // 014
+  write_words(sac_file, convert_to_word(static_cast<float>(t5())));  // 015
+  write_words(sac_file, convert_to_word(static_cast<float>(t6())));  // 016
+  write_words(sac_file, convert_to_word(static_cast<float>(t7())));  // 017
+  write_words(sac_file, convert_to_word(static_cast<float>(t8())));  // 018
+  write_words(sac_file, convert_to_word(static_cast<float>(t9())));  // 019
+  write_words(sac_file, convert_to_word(static_cast<float>(f())));   // 020
+}
+
+/*!
+  \brief Writes SAC-headers from words 021--030.
+
+  Note that this expects the position of the writer to be the beginning of word
+  021.
+
+  Note that this modifies the position of the writer to the end of word 030.
+
+  Headers written: resp0, resp1, resp2, resp3, resp4, resp5, resp6, resp7,
+  resp8, and resp9.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_float_headers_resp(std::ofstream *sac_file) const {
+  write_words(sac_file, convert_to_word(resp0()));  // 021
+  write_words(sac_file, convert_to_word(resp1()));  // 022
+  write_words(sac_file, convert_to_word(resp2()));  // 023
+  write_words(sac_file, convert_to_word(resp3()));  // 024
+  write_words(sac_file, convert_to_word(resp4()));  // 025
+  write_words(sac_file, convert_to_word(resp5()));  // 026
+  write_words(sac_file, convert_to_word(resp6()));  // 027
+  write_words(sac_file, convert_to_word(resp7()));  // 028
+  write_words(sac_file, convert_to_word(resp8()));  // 029
+  write_words(sac_file, convert_to_word(resp9()));  // 030
+}
+
+/*!
+  \brief Writes SAC-headers from words 031--039.
+
+  Note that this expects the position of the writer to be the beginning of word
+  031.
+
+  Note that this modifies the position of the writer to the end of word 039.
+
+  Headers written: stla, stlo, stel, stdp, evla, evlo, evel, evdp, and mag.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_float_headers_station_event(std::ofstream *sac_file) const {
+  write_words(sac_file, convert_to_word(static_cast<float>(stla())));  // 031
+  write_words(sac_file, convert_to_word(static_cast<float>(stlo())));  // 032
+  write_words(sac_file, convert_to_word(stel()));                      // 033
+  write_words(sac_file, convert_to_word(stdp()));                      // 034
+  write_words(sac_file, convert_to_word(static_cast<float>(evla())));  // 035
+  write_words(sac_file, convert_to_word(static_cast<float>(evlo())));  // 036
+  write_words(sac_file, convert_to_word(evel()));                      // 037
+  write_words(sac_file, convert_to_word(evdp()));                      // 038
+  write_words(sac_file, convert_to_word(mag()));                       // 039
+}
+
+/*!
+  \brief Writes SAC-headers from words 040--049.
+
+  Note that this expects the position of the writer to be the beginning of word
+  040.
+
+  Note that this modifies the position of the writer to the end of word 049.
+
+  Headers written: user0, user1, user2, user3, user4, user5, user6, user7,
+  user8, and user9.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_float_headers_user(std::ofstream *sac_file) const {
+  write_words(sac_file, convert_to_word(user0()));  // 040
+  write_words(sac_file, convert_to_word(user1()));  // 041
+  write_words(sac_file, convert_to_word(user2()));  // 042
+  write_words(sac_file, convert_to_word(user3()));  // 043
+  write_words(sac_file, convert_to_word(user4()));  // 044
+  write_words(sac_file, convert_to_word(user5()));  // 045
+  write_words(sac_file, convert_to_word(user6()));  // 046
+  write_words(sac_file, convert_to_word(user7()));  // 047
+  write_words(sac_file, convert_to_word(user8()));  // 048
+  write_words(sac_file, convert_to_word(user9()));  // 049
+}
+
+/*!
+  \brief Writes SAC-headers from words 050--053.
+
+  Note that this expects the position of the writer to be the beginning of word
+  050.
+
+  Note that this modifies the position of the writer to the end of word 053.
+
+  Headers written: dist, az, baz, and gcarc.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_float_headers_geometry(std::ofstream *sac_file) const {
+  write_words(sac_file, convert_to_word(dist()));   // 050
+  write_words(sac_file, convert_to_word(az()));     // 051
+  write_words(sac_file, convert_to_word(baz()));    // 052
+  write_words(sac_file, convert_to_word(gcarc()));  // 053
+}
+
+/*!
+  \brief Writes SAC-headers from words 054--069.
+
+  Note that this expects the position of the writer to be the beginning of word
+  054.
+
+  Note that this modifies the position of the writer to the end of word 069.
+
+  Headers written: sb, sdelta, depmen, cmpaz, cmpinc, xminimum, xmaximum,
+  yminimum, and ymaximum.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_float_headers_meta(std::ofstream *sac_file) const {
+  write_words(sac_file, convert_to_word(static_cast<float>(sb())));      // 054
+  write_words(sac_file, convert_to_word(static_cast<float>(sdelta())));  // 055
+  write_words(sac_file, convert_to_word(depmen()));                      // 056
+  write_words(sac_file, convert_to_word(cmpaz()));                       // 057
+  write_words(sac_file, convert_to_word(cmpinc()));                      // 058
+  write_words(sac_file, convert_to_word(xminimum()));                    // 059
+  write_words(sac_file, convert_to_word(xmaximum()));                    // 060
+  write_words(sac_file, convert_to_word(yminimum()));                    // 061
+  write_words(sac_file, convert_to_word(ymaximum()));                    // 062
+  // Fill 'unused' (xcommon_skip_num)
+  for (int i{0}; i < common_skip_num; ++i) {  // 063-069
+    write_words(sac_file, convert_to_word(az()));
+  }
+}
+
+/*!
+  \brief Writes SAC-headers from words 000--069.
+
+  Note that this expects the position of the writer to be the beginning of word
+  000.
+
+  Note that this modifies the position of the writer to the end of word 069.
+
+  Writes all the float headers.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+  */
+void Trace::write_float_headers(std::ofstream *sac_file) const {
+  write_float_headers_starter(sac_file);        // 000-009
+  write_float_headers_t(sac_file);              // 010-020
+  write_float_headers_resp(sac_file);           // 031-030
+  write_float_headers_station_event(sac_file);  // 031-039
+  write_float_headers_user(sac_file);           // 040-049
+  write_float_headers_geometry(sac_file);       // 050-053
+  write_float_headers_meta(sac_file);           // 054-069
+}
+
+/*!
+  \brief Writes SAC-headers from words 070--075.
+
+  Note that this expects the position of the writer to be the beginning of word
+  070.
+
+  Note that this modifies the position of the writer to the end of word 075.
+
+  Headers written: nzyear, nzjday, nzhour, nzmin, nzsec, and nzmsec.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_int_headers_datetime(std::ofstream *sac_file) const {
+  write_words(sac_file, convert_to_word(nzyear()));  // 070
+  write_words(sac_file, convert_to_word(nzjday()));  // 071
+  write_words(sac_file, convert_to_word(nzhour()));  // 072
+  write_words(sac_file, convert_to_word(nzmin()));   // 073
+  write_words(sac_file, convert_to_word(nzsec()));   // 074
+  write_words(sac_file, convert_to_word(nzmsec()));  // 075
+}
+
+/*!
+  \brief Writes SAC-headers from words 076--104.
+
+  Note that this expects the position of the writer to be the beginning of word
+  076.
+
+  Note that this modifies the position of the writer to the end of word 104.
+
+  Headers written: nvhdr, norid, nevid, npts, nsnpts, nwfid, nxsize, nysize,
+  iftype, idep, iztype, iinst, istreg, ievreg, ievtyp, iqual, isynth, imagtyp,
+  imagsrc, and ibody.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+  @param[in] hdr_ver Integer header version to be written.
+ */
+void Trace::write_int_headers_meta(std::ofstream *sac_file,
+                                   const int hdr_ver) const {
+  write_words(sac_file, convert_to_word(hdr_ver));   // 076
+  write_words(sac_file, convert_to_word(norid()));   // 077
+  write_words(sac_file, convert_to_word(nevid()));   // 078
+  write_words(sac_file, convert_to_word(npts()));    // 079
+  write_words(sac_file, convert_to_word(nsnpts()));  // 080
+  write_words(sac_file, convert_to_word(nwfid()));   // 081
+  write_words(sac_file, convert_to_word(nxsize()));  // 082
+  write_words(sac_file, convert_to_word(nysize()));  // 083
+  // Fill 'unused'
+  write_words(sac_file, convert_to_word(nysize()));  // 084
+  write_words(sac_file, convert_to_word(iftype()));  // 085
+  write_words(sac_file, convert_to_word(idep()));    // 086
+  write_words(sac_file, convert_to_word(iztype()));  // 087
+  // Fill 'unused'
+  write_words(sac_file, convert_to_word(iztype()));   // 088
+  write_words(sac_file, convert_to_word(iinst()));    // 089
+  write_words(sac_file, convert_to_word(istreg()));   // 090
+  write_words(sac_file, convert_to_word(ievreg()));   // 091
+  write_words(sac_file, convert_to_word(ievtyp()));   // 092
+  write_words(sac_file, convert_to_word(iqual()));    // 093
+  write_words(sac_file, convert_to_word(isynth()));   // 094
+  write_words(sac_file, convert_to_word(imagtyp()));  // 095
+  write_words(sac_file, convert_to_word(imagsrc()));  // 096
+  write_words(sac_file, convert_to_word(ibody()));    // 097
+  // Fill 'unused' (xcommon_skip_num)
+  for (int i{0}; i < common_skip_num; ++i) {  // 098-104
+    write_words(sac_file, convert_to_word(ibody()));
+  }
+}
+
+/*!
+  \brief Writes SAC-headers from words 070--104.
+
+  Note that this expects the position of the writer to be the beginning of word
+  070.
+
+  Note that this modifies the position of the writer to the end of word 104.
+
+  Writes all integer headers.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+  @param[in] hdr_ver Integer header version to be written.
+ */
+void Trace::write_int_headers(std::ofstream *sac_file,
+                              const int hdr_ver) const {
+  write_int_headers_datetime(sac_file);       // 070-075
+  write_int_headers_meta(sac_file, hdr_ver);  // 076-104
+}
+
+/*!
+  \brief Writes SAC-headers from words 105--109.
+
+  Note that this expects the position of the writer to be the beginning of word
+  105.
+
+  Note that this modifies the position of the writer to the end of word 109.
+
+  Writes all boolean headers.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_bool_headers(std::ofstream *sac_file) const {
+  write_words(sac_file, bool_to_word(leven()));   // 105
+  write_words(sac_file, bool_to_word(lpspol()));  // 106
+  write_words(sac_file, bool_to_word(lovrok()));  // 107
+  write_words(sac_file, bool_to_word(lcalda()));  // 108
+  // Fill 'unused'
+  write_words(sac_file, bool_to_word(lcalda()));  // 109
+}
+
+/*!
+  \brief Writes SAC-headers from words 110--157.
+
+  Note that this expects the position of the writer to be the beginning of word
+  110.
+
+  Note that this modifies the position of the writer to the end of word 157.
+
+  Writes all string headers.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_string_headers(std::ofstream *sac_file) const {
+  // Strings are special
+  std::array<char, static_cast<size_t>(2) * word_length> two_words{
+      convert_to_words<sizeof(two_words)>(kstnm(), 2)};
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 110-111
+
+  std::array<char, static_cast<size_t>(4) * word_length> four_words{
+      convert_to_words<sizeof(four_words)>(kevnm(), 4)};
+  write_words(sac_file, std::vector<char>(four_words.begin(),
+                                          four_words.end()));  // 112-115
+
+  two_words = convert_to_words<sizeof(two_words)>(khole(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 116-117
+
+  two_words = convert_to_words<sizeof(two_words)>(ko(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 118-119
+
+  two_words = convert_to_words<sizeof(two_words)>(ka(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 120-121
+
+  two_words = convert_to_words<sizeof(two_words)>(kt0(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 122-123
+
+  two_words = convert_to_words<sizeof(two_words)>(kt1(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 124-125
+
+  two_words = convert_to_words<sizeof(two_words)>(kt2(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 126-127
+
+  two_words = convert_to_words<sizeof(two_words)>(kt3(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 128-129
+
+  two_words = convert_to_words<sizeof(two_words)>(kt4(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 130-131
+
+  two_words = convert_to_words<sizeof(two_words)>(kt5(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 132-133
+
+  two_words = convert_to_words<sizeof(two_words)>(kt6(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 134-135
+
+  two_words = convert_to_words<sizeof(two_words)>(kt7(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 136-137
+
+  two_words = convert_to_words<sizeof(two_words)>(kt8(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 138-139
+
+  two_words = convert_to_words<sizeof(two_words)>(kt9(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 140-141
+
+  two_words = convert_to_words<sizeof(two_words)>(kf(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 142-143
+
+  two_words = convert_to_words<sizeof(two_words)>(kuser0(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 144-145
+
+  two_words = convert_to_words<sizeof(two_words)>(kuser1(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 146-147
+
+  two_words = convert_to_words<sizeof(two_words)>(kuser2(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 148-149
+
+  two_words = convert_to_words<sizeof(two_words)>(kcmpnm(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 150-151
+
+  two_words = convert_to_words<sizeof(two_words)>(knetwk(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 152-153
+
+  two_words = convert_to_words<sizeof(two_words)>(kdatrd(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 154-155
+
+  two_words = convert_to_words<sizeof(two_words)>(kinst(), 2);
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 156-157
+}
+
+/*!
+  \brief Writes SAC-footers (post-data words 00--43).
+
+  Note that this modifies the position of the writer to the end of the footer
+  section.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
+void Trace::write_footers(std::ofstream *sac_file) const {
+  write_words(sac_file, convert_to_word(delta()));   // 00-01
+  write_words(sac_file, convert_to_word(b()));       // 02-03
+  write_words(sac_file, convert_to_word(e()));       // 04-05
+  write_words(sac_file, convert_to_word(o()));       // 06-07
+  write_words(sac_file, convert_to_word(a()));       // 08-09
+  write_words(sac_file, convert_to_word(t0()));      // 10-11
+  write_words(sac_file, convert_to_word(t1()));      // 12-13
+  write_words(sac_file, convert_to_word(t2()));      // 14-15
+  write_words(sac_file, convert_to_word(t3()));      // 16-17
+  write_words(sac_file, convert_to_word(t4()));      // 18-19
+  write_words(sac_file, convert_to_word(t5()));      // 20-21
+  write_words(sac_file, convert_to_word(t6()));      // 22-23
+  write_words(sac_file, convert_to_word(t7()));      // 24-25
+  write_words(sac_file, convert_to_word(t8()));      // 26-27
+  write_words(sac_file, convert_to_word(t9()));      // 28-29
+  write_words(sac_file, convert_to_word(f()));       // 30-31
+  write_words(sac_file, convert_to_word(evlo()));    // 32-33
+  write_words(sac_file, convert_to_word(evla()));    // 34-35
+  write_words(sac_file, convert_to_word(stlo()));    // 36-37
+  write_words(sac_file, convert_to_word(stla()));    // 38-39
+  write_words(sac_file, convert_to_word(sb()));      // 40-41
+  write_words(sac_file, convert_to_word(sdelta()));  // 42-43
+}
+
 /*!
   \brief Binary SAC-file writer.
 
@@ -1993,219 +2689,20 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
     throw io_error(path.string() + " cannot be opened to write.");
   }
   const int header_version{legacy ? old_hdr_version : modern_hdr_version};
-  write_words(&file, convert_to_word(static_cast<float>(delta())));
-  write_words(&file, convert_to_word(depmin()));
-  write_words(&file, convert_to_word(depmax()));
-  // Fill 'unused'
-  write_words(&file, convert_to_word(depmax()));
-  write_words(&file, convert_to_word(odelta()));
-  write_words(&file, convert_to_word(static_cast<float>(b())));
-  write_words(&file, convert_to_word(static_cast<float>(e())));
-  write_words(&file, convert_to_word(static_cast<float>(o())));
-  write_words(&file, convert_to_word(static_cast<float>(a())));
-  // Fill 'internal'
-  write_words(&file, convert_to_word(depmin()));
-  write_words(&file, convert_to_word(static_cast<float>(t0())));
-  write_words(&file, convert_to_word(static_cast<float>(t1())));
-  write_words(&file, convert_to_word(static_cast<float>(t2())));
-  write_words(&file, convert_to_word(static_cast<float>(t3())));
-  write_words(&file, convert_to_word(static_cast<float>(t4())));
-  write_words(&file, convert_to_word(static_cast<float>(t5())));
-  write_words(&file, convert_to_word(static_cast<float>(t6())));
-  write_words(&file, convert_to_word(static_cast<float>(t7())));
-  write_words(&file, convert_to_word(static_cast<float>(t8())));
-  write_words(&file, convert_to_word(static_cast<float>(t9())));
-  write_words(&file, convert_to_word(static_cast<float>(f())));
-  write_words(&file, convert_to_word(resp0()));
-  write_words(&file, convert_to_word(resp1()));
-  write_words(&file, convert_to_word(resp2()));
-  write_words(&file, convert_to_word(resp3()));
-  write_words(&file, convert_to_word(resp4()));
-  write_words(&file, convert_to_word(resp5()));
-  write_words(&file, convert_to_word(resp6()));
-  write_words(&file, convert_to_word(resp7()));
-  write_words(&file, convert_to_word(resp8()));
-  write_words(&file, convert_to_word(resp9()));
-  write_words(&file, convert_to_word(static_cast<float>(stla())));
-  write_words(&file, convert_to_word(static_cast<float>(stlo())));
-  write_words(&file, convert_to_word(stel()));
-  write_words(&file, convert_to_word(stdp()));
-  write_words(&file, convert_to_word(static_cast<float>(evla())));
-  write_words(&file, convert_to_word(static_cast<float>(evlo())));
-  write_words(&file, convert_to_word(evel()));
-  write_words(&file, convert_to_word(evdp()));
-  write_words(&file, convert_to_word(mag()));
-  write_words(&file, convert_to_word(user0()));
-  write_words(&file, convert_to_word(user1()));
-  write_words(&file, convert_to_word(user2()));
-  write_words(&file, convert_to_word(user3()));
-  write_words(&file, convert_to_word(user4()));
-  write_words(&file, convert_to_word(user5()));
-  write_words(&file, convert_to_word(user6()));
-  write_words(&file, convert_to_word(user7()));
-  write_words(&file, convert_to_word(user8()));
-  write_words(&file, convert_to_word(user9()));
-  write_words(&file, convert_to_word(dist()));
-  write_words(&file, convert_to_word(az()));
-  write_words(&file, convert_to_word(baz()));
-  write_words(&file, convert_to_word(gcarc()));
-  write_words(&file, convert_to_word(static_cast<float>(sb())));
-  write_words(&file, convert_to_word(static_cast<float>(sdelta())));
-  write_words(&file, convert_to_word(depmen()));
-  write_words(&file, convert_to_word(cmpaz()));
-  write_words(&file, convert_to_word(cmpinc()));
-  write_words(&file, convert_to_word(xminimum()));
-  write_words(&file, convert_to_word(xmaximum()));
-  write_words(&file, convert_to_word(yminimum()));
-  write_words(&file, convert_to_word(ymaximum()));
-  // Fill 'unused' (xcommon_skip_num)
-  for (int i{0}; i < common_skip_num; ++i) {
-    write_words(&file, convert_to_word(az()));
-  }
-  write_words(&file, convert_to_word(nzyear()));
-  write_words(&file, convert_to_word(nzjday()));
-  write_words(&file, convert_to_word(nzhour()));
-  write_words(&file, convert_to_word(nzmin()));
-  write_words(&file, convert_to_word(nzsec()));
-  write_words(&file, convert_to_word(nzmsec()));
-  write_words(&file, convert_to_word(header_version));
-  write_words(&file, convert_to_word(norid()));
-  write_words(&file, convert_to_word(nevid()));
-  write_words(&file, convert_to_word(npts()));
-  write_words(&file, convert_to_word(nsnpts()));
-  write_words(&file, convert_to_word(nwfid()));
-  write_words(&file, convert_to_word(nxsize()));
-  write_words(&file, convert_to_word(nysize()));
-  // Fill 'unused'
-  write_words(&file, convert_to_word(nysize()));
-  write_words(&file, convert_to_word(iftype()));
-  write_words(&file, convert_to_word(idep()));
-  write_words(&file, convert_to_word(iztype()));
-  // Fill 'unused'
-  write_words(&file, convert_to_word(iztype()));
-  write_words(&file, convert_to_word(iinst()));
-  write_words(&file, convert_to_word(istreg()));
-  write_words(&file, convert_to_word(ievreg()));
-  write_words(&file, convert_to_word(ievtyp()));
-  write_words(&file, convert_to_word(iqual()));
-  write_words(&file, convert_to_word(isynth()));
-  write_words(&file, convert_to_word(imagtyp()));
-  write_words(&file, convert_to_word(imagsrc()));
-  write_words(&file, convert_to_word(ibody()));
-  // Fill 'unused' (xcommon_skip_num)
-  for (int i{0}; i < common_skip_num; ++i) {
-    write_words(&file, convert_to_word(ibody()));
-  }
-  write_words(&file, bool_to_word(leven()));
-  write_words(&file, bool_to_word(lpspol()));
-  write_words(&file, bool_to_word(lovrok()));
-  write_words(&file, bool_to_word(lcalda()));
-  // Fill 'unused'
-  write_words(&file, bool_to_word(lcalda()));
-  // Strings are special
-  std::array<char, static_cast<size_t>(2) * word_length> two_words{
-      convert_to_words<sizeof(two_words)>(kstnm(), 2)};
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  std::array<char, static_cast<size_t>(4) * word_length> four_words{
-      convert_to_words<sizeof(four_words)>(kevnm(), 4)};
-  write_words(&file, std::vector<char>(four_words.begin(), four_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(khole(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(ko(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(ka(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kt0(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kt1(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kt2(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kt3(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kt4(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kt5(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kt6(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kt7(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kt8(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kt9(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kf(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kuser0(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kuser1(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kuser2(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kcmpnm(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(knetwk(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kdatrd(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
-
-  two_words = convert_to_words<sizeof(two_words)>(kinst(), 2);
-  write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_float_headers(&file);
+  write_int_headers(&file, header_version);
+  write_bool_headers(&file);
+  write_string_headers(&file);
   // Data
-  for (double dub : data1()) [[likely]] {
-    write_words(&file, convert_to_word(static_cast<float>(dub)));
-  }
+  std::vector<double> tmp{data1()};
+  write_data(&file, tmp);
   if (!leven() || (iftype() > 1)) {
-    for (double dub : data2()) {
-      write_words(&file, convert_to_word(static_cast<float>(dub)));
-    }
+    tmp = data2();
+    write_data(&file, tmp);
   }
   if (header_version == modern_hdr_version) {
     // Write footer
-    write_words(&file, convert_to_word(delta()));
-    write_words(&file, convert_to_word(b()));
-    write_words(&file, convert_to_word(e()));
-    write_words(&file, convert_to_word(o()));
-    write_words(&file, convert_to_word(a()));
-    write_words(&file, convert_to_word(t0()));
-    write_words(&file, convert_to_word(t1()));
-    write_words(&file, convert_to_word(t2()));
-    write_words(&file, convert_to_word(t3()));
-    write_words(&file, convert_to_word(t4()));
-    write_words(&file, convert_to_word(t5()));
-    write_words(&file, convert_to_word(t6()));
-    write_words(&file, convert_to_word(t7()));
-    write_words(&file, convert_to_word(t8()));
-    write_words(&file, convert_to_word(t9()));
-    write_words(&file, convert_to_word(f()));
-    write_words(&file, convert_to_word(evlo()));
-    write_words(&file, convert_to_word(evla()));
-    write_words(&file, convert_to_word(stlo()));
-    write_words(&file, convert_to_word(stla()));
-    write_words(&file, convert_to_word(sb()));
-    write_words(&file, convert_to_word(sdelta()));
+    write_footers(&file);
   }
   file.close();
 }

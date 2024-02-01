@@ -663,7 +663,7 @@ TEST_CASE("Trace: Setters: Data") {
   REQUIRE(trace.data2() == value);
 }
 
-TEST_CASE("Convenience Functions") {
+TEST_CASE("Trace: Convenience Functions") {
   Trace trace{};
   trace.delta(0.025);
   REQUIRE(trace.frequency() == 40);

@@ -16,22 +16,32 @@ file-format belongs to its developers and maintainers (details
 
 ### depmin
 
+Pre-data word 001.
+
 Minimum value of the dependent variable
 (displacement/velocity/acceleration/volts/counts).
 
 ### depmen
 
+Pre-data word 057.
+
 Mean value of the dependent variable.
 
 ### depmax
+
+Pre-data word 002.
 
 Maximum value of the dependent variable.
 
 ### odelta
 
+Pre-data word 004.
+
 Modified (*observational*) value of `delta`.
 
 ### resp(0--9)
+
+Pre-data words 021--030.
 
 Instrument response parameters (poles, zeros, and a constant).
 
@@ -39,11 +49,15 @@ Instrument response parameters (poles, zeros, and a constant).
 
 ### stel
 
+Pre-data word 033.
+
 Station elevation in meters above sea level (*m.a.s.l*).
 
 **Not used by SAC** free for other purposes.
 
 ### stdp
+
+Pre-data word 034.
 
 Station depth in meters below surface (borehole/buried vault).
 
@@ -51,41 +65,59 @@ Station depth in meters below surface (borehole/buried vault).
 
 ### evel
 
+Pre-data word 037.
+
 Event elevation *m.a.s.l.*
 
 **Not used by SAC** free for other purposes.
 
 ### evdp
 
+Pre-data word 038.
+
 Event depth in kilometers (*previously meters*) below surface.
 
 ### mag
+
+Pre-data word 039.
 
 Event magnitude.
 
 ### user(0--9)
 
+Pre-data words 040--049.
+
 Storage for user-defined values.
 
 ### dist
 
+Pre-data word 050.
+
 Station-Event distance in kilometers.
 
 ### az
+
+Pre-data word 051.
 
 Azimuth \f$\color{orange}\mathrm{\left(Event \to Station\right)}\f$, decimal
 degrees from North.
 
 ### baz
 
+Pre-data word 052.
+
 Back-azimuth \f$\color{orange}\mathrm{\left(Station \to Event\right)}\f$,
 decimal degrees from North.
 
 ### gcarc
 
+Pre-data word 053.
+
 Station-Event great circle arc-length, decimal degrees.
 
 ### cmpaz
+
+Pre-data word 057.
 
 Instrument measurement azimuth, decimal degrees from North.
 
@@ -98,6 +130,8 @@ Instrument measurement azimuth, decimal degrees from North.
 | Other    | 1/2/3     |
 
 ### cmpinc
+
+Pre-data word 058.
 
 Instrument measurement incident angle, decimal degrees from upward vertical
 (incident 0&deg; = dip -90&deg;).
@@ -114,19 +148,27 @@ Instrument measurement incident angle, decimal degrees from upward vertical
 
 ### xminimum
 
+Pre-data word 059.
+
 Spectral-only equivalent of `depmin` (\f$\color{orange}f_{0}\f$ or
 \f$\color{orange}\omega_{0}\f$).
 
 ### xmaximum
+
+Pre-data word 060.
 
 Spectral-only equivalent of `depmax` (\f$\color{orange}f_{max}\f$ or
 \f$\color{orange}\omega_{max}\f$).
 
 ### yminimum
 
+Pre-data word 061.
+
 Spectral-only equivalent of `b`.
 
 ### ymaximum
+
+Pre-data word 062.
 
 Spectral-only equivalent of `e`.
 
@@ -140,41 +182,59 @@ regardless of the SAC-file version.
 
 ### delta
 
+Pre-data word 000, post-data words 00-01.
+
 Increment between evenly spaced samples (\f$\color{orange}\Delta t\f$ for
 timeseries, \f$\color{orange}\Delta f\f$ or \f$\color{orange}\Delta\omega\f$ for
 spectra).
 
 ### b
 
+Pre-data word 005, post-data words 02-03.
+
 First value (*begin*) of independent variable (\f$\color{orange}t_{0}\f$).
 
 ### e
+
+Pre-data word 006, post-data words 04-05.
 
 Final value (*end*) of independent variable (\f$\color{orange}t_{max}\f$).
 
 ### o
 
+Pre-data word 007, post-data words 06-07.
+
 Event *origin* time, in seconds relative to the reference time.
 
 ### a
+
+Pre-data word 008, post-data words 08-09.
 
 Event first *arrival* time, in seconds relative to the reference time.
 
 ### t(0--9)
 
+Pre-data words 010--019, post-data words 10--29.
+
 User defined *time* values, in seconds relative to the reference time.
 
 ### f
 
+Pre-data word 020, post-data words 30-31.
+
 Event end (*fini*) time, in seconds relative to the reference time.
 
 ### stla
+
+Pre-data word 031, post-data words 36-37.
 
 Station latitude in decimal degrees, N/S - positive/negative.
 
 sac-format automatically enforces \f$\color{orange}\mathrm{stla}\in[-90, 90]\f$.
 
 ### stlo
+
+Pre-data word 032, post-data words 38-39.
 
 Station longitude in decimal degrees, E/W - positive/negative.
 
@@ -183,11 +243,15 @@ sac-format automatically enforces \f$\color{orange}\mathrm{stlo}\in[-180,
 
 ### evla
 
+Pre-data word 035, post-data words 32-33.
+
 Event latitude in decimal degrees, N/S - positive/negative.
 
 sac-format automatically enforces \f$\color{orange}\mathrm{evla}\in[-90, 90]\f$.
 
 ### evlo
+
+Pre-data word 036, post-data words 34-35.
 
 Event longitude in decimal degrees, E/W - positive/negative.
 
@@ -196,9 +260,13 @@ sac-format automatically enforces \f$\color{orange}\mathrm{evlo}\in[-180,
 
 ### sb
 
+Pre-data word 054, post-data words 40-41.
+
 Original (*saved*) `b` value.
 
 ### sdelta
+
+Pre-data word 055, post-data words 42-43.
 
 Original (*saved*) `delta` value.
 
@@ -208,30 +276,44 @@ Original (*saved*) `delta` value.
 
 ### nzyear
 
+Pre-data word 070.
+
 Reference time GMT year.
 
 ### nzjday
+
+Pre-data word 071.
 
 Reference time GMT day-of-year (often called [Julian
 Date](https://en.wikipedia.org/wiki/Julian_day)) (1--366).
 
 ### nzhour
 
+Pre-data word 072.
+
 Reference time GMT hour (0--23).
 
 ### nzmin
+
+Pre-data word 073.
 
 Reference time GMT minute (0--59).
 
 ### nzsec
 
+Pre-data word 074.
+
 Reference time GMT second (0--59).
 
 ### nzmsec
 
+Pre-data word 075.
+
 Reference time GMT Millisecond (0--999).
 
 ### nvhdr
+
+Pre-data word 076.
 
 SAC-file version.
 
@@ -242,33 +324,49 @@ SAC-file version.
 
 ### norid
 
+Pre-data word 077.
+
 Origin ID.
 
 ### nevid
+
+Pre-data word 078.
 
 Event ID.
 
 ### npts
 
+Pre-data word 079.
+
 *Number of points* in data.
 
 ### nsnpts
+
+Pre-data word 080.
 
 Original (*saved*) `npts`.
 
 ### nwfid
 
+Pre-data word 081.
+
 Waveform ID.
 
 ### nxsize
+
+Pre-data word 082.
 
 Spectral-only equivalent of `npts` (length of spectrum).
 
 ### nysize
 
+Pre-data word 083.
+
 Spectral-only, width of spectrum.
 
 ### iftype
+
+Pre-data word 085.
 
 File type.
 
@@ -284,6 +382,8 @@ File type.
 
 ### idep
 
+Pre-data word 086.
+
 Dependent variable type.
 
 <!-- markdownlint-disable line-length -->
@@ -298,6 +398,8 @@ Dependent variable type.
 
 ### iztype
 
+Pre-data word 087.
+
 Reference time equivalent.
 
 | Value        | Type           | Description                |
@@ -311,11 +413,15 @@ Reference time equivalent.
 
 ### iinst
 
+Pre-data word 089.
+
 Recording instrument type.
 
 **Not used by SAC**: free for other purposes.
 
 ### istreg
+
+Pre-data word 090.
 
 Station geographic region.
 
@@ -323,11 +429,15 @@ Station geographic region.
 
 ### ievreg
 
+Pre-data word 091.
+
 Event geographic region.
 
 **Not used by SAC**: free for other purposes.
 
 ### ievtyp
+
+Pre-data word 092.
 
 Event type.
 
@@ -362,6 +472,8 @@ Event type.
 
 ### iqual
 
+Pre-data word 093.
+
 Quality of data.
 
 | Value | Type   | Description               |
@@ -376,6 +488,8 @@ Quality of data.
 
 ### isynth
 
+Pre-data word 094.
+
 Synthetic data flag.
 
 | Value | Type     | Description |
@@ -386,6 +500,8 @@ Synthetic data flag.
 &lowast;Values and types not listed in the standard.
 
 ### imagtyp
+
+Pre-data word 095.
 
 Magnitude type.
 
@@ -399,6 +515,8 @@ Magnitude type.
 | 57    | IMX  | User-defined magnitude (\f$\color{orange}M_{x}\f$) |
 
 ### imagsrc
+
+Pre-data word 096.
 
 Source of magnitude information.
 
@@ -419,6 +537,8 @@ Source of magnitude information.
 
 ### ibody
 
+Pre-data word 097.
+
 Body/spheroid definition used to calculate distances.
 
 | Value | Type | Name | Semi-major axis (a [m]) | Inverse Flattening (*f*) |
@@ -433,15 +553,21 @@ Body/spheroid definition used to calculate distances.
 
 ## Boolean (4)
 
+Pre-data word 105.
+
 32-bit (1 word, 4 bytes) in-file/8-bit (1 byte) in-memory
 
 ### leven
+
+Pre-data word 106.
 
 **REQUIRED** Evenly-spaced data flag.
 
 If true, then data is evenly spaced.
 
 ### lpspol
+
+Pre-data word 107.
 
 Station polarity flag.
 
@@ -450,11 +576,15 @@ If true, then station has positive-polarity; it follows the left-hand convention
 
 ### lovrok
 
+Pre-data word 108.
+
 File overwrite flag.
 
 If true, then it's okay to overwrite the file.
 
 ### lcalda
+
+Pre-data word 109.
 
 Calculate geometry flag.
 
@@ -467,9 +597,13 @@ If true, then calculate `dist`, `az`, `baz`, and `gcarc` from `stla`, `stlo`,
 
 ### kstnm
 
+Pre-data words 110--111.
+
 Station name.
 
 ### kevnm
+
+Pre-data words 112--115.
 
 Event name.
 
@@ -477,35 +611,63 @@ Event name.
 
 ### khole
 
+Pre-data words 116--117.
+
 Nuclear: Hole identifier.
 
 Other: Location identifier (LOCID).
 
 ### ko
 
+Pre-data words 118--119.
+
 Text for `o`.
 
 ### ka
+
+Pre-data words 120--121.
 
 Text for `a`.
 
 ### kt(0--9)
 
+Pre-data words 112--141.
+
 Text for `t(0--9)`.
 
 ### kf
+
+Pre-data words 142--143.
 
 Text for `f`.
 
 ### kuser(0--2)
 
+Pre-data words 144--149.
+
 Text for the first three of `user(0--9)`.
 
+### kcmpnm
+
+Pre-data words 150--151.
+
+Component name.
+
+### knetwk
+
+Pre-data words 152--153.
+
+Network name.
+
 ### kdatrd
+
+Pre-data words 154--155.
 
 Date the data was read onto a computer.
 
 ### kinst
+
+Pre-data words 156--157.
 
 Text for `iinst`.
 
@@ -518,9 +680,13 @@ double-precision in memory.
 
 ### data1
 
+Words 158--(158 + npts)
+
 The first data vector---**always** present in a SAC-file and begins at word 158.
 
 ### data2
+
+Words (158 + 1 + npts)--(159 + (2 * npts))
 
 The second data vector---**conditionally** present and begins after `data1`.
 

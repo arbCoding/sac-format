@@ -1,13 +1,15 @@
 <map id="sacfmt::nwords_after_current" name="sacfmt::nwords_after_current">
-<area shape="rect" id="Node000001" title="Determine if the SAC&#45;file has enough remaining data to read the requested amount of data." alt="" coords="446,57,604,102"/>
-<area shape="rect" id="Node000002" href="$namespacesacfmt.html#af58e2ef696848c285048403c7604c9a5" title="Determines if the SAC&#45;file has enough space remaining to contain a complete data vector." alt="" coords="204,5,398,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="431,56,397,47,356,36,358,31,399,42,433,51"/>
-<area shape="rect" id="Node000004" href="$namespacesacfmt.html#a2b243e627f913bab34d5d870d0287eb1" title="Determines if the SAC&#45;file has enough space remaining to contain a complete footer." alt="" coords="222,57,380,102"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="431,82,380,82,380,77,431,77"/>
-<area shape="rect" id="Node000005" href="$namespacesacfmt.html#a43d0fe79f5a761b14a70828ec8047aee" title="Determine if the SAC&#45;file is large enough to contain a complete header." alt="" coords="222,126,380,171"/>
-<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="438,109,376,128,375,123,436,104"/>
-<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,65,156,93"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="231,40,204,47,132,67,131,62,203,42,230,35"/>
-<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="207,82,156,82,156,77,207,77"/>
-<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="213,124,126,96,128,91,215,119"/>
+<area shape="rect" id="Node000001" title="Determine if the SAC&#45;file has enough remaining data to read the requested amount of data." alt="" coords="652,75,811,119"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#af58e2ef696848c285048403c7604c9a5" title="Determines if the SAC&#45;file has enough space remaining to contain a complete data vector." alt="" coords="410,23,604,51"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="637,75,561,54,563,49,639,70"/>
+<area shape="rect" id="Node000005" href="$namespacesacfmt.html#a2b243e627f913bab34d5d870d0287eb1" title="Determines if the SAC&#45;file has enough space remaining to contain a complete footer." alt="" coords="204,75,362,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="638,100,363,100,363,94,638,94"/>
+<area shape="rect" id="Node000006" href="$namespacesacfmt.html#a43d0fe79f5a761b14a70828ec8047aee" title="Determine if the SAC&#45;file is large enough to contain a complete header." alt="" coords="428,135,586,179"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="639,125,587,138,586,133,637,119"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a3c1aa78b048dc56fefd0674d9e72f443" title="Reads data vectors." alt="" coords="210,5,356,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="395,35,356,33,356,28,395,30"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,83,156,111"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="203,58,124,85,122,80,201,53"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="189,100,156,100,156,94,189,94"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="413,157,312,149,203,134,124,114,125,109,204,129,312,144,413,151"/>
 </map>

@@ -1,9 +1,11 @@
 <map id="sacfmt::Trace::data1" name="sacfmt::Trace::data1">
-<area shape="rect" id="Node000001" title=" " alt="" coords="411,32,564,60"/>
-<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="213,5,363,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="396,36,363,32,364,27,397,31"/>
-<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a5a16040cc0d19472325794b2db602aaf" title="Binary SAC&#45;file writer." alt="" coords="213,57,363,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="397,60,363,64,363,59,396,55"/>
-<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#afdeafc868fa9a589497ccbff744523f7" title="Binary SAC&#45;file legacy&#45;write convenience function." alt="" coords="5,49,165,94"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,74,165,74,165,69,198,69"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="410,45,563,72"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a3c1aa78b048dc56fefd0674d9e72f443" title="Reads data vectors." alt="" coords="215,5,360,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="395,47,360,41,361,36,396,42"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#a5a16040cc0d19472325794b2db602aaf" title="Binary SAC&#45;file writer." alt="" coords="213,74,362,102"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="396,74,363,79,362,74,395,69"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="10,14,160,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="200,30,161,30,161,25,200,25"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#afdeafc868fa9a589497ccbff744523f7" title="Binary SAC&#45;file legacy&#45;write convenience function." alt="" coords="5,65,165,110"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="198,90,165,90,165,85,198,85"/>
 </map>

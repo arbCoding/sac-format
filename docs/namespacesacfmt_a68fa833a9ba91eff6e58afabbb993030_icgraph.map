@@ -1,5 +1,12 @@
 <map id="sacfmt::binary_to_int" name="sacfmt::binary_to_int">
-<area shape="rect" id="Node000001" title="Convert 32&#45;bit (one word) binary bitset to integer." alt="" coords="204,5,363,33"/>
-<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,5,156,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,22,156,22,156,17,189,17"/>
+<area shape="rect" id="Node000001" title="Convert 32&#45;bit (one word) binary bitset to integer." alt="" coords="615,49,775,76"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a487af9381c8df959027b009e2a909580" title="Reads SAC&#45;headers from words 070–075." alt="" coords="397,5,567,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="600,50,567,44,568,39,601,44"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#aa5bf0c40329dfe3256d2ad4f9c9c764d" title="Reads SAC&#45;headers from words 076–104." alt="" coords="410,75,555,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="601,80,556,88,555,83,600,75"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#abddd25118a26ab1e855da14c3d2d0039" title="Reads SAC&#45;headers from words 070–104." alt="" coords="204,40,349,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="383,47,350,53,349,47,382,42"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,49,156,76"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="189,65,156,65,156,60,189,60"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="394,85,349,77,350,72,395,80"/>
 </map>

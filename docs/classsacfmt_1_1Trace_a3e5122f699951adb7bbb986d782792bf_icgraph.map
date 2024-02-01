@@ -1,0 +1,7 @@
+<map id="sacfmt::Trace::read_float_headers_station_event" name="sacfmt::Trace::read_float_headers_station_event">
+<area shape="rect" id="Node000001" title="Reads SAC&#45;headers from words 031–039." alt="" coords="397,5,609,50"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a14a56161e48f3406b7f7c2e3315e5d92" title="Reads SAC&#45;headers from words 000–069." alt="" coords="204,5,349,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="383,30,349,30,349,25,383,25"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,14,156,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="189,30,156,30,156,25,189,25"/>
+</map>
