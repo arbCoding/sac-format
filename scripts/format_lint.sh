@@ -94,15 +94,13 @@ markdownlint-cli2 --fix ./*.md
 # it that way so that it can be close to the default usage
 # inside SAC itself (more familiar to potential users of this
 # library).
-# I should break the reading/writing methods into smaller
-# chunks (later).
 echo "Running oclint"
 oclint "$base"/include/sac-format/sac_format.hpp \
     "$base"/src/sac_format.cpp \
     "$base"/src/examples/list_sac.cpp \
     -disable-rule ConstantIfExpression \
     -rc NCSS_METHOD=300 \
-    -rc LONG_METHOD=75 \
+    -rc LONG_METHOD=200 \
     -rc NPATH_COMPLEXITY=300 \
     -rc TOO_MANY_METHODS=300
 

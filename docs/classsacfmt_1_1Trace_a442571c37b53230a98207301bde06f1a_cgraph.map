@@ -1,0 +1,15 @@
+<map id="sacfmt::Trace::write_float_headers_geometry" name="sacfmt::Trace::write_float_headers_geometry">
+<area shape="rect" id="Node000001" title="Writes SAC&#45;headers from words 050–053." alt="" coords="5,128,192,172"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#ac1747dbf31418c1a185df40b3527425e" title=" " alt="" coords="265,5,397,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,125,174,84,238,43,255,36,257,41,241,48,177,88,126,129"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a8429a1b78f5b54dfbc325510249520e9" title=" " alt="" coords="261,57,401,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="158,124,239,95,264,87,265,92,241,100,160,129"/>
+<area shape="rect" id="Node000004" href="$namespacesacfmt.html#a60e74c162149c7afb740f2e342dc4bed" title="Template function to convert input value into a std::vector&lt;char&gt; for writing." alt="" coords="240,109,422,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="192,136,225,133,225,138,192,142"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#acb29b9cc548cf844d528a10bee3ba789" title=" " alt="" coords="261,161,401,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="192,157,246,163,245,169,192,163"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#aba7da69c9ae7dbbbf6502e78fe62d4d7" title=" " alt="" coords="255,213,407,241"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="162,170,241,198,266,206,265,211,239,203,160,175"/>
+<area shape="rect" id="Node000007" href="$namespacesacfmt.html#ac8fee1d64cb1b530a798dee46ffb6493" title="Write arbitrary number of words (useful for vectors) to a binary SAC&#45;file." alt="" coords="254,265,408,293"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="127,170,177,211,241,250,258,257,256,262,238,255,174,215,123,175"/>
+</map>

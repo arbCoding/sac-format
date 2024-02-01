@@ -2204,6 +2204,19 @@ Trace::Trace(const std::filesystem::path &path) {
 //------------------------------------------------------------------------------
 // Write
 //------------------------------------------------------------------------------
+/*!
+  \brief Writes data vectors.
+
+  Note that this modifies the position of the writer to the end of the data
+  section wriitten.
+
+  For data1 writes words 158--(158 + npts).
+
+  For data2 writess words (158 + 1 + npts)--(159 + (2 * npts))
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+  @param[in] data_vec std::vector<double> Data-vector to write.
+ */
 void Trace::write_data(std::ofstream *sac_file,
                        const std::vector<double> &data_vec) {
   std::for_each(
@@ -2212,260 +2225,453 @@ void Trace::write_data(std::ofstream *sac_file,
       });
 }
 
+/*!
+  \brief Writes SAC-headers from words 000--009.
+
+  Note that this expects the position of the writer to be the beginning of word
+  000.
+
+  Note that this modifies the position of the writer to the end of word 009.
+
+  Headers written: delta, depmin, depmax, odelta, b, e, o, and a.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_float_headers_starter(std::ofstream *sac_file) const {
-  write_words(sac_file, convert_to_word(static_cast<float>(delta())));
-  write_words(sac_file, convert_to_word(depmin()));
-  write_words(sac_file, convert_to_word(depmax()));
+  write_words(sac_file, convert_to_word(static_cast<float>(delta())));  // 000
+  write_words(sac_file, convert_to_word(depmin()));                     // 001
+  write_words(sac_file, convert_to_word(depmax()));                     // 002
   // Fill 'unused'
-  write_words(sac_file, convert_to_word(depmax()));
-  write_words(sac_file, convert_to_word(odelta()));
-  write_words(sac_file, convert_to_word(static_cast<float>(b())));
-  write_words(sac_file, convert_to_word(static_cast<float>(e())));
-  write_words(sac_file, convert_to_word(static_cast<float>(o())));
-  write_words(sac_file, convert_to_word(static_cast<float>(a())));
+  write_words(sac_file, convert_to_word(depmax()));                 // 003
+  write_words(sac_file, convert_to_word(odelta()));                 // 004
+  write_words(sac_file, convert_to_word(static_cast<float>(b())));  // 005
+  write_words(sac_file, convert_to_word(static_cast<float>(e())));  // 006
+  write_words(sac_file, convert_to_word(static_cast<float>(o())));  // 007
+  write_words(sac_file, convert_to_word(static_cast<float>(a())));  // 008
   // Fill 'internal'
-  write_words(sac_file, convert_to_word(depmin()));
+  write_words(sac_file, convert_to_word(depmin()));  // 009
 }
 
+/*!
+  \brief Writes SAC-headers from words 010--020.
+
+  Note that this expects the position of the writer to be the beginning of word
+  010.
+
+  Note that this modifies the position of the writer to the end of word 020.
+
+  Headers written: t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, and f.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_float_headers_t(std::ofstream *sac_file) const {
-  write_words(sac_file, convert_to_word(static_cast<float>(t0())));
-  write_words(sac_file, convert_to_word(static_cast<float>(t1())));
-  write_words(sac_file, convert_to_word(static_cast<float>(t2())));
-  write_words(sac_file, convert_to_word(static_cast<float>(t3())));
-  write_words(sac_file, convert_to_word(static_cast<float>(t4())));
-  write_words(sac_file, convert_to_word(static_cast<float>(t5())));
-  write_words(sac_file, convert_to_word(static_cast<float>(t6())));
-  write_words(sac_file, convert_to_word(static_cast<float>(t7())));
-  write_words(sac_file, convert_to_word(static_cast<float>(t8())));
-  write_words(sac_file, convert_to_word(static_cast<float>(t9())));
-  write_words(sac_file, convert_to_word(static_cast<float>(f())));
+  write_words(sac_file, convert_to_word(static_cast<float>(t0())));  // 010
+  write_words(sac_file, convert_to_word(static_cast<float>(t1())));  // 011
+  write_words(sac_file, convert_to_word(static_cast<float>(t2())));  // 012
+  write_words(sac_file, convert_to_word(static_cast<float>(t3())));  // 013
+  write_words(sac_file, convert_to_word(static_cast<float>(t4())));  // 014
+  write_words(sac_file, convert_to_word(static_cast<float>(t5())));  // 015
+  write_words(sac_file, convert_to_word(static_cast<float>(t6())));  // 016
+  write_words(sac_file, convert_to_word(static_cast<float>(t7())));  // 017
+  write_words(sac_file, convert_to_word(static_cast<float>(t8())));  // 018
+  write_words(sac_file, convert_to_word(static_cast<float>(t9())));  // 019
+  write_words(sac_file, convert_to_word(static_cast<float>(f())));   // 020
 }
 
+/*!
+  \brief Writes SAC-headers from words 021--030.
+
+  Note that this expects the position of the writer to be the beginning of word
+  021.
+
+  Note that this modifies the position of the writer to the end of word 030.
+
+  Headers written: resp0, resp1, resp2, resp3, resp4, resp5, resp6, resp7,
+  resp8, and resp9.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_float_headers_resp(std::ofstream *sac_file) const {
-  write_words(sac_file, convert_to_word(resp0()));
-  write_words(sac_file, convert_to_word(resp1()));
-  write_words(sac_file, convert_to_word(resp2()));
-  write_words(sac_file, convert_to_word(resp3()));
-  write_words(sac_file, convert_to_word(resp4()));
-  write_words(sac_file, convert_to_word(resp5()));
-  write_words(sac_file, convert_to_word(resp6()));
-  write_words(sac_file, convert_to_word(resp7()));
-  write_words(sac_file, convert_to_word(resp8()));
-  write_words(sac_file, convert_to_word(resp9()));
+  write_words(sac_file, convert_to_word(resp0()));  // 021
+  write_words(sac_file, convert_to_word(resp1()));  // 022
+  write_words(sac_file, convert_to_word(resp2()));  // 023
+  write_words(sac_file, convert_to_word(resp3()));  // 024
+  write_words(sac_file, convert_to_word(resp4()));  // 025
+  write_words(sac_file, convert_to_word(resp5()));  // 026
+  write_words(sac_file, convert_to_word(resp6()));  // 027
+  write_words(sac_file, convert_to_word(resp7()));  // 028
+  write_words(sac_file, convert_to_word(resp8()));  // 029
+  write_words(sac_file, convert_to_word(resp9()));  // 030
 }
 
+/*!
+  \brief Writes SAC-headers from words 031--039.
+
+  Note that this expects the position of the writer to be the beginning of word
+  031.
+
+  Note that this modifies the position of the writer to the end of word 039.
+
+  Headers written: stla, stlo, stel, stdp, evla, evlo, evel, evdp, and mag.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_float_headers_station_event(std::ofstream *sac_file) const {
-  write_words(sac_file, convert_to_word(static_cast<float>(stla())));
-  write_words(sac_file, convert_to_word(static_cast<float>(stlo())));
-  write_words(sac_file, convert_to_word(stel()));
-  write_words(sac_file, convert_to_word(stdp()));
-  write_words(sac_file, convert_to_word(static_cast<float>(evla())));
-  write_words(sac_file, convert_to_word(static_cast<float>(evlo())));
-  write_words(sac_file, convert_to_word(evel()));
-  write_words(sac_file, convert_to_word(evdp()));
-  write_words(sac_file, convert_to_word(mag()));
+  write_words(sac_file, convert_to_word(static_cast<float>(stla())));  // 031
+  write_words(sac_file, convert_to_word(static_cast<float>(stlo())));  // 032
+  write_words(sac_file, convert_to_word(stel()));                      // 033
+  write_words(sac_file, convert_to_word(stdp()));                      // 034
+  write_words(sac_file, convert_to_word(static_cast<float>(evla())));  // 035
+  write_words(sac_file, convert_to_word(static_cast<float>(evlo())));  // 036
+  write_words(sac_file, convert_to_word(evel()));                      // 037
+  write_words(sac_file, convert_to_word(evdp()));                      // 038
+  write_words(sac_file, convert_to_word(mag()));                       // 039
 }
 
+/*!
+  \brief Writes SAC-headers from words 040--049.
+
+  Note that this expects the position of the writer to be the beginning of word
+  040.
+
+  Note that this modifies the position of the writer to the end of word 049.
+
+  Headers written: user0, user1, user2, user3, user4, user5, user6, user7,
+  user8, and user9.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_float_headers_user(std::ofstream *sac_file) const {
-  write_words(sac_file, convert_to_word(user0()));
-  write_words(sac_file, convert_to_word(user1()));
-  write_words(sac_file, convert_to_word(user2()));
-  write_words(sac_file, convert_to_word(user3()));
-  write_words(sac_file, convert_to_word(user4()));
-  write_words(sac_file, convert_to_word(user5()));
-  write_words(sac_file, convert_to_word(user6()));
-  write_words(sac_file, convert_to_word(user7()));
-  write_words(sac_file, convert_to_word(user8()));
-  write_words(sac_file, convert_to_word(user9()));
+  write_words(sac_file, convert_to_word(user0()));  // 040
+  write_words(sac_file, convert_to_word(user1()));  // 041
+  write_words(sac_file, convert_to_word(user2()));  // 042
+  write_words(sac_file, convert_to_word(user3()));  // 043
+  write_words(sac_file, convert_to_word(user4()));  // 044
+  write_words(sac_file, convert_to_word(user5()));  // 045
+  write_words(sac_file, convert_to_word(user6()));  // 046
+  write_words(sac_file, convert_to_word(user7()));  // 047
+  write_words(sac_file, convert_to_word(user8()));  // 048
+  write_words(sac_file, convert_to_word(user9()));  // 049
 }
 
+/*!
+  \brief Writes SAC-headers from words 050--053.
+
+  Note that this expects the position of the writer to be the beginning of word
+  050.
+
+  Note that this modifies the position of the writer to the end of word 053.
+
+  Headers written: dist, az, baz, and gcarc.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_float_headers_geometry(std::ofstream *sac_file) const {
-  write_words(sac_file, convert_to_word(dist()));
-  write_words(sac_file, convert_to_word(az()));
-  write_words(sac_file, convert_to_word(baz()));
-  write_words(sac_file, convert_to_word(gcarc()));
+  write_words(sac_file, convert_to_word(dist()));   // 050
+  write_words(sac_file, convert_to_word(az()));     // 051
+  write_words(sac_file, convert_to_word(baz()));    // 052
+  write_words(sac_file, convert_to_word(gcarc()));  // 053
 }
 
+/*!
+  \brief Writes SAC-headers from words 054--069.
+
+  Note that this expects the position of the writer to be the beginning of word
+  054.
+
+  Note that this modifies the position of the writer to the end of word 069.
+
+  Headers written: sb, sdelta, depmen, cmpaz, cmpinc, xminimum, xmaximum,
+  yminimum, and ymaximum.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_float_headers_meta(std::ofstream *sac_file) const {
-  write_words(sac_file, convert_to_word(static_cast<float>(sb())));
-  write_words(sac_file, convert_to_word(static_cast<float>(sdelta())));
-  write_words(sac_file, convert_to_word(depmen()));
-  write_words(sac_file, convert_to_word(cmpaz()));
-  write_words(sac_file, convert_to_word(cmpinc()));
-  write_words(sac_file, convert_to_word(xminimum()));
-  write_words(sac_file, convert_to_word(xmaximum()));
-  write_words(sac_file, convert_to_word(yminimum()));
-  write_words(sac_file, convert_to_word(ymaximum()));
+  write_words(sac_file, convert_to_word(static_cast<float>(sb())));      // 054
+  write_words(sac_file, convert_to_word(static_cast<float>(sdelta())));  // 055
+  write_words(sac_file, convert_to_word(depmen()));                      // 056
+  write_words(sac_file, convert_to_word(cmpaz()));                       // 057
+  write_words(sac_file, convert_to_word(cmpinc()));                      // 058
+  write_words(sac_file, convert_to_word(xminimum()));                    // 059
+  write_words(sac_file, convert_to_word(xmaximum()));                    // 060
+  write_words(sac_file, convert_to_word(yminimum()));                    // 061
+  write_words(sac_file, convert_to_word(ymaximum()));                    // 062
   // Fill 'unused' (xcommon_skip_num)
-  for (int i{0}; i < common_skip_num; ++i) {
+  for (int i{0}; i < common_skip_num; ++i) {  // 063-069
     write_words(sac_file, convert_to_word(az()));
   }
 }
 
+/*!
+  \brief Writes SAC-headers from words 000--069.
+
+  Note that this expects the position of the writer to be the beginning of word
+  000.
+
+  Note that this modifies the position of the writer to the end of word 069.
+
+  Writes all the float headers.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+  */
 void Trace::write_float_headers(std::ofstream *sac_file) const {
-  write_float_headers_starter(sac_file);
-  write_float_headers_t(sac_file);
-  write_float_headers_resp(sac_file);
-  write_float_headers_station_event(sac_file);
-  write_float_headers_user(sac_file);
-  write_float_headers_geometry(sac_file);
-  write_float_headers_meta(sac_file);
+  write_float_headers_starter(sac_file);        // 000-009
+  write_float_headers_t(sac_file);              // 010-020
+  write_float_headers_resp(sac_file);           // 031-030
+  write_float_headers_station_event(sac_file);  // 031-039
+  write_float_headers_user(sac_file);           // 040-049
+  write_float_headers_geometry(sac_file);       // 050-053
+  write_float_headers_meta(sac_file);           // 054-069
 }
 
+/*!
+  \brief Writes SAC-headers from words 070--075.
+
+  Note that this expects the position of the writer to be the beginning of word
+  070.
+
+  Note that this modifies the position of the writer to the end of word 075.
+
+  Headers written: nzyear, nzjday, nzhour, nzmin, nzsec, and nzmsec.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_int_headers_datetime(std::ofstream *sac_file) const {
-  write_words(sac_file, convert_to_word(nzyear()));
-  write_words(sac_file, convert_to_word(nzjday()));
-  write_words(sac_file, convert_to_word(nzhour()));
-  write_words(sac_file, convert_to_word(nzmin()));
-  write_words(sac_file, convert_to_word(nzsec()));
-  write_words(sac_file, convert_to_word(nzmsec()));
+  write_words(sac_file, convert_to_word(nzyear()));  // 070
+  write_words(sac_file, convert_to_word(nzjday()));  // 071
+  write_words(sac_file, convert_to_word(nzhour()));  // 072
+  write_words(sac_file, convert_to_word(nzmin()));   // 073
+  write_words(sac_file, convert_to_word(nzsec()));   // 074
+  write_words(sac_file, convert_to_word(nzmsec()));  // 075
 }
 
+/*!
+  \brief Writes SAC-headers from words 076--104.
+
+  Note that this expects the position of the writer to be the beginning of word
+  076.
+
+  Note that this modifies the position of the writer to the end of word 104.
+
+  Headers written: nvhdr, norid, nevid, npts, nsnpts, nwfid, nxsize, nysize,
+  iftype, idep, iztype, iinst, istreg, ievreg, ievtyp, iqual, isynth, imagtyp,
+  imagsrc, and ibody.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+  @param[in] hdr_ver Integer header version to be written.
+ */
 void Trace::write_int_headers_meta(std::ofstream *sac_file,
                                    const int hdr_ver) const {
-  write_words(sac_file, convert_to_word(hdr_ver));
-  write_words(sac_file, convert_to_word(norid()));
-  write_words(sac_file, convert_to_word(nevid()));
-  write_words(sac_file, convert_to_word(npts()));
-  write_words(sac_file, convert_to_word(nsnpts()));
-  write_words(sac_file, convert_to_word(nwfid()));
-  write_words(sac_file, convert_to_word(nxsize()));
-  write_words(sac_file, convert_to_word(nysize()));
+  write_words(sac_file, convert_to_word(hdr_ver));   // 076
+  write_words(sac_file, convert_to_word(norid()));   // 077
+  write_words(sac_file, convert_to_word(nevid()));   // 078
+  write_words(sac_file, convert_to_word(npts()));    // 079
+  write_words(sac_file, convert_to_word(nsnpts()));  // 080
+  write_words(sac_file, convert_to_word(nwfid()));   // 081
+  write_words(sac_file, convert_to_word(nxsize()));  // 082
+  write_words(sac_file, convert_to_word(nysize()));  // 083
   // Fill 'unused'
-  write_words(sac_file, convert_to_word(nysize()));
-  write_words(sac_file, convert_to_word(iftype()));
-  write_words(sac_file, convert_to_word(idep()));
-  write_words(sac_file, convert_to_word(iztype()));
+  write_words(sac_file, convert_to_word(nysize()));  // 084
+  write_words(sac_file, convert_to_word(iftype()));  // 085
+  write_words(sac_file, convert_to_word(idep()));    // 086
+  write_words(sac_file, convert_to_word(iztype()));  // 087
   // Fill 'unused'
-  write_words(sac_file, convert_to_word(iztype()));
-  write_words(sac_file, convert_to_word(iinst()));
-  write_words(sac_file, convert_to_word(istreg()));
-  write_words(sac_file, convert_to_word(ievreg()));
-  write_words(sac_file, convert_to_word(ievtyp()));
-  write_words(sac_file, convert_to_word(iqual()));
-  write_words(sac_file, convert_to_word(isynth()));
-  write_words(sac_file, convert_to_word(imagtyp()));
-  write_words(sac_file, convert_to_word(imagsrc()));
-  write_words(sac_file, convert_to_word(ibody()));
+  write_words(sac_file, convert_to_word(iztype()));   // 088
+  write_words(sac_file, convert_to_word(iinst()));    // 089
+  write_words(sac_file, convert_to_word(istreg()));   // 090
+  write_words(sac_file, convert_to_word(ievreg()));   // 091
+  write_words(sac_file, convert_to_word(ievtyp()));   // 092
+  write_words(sac_file, convert_to_word(iqual()));    // 093
+  write_words(sac_file, convert_to_word(isynth()));   // 094
+  write_words(sac_file, convert_to_word(imagtyp()));  // 095
+  write_words(sac_file, convert_to_word(imagsrc()));  // 096
+  write_words(sac_file, convert_to_word(ibody()));    // 097
   // Fill 'unused' (xcommon_skip_num)
-  for (int i{0}; i < common_skip_num; ++i) {
+  for (int i{0}; i < common_skip_num; ++i) {  // 098-104
     write_words(sac_file, convert_to_word(ibody()));
   }
 }
 
+/*!
+  \brief Writes SAC-headers from words 070--104.
+
+  Note that this expects the position of the writer to be the beginning of word
+  070.
+
+  Note that this modifies the position of the writer to the end of word 104.
+
+  Writes all integer headers.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+  @param[in] hdr_ver Integer header version to be written.
+ */
 void Trace::write_int_headers(std::ofstream *sac_file,
                               const int hdr_ver) const {
-  write_int_headers_datetime(sac_file);
-  write_int_headers_meta(sac_file, hdr_ver);
+  write_int_headers_datetime(sac_file);       // 070-075
+  write_int_headers_meta(sac_file, hdr_ver);  // 076-104
 }
 
+/*!
+  \brief Writes SAC-headers from words 105--109.
+
+  Note that this expects the position of the writer to be the beginning of word
+  105.
+
+  Note that this modifies the position of the writer to the end of word 109.
+
+  Writes all boolean headers.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_bool_headers(std::ofstream *sac_file) const {
-  write_words(sac_file, bool_to_word(leven()));
-  write_words(sac_file, bool_to_word(lpspol()));
-  write_words(sac_file, bool_to_word(lovrok()));
-  write_words(sac_file, bool_to_word(lcalda()));
+  write_words(sac_file, bool_to_word(leven()));   // 105
+  write_words(sac_file, bool_to_word(lpspol()));  // 106
+  write_words(sac_file, bool_to_word(lovrok()));  // 107
+  write_words(sac_file, bool_to_word(lcalda()));  // 108
   // Fill 'unused'
-  write_words(sac_file, bool_to_word(lcalda()));
+  write_words(sac_file, bool_to_word(lcalda()));  // 109
 }
 
+/*!
+  \brief Writes SAC-headers from words 110--157.
+
+  Note that this expects the position of the writer to be the beginning of word
+  110.
+
+  Note that this modifies the position of the writer to the end of word 157.
+
+  Writes all string headers.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_string_headers(std::ofstream *sac_file) const {
   // Strings are special
   std::array<char, static_cast<size_t>(2) * word_length> two_words{
       convert_to_words<sizeof(two_words)>(kstnm(), 2)};
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 110-111
 
   std::array<char, static_cast<size_t>(4) * word_length> four_words{
       convert_to_words<sizeof(four_words)>(kevnm(), 4)};
-  write_words(sac_file,
-              std::vector<char>(four_words.begin(), four_words.end()));
+  write_words(sac_file, std::vector<char>(four_words.begin(),
+                                          four_words.end()));  // 112-115
 
   two_words = convert_to_words<sizeof(two_words)>(khole(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 116-117
 
   two_words = convert_to_words<sizeof(two_words)>(ko(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 118-119
 
   two_words = convert_to_words<sizeof(two_words)>(ka(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 120-121
 
   two_words = convert_to_words<sizeof(two_words)>(kt0(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 122-123
 
   two_words = convert_to_words<sizeof(two_words)>(kt1(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 124-125
 
   two_words = convert_to_words<sizeof(two_words)>(kt2(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 126-127
 
   two_words = convert_to_words<sizeof(two_words)>(kt3(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 128-129
 
   two_words = convert_to_words<sizeof(two_words)>(kt4(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 130-131
 
   two_words = convert_to_words<sizeof(two_words)>(kt5(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 132-133
 
   two_words = convert_to_words<sizeof(two_words)>(kt6(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 134-135
 
   two_words = convert_to_words<sizeof(two_words)>(kt7(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 136-137
 
   two_words = convert_to_words<sizeof(two_words)>(kt8(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 138-139
 
   two_words = convert_to_words<sizeof(two_words)>(kt9(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 140-141
 
   two_words = convert_to_words<sizeof(two_words)>(kf(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 142-143
 
   two_words = convert_to_words<sizeof(two_words)>(kuser0(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 144-145
 
   two_words = convert_to_words<sizeof(two_words)>(kuser1(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 146-147
 
   two_words = convert_to_words<sizeof(two_words)>(kuser2(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 148-149
 
   two_words = convert_to_words<sizeof(two_words)>(kcmpnm(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 150-151
 
   two_words = convert_to_words<sizeof(two_words)>(knetwk(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 152-153
 
   two_words = convert_to_words<sizeof(two_words)>(kdatrd(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 154-155
 
   two_words = convert_to_words<sizeof(two_words)>(kinst(), 2);
-  write_words(sac_file, std::vector<char>(two_words.begin(), two_words.end()));
+  write_words(sac_file, std::vector<char>(two_words.begin(),
+                                          two_words.end()));  // 156-157
 }
 
+/*!
+  \brief Writes SAC-footers (post-data words 00--43).
+
+  Note that this modifies the position of the writer to the end of the footer
+  section.
+
+  @param[in,out] sac_file std::ofstream* SAC-file to be written.
+ */
 void Trace::write_footers(std::ofstream *sac_file) const {
-  write_words(sac_file, convert_to_word(delta()));
-  write_words(sac_file, convert_to_word(b()));
-  write_words(sac_file, convert_to_word(e()));
-  write_words(sac_file, convert_to_word(o()));
-  write_words(sac_file, convert_to_word(a()));
-  write_words(sac_file, convert_to_word(t0()));
-  write_words(sac_file, convert_to_word(t1()));
-  write_words(sac_file, convert_to_word(t2()));
-  write_words(sac_file, convert_to_word(t3()));
-  write_words(sac_file, convert_to_word(t4()));
-  write_words(sac_file, convert_to_word(t5()));
-  write_words(sac_file, convert_to_word(t6()));
-  write_words(sac_file, convert_to_word(t7()));
-  write_words(sac_file, convert_to_word(t8()));
-  write_words(sac_file, convert_to_word(t9()));
-  write_words(sac_file, convert_to_word(f()));
-  write_words(sac_file, convert_to_word(evlo()));
-  write_words(sac_file, convert_to_word(evla()));
-  write_words(sac_file, convert_to_word(stlo()));
-  write_words(sac_file, convert_to_word(stla()));
-  write_words(sac_file, convert_to_word(sb()));
-  write_words(sac_file, convert_to_word(sdelta()));
+  write_words(sac_file, convert_to_word(delta()));   // 00-01
+  write_words(sac_file, convert_to_word(b()));       // 02-03
+  write_words(sac_file, convert_to_word(e()));       // 04-05
+  write_words(sac_file, convert_to_word(o()));       // 06-07
+  write_words(sac_file, convert_to_word(a()));       // 08-09
+  write_words(sac_file, convert_to_word(t0()));      // 10-11
+  write_words(sac_file, convert_to_word(t1()));      // 12-13
+  write_words(sac_file, convert_to_word(t2()));      // 14-15
+  write_words(sac_file, convert_to_word(t3()));      // 16-17
+  write_words(sac_file, convert_to_word(t4()));      // 18-19
+  write_words(sac_file, convert_to_word(t5()));      // 20-21
+  write_words(sac_file, convert_to_word(t6()));      // 22-23
+  write_words(sac_file, convert_to_word(t7()));      // 24-25
+  write_words(sac_file, convert_to_word(t8()));      // 26-27
+  write_words(sac_file, convert_to_word(t9()));      // 28-29
+  write_words(sac_file, convert_to_word(f()));       // 30-31
+  write_words(sac_file, convert_to_word(evlo()));    // 32-33
+  write_words(sac_file, convert_to_word(evla()));    // 34-35
+  write_words(sac_file, convert_to_word(stlo()));    // 36-37
+  write_words(sac_file, convert_to_word(stla()));    // 38-39
+  write_words(sac_file, convert_to_word(sb()));      // 40-41
+  write_words(sac_file, convert_to_word(sdelta()));  // 42-43
 }
 
 /*!

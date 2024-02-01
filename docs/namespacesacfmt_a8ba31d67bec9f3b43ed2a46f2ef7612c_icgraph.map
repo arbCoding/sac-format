@@ -1,8 +1,13 @@
 <map id="sacfmt::read_two_words" name="sacfmt::read_two_words">
-<area shape="rect" id="Node000001" title="Read two words (64 bits, useful for most strings) from a binary SAC&#45;file." alt="" coords="434,31,614,58"/>
-<area shape="rect" id="Node000002" href="$namespacesacfmt.html#aaef6781fd78aa7d2941f9308523f2895" title="Read four words (128 bits, kEvNm only) from a binary SAC&#45;file." alt="" coords="204,5,386,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="419,36,386,32,387,27,420,30"/>
-<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,31,156,58"/>
-<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="419,47,156,47,156,42,419,42"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="189,34,156,38,156,33,188,29"/>
+<area shape="rect" id="Node000001" title="Read two words (64 bits, useful for most strings) from a binary SAC&#45;file." alt="" coords="627,65,808,92"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#ad24f430dda398b79f8b227b390ee10ec" title="Reads SAC&#45;footers (post&#45;data words 00–43)." alt="" coords="204,5,349,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="631,64,579,56,458,43,349,34,349,29,458,37,580,50,632,59"/>
+<area shape="rect" id="Node000004" href="$namespacesacfmt.html#aaef6781fd78aa7d2941f9308523f2895" title="Read four words (128 bits, kEvNm only) from a binary SAC&#45;file." alt="" coords="397,65,579,92"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="613,81,580,81,580,76,613,76"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#a0d062cca103240b81ea8d1a3aa1dd978" title="Reads SAC&#45;headers from words 110–157." alt="" coords="204,75,349,119"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="638,98,580,106,488,110,397,106,349,104,350,99,397,101,488,105,579,101,637,93"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,49,156,76"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="189,46,156,52,155,46,188,41"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="383,90,349,93,349,88,382,85"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="188,84,155,78,156,73,189,79"/>
 </map>

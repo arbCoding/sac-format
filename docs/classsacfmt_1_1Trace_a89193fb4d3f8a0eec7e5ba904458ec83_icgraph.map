@@ -1,9 +1,13 @@
 <map id="sacfmt::Trace::kt5" name="sacfmt::Trace::kt5">
-<area shape="rect" id="Node000001" title=" " alt="" coords="411,32,548,60"/>
-<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="213,5,363,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="396,37,363,32,364,27,397,32"/>
-<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a5a16040cc0d19472325794b2db602aaf" title="Binary SAC&#45;file writer." alt="" coords="213,57,363,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="397,59,363,64,363,59,396,54"/>
-<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#afdeafc868fa9a589497ccbff744523f7" title="Binary SAC&#45;file legacy&#45;write convenience function." alt="" coords="5,49,165,94"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,74,165,74,165,69,198,69"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="608,49,746,76"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a0d062cca103240b81ea8d1a3aa1dd978" title="Reads SAC&#45;headers from words 110–157." alt="" coords="413,5,558,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="593,50,558,43,559,38,594,45"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#ab0c0cbb1ed6f4284553f90f8564cd781" title="Writes SAC&#45;headers from words 110–157." alt="" coords="411,75,560,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="594,80,561,86,560,81,593,75"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="213,14,363,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="398,30,363,30,363,25,398,25"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#a5a16040cc0d19472325794b2db602aaf" title="Binary SAC&#45;file writer." alt="" coords="213,83,363,111"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="396,100,363,100,363,94,396,94"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#afdeafc868fa9a589497ccbff744523f7" title="Binary SAC&#45;file legacy&#45;write convenience function." alt="" coords="5,75,165,119"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="198,100,165,100,165,94,198,94"/>
 </map>

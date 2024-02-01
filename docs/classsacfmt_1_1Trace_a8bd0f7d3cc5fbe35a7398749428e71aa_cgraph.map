@@ -1,0 +1,23 @@
+<map id="sacfmt::Trace::read_float_headers_starter" name="sacfmt::Trace::read_float_headers_starter">
+<area shape="rect" id="Node000001" title="Reads SAC&#45;headers from words 000–009." alt="" coords="5,232,172,276"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a7b4ac68a54c685061347cb9f95c6d9f9" title=" " alt="" coords="243,5,368,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,230,112,190,138,140,173,88,218,44,229,37,232,41,221,48,178,92,143,143,117,193,100,232"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a73dbaa96dcb1999fff11ea451eeb1a64" title=" " alt="" coords="243,57,368,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="101,230,147,164,180,127,218,96,229,89,232,94,221,100,184,131,151,167,105,233"/>
+<area shape="rect" id="Node000004" href="$namespacesacfmt.html#ac112734df4871952d3d85f9c8abd9632" title="Convert 32&#45;bit (one word) binary bitset to a floating&#45;point value." alt="" coords="220,109,391,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="111,229,158,188,218,148,234,140,236,145,221,152,162,192,115,233"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#ac09363ce85e211d16fa75b16fa51aac5" title=" " alt="" coords="231,161,380,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="143,228,219,199,242,192,243,197,221,204,145,233"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#a71874640917875a675a9561b76c55aeb" title=" " alt="" coords="221,213,390,241"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="172,241,206,237,206,242,172,246"/>
+<area shape="rect" id="Node000007" href="$classsacfmt_1_1Trace.html#a3b90aed80b6bbdb6bc87fcdfff976a64" title=" " alt="" coords="223,265,388,293"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="172,261,208,265,207,270,172,266"/>
+<area shape="rect" id="Node000008" href="$classsacfmt_1_1Trace.html#acfd6ccf205474193dc61d69559174add" title=" " alt="" coords="243,317,368,345"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="147,274,221,302,244,310,242,315,219,307,145,279"/>
+<area shape="rect" id="Node000009" href="$classsacfmt_1_1Trace.html#ae92b4099ca4eb647465296ab91631396" title=" " alt="" coords="243,369,368,397"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="115,275,162,315,221,354,236,361,234,366,218,359,159,319,112,279"/>
+<area shape="rect" id="Node000010" href="$classsacfmt_1_1Trace.html#a4571d7aeee93058e0d4c3e22e7918a3f" title=" " alt="" coords="227,421,384,449"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="105,275,151,340,184,376,221,406,232,412,229,417,218,411,180,380,147,344,101,278"/>
+<area shape="rect" id="Node000011" href="$namespacesacfmt.html#a2a31dc3af3ab8c15a93694caee80354a" title="Read one word (32 bits, useful for non&#45;strings) from a binary SAC&#45;File." alt="" coords="234,473,377,501"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="101,276,117,315,143,365,178,415,221,458,230,464,227,469,218,463,174,418,139,367,113,318,96,278"/>
+</map>

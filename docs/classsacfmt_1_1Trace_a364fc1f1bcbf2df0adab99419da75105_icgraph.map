@@ -1,24 +1,38 @@
 <map id="sacfmt::Trace::evla" name="sacfmt::Trace::evla">
-<area shape="rect" id="Node000001" title=" " alt="" coords="670,181,815,209"/>
-<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a4954ab0c93ba1beef164308e6f6d0cc4" title="Return even location as a point." alt="" coords="443,78,596,123"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="694,177,621,146,574,126,577,121,623,141,696,172"/>
-<area shape="rect" id="Node000007" href="$classsacfmt_1_1Trace.html#a9acdb110709f4ed3b28e4b519cece23e" title="Determine if locations are set for geometry calculation." alt="" coords="416,155,622,182"/>
-<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="655,187,622,184,623,178,656,182"/>
-<area shape="rect" id="Node000008" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="444,207,594,234"/>
-<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="656,208,595,215,595,209,655,202"/>
-<area shape="rect" id="Node000009" href="$classsacfmt_1_1Trace.html#a5a16040cc0d19472325794b2db602aaf" title="Binary SAC&#45;file writer." alt="" coords="445,259,594,286"/>
-<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="699,218,623,248,583,261,581,255,621,243,697,213"/>
-<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#ac72a7903e8d1f68c39c5b4d254212d98" title="Calculate azimuth." alt="" coords="200,5,364,33"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="442,75,367,48,330,36,331,31,369,43,444,70"/>
-<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#aa2863cd71e9d5196a7f6d7d7b0e47dcd" title="Calculate back&#45;azimuth." alt="" coords="196,57,368,85"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="428,92,368,84,369,79,429,87"/>
-<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#a454402a99fd1e6435df25a076e8ebb2c" title="Calculate great&#45;circle arc&#45;distance (gcarc)." alt="" coords="211,109,353,154"/>
-<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="428,115,354,125,353,119,428,110"/>
-<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#ac3623740a5bd0345d045b557ad34c77a" title="Calculates gcarc, dist, az, and baz from stla, stlo, evla, and evlo." alt="" coords="5,80,148,124"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="218,41,197,48,123,82,121,77,195,43,216,36"/>
-<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="181,89,148,94,147,89,181,84"/>
-<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="195,122,148,115,148,109,196,116"/>
-<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="401,184,300,184,247,179,195,168,148,150,108,127,111,122,151,145,196,163,247,173,300,178,401,178"/>
-<area shape="rect" id="Node000010" href="$classsacfmt_1_1Trace.html#afdeafc868fa9a589497ccbff744523f7" title="Binary SAC&#45;file legacy&#45;write convenience function." alt="" coords="202,250,362,295"/>
-<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="430,275,362,275,362,270,430,270"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="926,271,1070,298"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a4954ab0c93ba1beef164308e6f6d0cc4" title="Return even location as a point." alt="" coords="695,82,848,127"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="972,262,929,219,876,173,811,130,814,125,879,169,932,215,976,258"/>
+<area shape="rect" id="Node000007" href="$classsacfmt_1_1Trace.html#a9acdb110709f4ed3b28e4b519cece23e" title="Determine if locations are set for geometry calculation." alt="" coords="411,177,617,205"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="965,264,924,238,877,218,811,202,743,193,618,188,618,183,744,188,812,197,879,213,927,234,968,259"/>
+<area shape="rect" id="Node000008" href="$classsacfmt_1_1Trace.html#a3e5122f699951adb7bbb986d782792bf" title="Reads SAC&#45;headers from words 031–039." alt="" coords="665,228,878,272"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="910,274,878,269,879,264,911,269"/>
+<area shape="rect" id="Node000011" href="$classsacfmt_1_1Trace.html#ad24f430dda398b79f8b227b390ee10ec" title="Reads SAC&#45;footers (post&#45;data words 00–43)." alt="" coords="699,297,844,342"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="911,300,845,311,844,305,911,295"/>
+<area shape="rect" id="Node000012" href="$classsacfmt_1_1Trace.html#a938feb32a99a6e23d43f1dd45f60e147" title="Writes SAC&#45;headers from words 031–039." alt="" coords="665,366,878,411"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="964,309,924,333,879,356,850,368,848,363,877,351,922,328,962,304"/>
+<area shape="rect" id="Node000016" href="$classsacfmt_1_1Trace.html#a6db1b57f0d78870958b8ed60cdffc31d" title="Writes SAC&#45;footers (post&#45;data words 00–43)." alt="" coords="697,436,846,480"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="982,313,940,369,912,399,879,425,848,442,845,437,876,421,908,395,936,366,978,309"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#ac72a7903e8d1f68c39c5b4d254212d98" title="Calculate azimuth." alt="" coords="432,5,596,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="700,79,617,48,574,36,576,31,618,43,702,74"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#aa2863cd71e9d5196a7f6d7d7b0e47dcd" title="Calculate back&#45;azimuth." alt="" coords="428,57,600,85"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="680,95,600,85,601,80,680,90"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#a454402a99fd1e6435df25a076e8ebb2c" title="Calculate great&#45;circle arc&#45;distance (gcarc)." alt="" coords="443,109,585,154"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="680,117,586,126,585,121,680,111"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#ac3623740a5bd0345d045b557ad34c77a" title="Calculates gcarc, dist, az, and baz from stla, stlo, evla, and evlo." alt="" coords="217,80,359,124"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="438,40,412,48,335,81,333,76,410,43,436,35"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="414,87,360,95,359,90,413,82"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="428,123,359,114,360,108,429,117"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="431,175,410,168,366,149,326,127,328,122,368,144,412,163,433,170"/>
+<area shape="rect" id="Node000009" href="$classsacfmt_1_1Trace.html#a14a56161e48f3406b7f7c2e3315e5d92" title="Reads SAC&#45;headers from words 000–069." alt="" coords="442,232,587,276"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="651,254,588,255,587,250,651,249"/>
+<area shape="rect" id="Node000010" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="213,272,363,300"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="428,269,364,278,363,273,427,263"/>
+<area shape="poly" id="edge14_Node000011_Node000010" title=" " alt="" coords="684,316,363,294,364,288,685,311"/>
+<area shape="rect" id="Node000013" href="$classsacfmt_1_1Trace.html#ac1c34f386bc0442e42aab7fd7272ff5f" title="Writes SAC&#45;headers from words 000–069." alt="" coords="440,370,589,415"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="650,393,589,394,589,389,650,388"/>
+<area shape="rect" id="Node000014" href="$classsacfmt_1_1Trace.html#a5a16040cc0d19472325794b2db602aaf" title="Binary SAC&#45;file writer." alt="" coords="213,408,363,436"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="425,407,363,415,363,410,425,401"/>
+<area shape="rect" id="Node000015" href="$classsacfmt_1_1Trace.html#afdeafc868fa9a589497ccbff744523f7" title="Binary SAC&#45;file legacy&#45;write convenience function." alt="" coords="5,400,165,444"/>
+<area shape="poly" id="edge18_Node000014_Node000015" title=" " alt="" coords="198,425,165,425,165,419,198,419"/>
+<area shape="poly" id="edge20_Node000016_Node000014" title=" " alt="" coords="682,454,363,430,363,425,683,449"/>
 </map>

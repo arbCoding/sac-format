@@ -1,0 +1,15 @@
+<map id="sacfmt::Trace::write_bool_headers" name="sacfmt::Trace::write_bool_headers">
+<area shape="rect" id="Node000001" title="Writes SAC&#45;headers from words 105–109." alt="" coords="5,128,155,172"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a38693814b8b3c05e99d782d0b8110d75" title="Convert boolean to a word for writing." alt="" coords="203,5,364,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,125,145,84,201,44,215,37,217,41,204,48,148,88,104,129"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#add4a9573a1a17bdd68a0abce3a2d06d3" title=" " alt="" coords="206,57,361,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="131,124,202,95,223,88,224,93,204,100,133,129"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#aa4ac7391da004996a8e8c1587aff957a" title=" " alt="" coords="207,109,360,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="155,137,192,132,193,138,155,143"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#a839a03d45a5ab05ec643db182e8d3c3b" title=" " alt="" coords="205,161,362,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="155,156,190,161,190,166,155,162"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#a59ef9524e27fbeccd7da025cb5d5d6de" title=" " alt="" coords="206,213,361,241"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="135,170,204,198,225,206,223,211,202,203,133,175"/>
+<area shape="rect" id="Node000007" href="$namespacesacfmt.html#ac8fee1d64cb1b530a798dee46ffb6493" title="Write arbitrary number of words (useful for vectors) to a binary SAC&#45;file." alt="" coords="207,265,360,293"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="105,171,149,211,204,250,217,257,215,262,201,255,145,215,101,175"/>
+</map>

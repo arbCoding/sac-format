@@ -1,0 +1,29 @@
+<map id="sacfmt::Trace::write_float_headers_t" name="sacfmt::Trace::write_float_headers_t">
+<area shape="rect" id="Node000001" title="Writes SAC&#45;headers from words 010–020." alt="" coords="5,309,155,354"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a60e74c162149c7afb740f2e342dc4bed" title="Template function to convert input value into a std::vector&lt;char&gt; for writing." alt="" coords="203,5,385,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,308,92,254,114,183,129,146,149,109,173,74,201,44,208,39,211,43,204,48,177,77,153,111,134,148,119,185,98,256,87,309"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a8236b68afddedb1d8df06230b270b415" title=" " alt="" coords="233,57,355,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="84,308,98,263,121,206,155,147,176,120,201,96,218,85,221,90,204,100,180,123,159,150,126,208,103,265,89,309"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#a1dcec6ab6a8387e04fcdaa3c593f73e0" title=" " alt="" coords="229,109,359,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="88,307,104,272,129,229,161,185,201,148,214,140,217,144,204,152,165,189,133,232,109,275,93,310"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#a909c70a399ecf8f39299fd09cc844092" title=" " alt="" coords="229,161,359,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="95,307,138,253,168,224,201,200,214,193,217,197,204,204,172,228,142,257,99,310"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#a01a925146a9e848c50e376ebef02ec2e" title=" " alt="" coords="229,213,359,241"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="110,306,153,278,202,251,221,244,223,249,204,256,155,283,113,311"/>
+<area shape="rect" id="Node000007" href="$classsacfmt_1_1Trace.html#a2b83312b723c3c6fa22e2b89b8601388" title=" " alt="" coords="229,265,359,293"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="155,310,219,295,220,300,156,316"/>
+<area shape="rect" id="Node000008" href="$classsacfmt_1_1Trace.html#a41b360b184d70d8eee0b7d673d6fcbe1" title=" " alt="" coords="229,317,359,345"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="155,329,214,329,214,334,155,334"/>
+<area shape="rect" id="Node000009" href="$classsacfmt_1_1Trace.html#a78f568d3784d51c5d196943a624ee73a" title=" " alt="" coords="229,369,359,397"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="156,347,220,363,219,368,155,352"/>
+<area shape="rect" id="Node000010" href="$classsacfmt_1_1Trace.html#aede7fd12528191e2609eadaac0a6fc9f" title=" " alt="" coords="229,421,359,449"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="113,352,155,380,204,406,223,414,221,419,202,411,153,384,110,356"/>
+<area shape="rect" id="Node000011" href="$classsacfmt_1_1Trace.html#aa8a5d03e3d9242da00035cd47110dac9" title=" " alt="" coords="229,473,359,501"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="99,352,142,406,172,434,204,458,217,465,214,470,201,463,168,438,138,409,95,355"/>
+<area shape="rect" id="Node000012" href="$classsacfmt_1_1Trace.html#a7bb802148c37b20dd6334260b9578edd" title=" " alt="" coords="229,525,359,553"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="93,353,109,388,133,430,165,474,204,510,217,518,214,523,201,515,161,477,129,433,104,390,88,355"/>
+<area shape="rect" id="Node000013" href="$classsacfmt_1_1Trace.html#afddb145db3a3ac51d68406b1b96f55ee" title=" " alt="" coords="229,577,359,605"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="89,353,103,398,126,454,159,513,180,539,204,562,217,571,214,576,201,567,176,543,155,516,121,456,98,399,84,355"/>
+<area shape="rect" id="Node000014" href="$namespacesacfmt.html#ac8fee1d64cb1b530a798dee46ffb6493" title="Write arbitrary number of words (useful for vectors) to a binary SAC&#45;file." alt="" coords="217,629,371,657"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="87,353,98,407,119,477,134,515,153,551,177,585,204,615,211,620,208,624,201,618,173,588,149,554,129,517,114,479,92,408,82,354"/>
+</map>

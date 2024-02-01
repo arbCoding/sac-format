@@ -1,5 +1,7 @@
 <map id="sacfmt::safe_to_read_data" name="sacfmt::safe_to_read_data">
-<area shape="rect" id="Node000001" title="Determines if the SAC&#45;file has enough space remaining to contain a complete data vector." alt="" coords="204,5,398,33"/>
-<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,5,156,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,22,156,22,156,17,189,17"/>
+<area shape="rect" id="Node000001" title="Determines if the SAC&#45;file has enough space remaining to contain a complete data vector." alt="" coords="397,14,591,42"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#a3c1aa78b048dc56fefd0674d9e72f443" title="Reads data vectors." alt="" coords="204,5,349,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="382,30,349,30,349,25,382,25"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,14,156,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="189,30,156,30,156,25,189,25"/>
 </map>

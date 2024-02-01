@@ -1,7 +1,9 @@
 <map id="sacfmt::word_position" name="sacfmt::word_position">
-<area shape="rect" id="Node000001" title="Calculates position of word in SAC&#45;file." alt="" coords="391,5,556,33"/>
-<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a42c4ad96f0e0e99f0e7c752d1fbf0076" title="Reader arbitrary number of words (useful for vectors) from a binary SAC&#45;file." alt="" coords="204,5,343,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="376,22,343,22,343,17,376,17"/>
-<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,5,156,33"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="189,22,156,22,156,17,189,17"/>
+<area shape="rect" id="Node000001" title="Calculates position of word in SAC&#45;file." alt="" coords="584,14,750,42"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a42c4ad96f0e0e99f0e7c752d1fbf0076" title="Reader arbitrary number of words (useful for vectors) from a binary SAC&#45;file." alt="" coords="397,14,536,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="570,30,537,30,537,25,570,25"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a3c1aa78b048dc56fefd0674d9e72f443" title="Reads data vectors." alt="" coords="204,5,349,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="382,30,350,30,350,25,382,25"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,14,156,42"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="189,30,156,30,156,25,189,25"/>
 </map>

@@ -1,14 +1,49 @@
 <map id="sacfmt::read_word" name="sacfmt::read_word">
-<area shape="rect" id="Node000001" title="Read one word (32 bits, useful for non&#45;strings) from a binary SAC&#45;File." alt="" coords="662,56,805,84"/>
-<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a42c4ad96f0e0e99f0e7c752d1fbf0076" title="Reader arbitrary number of words (useful for vectors) from a binary SAC&#45;file." alt="" coords="225,5,365,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="647,58,614,54,364,28,365,22,615,49,648,53"/>
-<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,81,156,109"/>
-<area shape="poly" id="edge7_Node000001_Node000003" title=" " alt="" coords="648,76,204,92,156,95,156,89,204,87,648,70"/>
-<area shape="rect" id="Node000004" href="$namespacesacfmt.html#a8ba31d67bec9f3b43ed2a46f2ef7612c" title="Read two words (64 bits, useful for most strings) from a binary SAC&#45;file." alt="" coords="434,107,614,134"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="660,90,585,109,584,103,659,85"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="240,41,205,54,122,83,120,78,203,49,238,36"/>
-<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="419,117,156,102,156,97,420,112"/>
-<area shape="rect" id="Node000005" href="$namespacesacfmt.html#aaef6781fd78aa7d2941f9308523f2895" title="Read four words (128 bits, kEvNm only) from a binary SAC&#45;file." alt="" coords="204,157,386,185"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="445,141,361,159,360,154,444,135"/>
-<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="238,154,203,142,120,112,122,107,205,137,240,149"/>
+<area shape="rect" id="Node000001" title="Read one word (32 bits, useful for non&#45;strings) from a binary SAC&#45;File." alt="" coords="888,345,1030,372"/>
+<area shape="rect" id="Node000002" href="$classsacfmt_1_1Trace.html#ad21ea2780a32300f66c83a836bae3ee6" title="Reads SAC&#45;headers from words 105–109." alt="" coords="204,173,349,218"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="954,330,948,268,930,190,915,149,895,111,870,77,838,49,805,30,769,17,733,10,695,8,656,11,618,18,541,42,469,74,404,110,308,175,305,171,401,106,467,69,540,37,617,13,656,6,695,3,733,5,771,12,807,25,841,44,874,73,900,108,920,147,935,188,953,267,959,329"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#a80526d9636443109858ffc01bbfdaf73" title="Reads SAC&#45;headers from words 050–053." alt="" coords="640,59,827,103"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="949,331,936,285,914,227,881,168,861,142,838,118,821,106,824,102,841,114,865,138,886,166,919,225,941,283,954,330"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#a1148a373e7a464153b37d4c25bf46ea5" title="Reads SAC&#45;headers from words 054–069." alt="" coords="655,128,812,173"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="943,332,903,260,874,221,838,187,811,172,814,167,841,183,878,217,908,257,948,330"/>
+<area shape="rect" id="Node000007" href="$classsacfmt_1_1Trace.html#a32288ec346b680e7d03e47d38964c0a5" title="Reads SAC&#45;headers from words 021–030." alt="" coords="658,197,809,242"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="933,335,891,295,838,257,809,243,811,238,841,252,895,291,937,332"/>
+<area shape="rect" id="Node000008" href="$classsacfmt_1_1Trace.html#a8bd0f7d3cc5fbe35a7398749428e71aa" title="Reads SAC&#45;headers from words 000–009." alt="" coords="650,267,817,311"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="897,342,808,315,809,309,898,337"/>
+<area shape="rect" id="Node000009" href="$classsacfmt_1_1Trace.html#a3e5122f699951adb7bbb986d782792bf" title="Reads SAC&#45;headers from words 031–039." alt="" coords="627,336,840,381"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="872,361,840,361,840,356,872,356"/>
+<area shape="rect" id="Node000010" href="$classsacfmt_1_1Trace.html#af750e5d19b9a50a21e010e76d5f2864c" title="Reads SAC&#45;headers from words 010–020." alt="" coords="661,405,806,450"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="898,380,808,408,806,403,897,374"/>
+<area shape="rect" id="Node000011" href="$classsacfmt_1_1Trace.html#aefa60107ad0d8eccc2c8be3f70866f97" title="Reads SAC&#45;headers from words 040–049." alt="" coords="658,475,809,519"/>
+<area shape="poly" id="edge16_Node000001_Node000011" title=" " alt="" coords="937,385,895,426,841,465,811,479,809,474,838,460,891,422,933,381"/>
+<area shape="rect" id="Node000012" href="$classsacfmt_1_1Trace.html#a487af9381c8df959027b009e2a909580" title="Reads SAC&#45;headers from words 070–075." alt="" coords="648,544,819,589"/>
+<area shape="poly" id="edge18_Node000001_Node000012" title=" " alt="" coords="948,387,908,460,878,500,841,534,821,546,818,542,838,530,874,496,903,457,943,385"/>
+<area shape="rect" id="Node000014" href="$classsacfmt_1_1Trace.html#aa5bf0c40329dfe3256d2ad4f9c9c764d" title="Reads SAC&#45;headers from words 076–104." alt="" coords="661,613,806,658"/>
+<area shape="poly" id="edge21_Node000001_Node000014" title=" " alt="" coords="954,387,941,434,919,492,886,551,865,579,841,603,808,623,805,618,838,599,861,575,881,548,914,490,936,432,949,386"/>
+<area shape="rect" id="Node000015" href="$namespacesacfmt.html#a8ba31d67bec9f3b43ed2a46f2ef7612c" title="Read two words (64 bits, useful for most strings) from a binary SAC&#45;file." alt="" coords="643,682,824,710"/>
+<area shape="poly" id="edge23_Node000001_Node000015" title=" " alt="" coords="958,388,949,447,930,524,915,565,895,604,871,641,841,672,825,684,822,679,838,668,867,637,891,601,910,563,925,523,944,446,953,387"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#aacae1343bf2a58a4ea9a83fc390f6fd3" title="Binary SAC&#45;file reader." alt="" coords="5,549,156,576"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="258,233,92,549,87,547,254,230"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#a14a56161e48f3406b7f7c2e3315e5d92" title="Reads SAC&#45;headers from words 000–069." alt="" coords="416,301,561,346"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="635,114,629,118,584,162,547,213,519,263,501,303,496,300,514,260,542,210,580,158,626,114,632,109"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="437,356,107,550,105,546,434,352"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="643,180,629,187,592,214,559,245,509,303,505,299,555,241,589,210,626,183,640,175"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="646,250,628,257,532,303,530,298,626,252,644,245"/>
+<area shape="poly" id="edge11_Node000008_Node000005" title=" " alt="" coords="636,306,562,316,561,311,635,300"/>
+<area shape="poly" id="edge13_Node000009_Node000005" title=" " alt="" coords="612,344,561,337,562,331,613,339"/>
+<area shape="poly" id="edge15_Node000010_Node000005" title=" " alt="" coords="646,403,626,396,530,349,532,344,628,391,648,398"/>
+<area shape="poly" id="edge17_Node000011_Node000005" title=" " alt="" coords="643,474,626,465,589,437,555,406,505,348,509,345,559,402,592,433,629,460,646,469"/>
+<area shape="rect" id="Node000013" href="$classsacfmt_1_1Trace.html#abddd25118a26ab1e855da14c3d2d0039" title="Reads SAC&#45;headers from words 070–104." alt="" coords="416,544,561,589"/>
+<area shape="poly" id="edge19_Node000012_Node000013" title=" " alt="" coords="634,569,561,569,561,564,634,564"/>
+<area shape="poly" id="edge20_Node000013_Node000003" title=" " alt="" coords="400,568,156,566,156,560,400,563"/>
+<area shape="poly" id="edge22_Node000014_Node000013" title=" " alt="" coords="646,614,561,590,562,584,648,609"/>
+<area shape="rect" id="Node000016" href="$classsacfmt_1_1Trace.html#ad24f430dda398b79f8b227b390ee10ec" title="Reads SAC&#45;footers (post&#45;data words 00–43)." alt="" coords="204,600,349,645"/>
+<area shape="poly" id="edge24_Node000015_Node000016" title=" " alt="" coords="660,681,579,664,458,645,349,632,350,627,458,640,580,658,661,675"/>
+<area shape="rect" id="Node000017" href="$namespacesacfmt.html#aaef6781fd78aa7d2941f9308523f2895" title="Read four words (128 bits, kEvNm only) from a binary SAC&#45;file." alt="" coords="397,673,579,700"/>
+<area shape="poly" id="edge26_Node000015_Node000017" title=" " alt="" coords="628,694,580,693,580,687,628,689"/>
+<area shape="rect" id="Node000018" href="$classsacfmt_1_1Trace.html#a0d062cca103240b81ea8d1a3aa1dd978" title="Reads SAC&#45;headers from words 110–157." alt="" coords="204,669,349,714"/>
+<area shape="poly" id="edge29_Node000015_Node000018" title=" " alt="" coords="629,711,579,714,488,719,397,714,349,708,350,703,397,709,488,713,579,709,628,705"/>
+<area shape="poly" id="edge25_Node000016_Node000003" title=" " alt="" coords="189,598,127,579,129,574,190,593"/>
+<area shape="poly" id="edge27_Node000017_Node000018" title=" " alt="" coords="382,692,349,693,349,687,382,686"/>
+<area shape="poly" id="edge28_Node000018_Node000003" title=" " alt="" coords="211,664,202,659,143,617,96,579,100,575,146,613,205,655,213,660"/>
 </map>

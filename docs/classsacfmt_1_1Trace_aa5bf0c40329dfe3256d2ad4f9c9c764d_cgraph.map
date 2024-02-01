@@ -1,0 +1,47 @@
+<map id="sacfmt::Trace::read_int_headers_meta" name="sacfmt::Trace::read_int_headers_meta">
+<area shape="rect" id="Node000001" title="Reads SAC&#45;headers from words 076–104." alt="" coords="5,544,151,588"/>
+<area shape="rect" id="Node000002" href="$namespacesacfmt.html#a68fa833a9ba91eff6e58afabbb993030" title="Convert 32&#45;bit (one word) binary bitset to integer." alt="" coords="204,5,364,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,543,91,437,115,288,131,212,150,142,172,84,197,44,201,40,205,44,201,48,177,86,155,143,136,213,120,289,97,438,84,543"/>
+<area shape="rect" id="Node000003" href="$classsacfmt_1_1Trace.html#a161b23e8196d2950337e0744c6edb1ea" title=" " alt="" coords="208,57,360,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="80,543,94,447,118,313,135,245,153,183,174,131,197,96,202,91,205,95,201,100,178,134,158,184,140,246,124,314,99,447,85,543"/>
+<area shape="rect" id="Node000004" href="$classsacfmt_1_1Trace.html#a31d3e1d43186575342ddc2999b4e12f5" title=" " alt="" coords="212,109,356,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="76,543,79,469,94,363,109,306,131,249,159,195,197,148,202,144,205,147,201,152,164,198,136,251,114,307,100,364,85,469,82,543"/>
+<area shape="rect" id="Node000005" href="$classsacfmt_1_1Trace.html#adcd0f41a5ea91666dac0c373667d02ae" title=" " alt="" coords="205,161,363,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="77,543,83,476,101,385,116,335,137,286,163,240,197,200,202,195,205,199,201,204,168,243,141,289,121,337,106,386,89,477,83,543"/>
+<area shape="rect" id="Node000006" href="$classsacfmt_1_1Trace.html#ad72660eb9cf0944b2d999dea192cda85" title=" " alt="" coords="205,213,363,241"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="79,543,88,485,108,407,123,365,143,324,167,286,197,252,203,247,206,251,201,256,171,289,147,327,128,367,113,408,93,486,84,543"/>
+<area shape="rect" id="Node000007" href="$classsacfmt_1_1Trace.html#a911962c90dd9e758efc5d4971d6666d2" title=" " alt="" coords="207,265,361,293"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="81,542,93,493,115,429,148,362,171,331,197,304,204,299,207,303,200,308,175,335,153,365,119,431,98,495,86,544"/>
+<area shape="rect" id="Node000008" href="$classsacfmt_1_1Trace.html#ab3c54d31092cf527b16f97b61e3ef717" title=" " alt="" coords="212,317,356,345"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="84,542,98,503,122,452,155,401,197,356,205,350,208,354,200,360,159,404,127,455,103,505,89,544"/>
+<area shape="rect" id="Node000009" href="$classsacfmt_1_1Trace.html#a5b4d5787fac67fd2e717c9baeca6e230" title=" " alt="" coords="200,369,368,397"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="89,542,130,476,161,439,197,408,207,401,210,406,200,412,165,443,135,479,93,545"/>
+<area shape="rect" id="Node000010" href="$classsacfmt_1_1Trace.html#a45a3d1dc7d3b41fc9f91e68308e5d9a2" title=" " alt="" coords="199,421,369,449"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="98,541,141,500,197,460,212,452,214,457,200,464,145,504,102,545"/>
+<area shape="rect" id="Node000011" href="$classsacfmt_1_1Trace.html#a64451718abb41234669fdff39c90b8c1" title=" " alt="" coords="210,473,358,501"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="128,540,198,511,220,503,222,508,200,516,130,545"/>
+<area shape="rect" id="Node000012" href="$classsacfmt_1_1Trace.html#acb66f203432e05e6548de4426a83fa43" title=" " alt="" coords="207,525,361,553"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="151,554,192,548,193,554,151,559"/>
+<area shape="rect" id="Node000013" href="$classsacfmt_1_1Trace.html#aa4240493a4f0f6cbad9f01c4f0abb910" title=" " alt="" coords="206,577,362,605"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="151,572,191,577,191,582,151,577"/>
+<area shape="rect" id="Node000014" href="$classsacfmt_1_1Trace.html#aa3e99dab75dd5fd0892d6b02de12e676" title=" " alt="" coords="206,629,362,657"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="131,586,200,614,222,622,220,627,198,619,129,591"/>
+<area shape="rect" id="Node000015" href="$classsacfmt_1_1Trace.html#acbca0fd17f1a36c5b11c5cadb07529a3" title=" " alt="" coords="208,681,360,709"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="102,587,145,627,200,666,214,673,212,678,197,671,142,631,98,590"/>
+<area shape="rect" id="Node000016" href="$classsacfmt_1_1Trace.html#a5fdc799a52f3c5afbc7da812e97d1908" title=" " alt="" coords="209,733,359,761"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="93,587,135,653,165,688,200,718,210,724,207,729,197,723,161,692,131,656,89,590"/>
+<area shape="rect" id="Node000017" href="$classsacfmt_1_1Trace.html#a3cae8b2fab55b1ea431b4f93ce8c0833" title=" " alt="" coords="212,785,356,813"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="89,588,104,627,127,677,159,727,200,770,208,776,205,780,197,775,155,730,122,679,99,629,84,590"/>
+<area shape="rect" id="Node000018" href="$classsacfmt_1_1Trace.html#a863a159442c23dbda0d8bc335f60f76d" title=" " alt="" coords="204,837,364,865"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="86,588,98,637,120,700,153,766,175,796,200,823,207,828,204,832,197,826,171,799,149,769,115,702,93,638,81,589"/>
+<area shape="rect" id="Node000019" href="$classsacfmt_1_1Trace.html#aefbfebf9dd16428e59eb0f9b1d69c1f9" title=" " alt="" coords="207,889,361,917"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="84,588,93,646,113,723,128,764,147,804,171,842,201,875,206,879,203,883,197,878,167,845,143,807,123,766,108,724,88,647,79,589"/>
+<area shape="rect" id="Node000020" href="$classsacfmt_1_1Trace.html#af1f193387ea790bafbfcacf57cff4d9d" title=" " alt="" coords="208,941,360,969"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="83,588,89,654,106,745,121,794,142,842,168,887,201,927,205,931,202,935,197,930,163,890,137,844,116,796,101,746,83,655,77,589"/>
+<area shape="rect" id="Node000021" href="$classsacfmt_1_1Trace.html#a8cd45a057a3fdb7f126cbbff86454e2c" title=" " alt="" coords="205,993,363,1021"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="82,589,85,663,100,767,115,824,136,880,164,932,201,979,205,983,202,987,197,982,160,935,131,882,110,826,95,769,79,663,76,589"/>
+<area shape="rect" id="Node000022" href="$classsacfmt_1_1Trace.html#a6476997ea19547b8de7fedb550764f0a" title=" " alt="" coords="205,1045,363,1073"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="85,588,99,684,124,817,140,884,158,946,178,997,201,1031,205,1035,202,1039,197,1034,174,999,153,948,135,886,118,818,94,685,80,589"/>
+<area shape="rect" id="Node000023" href="$namespacesacfmt.html#a2a31dc3af3ab8c15a93694caee80354a" title="Read one word (32 bits, useful for non&#45;strings) from a binary SAC&#45;File." alt="" coords="213,1097,355,1125"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="84,588,97,693,120,842,136,918,155,987,177,1044,201,1083,205,1087,201,1090,197,1086,172,1047,150,989,131,919,115,843,92,694,79,589"/>
+</map>
