@@ -18,13 +18,36 @@ cd "$base" || exit
 #   is better than
 #       auto my_function(int number) -> float {}
 ct_cmd () {
-    clang-tidy --checks="bugprone-*,performance-*,readability-*,portability-*,\
-        clang-analyzer-*,cpp-coreguidelines-*,modernize-a*,modernize-c*,\
-        modernize-d*,modernize-l*,modernize-m*,modernize-p*,modernize-r*,\
-        modernize-s*,modernize-t*,modernize-un*,modernize-use-a*,\
-        modernize-use-b*,modernize-use-c*,modernize-use-d*,modernize-use-e*,\
-        modernize-use-n*,modernize-use-o*,modernize-use-s*,modernize-use-tran*,\
-        modernize-use-u*,clang-diagnostic-*" --extra-arg="-std=c++20" -p \
+    clang-tidy --checks="\
+        bugprone-*,\
+        performance-*,\
+        readability-*,\
+        portability-*,\
+        clang-analyzer-*,\
+        cpp-coreguidelines-*,\
+        modernize-a*,\
+        modernize-c*,\
+        modernize-d*,\
+        modernize-l*,\
+        modernize-m*,\
+        modernize-p*,\
+        modernize-r*,\
+        modernize-s*,\
+        modernize-t*,\
+        modernize-un*,\
+        modernize-use-a*,\
+        modernize-use-b*,\
+        modernize-use-c*,\
+        modernize-use-d*,\
+        modernize-use-e*,\
+        modernize-use-n*,\
+        modernize-use-o*,\
+        modernize-use-s*,\
+        modernize-use-tran*,\
+        modernize-use-u*,\
+        clang-diagnostic-*,\
+        alpha.clone.CloneChecker" \
+        --extra-arg="-std=c++20" -p \
         "$base/compile_commands.json" "$1"
     echo ""
 }

@@ -488,9 +488,9 @@ std::vector<double> read_data(std::ifstream *sac, const read_spec &spec) {
   sac->seekg(word_position(spec.start_word));
   std::vector<double> result{};
   result.resize(spec.num_words);
-  for (size_t i{0}; i < spec.num_words; ++i) [[likely]] {
-    result[i] = static_cast<double>(binary_to_float(read_word(sac)));
-  }
+  std::for_each(result.begin(), result.end(), [&sac](double &value) {
+    value = static_cast<double>(binary_to_float(read_word(sac)));
+  });
   return result;
 }
 //-----------------------------------------------------------------------------
@@ -510,9 +510,9 @@ std::vector<double> read_data(std::ifstream *sac, const read_spec &spec) {
 void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
   std::ofstream &sac = *sac_file;
   if (sac.is_open()) {
-    for (char character : input) [[likely]] {
+    std::for_each(input.begin(), input.end(), [&sac](const char &character) {
       sac.write(&character, sizeof(char));
-    }
+    });
   }
 }
 
@@ -530,10 +530,10 @@ std::vector<char> convert_to_word(const T input) noexcept {
   // flawfinder: ignore
   std::memcpy(tmp.data(), &input, word_length);
   std::vector<char> word{};
-  word.resize(word_length);
-  for (size_t i{0}; i < word_length; ++i) [[likely]] {
-    word[i] = tmp[i];
-  }
+  word.reserve(word_length);
+  std::for_each(tmp.begin(), tmp.end(), [&word](const char &character) {
+    word.push_back(character);
+  });
   return word;
 }
 
@@ -548,15 +548,15 @@ template std::vector<char> convert_to_word(const int x) noexcept;
   @return std::vector<char> Prepared for writing to binary SAC-file.
  */
 std::vector<char> convert_to_word(const double input) noexcept {
-  std::array<char, static_cast<size_t>(2) * word_length> tmp{};
+  constexpr size_t n_words{static_cast<size_t>(2) * word_length};
+  std::array<char, n_words> tmp{};
   // Copy bytes from input into the tmp array
   // flawfinder: ignore
-  std::memcpy(tmp.data(), &input, static_cast<size_t>(2) * word_length);
+  std::memcpy(tmp.data(), &input, n_words);
   std::vector<char> word{};
-  word.resize(static_cast<size_t>(2) * word_length);
-  for (size_t i{0}; i < 2 * word_length; ++i) {
-    word[i] = tmp[i];
-  }
+  word.reserve(n_words);
+  std::for_each(tmp.begin(), tmp.end(),
+                [&word](const char &character) { word.push_back(character); });
   return word;
 }
 
@@ -572,12 +572,14 @@ std::vector<char> convert_to_word(const double input) noexcept {
 template <size_t N>
 std::array<char, N> convert_to_words(const std::string &str,
                                      int n_words) noexcept {
+  std::vector<char> tmp{};
+  tmp.reserve(n_words);
+  std::for_each(str.begin(), str.end(), [&tmp](const char &character) {
+    tmp.push_back(character);
+  });
   std::array<char, N> all_words{};
-  // String to null-terminated character array
-  const char *c_str = str.c_str();
-  for (size_t i{0}; i < static_cast<size_t>(n_words) * word_length; ++i) {
-    all_words[i] = c_str[i];
-  }
+  // Move vector to array
+  std::move(tmp.begin(), tmp.end(), all_words.begin());
   return all_words;
 }
 
@@ -598,10 +600,8 @@ convert_to_words(const std::string &str, const int n_words) noexcept;
 std::vector<char> bool_to_word(const bool flag) noexcept {
   std::vector<char> result;
   result.resize(word_length);
+  std::fill(result.begin() + 1, result.end(), 0);
   result[0] = static_cast<char>(flag ? 1 : 0);
-  for (size_t i{1}; i < word_length; ++i) {
-    result[i] = 0;
-  }
   return result;
 }
 //-----------------------------------------------------------------------------
@@ -861,11 +861,11 @@ double limit_90(const double degrees) noexcept {
   @returns Default created Trace object.
  */
 Trace::Trace() noexcept {
-  std::ranges::fill(floats.begin(), floats.end(), unset_float);
-  std::ranges::fill(doubles.begin(), doubles.end(), unset_double);
-  std::ranges::fill(ints.begin(), ints.end(), unset_int);
-  std::ranges::fill(bools.begin(), bools.end(), unset_bool);
-  std::ranges::fill(strings.begin(), strings.end(), unset_word);
+  std::fill(floats.begin(), floats.end(), unset_float);
+  std::fill(doubles.begin(), doubles.end(), unset_double);
+  std::fill(ints.begin(), ints.end(), unset_int);
+  std::fill(bools.begin(), bools.end(), unset_bool);
+  std::fill(strings.begin(), strings.end(), unset_word);
 }
 
 /*!
@@ -2174,13 +2174,15 @@ void Trace::write(const std::filesystem::path &path, const bool legacy) const {
   two_words = convert_to_words<sizeof(two_words)>(kinst(), 2);
   write_words(&file, std::vector<char>(two_words.begin(), two_words.end()));
   // Data
-  for (double dub : data1()) [[likely]] {
-    write_words(&file, convert_to_word(static_cast<float>(dub)));
-  }
+  std::vector<double> tmp{data1()};
+  std::for_each(tmp.begin(), tmp.end(), [&file](const auto &value) {
+    write_words(&file, convert_to_word(static_cast<float>(value)));
+  });
   if (!leven() || (iftype() > 1)) {
-    for (double dub : data2()) {
-      write_words(&file, convert_to_word(static_cast<float>(dub)));
-    }
+    tmp = data2();
+    std::for_each(tmp.begin(), tmp.end(), [&file](const auto &value) {
+      write_words(&file, convert_to_word(static_cast<float>(value)));
+    });
   }
   if (header_version == modern_hdr_version) {
     // Write footer

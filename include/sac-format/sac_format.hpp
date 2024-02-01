@@ -16,7 +16,7 @@
 #pragma once
 // Standard Library
 //   https://en.cppreference.com/w/cpp/standard_library
-// std::ranges::fill
+// std::fill, std::for_each
 #include <algorithm>
 // std::array
 #include <array>
