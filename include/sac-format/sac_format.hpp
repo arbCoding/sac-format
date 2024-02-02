@@ -127,24 +127,6 @@ word_one uint_to_binary(uint num) noexcept;
 word_one int_to_binary(int num) noexcept;
 // Convert 32-bit (one word) binary bitset to integer.
 int binary_to_int(word_one bin) noexcept;
-//! bitset type-safety namespace.
-namespace bitset_type {
-//! Ensure type-safety for conversions between floats/doubles and bitsets.
-template <unsigned nbits> struct uint {};
-//! One-word (floats).
-template <> struct uint<4 * bits_per_byte> {
-  using type = uint32_t;
-};
-constexpr int bytes{8};
-//! Two-words (doubles)
-template <> struct uint<bytes * bits_per_byte> {
-  using type = uint64_t;
-};
-}  // namespace bitset_type
-//! Convert variable to unsigned-integer using type-safe conversions.
-template <class T>
-using unsigned_int =
-    typename bitset_type::uint<sizeof(T) * bits_per_byte>::type;
 // Convert floating-point value to 32-bit (one word) binary bitset.
 word_one float_to_binary(float num) noexcept;
 // Convert 32-bit (one word) binary bitset to floating-point value.
