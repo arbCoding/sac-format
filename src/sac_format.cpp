@@ -109,9 +109,7 @@ int binary_to_int(word_one bin) noexcept {
   @returns ::word_one Converted value.
  */
 word_one float_to_binary(const float num) noexcept {
-  unsigned_int<float> num_as_uint{0};
-  // flawfinder: ignore
-  std::memcpy(&num_as_uint, &num, sizeof(float));
+  uint32_t num_as_uint{std::bit_cast<uint32_t>(num)};
   word_one result{num_as_uint};
   return result;
 }
@@ -120,6 +118,8 @@ word_one float_to_binary(const float num) noexcept {
   \brief Convert 32-bit (one word) binary bitset to a floating-point value.
 
   Converts bitset to unsigned long then to float.
+
+  This requires memcpy as there is no std::bit_cast from unsigned long to float.
 
   @param[in] bin ::word_one Binary value to be converted.
   @returns float Converted value.
@@ -141,9 +141,7 @@ float binary_to_float(const word_one &bin) noexcept {
   @returns ::word_two Converted value.
  */
 word_two double_to_binary(const double num) noexcept {
-  unsigned_int<double> num_as_uint{0};
-  // flawfinder: ignore
-  std::memcpy(&num_as_uint, &num, sizeof(double));
+  uint64_t num_as_uint{std::bit_cast<uint64_t>(num)};
   word_two result{num_as_uint};
   return result;
 }
@@ -152,6 +150,8 @@ word_two double_to_binary(const double num) noexcept {
   \brief Convert 64-bit (two words) binary bitset to double-precision value.
 
   Converts bitset to unsigned long long then to double.
+
+  This requires memcpy as there is no std::bit_cast from unsigned long long to double.
 
   @param[in] bin ::word_two Binary value to be converted.
   @returns double Converted value.
@@ -520,6 +520,8 @@ void write_words(std::ofstream *sac_file, const std::vector<char> &input) {
   \brief Template function to convert input value into a std::vector<char> for
   writing.
 
+  This requires memcpy as there is no std::bit_cast from float to char (uint).
+
   @param[in] input Input value (float or int) to convert.
   @return std::vector<char> Prepared for writing to binary SAC-file.
  */
@@ -542,6 +544,8 @@ template std::vector<char> convert_to_word(const int x) noexcept;
 
 /*!
   \brief Convert double value into a std::vector<char> for writing.
+
+  This requires memcpy because there is no std::bit_cast from double to char (uint).
 
   @param[in] input Input value to convert (double).
   @return std::vector<char> Prepared for writing to binary SAC-file.
@@ -855,8 +859,6 @@ double limit_90(const double degrees) noexcept {
 
   Fills all values with their default (unset) values.
   Data vectors are of size zero.
-
-  @returns Default created Trace object.
  */
 Trace::Trace() noexcept {
   std::fill(floats.begin(), floats.end(), unset_float);
@@ -869,7 +871,6 @@ Trace::Trace() noexcept {
 /*!
   \brief Trace equality operator.
 
-  @param[in] this First Trace in comparison (LHS).
   @param[in] other Second Trace in comparison (RHS).
   @returns bool Truth value of equality.
  */
@@ -2179,7 +2180,6 @@ void Trace::read_footers(std::ifstream *sac_file) {
   \brief Binary SAC-file reader.
 
   @param[in] path std::filesystem::path SAC-file to be read.
-  @returns Trace read in-file.
   @throw io_error If the file is not safe to read for whatever reason.
   @throw std::exception (disk failure).
  */

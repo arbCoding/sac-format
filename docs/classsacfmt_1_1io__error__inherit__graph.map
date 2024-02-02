@@ -1,5 +1,5 @@
 <map id="sacfmt::io_error" name="sacfmt::io_error">
-<area shape="rect" id="Node000001" title="Class for generic I/O exceptions." alt="" coords="5,81,130,109"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="11,5,124,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="70,48,70,81,65,81,65,48"/>
+<area shape="rect" id="Node000001" title="Class for generic I/O exceptions." alt="" coords="5,123,199,231"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="49,5,155,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,89,105,123,99,123,99,89"/>
 </map>

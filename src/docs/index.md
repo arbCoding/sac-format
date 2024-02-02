@@ -60,14 +60,14 @@ to get up and running.
 ### Small
 
 sac-format is **small** in total (header +
-implementation; excluding comments) the library is under 2100&lowast;
+implementation; excluding comments) the library is under 2300&lowast;
 lines of code. Small size opens the door to using on any sort of hardware (old
 or new) and makes it easy to expand upon.
 
 &lowast; This value includes only the library, excluding all
 testing/benchmarking and example codes. Including `utests.cpp`, `benchmark.cpp`,
-`util.hpp`, the example program (`list_sac`), and sac-format totals just over
-5100 lines of code.
+`util.hpp`, the example program (`list_sac`), and sac-format totals just under
+5500 lines of code.
 
 ### Documented
 

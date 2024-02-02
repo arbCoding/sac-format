@@ -20,7 +20,7 @@
 #include <algorithm>
 // std::array
 #include <array>
-// std::endian
+// std::endian, std::bit_cast
 #include <bit>
 // std::bitset
 #include <bitset>

@@ -74,6 +74,9 @@ coverage/*
 # Infer
 infer-out/*
 
+# Doxygen
+doxygen_warnings_*
+
 # macOS productbuild
 CMakeFiles/*
 *.cmake
